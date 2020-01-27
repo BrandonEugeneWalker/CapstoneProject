@@ -59,6 +59,25 @@ namespace Capstone_Web_Members.Models
         public bool IsLibrarian { get; set; }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Member"/> class.
+        /// </summary>
+        /// <param name="memberId">The member identifier.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="firstName">The first name.</param>
+        /// <param name="lastName">The last name.</param>
+        /// <param name="isLibrarian">if set to <c>true</c> [is librarian].</param>
+        /// <exception cref="ArgumentOutOfRangeException">memberId - Member ID must be greater than zero</exception>
+        /// <exception cref="ArgumentNullException">
+        /// userName - Member Username can not be Null or Empty.
+        /// or
+        /// password - Member Password can not be Null or Empty.
+        /// or
+        /// firstName - Member first name can not be Null or Empty.
+        /// or
+        /// lastName - Member last name can not be Null or Empty.
+        /// </exception>
         public Member(int memberId, string userName, string password, string firstName, string lastName, bool isLibrarian)
         {
             if (memberId <= 0)
