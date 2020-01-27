@@ -21,6 +21,7 @@ namespace Capstone_Web_Warehouse.Controllers
         }
 
 
+        [Authorize]
         public ActionResult ManageEmployee()
         {
             ViewBag.Message = "Employee management page.";
