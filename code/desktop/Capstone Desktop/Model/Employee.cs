@@ -8,5 +8,6 @@ namespace Capstone_Desktop.Model
 {
     class Employee
     {
+
     }
 }
