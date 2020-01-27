@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Capstone_Web_Members.Models
 {
     /// <summary>
@@ -15,6 +16,8 @@ namespace Capstone_Web_Members.Models
         /// </value>
         public int MemberId { get; set; }
 
+
+        //TODO Username/Password might store separately
         /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>
@@ -47,10 +50,52 @@ namespace Capstone_Web_Members.Models
         /// </value>
         public string LastName { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is librarian.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is librarian; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLibrarian { get; set; }
 
-        public Member()
+
+        public Member(int memberId, string userName, string password, string firstName, string lastName, bool isLibrarian)
         {
+            if (memberId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(memberId), "Member ID must be greater than zero");
+            }
 
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException(nameof(userName), "Member Username can not be Null or Empty.");
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password), "Member Password can not be Null or Empty.");
+            }
+
+            if (string.IsNullOrEmpty(firstName))
+            {
+                throw new ArgumentNullException(nameof(firstName), "Member first name can not be Null or Empty.");
+            }
+
+            if (string.IsNullOrEmpty(lastName))
+            {
+                throw new ArgumentNullException(nameof(lastName), "Member last name can not be Null or Empty.");
+            }
+
+            this.MemberId = memberId;
+
+            //TODO might store separately
+            this.UserName = userName;
+            this.Password = password;
+            //
+
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.IsLibrarian = isLibrarian;
         }
     }
 }
