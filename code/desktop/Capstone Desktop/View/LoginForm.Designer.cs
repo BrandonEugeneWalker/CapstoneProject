@@ -99,7 +99,7 @@
             this.loginButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loginButton.Location = new System.Drawing.Point(797, 380);
             this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new System.Drawing.Size(94, 26);
+            this.loginButton.Size = new System.Drawing.Size(94, 30);
             this.loginButton.TabIndex = 3;
             this.loginButton.Text = "Login";
             this.loginButton.UseVisualStyleBackColor = true;
@@ -118,7 +118,7 @@
             this.Controls.Add(this.loginLabel);
             this.Controls.Add(this.companyLabel);
             this.Name = "LoginForm";
-            this.Text = "LoginForm";
+            this.Text = "Manager Login";
             this.ResumeLayout(false);
             this.PerformLayout();
 
