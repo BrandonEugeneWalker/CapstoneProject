@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Capstone Database", "Capstone Database.sqlproj", "{FB8826E8-32D0-4C89-8F16-C63FB0A8D1AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB8826E8-32D0-4C89-8F16-C63FB0A8D1AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8826E8-32D0-4C89-8F16-C63FB0A8D1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8826E8-32D0-4C89-8F16-C63FB0A8D1AA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{FB8826E8-32D0-4C89-8F16-C63FB0A8D1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8826E8-32D0-4C89-8F16-C63FB0A8D1AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB8826E8-32D0-4C89-8F16-C63FB0A8D1AA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A77CBDD-3E63-46C4-8885-B23C8AB01419}
+	EndGlobalSection
+EndGlobal
