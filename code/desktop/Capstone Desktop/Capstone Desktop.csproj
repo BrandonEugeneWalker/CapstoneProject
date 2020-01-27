@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Capstone_Database">
-      <HintPath>..\..\database\Capstone Database\bin\Debug\Capstone_Database.dll</HintPath>
+      <HintPath>..\..\database\Capstone Database\database\Capstone_Database.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
