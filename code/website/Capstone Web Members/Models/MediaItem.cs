@@ -54,7 +54,7 @@
         public enum MediaType
         {
             Book,
-            CD,
+            MusicCd,
             Movie
         }
     }
