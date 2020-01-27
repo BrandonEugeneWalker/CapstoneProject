@@ -16,5 +16,25 @@ namespace Capstone_Desktop.View
         {
             InitializeComponent();
         }
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RemoveButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EditButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
