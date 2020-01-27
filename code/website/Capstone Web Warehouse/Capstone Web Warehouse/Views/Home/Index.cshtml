@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>West Georgia Library Warehouse</h1>
+    <p class="lead">Welcome to the West Georgia Library Warehouse</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Manage Items</h2>
+        <p>
+            Update Status
+        </p>
+        <p class="btn btn-default">@Html.ActionLink("Manage Items", "ManageItems", "Home")</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Manage Employees</h2>
+        <p></p>
+        <p class="btn btn-default">@Html.ActionLink("Manage Employees", "ManageEmployee", "Home")</p>
+    </div>
+
+</div>
