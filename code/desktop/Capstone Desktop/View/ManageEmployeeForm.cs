@@ -36,5 +36,12 @@ namespace Capstone_Desktop.View
         {
 
         }
+
+        private void ManageEmployeeForm_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the '_Capstone_DatabaseDataSet.Employee' table. You can move, or remove it, as needed.
+            this.employeeTableAdapter.Fill(this._Capstone_DatabaseDataSet.Employee);
+
+        }
     }
 }

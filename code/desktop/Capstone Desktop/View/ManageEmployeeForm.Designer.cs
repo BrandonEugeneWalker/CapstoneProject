@@ -28,14 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.logoutButton = new System.Windows.Forms.Button();
             this.companyLabel = new System.Windows.Forms.Label();
             this.loginLabel = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.employeeGridView = new System.Windows.Forms.DataGridView();
             this.removeButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.editButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this._Capstone_DatabaseDataSet = new Capstone_Desktop._Capstone_DatabaseDataSet();
+            this.employeeBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.employeeTableAdapter = new Capstone_Desktop._Capstone_DatabaseDataSetTableAdapters.EmployeeTableAdapter();
+            this.employeeIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isManagerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.employeeGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._Capstone_DatabaseDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.employeeBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // logoutButton
@@ -71,19 +81,27 @@
             this.loginLabel.Text = "Manage Employees";
             this.loginLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // dataGridView1
+            // employeeGridView
             // 
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 164);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 62;
-            this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(1234, 391);
-            this.dataGridView1.TabIndex = 3;
+            this.employeeGridView.AllowUserToOrderColumns = true;
+            this.employeeGridView.AutoGenerateColumns = false;
+            this.employeeGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.employeeGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.employeeIdDataGridViewTextBoxColumn,
+            this.passwordDataGridViewTextBoxColumn,
+            this.isManagerDataGridViewTextBoxColumn,
+            this.nameDataGridViewTextBoxColumn});
+            this.employeeGridView.DataSource = this.employeeBindingSource;
+            this.employeeGridView.Location = new System.Drawing.Point(12, 164);
+            this.employeeGridView.Name = "employeeGridView";
+            this.employeeGridView.RowHeadersWidth = 62;
+            this.employeeGridView.RowTemplate.Height = 28;
+            this.employeeGridView.Size = new System.Drawing.Size(1234, 391);
+            this.employeeGridView.TabIndex = 3;
             // 
             // removeButton
             // 
+            this.removeButton.Enabled = false;
             this.removeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.removeButton.Location = new System.Drawing.Point(1105, 578);
             this.removeButton.Name = "removeButton";
@@ -106,6 +124,7 @@
             // 
             // editButton
             // 
+            this.editButton.Enabled = false;
             this.editButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.editButton.Location = new System.Drawing.Point(811, 578);
             this.editButton.Name = "editButton";
@@ -115,14 +134,53 @@
             this.editButton.UseVisualStyleBackColor = true;
             this.editButton.Click += new System.EventHandler(this.EditButton_Click);
             // 
+            // _Capstone_DatabaseDataSet
+            // 
+            this._Capstone_DatabaseDataSet.DataSetName = "_Capstone_DatabaseDataSet";
+            this._Capstone_DatabaseDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // employeeBindingSource
+            // 
+            this.employeeBindingSource.DataMember = "Employee";
+            this.employeeBindingSource.DataSource = this._Capstone_DatabaseDataSet;
+            // 
+            // employeeTableAdapter
+            // 
+            this.employeeTableAdapter.ClearBeforeFill = true;
+            // 
+            // employeeIdDataGridViewTextBoxColumn
+            // 
+            this.employeeIdDataGridViewTextBoxColumn.DataPropertyName = "employeeId";
+            this.employeeIdDataGridViewTextBoxColumn.HeaderText = "employeeId";
+            this.employeeIdDataGridViewTextBoxColumn.Name = "employeeIdDataGridViewTextBoxColumn";
+            this.employeeIdDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // passwordDataGridViewTextBoxColumn
+            // 
+            this.passwordDataGridViewTextBoxColumn.DataPropertyName = "password";
+            this.passwordDataGridViewTextBoxColumn.HeaderText = "password";
+            this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
+            // 
+            // isManagerDataGridViewTextBoxColumn
+            // 
+            this.isManagerDataGridViewTextBoxColumn.DataPropertyName = "isManager";
+            this.isManagerDataGridViewTextBoxColumn.HeaderText = "isManager";
+            this.isManagerDataGridViewTextBoxColumn.Name = "isManagerDataGridViewTextBoxColumn";
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            // 
             // ManageEmployeeForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(1258, 664);
+            this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.editButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.removeButton);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.employeeGridView);
             this.Controls.Add(this.loginLabel);
             this.Controls.Add(this.logoutButton);
             this.Controls.Add(this.companyLabel);
@@ -132,7 +190,10 @@
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "ManageEmployeeForm";
             this.Text = "Manage Employees";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.employeeGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._Capstone_DatabaseDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.employeeBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -142,9 +203,16 @@
         private System.Windows.Forms.Button logoutButton;
         private System.Windows.Forms.Label companyLabel;
         private System.Windows.Forms.Label loginLabel;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView employeeGridView;
         private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button editButton;
+        private _Capstone_DatabaseDataSet _Capstone_DatabaseDataSet;
+        private System.Windows.Forms.BindingSource employeeBindingSource;
+        private _Capstone_DatabaseDataSetTableAdapters.EmployeeTableAdapter employeeTableAdapter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn employeeIdDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn passwordDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn isManagerDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
     }
 }
