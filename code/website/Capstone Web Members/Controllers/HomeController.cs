@@ -32,5 +32,12 @@ namespace Capstone_Web_Members.Controllers
         {
             return View(data.Products.ToList());
         }
+
+        [HttpPost]
+        public ActionResult SearchByName(string search)
+        {
+            return RedirectToAction("", "", search);
+            //return View("MediaLibrary", data.Products.ToList());
+        }
     }
 }
