@@ -29,9 +29,12 @@ namespace Capstone_Desktop.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\brand\\source\\repos\\C" +
             "apstoneProject\\code\\database\\Capstone-Database.mdf;Integrated Security=True;Conn" +
             "ect Timeout=30")]
-        public string Capstone_DatabaseConnectionString {
-            get {
-                return ((string)(this["Capstone_DatabaseConnectionString"]));
+        public static string Capstone_DatabaseConnectionString {
+            get
+            {
+                return "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\brand\\source\\repos\\C" +
+                       "apstoneProject\\code\\database\\Capstone-Database.mdf;Integrated Security=True;Conn" +
+                       "ect Timeout=30";
             }
         }
     }

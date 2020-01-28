@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\LoginFormController.cs" />
+    <Compile Include="Database\employee\SelectEmployeeSQLCommands.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\LibraryItem.cs" />
     <Compile Include="View\LoginForm.cs">
@@ -122,5 +123,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

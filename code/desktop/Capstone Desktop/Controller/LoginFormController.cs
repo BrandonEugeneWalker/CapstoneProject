@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Capstone_Desktop.Controller
 {
-    class LoginFormController
+    /// <summary>Class handles the business logic that controls the Login page of the application.</summary>
+    public class LoginFormController
     {
     }
 }
