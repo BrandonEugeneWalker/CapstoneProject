@@ -5,26 +5,39 @@
 <div class="jumbotron">
     <h1>West Georgia Library</h1>
     <p class="lead">Welcome to the West Georgia Library, your online media ordering site.</p>
-    
-    <p><a href="~/Account/Register" class="btn btn-primary btn-lg">Sign Up Here!</a></p>
+    @if (!Request.IsAuthenticated)
+     {
+         <p>
+             <a href="~/Account/Register" class="btn btn-primary btn-lg">Sign Up Here!</a>
+         </p>
+     }
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            To get started, you must register an account if you haven't already. After which you can simply log in and start browsing our extensive library.
-        </p>
-        <p><a class="btn btn-default" href="~/Account/Login">Login &raquo;</a></p>
-    </div>
+    @if (!Request.IsAuthenticated)
+    {
+        <div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>
+                To get started, you must register an account if you haven't already. After which you can simply log in and start browsing our extensive library.
+            </p>
+            <p>
+                <a class="btn btn-default" href="~/Account/Login">Login &raquo;</a>
+            </p>
+        </div>
+    }
     <div class="col-md-4">
         <h2>Learn more</h2>
         <p>To learn more about us, click below!</p>
-        <p><a class="btn btn-default" href="~/Home/About">Learn more &raquo;</a></p>
+        <p>
+            <a class="btn btn-default" href="~/Home/About">Learn more &raquo;</a>
+        </p>
     </div>
     <div class="col-md-4">
         <h2>Contact us</h2>
         <p>Need help? Have a question? Click below!</p>
-        <p><a class="btn btn-default" href="~/Home/Contact">Contact us &raquo;</a></p>
+        <p>
+            <a class="btn btn-default" href="~/Home/Contact">Contact us &raquo;</a>
+        </p>
     </div>
 </div>

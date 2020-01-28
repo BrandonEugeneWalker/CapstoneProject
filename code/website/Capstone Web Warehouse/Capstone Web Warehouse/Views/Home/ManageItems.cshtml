@@ -5,3 +5,10 @@
 <h3>@ViewBag.Message</h3>
 
 <p>This page is used to update rental items.</p>
+
+<form asp-controller="Product" asp-action="Index">
+    <p>
+        Search by Name: <input type="text" name="nameSearch" />
+        <input type="submit" value="Search" />
+    </p>
+</form>

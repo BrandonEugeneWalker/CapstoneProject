@@ -213,7 +213,6 @@
     <Compile Include="Models\Employee.cs">
       <DependentUpon>CapstoneDatabaseModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MediaItem.cs" />
     <Compile Include="Models\Member.cs">
       <DependentUpon>CapstoneDatabaseModel.tt</DependentUpon>
     </Compile>

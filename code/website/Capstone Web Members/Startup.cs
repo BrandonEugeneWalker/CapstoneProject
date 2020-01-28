@@ -1,7 +1,9 @@
-﻿using Microsoft.Owin;
+﻿using Capstone_Web_Members;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(Capstone_Web_Members.Startup))]
+[assembly: OwinStartupAttribute(typeof(Startup))]
+
 namespace Capstone_Web_Members
 {
     public partial class Startup

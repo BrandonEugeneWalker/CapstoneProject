@@ -6,9 +6,17 @@
 
 <h2>Media Library</h2>
 
+
 <div>
     <h4>Media:</h4>
-    <hr />
+    <hr/>
+    <form asp-action="Search">
+        <p>
+            Search by Name:
+            <input type="text" id="nameSearch" name="nameSearch"/>
+            <input type="button" asp-action="SearchByName" id="searchNameButton" value="Search"/>
+        </p>
+    </form>
     <table class="table">
         <tr>
             <th>
@@ -24,6 +32,11 @@
         </tr>
         @foreach (var item in Model)
         {
+
+            //if (item.name.Contains(--nameSearch---))
+            //{
+
+            //}
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.name)

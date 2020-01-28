@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Capstone_Web_Members.Models;
 
@@ -9,7 +6,8 @@ namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
-        private DefaultEntity data = new DefaultEntity();
+        private readonly DefaultEntity data = new DefaultEntity();
+
         public ActionResult Index()
         {
             return View();
@@ -32,7 +30,14 @@ namespace Capstone_Web_Members.Controllers
         [Authorize]
         public ActionResult MediaLibrary()
         {
-            return View(this.data.Products.ToList());
+            return View(data.Products.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult SearchByName(string search)
+        {
+            return RedirectToAction("", "", search);
+            //return View("MediaLibrary", data.Products.ToList());
         }
     }
 }
