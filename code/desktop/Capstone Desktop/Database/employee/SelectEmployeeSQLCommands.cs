@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Capstone_Desktop.Model;
+using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.Database.employee
 {
@@ -18,14 +19,14 @@ namespace Capstone_Desktop.Database.employee
             var query =
                 "select * from Employee where employeeId = @employeeId and password = ENCRYPT(@password, 'whatever')";
 
-            using (var getEmployeeConnection = new SqlConnection(Properties.Settings.Capstone_DatabaseConnectionString))
+            using (var getEmployeeConnection = new MySqlConnection(CapstoneSQLConnection.SqlConnection))
             {
                 getEmployeeConnection.Open();
 
-                using (var getEmployeeCommand = new SqlCommand(query, getEmployeeConnection))
+                using (var getEmployeeCommand = new MySqlCommand(query, getEmployeeConnection))
                 {
-                    getEmployeeCommand.Parameters.Add("@employeeId", SqlDbType.Int);
-                    getEmployeeCommand.Parameters.Add("@password", SqlDbType.VarChar);
+                    getEmployeeCommand.Parameters.Add("@employeeId", MySqlDbType.Int32);
+                    getEmployeeCommand.Parameters.Add("@password", MySqlDbType.VarChar);
 
                     getEmployeeCommand.Parameters["@employeeId"].Value = employeeId;
                     getEmployeeCommand.Parameters["@password"].Value = password;
@@ -33,7 +34,6 @@ namespace Capstone_Desktop.Database.employee
                     var results = getEmployeeCommand.ExecuteReader();
 
                     var returnId = 0;
-                    var returnPassword = "";
                     var returnName = "";
                     var returnIsManager = false;
 
@@ -41,7 +41,6 @@ namespace Capstone_Desktop.Database.employee
                     while (results.Read())
                     {
                         returnId = results.GetInt32(0);
-                        returnPassword = results.GetString(1);
                         returnIsManager = results.GetBoolean(2);
                         returnName = results.GetString(3);
                     }
@@ -51,5 +50,6 @@ namespace Capstone_Desktop.Database.employee
                 }
             }
         }
+
     }
 }

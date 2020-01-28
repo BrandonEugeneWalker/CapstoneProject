@@ -7,19 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Capstone_Desktop.Model;
 
 namespace Capstone_Desktop.View
 {
     public partial class ManageEmployeeForm : Form
     {
-        public ManageEmployeeForm()
+        public Employee CurrentEmployee { get; set; }
+
+        public ManageEmployeeForm(Employee loggedInEmployee)
         {
             InitializeComponent();
+            this.CurrentEmployee = loggedInEmployee;
         }
 
         private void LogoutButton_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
