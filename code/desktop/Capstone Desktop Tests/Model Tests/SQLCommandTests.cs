@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Capstone_Desktop_Tests.Model_Tests
 {
-    internal class SQLCommandTests
+    public class SqlCommandTests
     {
         #region Methods
 

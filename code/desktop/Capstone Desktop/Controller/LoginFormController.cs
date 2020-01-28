@@ -25,19 +25,9 @@ namespace Capstone_Desktop.Controller
         /// <exception cref="ArgumentOutOfRangeException">id - The id must be a positive number greater than 0.</exception>
         public bool TryToLogin(int id, string password)
         {
-            if (String.IsNullOrEmpty(password))
-            {
-                throw new ArgumentNullException(nameof(password), "The password cannot be null or empty.");
-            }
-
-            if (id <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(id), "The id must be a positive number greater than 0.");
-            }
-
             try
             {
-                 var employee = SelectEmployeeSqlCommands.GetEmployeeByIdPassword(id, password);
+                var employee = SelectEmployeeSqlCommands.GetEmployeeByIdPassword(id, password);
 
                 if (this.checkIfManager(employee))
                 {
