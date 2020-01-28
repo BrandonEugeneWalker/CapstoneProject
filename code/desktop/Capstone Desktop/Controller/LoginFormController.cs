@@ -35,22 +35,35 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentOutOfRangeException(nameof(id), "The id must be a positive number greater than 0.");
             }
 
-            var employee = SelectEmployeeSQLCommands.GetEmployeeByIdPassword(id, password);
-
-            if (this.checkIfManager(employee))
+            try
             {
-                this.CurrentEmployee = employee;
-                return true;
+                 var employee = SelectEmployeeSqlCommands.GetEmployeeByIdPassword(id, password);
+
+                if (this.checkIfManager(employee))
+                {
+                    this.CurrentEmployee = employee;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (ArgumentOutOfRangeException)
             {
                 return false;
             }
+            catch (ArgumentNullException)
+            {
+                return false;
+            }
+            
         }
 
         private bool checkIfManager(Employee employee)
         {
             return employee.IsManager == true;
         }
+
     }
 }

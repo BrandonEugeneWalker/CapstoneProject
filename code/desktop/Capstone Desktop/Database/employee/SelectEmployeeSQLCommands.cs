@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Capstone_Desktop.Model;
+﻿using Capstone_Desktop.Model;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.Database.employee
 {
     /// <summary>Class for selecting employees with SQL.</summary>
-    public static class SelectEmployeeSQLCommands
+    public static class SelectEmployeeSqlCommands
     {
+        #region Methods
 
         public static Employee GetEmployeeByIdPassword(int employeeId, string password)
         {
             var query =
                 "select * from Employee where employeeId = @employeeId and password = ENCRYPT(@password, 'whatever')";
 
-            using (var getEmployeeConnection = new MySqlConnection(CapstoneSQLConnection.SqlConnection))
+            using (var getEmployeeConnection = new MySqlConnection(CapstoneSqlConnection.SqlConnection))
             {
                 getEmployeeConnection.Open();
 
@@ -37,7 +31,6 @@ namespace Capstone_Desktop.Database.employee
                     var returnName = "";
                     var returnIsManager = false;
 
-
                     while (results.Read())
                     {
                         returnId = results.GetInt32(0);
@@ -51,5 +44,6 @@ namespace Capstone_Desktop.Database.employee
             }
         }
 
+        #endregion
     }
 }

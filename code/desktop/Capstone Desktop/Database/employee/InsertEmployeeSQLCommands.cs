@@ -1,20 +1,26 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System;
 using Capstone_Desktop.Model;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.Database.employee
 {
     /// <summary>Handles SQL commands for inserting employees.</summary>
-    public static class InsertEmployeeSQLCommands
+    public static class InsertEmployeeSqlCommands
     {
+        #region Methods
+
         public static bool InsertEmployee(Employee employeeToInsert, string password)
         {
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password), "The employee's password cannot be null or empty.");
+            }
+
             var query =
                 "insert into Employee(employeeId, password, isManager, name) values(@employeeId, ENCRYPT(@password, 'whatever'), @isManager, @name)";
 
             using (var insertMemberConnection =
-                new MySqlConnection(CapstoneSQLConnection.SqlConnection))
+                new MySqlConnection(CapstoneSqlConnection.SqlConnection))
             {
                 insertMemberConnection.Open();
 
@@ -32,9 +38,11 @@ namespace Capstone_Desktop.Database.employee
 
                     var result = insertMemberCommand.ExecuteNonQuery();
 
-                    return (result == 1);
+                    return result == 1;
                 }
             }
         }
+
+        #endregion
     }
 }
