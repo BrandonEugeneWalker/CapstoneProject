@@ -32,23 +32,5 @@ namespace Capstone_Web_Members.Controllers
         {
             return View(data.Products.ToList());
         }
-
-        [HttpPost]
-        public ActionResult SearchByName(string nameSearch)
-        {
-            //return RedirectToAction("", "", search);
-            var searchedData = new DefaultEntity();
-            foreach (var product in data.Products.ToList().Where(product => product.name.Contains(nameSearch)))
-            {
-                searchedData.Products.Add(product);
-            }
-
-            if (searchedData.Products.ToList().Count < 1)
-            {
-                searchedData = data;
-            }
-
-            return View("MediaLibrary", searchedData.Products.ToList());
-        }
     }
 }
