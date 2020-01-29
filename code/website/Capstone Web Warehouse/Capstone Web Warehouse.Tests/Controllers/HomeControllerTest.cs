@@ -21,19 +21,6 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
         }
 
         [TestMethod]
-        public void About()
-        {
-            // Arrange
-            var controller = new HomeController();
-
-            // Act
-            var result = controller.ManageEmployee() as ViewResult;
-
-            // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
-        }
-
-        [TestMethod]
         public void Contact()
         {
             // Arrange

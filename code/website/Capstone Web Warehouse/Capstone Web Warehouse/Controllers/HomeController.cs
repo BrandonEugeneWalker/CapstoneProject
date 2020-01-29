@@ -20,17 +20,7 @@ namespace Capstone_Web_Warehouse.Controllers
         {
             ViewBag.Message = "Item management page.";
 
-            return View(data.Rentals.ToList());
+            return View(this.data.Rentals.ToList());
         }
-
-
-        [Authorize]
-        public ActionResult ManageEmployee()
-        {
-            ViewBag.Message = "Employee management page.";
-
-            return View();
-        }
-
     }
 }
