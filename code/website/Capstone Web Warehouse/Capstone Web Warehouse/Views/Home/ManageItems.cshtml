@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Capstone_Web_Warehouse.Models.Rental>
+
+@{
     ViewBag.Title = "Manage Items";
 }
 <h2>@ViewBag.Title.</h2>
@@ -6,9 +8,34 @@
 
 <p>This page is used to update rental items.</p>
 
-<form asp-controller="Product" asp-action="Index">
-    <p>
-        Search by Name: <input type="text" name="nameSearch" />
-        <input type="submit" value="Search" />
-    </p>
-</form>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.rentalId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stockId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.memberId)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.rentalId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stockId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.memberId)
+            </td>
+            <td>
+                Return(Not Implemented)
+            </td>
+        </tr>
+    }
+</table>
