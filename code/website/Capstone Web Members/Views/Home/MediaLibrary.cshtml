@@ -14,7 +14,6 @@
         <p>
             Search by Name:
             <input type="text" id="nameSearch" name="nameSearch"/>
-            <input type="button" asp-action="SearchByName" id="searchNameButton" value="Search"/>
         </p>
     </form>
     <table class="table">
@@ -32,25 +31,46 @@
         </tr>
         @foreach (var item in Model)
         {
+            if (Request.QueryString.HasKeys())
+            {
+                var searchString = Request.QueryString.ToString().Remove(0, 11).ToLower();
+                if (item.name.ToLower().Contains(searchString))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.type)
+                        </td>
+                        <td>
+                            Order(Not Implemented)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.type)
+                    </td>
+                    <td>
+                        Order(Not Implemented)
+                    </td>
+                </tr>
+            }
 
-            //if (item.name.Contains(--nameSearch---))
-            //{
 
-            //}
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.type)
-                </td>
-                <td>
-                    Order(Not Implemented)
-                </td>
-            </tr>
         }
     </table>
 
