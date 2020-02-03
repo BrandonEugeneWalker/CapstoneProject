@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Capstone_Web_Members.Models;
+using Capstone_Web_Members.Settings;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -47,15 +48,14 @@ namespace Capstone_Web_Members
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
-
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true
+                RequiredLength = AccountSettings.PasswordRequiredLength,
+                RequireNonLetterOrDigit = AccountSettings.PasswordRequireNonLetterOrDigit,
+                RequireDigit = AccountSettings.PasswordRequireDigit,
+                RequireLowercase = AccountSettings.PasswordRequireLowercase,
+                RequireUppercase = AccountSettings.PasswordRequireUppercase
             };
 
             // Configure user lockout defaults
