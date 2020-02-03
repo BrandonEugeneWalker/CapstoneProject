@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using Capstone_Desktop.Controller;
 using Capstone_Desktop.View;
+using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop
 {
@@ -41,7 +42,7 @@ namespace Capstone_Desktop
                 if (results)
                 {
                     var manageEmployeeForm = new ManageEmployeeForm(this.LoginController.CurrentEmployee);
-                    manageEmployeeForm.Show();
+                    manageEmployeeForm.ShowDialog();
                 }
                 else
                 {
@@ -50,7 +51,7 @@ namespace Capstone_Desktop
                     this.passwordTextbox.Text = "";
                 }
             }
-            catch (SqlException)
+            catch (MySqlException)
             {
                 MessageBox.Show(@"Was unable to login.");
                 this.usernameTextbox.Text = "";

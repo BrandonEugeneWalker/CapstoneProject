@@ -3,6 +3,7 @@ using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
 using Capstone_Desktop.Database;
+using Capstone_Desktop.Database.employee;
 using Capstone_Desktop.Model;
 using MySql.Data.MySqlClient;
 
@@ -18,6 +19,8 @@ namespace Capstone_Desktop.View
 
         private MySqlCommandBuilder tableCommandBuilder = new MySqlCommandBuilder();
 
+        private DataTable dataTable;
+
         #endregion
 
         #region Properties
@@ -32,6 +35,10 @@ namespace Capstone_Desktop.View
         {
             this.InitializeComponent();
             this.CurrentEmployee = loggedInEmployee;
+            this.dataTable = new DataTable
+            {
+                Locale = CultureInfo.InvariantCulture
+            };
         }
 
         #endregion
@@ -45,12 +52,29 @@ namespace Capstone_Desktop.View
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
-            var table = (DataTable) this.employeeListSource.DataSource;
-
+            var removedCount = 0;
             foreach (DataGridViewRow currentRow in this.employeeGridView.SelectedRows)
             {
-                table.Rows.RemoveAt(currentRow.Index);
+                var rowIndex = currentRow.Index;
+                var id = int.Parse(this.dataTable.Rows[rowIndex][0].ToString());
+                try
+                {
+                    var results = DeleteEmployeeSqlCommands.DeleteEmployeeById(id);
+                    removedCount += results;
+                    this.dataTable.Rows.RemoveAt(rowIndex);
+                }
+                catch (MySqlException)
+                {
+                    MessageBox.Show(@"Trouble removing Employee of id: " + id);
+                }
+
             }
+
+            MessageBox.Show(@"Successfully removed " + removedCount + @"employee(s) from the database.");
+
+
+
+
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -62,7 +86,8 @@ namespace Capstone_Desktop.View
 
         private void SubmitChangesButton_Click(object sender, EventArgs e)
         {
-            this.tableDataAdapter.Update((DataTable) this.employeeListSource.DataSource); //TODO
+            
+            this.tableDataAdapter.Update(this.dataTable); //TODO
         }
 
         private void ManageEmployeeForm_Load(object sender, EventArgs e)
@@ -76,13 +101,11 @@ namespace Capstone_Desktop.View
             try
             {
                 var query = "select * from Employee";
+                this.dataTable.Clear();
                 this.tableDataAdapter = new MySqlDataAdapter(query, CapstoneSqlConnection.SqlConnection);
                 this.tableCommandBuilder = new MySqlCommandBuilder(this.tableDataAdapter);
-                var table = new DataTable {
-                    Locale = CultureInfo.InvariantCulture
-                };
-                this.tableDataAdapter.Fill(table);
-                this.employeeBindingSource.DataSource = table;
+                this.tableDataAdapter.Fill(this.dataTable);
+                this.employeeBindingSource.DataSource = this.dataTable;
 
                 this.refreshTable();
             }
