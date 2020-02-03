@@ -84,8 +84,9 @@
   <ItemGroup>
     <Compile Include="Controller\LoginFormController.cs" />
     <Compile Include="Database\CapstoneSQLConnection.cs" />
-    <Compile Include="Database\employee\InsertEmployeeSQLCommands.cs" />
-    <Compile Include="Database\employee\SelectEmployeeSQLCommands.cs" />
+    <Compile Include="Database\employee\DeleteEmployeeSqlCommands.cs" />
+    <Compile Include="Database\employee\InsertEmployeeSqlCommands.cs" />
+    <Compile Include="Database\employee\SelectEmployeeSqlCommands.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\LibraryItem.cs" />
     <Compile Include="View\AddEmployeeForm.cs">

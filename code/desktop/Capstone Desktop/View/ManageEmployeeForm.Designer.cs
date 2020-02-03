@@ -137,7 +137,6 @@
             // 
             // removeButton
             // 
-            this.removeButton.Enabled = false;
             this.removeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.removeButton.Location = new System.Drawing.Point(1105, 578);
             this.removeButton.Name = "removeButton";
