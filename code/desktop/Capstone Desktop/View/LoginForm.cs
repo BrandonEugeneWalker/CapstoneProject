@@ -42,7 +42,9 @@ namespace Capstone_Desktop
                 if (results)
                 {
                     var manageEmployeeForm = new ManageEmployeeForm(this.LoginController.CurrentEmployee);
+                    this.Hide();
                     manageEmployeeForm.ShowDialog();
+                    this.Show();
                 }
                 else
                 {
