@@ -40,6 +40,9 @@
             this.idNummericUpDown = new System.Windows.Forms.NumericUpDown();
             this.submitButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.isValidLabel = new System.Windows.Forms.Label();
+            this.passwordReqHeaderLabel = new System.Windows.Forms.Label();
+            this.passwordRequirementsLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.idNummericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,7 +69,7 @@
             // idLabel
             // 
             this.idLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idLabel.Location = new System.Drawing.Point(152, 225);
+            this.idLabel.Location = new System.Drawing.Point(23, 217);
             this.idLabel.Name = "idLabel";
             this.idLabel.Size = new System.Drawing.Size(185, 37);
             this.idLabel.TabIndex = 0;
@@ -76,7 +79,7 @@
             // passwordLabel
             // 
             this.passwordLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.passwordLabel.Location = new System.Drawing.Point(148, 262);
+            this.passwordLabel.Location = new System.Drawing.Point(19, 254);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(189, 37);
             this.passwordLabel.TabIndex = 0;
@@ -86,7 +89,7 @@
             // isManagerLabel
             // 
             this.isManagerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.isManagerLabel.Location = new System.Drawing.Point(140, 299);
+            this.isManagerLabel.Location = new System.Drawing.Point(11, 291);
             this.isManagerLabel.Name = "isManagerLabel";
             this.isManagerLabel.Size = new System.Drawing.Size(197, 37);
             this.isManagerLabel.TabIndex = 0;
@@ -96,7 +99,7 @@
             // nameLabel
             // 
             this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nameLabel.Location = new System.Drawing.Point(144, 336);
+            this.nameLabel.Location = new System.Drawing.Point(15, 328);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(193, 37);
             this.nameLabel.TabIndex = 0;
@@ -106,22 +109,23 @@
             // passwordTextBox
             // 
             this.passwordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.passwordTextBox.Location = new System.Drawing.Point(384, 267);
+            this.passwordTextBox.Location = new System.Drawing.Point(255, 259);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.Size = new System.Drawing.Size(185, 26);
             this.passwordTextBox.TabIndex = 2;
+            this.passwordTextBox.TextChanged += new System.EventHandler(this.passwordTextBox_TextChanged);
             // 
             // nameTextBox
             // 
             this.nameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nameTextBox.Location = new System.Drawing.Point(384, 341);
+            this.nameTextBox.Location = new System.Drawing.Point(255, 333);
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(185, 26);
             this.nameTextBox.TabIndex = 4;
             // 
             // isManagerCheckBox
             // 
-            this.isManagerCheckBox.Location = new System.Drawing.Point(384, 299);
+            this.isManagerCheckBox.Location = new System.Drawing.Point(255, 291);
             this.isManagerCheckBox.Name = "isManagerCheckBox";
             this.isManagerCheckBox.Size = new System.Drawing.Size(185, 36);
             this.isManagerCheckBox.TabIndex = 3;
@@ -131,7 +135,7 @@
             // idNummericUpDown
             // 
             this.idNummericUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idNummericUpDown.Location = new System.Drawing.Point(384, 231);
+            this.idNummericUpDown.Location = new System.Drawing.Point(255, 223);
             this.idNummericUpDown.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -154,7 +158,7 @@
             // submitButton
             // 
             this.submitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.submitButton.Location = new System.Drawing.Point(454, 413);
+            this.submitButton.Location = new System.Drawing.Point(325, 405);
             this.submitButton.Name = "submitButton";
             this.submitButton.Size = new System.Drawing.Size(115, 34);
             this.submitButton.TabIndex = 6;
@@ -165,7 +169,7 @@
             // cancelButton
             // 
             this.cancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelButton.Location = new System.Drawing.Point(315, 413);
+            this.cancelButton.Location = new System.Drawing.Point(186, 405);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(115, 34);
             this.cancelButton.TabIndex = 5;
@@ -173,11 +177,42 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // isValidLabel
+            // 
+            this.isValidLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.isValidLabel.Location = new System.Drawing.Point(446, 259);
+            this.isValidLabel.Name = "isValidLabel";
+            this.isValidLabel.Size = new System.Drawing.Size(105, 26);
+            this.isValidLabel.TabIndex = 7;
+            this.isValidLabel.Text = "Invalid";
+            this.isValidLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // passwordReqHeaderLabel
+            // 
+            this.passwordReqHeaderLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.passwordReqHeaderLabel.Location = new System.Drawing.Point(539, 259);
+            this.passwordReqHeaderLabel.Name = "passwordReqHeaderLabel";
+            this.passwordReqHeaderLabel.Size = new System.Drawing.Size(218, 26);
+            this.passwordReqHeaderLabel.TabIndex = 8;
+            this.passwordReqHeaderLabel.Text = "Password Requirements:";
+            this.passwordReqHeaderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // passwordRequirementsLabel
+            // 
+            this.passwordRequirementsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.passwordRequirementsLabel.Location = new System.Drawing.Point(543, 291);
+            this.passwordRequirementsLabel.Name = "passwordRequirementsLabel";
+            this.passwordRequirementsLabel.Size = new System.Drawing.Size(229, 261);
+            this.passwordRequirementsLabel.TabIndex = 9;
+            // 
             // AddEmployeeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.passwordRequirementsLabel);
+            this.Controls.Add(this.passwordReqHeaderLabel);
+            this.Controls.Add(this.isValidLabel);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.submitButton);
             this.Controls.Add(this.idNummericUpDown);
@@ -196,7 +231,6 @@
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "AddEmployeeForm";
             this.Text = "Adding An Employee";
-            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.idNummericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -217,5 +251,8 @@
         private System.Windows.Forms.NumericUpDown idNummericUpDown;
         private System.Windows.Forms.Button submitButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label isValidLabel;
+        private System.Windows.Forms.Label passwordReqHeaderLabel;
+        private System.Windows.Forms.Label passwordRequirementsLabel;
     }
 }

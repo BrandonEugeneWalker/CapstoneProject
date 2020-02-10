@@ -80,7 +80,9 @@ namespace Capstone_Desktop.View
         private void AddButton_Click(object sender, EventArgs e)
         {
             var addEmployeeForm = new AddEmployeeForm();
+            this.Hide();
             addEmployeeForm.ShowDialog();
+            this.Show();
             this.getData();
         }
 

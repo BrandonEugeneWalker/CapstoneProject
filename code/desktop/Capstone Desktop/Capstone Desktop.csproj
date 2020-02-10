@@ -82,6 +82,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\AddEmployeeFormController.cs" />
     <Compile Include="Controller\LoginFormController.cs" />
     <Compile Include="Database\CapstoneSQLConnection.cs" />
     <Compile Include="Database\employee\DeleteEmployeeSqlCommands.cs" />
