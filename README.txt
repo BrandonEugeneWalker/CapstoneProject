@@ -8,5 +8,36 @@ to borrow different types of media for consumption and then return it through ma
 Our employee system allows WGEL to keep our product pages up to date and tidy.
 
 
-How to install:
-No instructions as of now.
+**How to install:**
+
+*Requirements:*
+
+1.) MySQL for Visual Studio
+  https://dev.mysql.com/downloads/windows/visualstudio/1.2.html
+  
+2.) MySQL connectors for C#
+  https://dev.mysql.com/downloads/connector/net/8.0.html
+  
+3.) University VPN if not using a wired connection on campus.
+
+
+*Running Web for Members*
+  Select Capstone Web Member in the run list and then run.
+  
+  **Passwords**
+  User:
+  Password:
+  
+*Running Web for Warehouse*
+  Select Capstone Web Warehouse in the run list and then run it.
+  
+  **Passwords**
+  User: 1234
+  Password: password
+  
+*Running Desktop*
+  Select Capstone Desktop in the run list and run it.
+  
+  **Passwords**
+  User: 1234
+  Password: password
