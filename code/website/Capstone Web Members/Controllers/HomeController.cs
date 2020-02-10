@@ -1,12 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using Capstone_Database;
 using Capstone_Web_Members.Models;
 
 namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly DefaultEntity data = new DefaultEntity();
+        private readonly Capstone_Database.cs4982s20dDataSet data = new cs4982s20dDataSet();
 
         public ActionResult Index()
         {
@@ -30,7 +32,7 @@ namespace Capstone_Web_Members.Controllers
         [Authorize]
         public ActionResult MediaLibrary()
         {
-            return View(data.Products.ToList());
+            return View(this.data.Product.ToList());
         }
     }
 }
