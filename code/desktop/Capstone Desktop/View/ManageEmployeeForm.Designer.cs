@@ -28,24 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.logoutButton = new System.Windows.Forms.Button();
             this.companyLabel = new System.Windows.Forms.Label();
             this.loginLabel = new System.Windows.Forms.Label();
             this.employeeGridView = new System.Windows.Forms.DataGridView();
-            this.employeeIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isManagerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.employeeBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this._Capstone_DatabaseDataSet = new Capstone_Desktop._Capstone_DatabaseDataSet();
             this.removeButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.submitChangesButton = new System.Windows.Forms.Button();
-            this.employeeTableAdapter = new Capstone_Desktop._Capstone_DatabaseDataSetTableAdapters.EmployeeTableAdapter();
+            this.manageItemsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.employeeGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.employeeBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._Capstone_DatabaseDataSet)).BeginInit();
             this.SuspendLayout();
             // 
             // logoutButton
@@ -84,56 +75,15 @@
             // employeeGridView
             // 
             this.employeeGridView.AllowUserToResizeRows = false;
-            this.employeeGridView.AutoGenerateColumns = false;
             this.employeeGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.employeeGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.employeeGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.employeeIdDataGridViewTextBoxColumn,
-            this.passwordDataGridViewTextBoxColumn,
-            this.isManagerDataGridViewTextBoxColumn,
-            this.nameDataGridViewTextBoxColumn});
-            this.employeeGridView.DataSource = this.employeeBindingSource;
             this.employeeGridView.Location = new System.Drawing.Point(12, 164);
             this.employeeGridView.Name = "employeeGridView";
             this.employeeGridView.RowHeadersWidth = 62;
             this.employeeGridView.RowTemplate.Height = 28;
+            this.employeeGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.employeeGridView.Size = new System.Drawing.Size(1234, 391);
             this.employeeGridView.TabIndex = 3;
-            // 
-            // employeeIdDataGridViewTextBoxColumn
-            // 
-            this.employeeIdDataGridViewTextBoxColumn.DataPropertyName = "employeeId";
-            this.employeeIdDataGridViewTextBoxColumn.HeaderText = "employeeId";
-            this.employeeIdDataGridViewTextBoxColumn.Name = "employeeIdDataGridViewTextBoxColumn";
-            this.employeeIdDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // passwordDataGridViewTextBoxColumn
-            // 
-            this.passwordDataGridViewTextBoxColumn.DataPropertyName = "password";
-            this.passwordDataGridViewTextBoxColumn.HeaderText = "password";
-            this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
-            // 
-            // isManagerDataGridViewTextBoxColumn
-            // 
-            this.isManagerDataGridViewTextBoxColumn.DataPropertyName = "isManager";
-            this.isManagerDataGridViewTextBoxColumn.HeaderText = "isManager";
-            this.isManagerDataGridViewTextBoxColumn.Name = "isManagerDataGridViewTextBoxColumn";
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            // 
-            // employeeBindingSource
-            // 
-            this.employeeBindingSource.DataMember = "Employee";
-            this.employeeBindingSource.DataSource = this._Capstone_DatabaseDataSet;
-            // 
-            // _Capstone_DatabaseDataSet
-            // 
-            this._Capstone_DatabaseDataSet.DataSetName = "_Capstone_DatabaseDataSet";
-            this._Capstone_DatabaseDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // removeButton
             // 
@@ -169,14 +119,22 @@
             this.submitChangesButton.UseVisualStyleBackColor = true;
             this.submitChangesButton.Click += new System.EventHandler(this.SubmitChangesButton_Click);
             // 
-            // employeeTableAdapter
+            // manageItemsButton
             // 
-            this.employeeTableAdapter.ClearBeforeFill = true;
+            this.manageItemsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manageItemsButton.Location = new System.Drawing.Point(1105, 64);
+            this.manageItemsButton.Name = "manageItemsButton";
+            this.manageItemsButton.Size = new System.Drawing.Size(141, 46);
+            this.manageItemsButton.TabIndex = 7;
+            this.manageItemsButton.Text = "Manage Items";
+            this.manageItemsButton.UseVisualStyleBackColor = true;
+            this.manageItemsButton.Click += new System.EventHandler(this.manageItemsButton_Click);
             // 
             // ManageEmployeeForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.manageItemsButton);
             this.Controls.Add(this.submitChangesButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.removeButton);
@@ -192,8 +150,6 @@
             this.Text = "Manage Employees";
             this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.employeeGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.employeeBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._Capstone_DatabaseDataSet)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -207,12 +163,6 @@
         private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button submitChangesButton;
-        private _Capstone_DatabaseDataSet _Capstone_DatabaseDataSet;
-        private System.Windows.Forms.BindingSource employeeBindingSource;
-        private _Capstone_DatabaseDataSetTableAdapters.EmployeeTableAdapter employeeTableAdapter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn employeeIdDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn passwordDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn isManagerDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Button manageItemsButton;
     }
 }

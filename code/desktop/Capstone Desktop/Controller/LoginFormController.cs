@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Capstone_Desktop.Database.employee;
 using Capstone_Desktop.Model;
 
@@ -11,12 +7,19 @@ namespace Capstone_Desktop.Controller
     /// <summary>Class handles the business logic that controls the Login page of the application.</summary>
     public class LoginFormController
     {
+        #region Properties
+
         public Employee CurrentEmployee { get; set; }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        ///   <para>
-        /// Checks if the given id and password are valid, if it is valid the current user is changed and true is returned.</para>
-        ///   <para>False is returned if the employee is not a manager.</para>
+        ///     <para>
+        ///         Checks if the given id and password are valid, if it is valid the current user is changed and true is returned.
+        ///     </para>
+        ///     <para>False is returned if the employee is not a manager.</para>
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="password">The password.</param>
@@ -28,16 +31,14 @@ namespace Capstone_Desktop.Controller
             try
             {
                 var employee = SelectEmployeeSqlCommands.GetEmployeeByIdPassword(id, password);
+                this.CurrentEmployee = employee;
 
                 if (this.checkIfManager(employee))
                 {
-                    this.CurrentEmployee = employee;
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -47,13 +48,13 @@ namespace Capstone_Desktop.Controller
             {
                 return false;
             }
-            
         }
 
         private bool checkIfManager(Employee employee)
         {
-            return employee.IsManager == true;
+            return employee.IsManager;
         }
 
+        #endregion
     }
 }
