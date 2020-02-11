@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Capstone_Web_Warehouse.Models.Rental>
+﻿@model IEnumerable<Capstone_Database.Model.ItemRental>
 
 @{
     ViewBag.Title = "Manage Items";
@@ -11,13 +11,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.rentalId)
+            @Html.DisplayNameFor(model => model.itemRentalId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.stockId)
+            @Html.DisplayNameFor(model => model.Stock.Product.name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.memberId)
+            @Html.DisplayNameFor(model => model.Member.name)
         </th>
         <th></th>
     </tr>
@@ -25,13 +25,13 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.rentalId)
+                @Html.DisplayFor(modelItem => item.itemRentalId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.stockId)
+                @Html.DisplayFor(modelItem => item.Stock.Product.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.memberId)
+                @Html.DisplayFor(modelItem => item.Member.name)
             </td>
             <td>
                 Return(Not Implemented)

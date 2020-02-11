@@ -7,26 +7,27 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Capstone_Database
+namespace Capstone_Database.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class Stock
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Product()
+        public Stock()
         {
-            this.Stocks = new HashSet<Stock>();
+            this.ItemRentals = new HashSet<ItemRental>();
+            this.ItemReturns = new HashSet<ItemReturn>();
         }
     
+        public int stockId { get; set; }
         public int productId { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public string type { get; set; }
-        public string category { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Stock> Stocks { get; set; }
+        public virtual ICollection<ItemRental> ItemRentals { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemReturn> ItemReturns { get; set; }
+        public virtual Product Product { get; set; }
     }
 }
