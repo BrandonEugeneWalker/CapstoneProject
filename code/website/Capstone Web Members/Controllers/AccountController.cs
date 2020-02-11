@@ -129,7 +129,7 @@ namespace Capstone_Web_Members.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var result = await UserManager.CreateAsync(user, model.Password); // TODO Point of failure
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, false, false);
