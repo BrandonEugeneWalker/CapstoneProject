@@ -107,15 +107,6 @@ namespace Capstone_Desktop.View
             this.itemsGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 
-        private void markReturnedButton_Click(object sender, EventArgs e)
-        {
-            //TODO
-        }
-
-        private void markShippedButton_Click(object sender, EventArgs e)
-        {
-            //TODO
-        }
 
         private void managerButton_Click(object sender, EventArgs e)
         {
@@ -129,5 +120,10 @@ namespace Capstone_Desktop.View
         }
 
         #endregion
+
+        private void manageRentalsButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

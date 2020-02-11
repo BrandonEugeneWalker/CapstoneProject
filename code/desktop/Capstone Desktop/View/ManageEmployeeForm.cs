@@ -110,6 +110,11 @@ namespace Capstone_Desktop.View
             }
         }
 
+        private void getDbContextData()
+        {
+            
+        }
+
         private void refreshTable()
         {
             this.employeeGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
