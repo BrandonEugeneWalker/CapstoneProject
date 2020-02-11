@@ -2,21 +2,16 @@
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database;
-using Capstone_Database.DAL;
 using Capstone_Web_Members.Models;
 
 namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly Capstone_Database.cs4982s20dDataSet data = new cs4982s20dDataSet();
-        private Capstone_Database.DAL.CapstoneContext data = new CapstoneContext();
+        private readonly Capstone_Database.cs4982s20dDataSet data = new cs4982s20dDataSet();
 
         public ActionResult Index()
         {
-            var fl = Capstone_Database.Class1.Connected;
-            var clas = new Capstone_Database.Class1();
-            var tr = Capstone_Database.Class1.Connected;
             return View();
         }
 
@@ -34,9 +29,10 @@ namespace Capstone_Web_Members.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult MediaLibrary()
         {
-            return View(this.data.Products.ToList());
+            return View(this.data.Product.ToList());
         }
     }
 }
