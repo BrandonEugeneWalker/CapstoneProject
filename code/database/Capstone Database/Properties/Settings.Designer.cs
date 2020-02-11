@@ -12,7 +12,7 @@ namespace Capstone_Database.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.2.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -31,6 +31,17 @@ namespace Capstone_Database.Properties {
         public string cs4982s20dConnectionString {
             get {
                 return ((string)(this["cs4982s20dConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("server=160.10.25.16;user id=cs4982s20d;password=PAoWBgKC42A3m45V;persistsecurityi" +
+            "nfo=True;database=cs4982s20d")]
+        public string CapstoneConnection {
+            get {
+                return ((string)(this["CapstoneConnection"]));
             }
         }
     }

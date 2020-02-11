@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Capstone_Web_Members.Models.Product>
+﻿@model IEnumerable<Capstone_Database.Models.Product>
 
 @{
     ViewBag.Title = "Media Library";
@@ -31,11 +31,7 @@
         </tr>
         @foreach (var item in Model)
         {
-            if (Request.QueryString.HasKeys())
-            {
-                var searchString = Request.QueryString.ToString().Remove(0, 11).ToLower();
-                if (item.name.ToLower().Contains(searchString))
-                {
+
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.name)
@@ -50,26 +46,6 @@
                             Order(Not Implemented)
                         </td>
                     </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.type)
-                    </td>
-                    <td>
-                        Order(Not Implemented)
-                    </td>
-                </tr>
-            }
-
 
         }
     </table>
