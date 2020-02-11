@@ -1,0 +1,578 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="cs4982s20dModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="employeeId" />
+          </Key>
+          <Property Name="employeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="isManager" Type="bool" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ItemRental">
+          <Key>
+            <PropertyRef Name="itemRentalId" />
+          </Key>
+          <Property Name="itemRentalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stockId" Type="int" Nullable="false" />
+          <Property Name="memberId" Type="int" Nullable="false" />
+          <Property Name="status" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ItemReturn">
+          <Key>
+            <PropertyRef Name="itemReturnId" />
+          </Key>
+          <Property Name="itemReturnId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="memberId" Type="int" Nullable="false" />
+          <Property Name="stockId" Type="int" Nullable="false" />
+          <Property Name="employeeId" Type="int" Nullable="false" />
+          <Property Name="itemCondition" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="memberId" />
+          </Key>
+          <Property Name="memberId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="address" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="isLibrarian" Type="tinyint" Nullable="false" />
+          <Property Name="isBanned" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="productId" />
+          </Key>
+          <Property Name="productId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="category" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="stockId" />
+          </Key>
+          <Property Name="stockId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="productId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="eId">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemReturn" Type="Self.ItemReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="employeeId" />
+            </Principal>
+            <Dependent Role="ItemReturn">
+              <PropertyRef Name="employeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="memberId_ItemRental">
+          <End Role="Member" Type="Self.Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemRental" Type="Self.ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mID">
+          <End Role="Member" Type="Self.Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemReturn" Type="Self.ItemReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="ItemReturn">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="productId_Stock">
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="productId" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="productId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sID">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemReturn" Type="Self.ItemReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="stockId" />
+            </Principal>
+            <Dependent Role="ItemReturn">
+              <PropertyRef Name="stockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="stockId_ItemRental">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemRental" Type="Self.ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="stockId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="stockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="p_createMemberOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedStockId" Type="int" Mode="In" />
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="p_retrieveAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="p_retrieveAvailableProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="p_retrieveProductsWaitingReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="p_retrieveProductsWaitingShipment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="p_retrieveRentedCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="p_searchProductsName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="nameSearch" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="p_searchProductsNameType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="nameSearch" Type="varchar" Mode="In" />
+          <Parameter Name="typeSearch" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="p_searchProductsType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="typeSearch" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="p_updateMemberReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedStockId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="p_updateRentalShipped" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedStockId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="p_updateReturnProcessed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedStockId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="cs4982s20dModelStoreContainer">
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="cs4982s20d" store:Type="Tables" />
+          <EntitySet Name="ItemRental" EntityType="Self.ItemRental" Schema="cs4982s20d" store:Type="Tables" />
+          <EntitySet Name="ItemReturn" EntityType="Self.ItemReturn" Schema="cs4982s20d" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="cs4982s20d" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="cs4982s20d" store:Type="Tables" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" Schema="cs4982s20d" store:Type="Tables" />
+          <AssociationSet Name="eId" Association="Self.eId">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="ItemReturn" EntitySet="ItemReturn" />
+          </AssociationSet>
+          <AssociationSet Name="memberId_ItemRental" Association="Self.memberId_ItemRental">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="ItemRental" EntitySet="ItemRental" />
+          </AssociationSet>
+          <AssociationSet Name="mID" Association="Self.mID">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="ItemReturn" EntitySet="ItemReturn" />
+          </AssociationSet>
+          <AssociationSet Name="productId_Stock" Association="Self.productId_Stock">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="sID" Association="Self.sID">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="ItemReturn" EntitySet="ItemReturn" />
+          </AssociationSet>
+          <AssociationSet Name="stockId_ItemRental" Association="Self.stockId_ItemRental">
+            <End Role="Stock" EntitySet="Stock" />
+            <End Role="ItemRental" EntitySet="ItemRental" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="cs4982s20dModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="employeeId" />
+          </Key>
+          <Property Name="employeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="isManager" Type="Boolean" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ItemReturns" Relationship="Self.eId" FromRole="Employee" ToRole="ItemReturn" />
+        </EntityType>
+        <EntityType Name="ItemRental">
+          <Key>
+            <PropertyRef Name="itemRentalId" />
+          </Key>
+          <Property Name="itemRentalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stockId" Type="Int32" Nullable="false" />
+          <Property Name="memberId" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Member" Relationship="Self.memberId_ItemRental" FromRole="ItemRental" ToRole="Member" />
+          <NavigationProperty Name="Stock" Relationship="Self.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="ItemReturn">
+          <Key>
+            <PropertyRef Name="itemReturnId" />
+          </Key>
+          <Property Name="itemReturnId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="memberId" Type="Int32" Nullable="false" />
+          <Property Name="stockId" Type="Int32" Nullable="false" />
+          <Property Name="employeeId" Type="Int32" Nullable="false" />
+          <Property Name="itemCondition" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.eId" FromRole="ItemReturn" ToRole="Employee" />
+          <NavigationProperty Name="Member" Relationship="Self.mID" FromRole="ItemReturn" ToRole="Member" />
+          <NavigationProperty Name="Stock" Relationship="Self.sID" FromRole="ItemReturn" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="memberId" />
+          </Key>
+          <Property Name="memberId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="isLibrarian" Type="SByte" Nullable="false" />
+          <Property Name="isBanned" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="ItemRentals" Relationship="Self.memberId_ItemRental" FromRole="Member" ToRole="ItemRental" />
+          <NavigationProperty Name="ItemReturns" Relationship="Self.mID" FromRole="Member" ToRole="ItemReturn" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="productId" />
+          </Key>
+          <Property Name="productId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Stocks" Relationship="Self.productId_Stock" FromRole="Product" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="stockId" />
+          </Key>
+          <Property Name="stockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="productId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ItemRentals" Relationship="Self.stockId_ItemRental" FromRole="Stock" ToRole="ItemRental" />
+          <NavigationProperty Name="ItemReturns" Relationship="Self.sID" FromRole="Stock" ToRole="ItemReturn" />
+          <NavigationProperty Name="Product" Relationship="Self.productId_Stock" FromRole="Stock" ToRole="Product" />
+        </EntityType>
+        <Association Name="eId">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemReturn" Type="Self.ItemReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="employeeId" />
+            </Principal>
+            <Dependent Role="ItemReturn">
+              <PropertyRef Name="employeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="memberId_ItemRental">
+          <End Role="Member" Type="Self.Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemRental" Type="Self.ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="stockId_ItemRental">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemRental" Type="Self.ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="stockId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="stockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mID">
+          <End Role="Member" Type="Self.Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemReturn" Type="Self.ItemReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="ItemReturn">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sID">
+          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemReturn" Type="Self.ItemReturn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="stockId" />
+            </Principal>
+            <Dependent Role="ItemReturn">
+              <PropertyRef Name="stockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="productId_Stock">
+          <End Role="Product" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="productId" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="productId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cs4982s20dEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="ItemRentals" EntityType="Self.ItemRental" />
+          <EntitySet Name="ItemReturns" EntityType="Self.ItemReturn" />
+          <EntitySet Name="Members" EntityType="Self.Member" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Stocks" EntityType="Self.Stock" />
+          <AssociationSet Name="eId" Association="Self.eId">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="ItemReturn" EntitySet="ItemReturns" />
+          </AssociationSet>
+          <AssociationSet Name="memberId_ItemRental" Association="Self.memberId_ItemRental">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="ItemRental" EntitySet="ItemRentals" />
+          </AssociationSet>
+          <AssociationSet Name="stockId_ItemRental" Association="Self.stockId_ItemRental">
+            <End Role="Stock" EntitySet="Stocks" />
+            <End Role="ItemRental" EntitySet="ItemRentals" />
+          </AssociationSet>
+          <AssociationSet Name="mID" Association="Self.mID">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="ItemReturn" EntitySet="ItemReturns" />
+          </AssociationSet>
+          <AssociationSet Name="sID" Association="Self.sID">
+            <End Role="Stock" EntitySet="Stocks" />
+            <End Role="ItemReturn" EntitySet="ItemReturns" />
+          </AssociationSet>
+          <AssociationSet Name="productId_Stock" Association="Self.productId_Stock">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Stock" EntitySet="Stocks" />
+          </AssociationSet>
+          <FunctionImport Name="p_createMemberOrder">
+            <Parameter Name="selectedStockId" Mode="In" Type="Int32" />
+            <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="p_retrieveAllProducts" ReturnType="Collection(cs4982s20dModel.p_retrieveAllProducts_Result)" />
+          <FunctionImport Name="p_retrieveAvailableProducts" ReturnType="Collection(cs4982s20dModel.p_retrieveAvailableProducts_Result)" />
+          <FunctionImport Name="p_retrieveProductsWaitingReturn" ReturnType="Collection(cs4982s20dModel.p_retrieveProductsWaitingReturn_Result)" />
+          <FunctionImport Name="p_retrieveProductsWaitingShipment" ReturnType="Collection(cs4982s20dModel.p_retrieveProductsWaitingShipment_Result)" />
+          <FunctionImport Name="p_retrieveRentedCount" ReturnType="Collection(cs4982s20dModel.p_retrieveRentedCount_Result)">
+            <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="p_searchProductsName" ReturnType="Collection(cs4982s20dModel.p_searchProductsName_Result)">
+            <Parameter Name="nameSearch" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="p_searchProductsNameType" ReturnType="Collection(cs4982s20dModel.p_searchProductsNameType_Result)">
+            <Parameter Name="nameSearch" Mode="In" Type="String" />
+            <Parameter Name="typeSearch" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="p_searchProductsType" ReturnType="Collection(cs4982s20dModel.p_searchProductsType_Result)">
+            <Parameter Name="typeSearch" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="p_updateMemberReturn">
+            <Parameter Name="selectedStockId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="p_updateRentalShipped">
+            <Parameter Name="selectedStockId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="p_updateReturnProcessed">
+            <Parameter Name="selectedStockId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="p_retrieveAllProducts_Result" />
+        <ComplexType Name="p_retrieveAvailableProducts_Result" />
+        <ComplexType Name="p_retrieveProductsWaitingReturn_Result" />
+        <ComplexType Name="p_retrieveProductsWaitingShipment_Result" />
+        <ComplexType Name="p_retrieveRentedCount_Result" />
+        <ComplexType Name="p_searchProductsName_Result" />
+        <ComplexType Name="p_searchProductsNameType_Result" />
+        <ComplexType Name="p_searchProductsType_Result" />
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="cs4982s20dModelStoreContainer" CdmEntityContainer="cs4982s20dEntities">
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="cs4982s20dModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="employeeId" ColumnName="employeeId" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="isManager" ColumnName="isManager" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemRentals">
+            <EntityTypeMapping TypeName="cs4982s20dModel.ItemRental">
+              <MappingFragment StoreEntitySet="ItemRental">
+                <ScalarProperty Name="itemRentalId" ColumnName="itemRentalId" />
+                <ScalarProperty Name="stockId" ColumnName="stockId" />
+                <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemReturns">
+            <EntityTypeMapping TypeName="cs4982s20dModel.ItemReturn">
+              <MappingFragment StoreEntitySet="ItemReturn">
+                <ScalarProperty Name="itemReturnId" ColumnName="itemReturnId" />
+                <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="stockId" ColumnName="stockId" />
+                <ScalarProperty Name="employeeId" ColumnName="employeeId" />
+                <ScalarProperty Name="itemCondition" ColumnName="itemCondition" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="cs4982s20dModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="isLibrarian" ColumnName="isLibrarian" />
+                <ScalarProperty Name="isBanned" ColumnName="isBanned" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="cs4982s20dModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="category" ColumnName="category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stocks">
+            <EntityTypeMapping TypeName="cs4982s20dModel.Stock">
+              <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="stockId" ColumnName="stockId" />
+                <ScalarProperty Name="productId" ColumnName="productId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="p_createMemberOrder" FunctionName="cs4982s20dModel.Store.p_createMemberOrder" />
+          <FunctionImportMapping FunctionImportName="p_retrieveAllProducts" FunctionName="cs4982s20dModel.Store.p_retrieveAllProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_retrieveAllProducts_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_retrieveAvailableProducts" FunctionName="cs4982s20dModel.Store.p_retrieveAvailableProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_retrieveAvailableProducts_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_retrieveProductsWaitingReturn" FunctionName="cs4982s20dModel.Store.p_retrieveProductsWaitingReturn">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_retrieveProductsWaitingReturn_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_retrieveProductsWaitingShipment" FunctionName="cs4982s20dModel.Store.p_retrieveProductsWaitingShipment">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_retrieveProductsWaitingShipment_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_retrieveRentedCount" FunctionName="cs4982s20dModel.Store.p_retrieveRentedCount">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_retrieveRentedCount_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_searchProductsName" FunctionName="cs4982s20dModel.Store.p_searchProductsName">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_searchProductsName_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_searchProductsNameType" FunctionName="cs4982s20dModel.Store.p_searchProductsNameType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_searchProductsNameType_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_searchProductsType" FunctionName="cs4982s20dModel.Store.p_searchProductsType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="cs4982s20dModel.p_searchProductsType_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="p_updateMemberReturn" FunctionName="cs4982s20dModel.Store.p_updateMemberReturn" />
+          <FunctionImportMapping FunctionImportName="p_updateRentalShipped" FunctionName="cs4982s20dModel.Store.p_updateRentalShipped" />
+          <FunctionImportMapping FunctionImportName="p_updateReturnProcessed" FunctionName="cs4982s20dModel.Store.p_updateReturnProcessed" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
