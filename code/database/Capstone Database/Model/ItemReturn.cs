@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Capstone_Database
+namespace Capstone_Database.Model
 {
     using System;
     using System.Collections.Generic;

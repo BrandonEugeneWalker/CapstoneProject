@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Capstone_Database
+namespace Capstone_Database.Model
 {
     using System;
     
-    public partial class p_searchProductsNameType_Result
+    public partial class searchProductsType_Result
     {
     }
 }
