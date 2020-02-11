@@ -19,7 +19,7 @@ namespace Capstone_Desktop.View
 
         private MySqlCommandBuilder tableCommandBuilder = new MySqlCommandBuilder();
 
-        private DataTable dataTable;
+        private readonly DataTable dataTable;
 
         #endregion
 
@@ -35,8 +35,7 @@ namespace Capstone_Desktop.View
         {
             this.InitializeComponent();
             this.CurrentEmployee = loggedInEmployee;
-            this.dataTable = new DataTable
-            {
+            this.dataTable = new DataTable {
                 Locale = CultureInfo.InvariantCulture
             };
         }
@@ -67,34 +66,28 @@ namespace Capstone_Desktop.View
                 {
                     MessageBox.Show(@"Trouble removing Employee of id: " + id);
                 }
-
             }
 
             MessageBox.Show(@"Successfully removed " + removedCount + @"employee(s) from the database.");
-
-
-
-
         }
 
         private void AddButton_Click(object sender, EventArgs e)
         {
             var addEmployeeForm = new AddEmployeeForm();
-            this.Hide();
+            Hide();
             addEmployeeForm.ShowDialog();
-            this.Show();
+            Show();
             this.getData();
         }
 
         private void SubmitChangesButton_Click(object sender, EventArgs e)
         {
-            
             this.tableDataAdapter.Update(this.dataTable); //TODO
         }
 
         private void ManageEmployeeForm_Load(object sender, EventArgs e)
         {
-            this.employeeGridView.DataSource = this.employeeBindingSource;
+            this.employeeGridView.DataSource = this.employeeListSource;
             this.getData();
         }
 
@@ -107,7 +100,7 @@ namespace Capstone_Desktop.View
                 this.tableDataAdapter = new MySqlDataAdapter(query, CapstoneSqlConnection.SqlConnection);
                 this.tableCommandBuilder = new MySqlCommandBuilder(this.tableDataAdapter);
                 this.tableDataAdapter.Fill(this.dataTable);
-                this.employeeBindingSource.DataSource = this.dataTable;
+                this.employeeListSource.DataSource = this.dataTable;
 
                 this.refreshTable();
             }
@@ -120,6 +113,14 @@ namespace Capstone_Desktop.View
         private void refreshTable()
         {
             this.employeeGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+        }
+
+        private void manageItemsButton_Click(object sender, EventArgs e)
+        {
+            var manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
+            Hide();
+            manageItemsForm.ShowDialog();
+            Show();
         }
 
         #endregion

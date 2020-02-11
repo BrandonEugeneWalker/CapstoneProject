@@ -12,13 +12,13 @@ namespace Capstone_Desktop.View
     {
         #region Data members
 
-        private BindingSource itemListSource = new BindingSource();
+        private readonly BindingSource itemListSource = new BindingSource();
 
         private MySqlDataAdapter tableDataAdapter = new MySqlDataAdapter();
 
         private MySqlCommandBuilder tableCommandBuilder = new MySqlCommandBuilder();
 
-        private DataTable dataTable;
+        private readonly DataTable dataTable;
 
         #endregion
 
@@ -38,8 +38,8 @@ namespace Capstone_Desktop.View
             {
                 this.managerButton.Enabled = true;
             }
-            this.dataTable = new DataTable
-            {
+
+            this.dataTable = new DataTable {
                 Locale = CultureInfo.InvariantCulture
             };
         }
@@ -55,27 +55,22 @@ namespace Capstone_Desktop.View
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
-
         }
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            var addEmployeeForm = new AddEmployeeForm();
-            this.Hide();
-            addEmployeeForm.ShowDialog();
-            this.Show();
-            this.getData();
+            //TODO
         }
 
         private void SubmitChangesButton_Click(object sender, EventArgs e)
         {
-
             this.tableDataAdapter.Update(this.dataTable); //TODO
         }
 
         private void ManageEmployeeForm_Load(object sender, EventArgs e)
         {
-            this.itemsGridView.DataSource = this.itemsBindingSource;
+            // TODO: This line of code loads data into the '_Capstone_DatabaseDataSet.Product' table. You can move, or remove it, as needed.
+            this.itemsGridView.DataSource = this.itemListSource;
             this.getData();
         }
 
@@ -83,12 +78,21 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                var query = "select * from Product";
+                var query =
+                    "SELECT p.`productId`, p.`name`, p.`category`, p.`type`, COUNT(s.`productId`) AS \"In Stock\" " +
+                    "FROM `Product` AS p, `Stock` AS s " +
+                    "WHERE p.`productId` = s.`productId` " +
+                    "GROUP BY p.`productId`";
                 this.dataTable.Clear();
                 this.tableDataAdapter = new MySqlDataAdapter(query, CapstoneSqlConnection.SqlConnection);
                 this.tableCommandBuilder = new MySqlCommandBuilder(this.tableDataAdapter);
                 this.tableDataAdapter.Fill(this.dataTable);
-                this.itemsBindingSource.DataSource = this.dataTable;
+                this.itemListSource.DataSource = this.dataTable;
+
+                for (var i = 0; i < this.itemsGridView.Columns.Count; i++)
+                {
+                    this.itemsGridView.Columns[i].MinimumWidth = 100;
+                }
 
                 this.refreshTable();
             }
@@ -102,8 +106,6 @@ namespace Capstone_Desktop.View
         {
             this.itemsGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
-
-        #endregion
 
         private void markReturnedButton_Click(object sender, EventArgs e)
         {
@@ -119,11 +121,13 @@ namespace Capstone_Desktop.View
         {
             if (this.CurrentEmployee.IsManager)
             {
-                this.Hide();
-                ManageEmployeeForm manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
+                Hide();
+                var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
                 manageEmployeeForm.ShowDialog();
-                this.Show();
+                Show();
             }
         }
+
+        #endregion
     }
 }

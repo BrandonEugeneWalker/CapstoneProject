@@ -28,26 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.logoutButton = new System.Windows.Forms.Button();
             this.companyLabel = new System.Windows.Forms.Label();
             this.manageItemsLabel = new System.Windows.Forms.Label();
-            this.itemsGridView = new System.Windows.Forms.DataGridView();
-            this.itemsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this._Capstone_DatabaseDataSet = new Capstone_Desktop._Capstone_DatabaseDataSet();
             this.markReturnedButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.submitChangesButton = new System.Windows.Forms.Button();
-            this.employeeTableAdapter = new Capstone_Desktop._Capstone_DatabaseDataSetTableAdapters.EmployeeTableAdapter();
             this.markShippedButton = new System.Windows.Forms.Button();
             this.managerButton = new System.Windows.Forms.Button();
-            this.employeeIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.passwordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isManagerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.itemsGridView = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.itemsBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._Capstone_DatabaseDataSet)).BeginInit();
             this.SuspendLayout();
             // 
             // logoutButton
@@ -83,35 +73,6 @@
             this.manageItemsLabel.Text = "Manage Items";
             this.manageItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // itemsGridView
-            // 
-            this.itemsGridView.AllowUserToResizeRows = false;
-            this.itemsGridView.AutoGenerateColumns = false;
-            this.itemsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.itemsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.itemsGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.employeeIdDataGridViewTextBoxColumn,
-            this.passwordDataGridViewTextBoxColumn,
-            this.isManagerDataGridViewTextBoxColumn,
-            this.nameDataGridViewTextBoxColumn});
-            this.itemsGridView.DataSource = this.itemsBindingSource;
-            this.itemsGridView.Location = new System.Drawing.Point(12, 164);
-            this.itemsGridView.Name = "itemsGridView";
-            this.itemsGridView.RowHeadersWidth = 62;
-            this.itemsGridView.RowTemplate.Height = 28;
-            this.itemsGridView.Size = new System.Drawing.Size(1234, 391);
-            this.itemsGridView.TabIndex = 3;
-            // 
-            // itemsBindingSource
-            // 
-            this.itemsBindingSource.DataMember = "Employee";
-            this.itemsBindingSource.DataSource = this._Capstone_DatabaseDataSet;
-            // 
-            // _Capstone_DatabaseDataSet
-            // 
-            this._Capstone_DatabaseDataSet.DataSetName = "_Capstone_DatabaseDataSet";
-            this._Capstone_DatabaseDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // markReturnedButton
             // 
             this.markReturnedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -146,10 +107,6 @@
             this.submitChangesButton.UseVisualStyleBackColor = true;
             this.submitChangesButton.Click += new System.EventHandler(this.SubmitChangesButton_Click);
             // 
-            // employeeTableAdapter
-            // 
-            this.employeeTableAdapter.ClearBeforeFill = true;
-            // 
             // markShippedButton
             // 
             this.markShippedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -173,41 +130,26 @@
             this.managerButton.UseVisualStyleBackColor = true;
             this.managerButton.Click += new System.EventHandler(this.managerButton_Click);
             // 
-            // employeeIdDataGridViewTextBoxColumn
+            // itemsGridView
             // 
-            this.employeeIdDataGridViewTextBoxColumn.DataPropertyName = "employeeId";
-            this.employeeIdDataGridViewTextBoxColumn.HeaderText = "employeeId";
-            this.employeeIdDataGridViewTextBoxColumn.Name = "employeeIdDataGridViewTextBoxColumn";
-            this.employeeIdDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // passwordDataGridViewTextBoxColumn
-            // 
-            this.passwordDataGridViewTextBoxColumn.DataPropertyName = "password";
-            this.passwordDataGridViewTextBoxColumn.HeaderText = "password";
-            this.passwordDataGridViewTextBoxColumn.Name = "passwordDataGridViewTextBoxColumn";
-            // 
-            // isManagerDataGridViewTextBoxColumn
-            // 
-            this.isManagerDataGridViewTextBoxColumn.DataPropertyName = "isManager";
-            this.isManagerDataGridViewTextBoxColumn.HeaderText = "isManager";
-            this.isManagerDataGridViewTextBoxColumn.Name = "isManagerDataGridViewTextBoxColumn";
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.itemsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.itemsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.itemsGridView.Location = new System.Drawing.Point(12, 164);
+            this.itemsGridView.Name = "itemsGridView";
+            this.itemsGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.itemsGridView.Size = new System.Drawing.Size(1240, 384);
+            this.itemsGridView.TabIndex = 9;
             // 
             // ManageItemsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.itemsGridView);
             this.Controls.Add(this.managerButton);
             this.Controls.Add(this.markShippedButton);
             this.Controls.Add(this.submitChangesButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.markReturnedButton);
-            this.Controls.Add(this.itemsGridView);
             this.Controls.Add(this.manageItemsLabel);
             this.Controls.Add(this.logoutButton);
             this.Controls.Add(this.companyLabel);
@@ -219,8 +161,6 @@
             this.Text = "Manage Employees";
             this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.itemsBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._Capstone_DatabaseDataSet)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -230,18 +170,11 @@
         private System.Windows.Forms.Button logoutButton;
         private System.Windows.Forms.Label companyLabel;
         private System.Windows.Forms.Label manageItemsLabel;
-        private System.Windows.Forms.DataGridView itemsGridView;
         private System.Windows.Forms.Button markReturnedButton;
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button submitChangesButton;
-        private _Capstone_DatabaseDataSet _Capstone_DatabaseDataSet;
-        private System.Windows.Forms.BindingSource itemsBindingSource;
-        private _Capstone_DatabaseDataSetTableAdapters.EmployeeTableAdapter employeeTableAdapter;
         private System.Windows.Forms.Button markShippedButton;
         private System.Windows.Forms.Button managerButton;
-        private System.Windows.Forms.DataGridViewTextBoxColumn employeeIdDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn passwordDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn isManagerDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridView itemsGridView;
     }
 }

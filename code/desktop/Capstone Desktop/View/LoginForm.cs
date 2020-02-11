@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Windows.Forms;
 using Capstone_Desktop.Controller;
 using Capstone_Desktop.View;
@@ -42,23 +41,40 @@ namespace Capstone_Desktop
                 if (results)
                 {
                     var manageEmployeeForm = new ManageEmployeeForm(this.LoginController.CurrentEmployee);
-                    this.Hide();
+                    Hide();
                     manageEmployeeForm.ShowDialog();
-                    this.Show();
+                    this.emptyTextBoxes();
+                    Show();
+                }
+                else if (this.LoginController.CurrentEmployee != null)
+                {
+                    var manageItemsForm = new ManageItemsForm(this.LoginController.CurrentEmployee);
+                    Hide();
+                    manageItemsForm.ShowDialog();
+                    this.emptyTextBoxes();
+                    Show();
                 }
                 else
                 {
-                    MessageBox.Show(@"Access denied, contact a supervisor.");
-                    this.usernameTextbox.Text = "";
-                    this.passwordTextbox.Text = "";
+                    this.showLoginError();
                 }
             }
             catch (MySqlException)
             {
-                MessageBox.Show(@"Was unable to login.");
-                this.usernameTextbox.Text = "";
-                this.passwordTextbox.Text = "";
+                this.showLoginError();
             }
+        }
+
+        private void emptyTextBoxes()
+        {
+            this.usernameTextbox.Text = "";
+            this.passwordTextbox.Text = "";
+        }
+
+        private void showLoginError()
+        {
+            MessageBox.Show(@"Was unable to login.");
+            this.emptyTextBoxes();
         }
 
         #endregion
