@@ -28,7 +28,7 @@ namespace Capstone_Desktop.View
 
         #region Properties
 
-        private AddEmployeeFormController addEmployeeFormController { get; }
+        private AddEmployeeFormController EmployeeController { get; }
 
         #endregion
 
@@ -38,7 +38,7 @@ namespace Capstone_Desktop.View
         public AddEmployeeForm()
         {
             this.InitializeComponent();
-            this.addEmployeeFormController = new AddEmployeeFormController();
+            this.EmployeeController = new AddEmployeeFormController();
             this.submitButton.Enabled = false;
             this.passwordRequirementsLabel.Text = PASSWORD_REQUIREMENTS;
             this.isValidLabel.ForeColor = Color.Red;
@@ -91,7 +91,7 @@ namespace Capstone_Desktop.View
         private void passwordTextBox_TextChanged(object sender, EventArgs e)
         {
             var password = this.passwordTextBox.Text;
-            var isValid = this.addEmployeeFormController.IsValidPassword(password);
+            var isValid = this.EmployeeController.IsValidPassword(password);
 
             if (isValid)
             {
