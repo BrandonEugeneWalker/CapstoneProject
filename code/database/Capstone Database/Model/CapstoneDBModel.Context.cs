@@ -133,5 +133,31 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateReturnProcessed", selectedRentalIdParameter);
         }
+    
+        public virtual ObjectResult<Employee> selectEmployeeByIdAndPassword(Nullable<int> id, string pwd)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            var pwdParameter = pwd != null ?
+                new ObjectParameter("pwd", pwd) :
+                new ObjectParameter("pwd", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Employee>("selectEmployeeByIdAndPassword", idParameter, pwdParameter);
+        }
+    
+        public virtual ObjectResult<Employee> selectEmployeeByIdAndPassword(Nullable<int> id, string pwd, MergeOption mergeOption)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            var pwdParameter = pwd != null ?
+                new ObjectParameter("pwd", pwd) :
+                new ObjectParameter("pwd", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Employee>("selectEmployeeByIdAndPassword", mergeOption, idParameter, pwdParameter);
+        }
     }
 }

@@ -51,6 +51,9 @@
     <Reference Include="MySql.Data.Entity.EF6, Version=6.10.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\..\..\Capstone Project\packages\MySql.Data.Entity.6.10.9\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data.EntityFramework, Version=8.0.19.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Capstone Project\packages\MySql.Data.EntityFramework.8.0.19\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
@@ -93,14 +96,6 @@
   <ItemGroup>
     <Compile Include="Controller\AddEmployeeFormController.cs" />
     <Compile Include="Controller\LoginFormController.cs" />
-    <Compile Include="Database\CapstoneSQLConnection.cs" />
-    <Compile Include="Database\employee\DeleteEmployeeSqlCommands.cs" />
-    <Compile Include="Database\employee\InsertEmployeeSqlCommands.cs" />
-    <Compile Include="Database\employee\SelectEmployeeSqlCommands.cs" />
-    <Compile Include="Database\RentalStatus.cs" />
-    <Compile Include="Database\rental\UpdateRentalSqlCommands.cs" />
-    <Compile Include="Model\Employee.cs" />
-    <Compile Include="Model\LibraryItem.cs" />
     <Compile Include="View\AddEmployeeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -180,6 +175,8 @@
       <Name>Capstone Database</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

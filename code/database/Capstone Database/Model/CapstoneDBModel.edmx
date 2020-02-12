@@ -168,6 +168,10 @@
         <Function Name="searchProductsType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="typeSearch" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="selectEmployeeByIdAndPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="pwd" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="updateMemberReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedRentalId" Type="int" Mode="In" />
         </Function>
@@ -428,6 +432,10 @@
           <FunctionImport Name="updateReturnProcessed">
           <Parameter Name="selectedRentalId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="selectEmployeeByIdAndPassword" EntitySet="Employees" ReturnType="Collection(Model.Employee)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="pwd" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -437,6 +445,7 @@
         <ComplexType Name="searchProductsName_Result" />
         <ComplexType Name="searchProductsNameType_Result" />
         <ComplexType Name="searchProductsType_Result" />
+        <ComplexType Name="selectEmployeeByIdAndPassword_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -551,6 +560,8 @@
           <FunctionImportMapping FunctionImportName="updateMemberReturn" FunctionName="Model.Store.updateMemberReturn" />
           <FunctionImportMapping FunctionImportName="updateRentalShipped" FunctionName="Model.Store.updateRentalShipped" />
           <FunctionImportMapping FunctionImportName="updateReturnProcessed" FunctionName="Model.Store.updateReturnProcessed" />
+          <FunctionImportMapping FunctionImportName="selectEmployeeByIdAndPassword" FunctionName="Model.Store.selectEmployeeByIdAndPassword">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

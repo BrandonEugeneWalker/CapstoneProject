@@ -74,6 +74,7 @@
             // 
             // addButton
             // 
+            this.addButton.Enabled = false;
             this.addButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addButton.Location = new System.Drawing.Point(1105, 578);
             this.addButton.Name = "addButton";
@@ -119,7 +120,6 @@
             // 
             // manageRentalsButton
             // 
-            this.manageRentalsButton.Enabled = false;
             this.manageRentalsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.manageRentalsButton.Location = new System.Drawing.Point(1105, 64);
             this.manageRentalsButton.Name = "manageRentalsButton";

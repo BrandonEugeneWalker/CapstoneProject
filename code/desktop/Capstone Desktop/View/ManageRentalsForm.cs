@@ -1,51 +1,41 @@
 ﻿using System;
-using System.CodeDom;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using Capstone_Desktop.Database;
-using Capstone_Desktop.Model;
+using Capstone_Database.Model;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
+    /// <summary>This form is used to view and manage the status of the rentals.</summary>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class ManageRentalsForm : Form
     {
         #region Data members
 
         private readonly BindingSource rentalListSource = new BindingSource();
 
-        private MySqlDataAdapter tableDataAdapter = new MySqlDataAdapter();
-
-        private MySqlCommandBuilder tableCommandBuilder = new MySqlCommandBuilder();
-
         private readonly DataTable dataTable;
-
-        private static string waitingShipmentQuery = "SELECT p.`productId`, p.`name`, p.`category`, p.`type`, s.`stockId` " +
-                                                     "FROM `Product` AS p " +
-                                                     "INNER JOIN `Stock` AS s ON p.`productId` = s.`productId` " +
-                                                     "WHERE EXISTS (SELECT * FROM `ItemRental` AS r WHERE r.`stockId` = s.`stockId` AND `status` = \"WaitingShipment\")";
-
-        private static string waitingReturnQuery = "SELECT p.`productId`, p.`name`, p.`category`, p.`type`, s.`stockId` " +
-                                                   "FROM `Product` AS p " +
-                                                   "INNER JOIN `Stock` AS s ON p.`productId` = s.`productId` " +
-                                                   "WHERE EXISTS (SELECT * FROM `ItemRental` AS r WHERE r.`stockId` = s.`stockId` AND `status` = \"WaitingReturn\")";
 
         #endregion
 
         #region Properties
 
+        /// <summary>Gets or sets the current employee.</summary>
+        /// <value>The current employee.</value>
         public Employee CurrentEmployee { get; set; }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>Initializes a new instance of the <see cref="ManageRentalsForm" /> class.</summary>
+        /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageRentalsForm(Employee loggedInEmployee)
         {
             this.InitializeComponent();
             this.CurrentEmployee = loggedInEmployee;
-            if (this.CurrentEmployee.IsManager)
+            if (this.CurrentEmployee.isManager == true)
             {
                 this.managerButton.Enabled = true;
             }
@@ -74,14 +64,10 @@ namespace Capstone_Desktop.View
             this.returnButton.Enabled = false;
         }
 
-        private void getData(string query)
+        private void getData()
         {
             try
             {
-                this.dataTable.Clear();
-                this.tableDataAdapter = new MySqlDataAdapter(query, CapstoneSqlConnection.SqlConnection);
-                this.tableCommandBuilder = new MySqlCommandBuilder(this.tableDataAdapter);
-                this.tableDataAdapter.Fill(this.dataTable);
                 this.rentalListSource.DataSource = this.dataTable;
 
                 for (var i = 0; i < this.rentalGridView.Columns.Count; i++)
@@ -104,7 +90,7 @@ namespace Capstone_Desktop.View
 
         private void managerButton_Click(object sender, EventArgs e)
         {
-            if (this.CurrentEmployee.IsManager)
+            if (this.CurrentEmployee.isManager == true)
             {
                 Hide();
                 var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
@@ -126,20 +112,17 @@ namespace Capstone_Desktop.View
         {
         }
 
-        #endregion
-
         private void rentalStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.rentalStatusComboBox.SelectedIndex == 0)
             {
-                this.getData(waitingReturnQuery);
+                this.getData();
                 this.swapEnabledRentalButtons();
             }
             else
             {
-                this.getData(waitingShipmentQuery);
+                this.getData();
                 this.swapEnabledRentalButtons();
-                
             }
         }
 
@@ -148,5 +131,7 @@ namespace Capstone_Desktop.View
             this.returnButton.Enabled = !this.returnButton.Enabled;
             this.rentedButton.Enabled = !this.rentedButton.Enabled;
         }
+
+        #endregion
     }
 }
