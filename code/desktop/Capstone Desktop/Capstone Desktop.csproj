@@ -95,7 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\AddEmployeeFormController.cs" />
-    <Compile Include="Controller\LoginFormController.cs" />
     <Compile Include="View\AddEmployeeForm.cs">
       <SubType>Form</SubType>
     </Compile>

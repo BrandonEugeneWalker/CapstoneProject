@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using Capstone_Desktop.Controller;
+using Capstone_Database.Model;
 using Capstone_Desktop.View;
 using MySql.Data.MySqlClient;
+using System.Linq;
 
 namespace Capstone_Desktop
 {
@@ -12,9 +13,9 @@ namespace Capstone_Desktop
     {
         #region Properties
 
-        /// <summary>Gets or sets the login controller.</summary>
-        /// <value>The login controller.</value>
-        public LoginFormController LoginController { get; set; }
+        private Employee currentEmployee;
+
+        private readonly OnlineEntities capstoneDatabaseContext = new OnlineEntities();
 
         #endregion
 
@@ -24,32 +25,31 @@ namespace Capstone_Desktop
         public LoginForm()
         {
             this.InitializeComponent();
-            this.LoginController = new LoginFormController();
         }
 
         #endregion
 
         #region Methods
 
-        private void loginButton_Click(object sender, EventArgs e)
+        private void LoginButton_Click(object sender, EventArgs e)
         {
             var id = int.Parse(this.usernameTextbox.Text);
             var password = this.passwordTextbox.Text;
 
             try
             {
-                var results = this.LoginController.TryToLogin(id, password);
+                var results = this.tryToLogin(id, password);
                 if (results)
                 {
-                    var manageEmployeeForm = new ManageEmployeeForm(this.LoginController.CurrentEmployee);
+                    var manageEmployeeForm = new ManageEmployeeForm(this.currentEmployee);
                     Hide();
                     manageEmployeeForm.ShowDialog();
                     this.emptyTextBoxes();
                     Show();
                 }
-                else if (this.LoginController.CurrentEmployee != null)
+                else if (this.currentEmployee != null)
                 {
-                    var manageItemsForm = new ManageItemsForm(this.LoginController.CurrentEmployee);
+                    var manageItemsForm = new ManageItemsForm(this.currentEmployee);
                     Hide();
                     manageItemsForm.ShowDialog();
                     this.emptyTextBoxes();
@@ -76,6 +76,31 @@ namespace Capstone_Desktop
         {
             MessageBox.Show(@"Was unable to login.");
             this.emptyTextBoxes();
+        }
+
+        private bool tryToLogin(int id, string password)
+        {
+            try
+            {
+                var employee =
+                    this.capstoneDatabaseContext.selectEmployeeByIdAndPassword(id, password).ToList()[0];
+                this.currentEmployee = employee;
+
+                if (employee.isManager == true)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return false;
+            }
+            catch (ArgumentNullException)
+            {
+                return false;
+            }
         }
 
         #endregion
