@@ -35,9 +35,9 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult OrderProduct(int id)
         {
-            //TODO assign stockId and updateOrder here
             var results = this.db.findAvailableStockOfProduct(id).ToList();
             var availableStockId = results[0];
+            // TODO Remove this hardcoded MemberId when login is complete
             this.db.createMemberOrder(availableStockId, 1);
 
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);

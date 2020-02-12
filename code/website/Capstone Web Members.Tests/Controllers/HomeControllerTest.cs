@@ -45,5 +45,18 @@ namespace Capstone_Web_Members.Tests.Controllers
             // Assert
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void MediaLibrary()
+        {
+            // Arrange
+            var controller = new HomeController();
+
+            // Act
+            var result = controller.MediaLibrary() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
     }
 }
