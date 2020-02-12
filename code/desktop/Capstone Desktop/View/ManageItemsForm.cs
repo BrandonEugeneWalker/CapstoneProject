@@ -104,6 +104,10 @@ namespace Capstone_Desktop.View
 
         private void manageRentalsButton_Click(object sender, EventArgs e)
         {
+            Hide();
+            var manageRentalsForm = new ManageRentalsForm(this.CurrentEmployee);
+            manageRentalsForm.ShowDialog();
+            Show();
         }
 
         #endregion

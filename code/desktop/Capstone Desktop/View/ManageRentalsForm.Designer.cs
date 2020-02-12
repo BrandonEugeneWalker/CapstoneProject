@@ -99,6 +99,7 @@
             // 
             // rentalGridView
             // 
+            this.rentalGridView.AllowUserToAddRows = false;
             this.rentalGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.rentalGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.rentalGridView.Location = new System.Drawing.Point(12, 164);
@@ -172,7 +173,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "ManageRentalsForm";
-            this.Text = "Manage Employees";
+            this.Text = "Rentals";
             this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rentalGridView)).EndInit();
             this.ResumeLayout(false);

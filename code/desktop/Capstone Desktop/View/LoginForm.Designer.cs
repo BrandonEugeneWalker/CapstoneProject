@@ -122,7 +122,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(859, 482);
             this.Name = "LoginForm";
-            this.Text = "Manager Login";
+            this.Text = "Employee Login";
             this.ResumeLayout(false);
             this.PerformLayout();
 

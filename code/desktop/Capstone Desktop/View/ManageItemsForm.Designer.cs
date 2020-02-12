@@ -110,6 +110,7 @@
             // 
             // itemsGridView
             // 
+            this.itemsGridView.AllowUserToAddRows = false;
             this.itemsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.itemsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.itemsGridView.Location = new System.Drawing.Point(12, 164);
@@ -146,7 +147,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "ManageItemsForm";
-            this.Text = "Manage Employees";
+            this.Text = "Items";
             this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).EndInit();
             this.ResumeLayout(false);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Entity;
 using System.Globalization;
 using System.Windows.Forms;
 using Capstone_Database.Model;
@@ -25,6 +26,8 @@ namespace Capstone_Desktop.View
         /// <value>The current employee.</value>
         public Employee CurrentEmployee { get; set; }
 
+        private readonly OnlineEntities capstoneDatabaseContext;
+
         #endregion
 
         #region Constructors
@@ -35,6 +38,7 @@ namespace Capstone_Desktop.View
         {
             this.InitializeComponent();
             this.CurrentEmployee = loggedInEmployee;
+            this.capstoneDatabaseContext = new OnlineEntities();
             if (this.CurrentEmployee.isManager == true)
             {
                 this.managerButton.Enabled = true;
@@ -60,15 +64,17 @@ namespace Capstone_Desktop.View
             //WaitingReturn
             this.rentalGridView.DataSource = this.rentalListSource;
             this.rentalStatusComboBox.SelectedIndex = 0;
-            this.rentedButton.Enabled = true;
-            this.returnButton.Enabled = false;
+            //this.rentedButton.Enabled = true;
+            //this.returnButton.Enabled = false;
+            this.getData();
         }
 
         private void getData()
         {
             try
             {
-                this.rentalListSource.DataSource = this.dataTable;
+                this.capstoneDatabaseContext.ItemRentals.Load();
+                this.rentalListSource.DataSource = this.capstoneDatabaseContext.ItemRentals.Local.ToBindingList();
 
                 for (var i = 0; i < this.rentalGridView.Columns.Count; i++)
                 {
@@ -106,24 +112,45 @@ namespace Capstone_Desktop.View
 
         private void rentedButton_Click(object sender, EventArgs e)
         {
+            foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
+            {
+                ItemRental currentItem = (ItemRental) currentRow.DataBoundItem;
+
+                if (currentItem.status.Equals("WaitingShipment"))
+                {
+                    currentItem.status = "Rented";
+                    this.capstoneDatabaseContext.SaveChanges();
+                    this.rentalGridView.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show(@"That rental cannot be updated to shipped status.");
+                }
+            }
         }
 
         private void returnButton_Click(object sender, EventArgs e)
         {
+            foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
+            {
+                ItemRental currentItem = (ItemRental)currentRow.DataBoundItem;
+
+                if (currentItem.status.Equals("WaitingReturn"))
+                {
+                    currentItem.status = "Returned";
+                    this.capstoneDatabaseContext.SaveChanges();
+                    this.rentalGridView.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show(@"That rental cannot be updated to returned status.");
+                }
+            }
         }
 
         private void rentalStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.rentalStatusComboBox.SelectedIndex == 0)
-            {
-                this.getData();
-                this.swapEnabledRentalButtons();
-            }
-            else
-            {
-                this.getData();
-                this.swapEnabledRentalButtons();
-            }
+            
         }
 
         private void swapEnabledRentalButtons()
