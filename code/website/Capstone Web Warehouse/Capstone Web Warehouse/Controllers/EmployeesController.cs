@@ -76,6 +76,7 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(employee);
         }
 
