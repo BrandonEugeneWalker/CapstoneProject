@@ -15,6 +15,10 @@
         /// </returns>
         public bool IsValidPassword(string password)
         {
+            if (string.IsNullOrEmpty(password))
+            {
+                return false;
+            }
             var lowerCases = 0;
             var upperCases = 0;
             var numbers = 0;
