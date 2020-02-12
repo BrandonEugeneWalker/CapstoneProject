@@ -57,14 +57,24 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retrieveAvailableProducts_Result>("retrieveAvailableProducts");
         }
     
-        public virtual ObjectResult<retrieveProductsWaitingReturn_Result> retrieveProductsWaitingReturn()
+        public virtual ObjectResult<ItemRental> retrieveProductsWaitingReturn()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retrieveProductsWaitingReturn_Result>("retrieveProductsWaitingReturn");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingReturn");
         }
     
-        public virtual ObjectResult<retrieveProductsWaitingShipment_Result> retrieveProductsWaitingShipment()
+        public virtual ObjectResult<ItemRental> retrieveProductsWaitingReturn(MergeOption mergeOption)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retrieveProductsWaitingShipment_Result>("retrieveProductsWaitingShipment");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingReturn", mergeOption);
+        }
+    
+        public virtual ObjectResult<ItemRental> retrieveProductsWaitingShipment()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingShipment");
+        }
+    
+        public virtual ObjectResult<ItemRental> retrieveProductsWaitingShipment(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingShipment", mergeOption);
         }
     
         public virtual ObjectResult<retrieveRentedCount_Result> retrieveRentedCount(string selectedMemberId)
@@ -76,16 +86,25 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retrieveRentedCount_Result>("retrieveRentedCount", selectedMemberIdParameter);
         }
     
-        public virtual ObjectResult<searchProductsName_Result> searchProductsName(string nameSearch)
+        public virtual ObjectResult<Product> searchProductsName(string nameSearch)
         {
             var nameSearchParameter = nameSearch != null ?
                 new ObjectParameter("nameSearch", nameSearch) :
                 new ObjectParameter("nameSearch", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<searchProductsName_Result>("searchProductsName", nameSearchParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("searchProductsName", nameSearchParameter);
         }
     
-        public virtual ObjectResult<searchProductsNameType_Result> searchProductsNameType(string nameSearch, string typeSearch)
+        public virtual ObjectResult<Product> searchProductsName(string nameSearch, MergeOption mergeOption)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter("nameSearch", nameSearch) :
+                new ObjectParameter("nameSearch", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("searchProductsName", mergeOption, nameSearchParameter);
+        }
+    
+        public virtual ObjectResult<Product> searchProductsNameType(string nameSearch, string typeSearch)
         {
             var nameSearchParameter = nameSearch != null ?
                 new ObjectParameter("nameSearch", nameSearch) :
@@ -95,16 +114,38 @@ namespace Capstone_Database.Model
                 new ObjectParameter("typeSearch", typeSearch) :
                 new ObjectParameter("typeSearch", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<searchProductsNameType_Result>("searchProductsNameType", nameSearchParameter, typeSearchParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("searchProductsNameType", nameSearchParameter, typeSearchParameter);
         }
     
-        public virtual ObjectResult<searchProductsType_Result> searchProductsType(string typeSearch)
+        public virtual ObjectResult<Product> searchProductsNameType(string nameSearch, string typeSearch, MergeOption mergeOption)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter("nameSearch", nameSearch) :
+                new ObjectParameter("nameSearch", typeof(string));
+    
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter("typeSearch", typeSearch) :
+                new ObjectParameter("typeSearch", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("searchProductsNameType", mergeOption, nameSearchParameter, typeSearchParameter);
+        }
+    
+        public virtual ObjectResult<Product> searchProductsType(string typeSearch)
         {
             var typeSearchParameter = typeSearch != null ?
                 new ObjectParameter("typeSearch", typeSearch) :
                 new ObjectParameter("typeSearch", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<searchProductsType_Result>("searchProductsType", typeSearchParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("searchProductsType", typeSearchParameter);
+        }
+    
+        public virtual ObjectResult<Product> searchProductsType(string typeSearch, MergeOption mergeOption)
+        {
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter("typeSearch", typeSearch) :
+                new ObjectParameter("typeSearch", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("searchProductsType", mergeOption, typeSearchParameter);
         }
     
         public virtual int updateMemberReturn(Nullable<int> selectedRentalId)

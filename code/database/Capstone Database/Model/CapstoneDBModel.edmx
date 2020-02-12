@@ -408,19 +408,19 @@
           </FunctionImport>
           <FunctionImport Name="retrieveAllProducts" ReturnType="Collection(Model.retrieveAllProducts_Result)" />
           <FunctionImport Name="retrieveAvailableProducts" ReturnType="Collection(Model.retrieveAvailableProducts_Result)" />
-          <FunctionImport Name="retrieveProductsWaitingReturn" ReturnType="Collection(Model.retrieveProductsWaitingReturn_Result)" />
-          <FunctionImport Name="retrieveProductsWaitingShipment" ReturnType="Collection(Model.retrieveProductsWaitingShipment_Result)" />
+          <FunctionImport Name="retrieveProductsWaitingReturn" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
+          <FunctionImport Name="retrieveProductsWaitingShipment" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
           <FunctionImport Name="retrieveRentedCount" ReturnType="Collection(Model.retrieveRentedCount_Result)">
           <Parameter Name="selectedMemberId" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="searchProductsName" ReturnType="Collection(Model.searchProductsName_Result)">
+          <FunctionImport Name="searchProductsName" EntitySet="Products" ReturnType="Collection(Model.Product)">
           <Parameter Name="nameSearch" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="searchProductsNameType" ReturnType="Collection(Model.searchProductsNameType_Result)">
+          <FunctionImport Name="searchProductsNameType" EntitySet="Products" ReturnType="Collection(Model.Product)">
             <Parameter Name="nameSearch" Mode="In" Type="String" />
             <Parameter Name="typeSearch" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="searchProductsType" ReturnType="Collection(Model.searchProductsType_Result)">
+          <FunctionImport Name="searchProductsType" EntitySet="Products" ReturnType="Collection(Model.Product)">
           <Parameter Name="typeSearch" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="updateMemberReturn">
@@ -528,14 +528,8 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="retrieveProductsWaitingReturn" FunctionName="Model.Store.retrieveProductsWaitingReturn">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.retrieveProductsWaitingReturn_Result" />
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="retrieveProductsWaitingShipment" FunctionName="Model.Store.retrieveProductsWaitingShipment">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.retrieveProductsWaitingShipment_Result" />
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="retrieveRentedCount" FunctionName="Model.Store.retrieveRentedCount">
             <ResultMapping>
@@ -543,19 +537,10 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="searchProductsName" FunctionName="Model.Store.searchProductsName">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.searchProductsName_Result" />
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="searchProductsNameType" FunctionName="Model.Store.searchProductsNameType">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.searchProductsNameType_Result" />
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="searchProductsType" FunctionName="Model.Store.searchProductsType">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.searchProductsType_Result" />
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="updateMemberReturn" FunctionName="Model.Store.updateMemberReturn" />
           <FunctionImportMapping FunctionImportName="updateRentalShipped" FunctionName="Model.Store.updateRentalShipped" />
