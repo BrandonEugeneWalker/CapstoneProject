@@ -32,5 +32,15 @@ namespace Capstone_Web_Members.Controllers
             var availableProducts = this.db.retrieveAvailableProducts().ToList();
             return View(availableProducts);
         }
+
+        public ActionResult OrderProduct(int id)
+        {
+            //TODO assign stockId and updateOrder here
+            var results = this.db.findAvailableStockOfProduct(id).ToList();
+            var availableStockId = results[0];
+            this.db.createMemberOrder(availableStockId, 1);
+
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+        }
     }
 }

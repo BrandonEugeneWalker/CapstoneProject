@@ -151,6 +151,9 @@
           <Parameter Name="selectedStockId" Type="int" Mode="In" />
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
+        <Function Name="findAvailableStockOfProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedProductId" Type="int" Mode="In" />
+        </Function>
         <Function Name="insertEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="id" Type="int" Mode="In" />
           <Parameter Name="pw" Type="varchar" Mode="In" />
@@ -451,6 +454,9 @@
             <Parameter Name="isMan" Mode="In" Type="SByte" />
             <Parameter Name="epName" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="findAvailableStockOfProduct" ReturnType="Collection(Int32)">
+            <Parameter Name="selectedProductId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -560,6 +566,7 @@
           <FunctionImportMapping FunctionImportName="selectEmployeeByIdAndPassword" FunctionName="Model.Store.selectEmployeeByIdAndPassword">
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="insertEmployee" FunctionName="Model.Store.insertEmployee" />
+          <FunctionImportMapping FunctionImportName="findAvailableStockOfProduct" FunctionName="Model.Store.findAvailableStockOfProduct" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

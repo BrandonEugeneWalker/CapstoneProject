@@ -226,5 +226,14 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertEmployee", idParameter, pwParameter, isManParameter, epNameParameter);
         }
+    
+        public virtual ObjectResult<Nullable<int>> findAvailableStockOfProduct(Nullable<int> selectedProductId)
+        {
+            var selectedProductIdParameter = selectedProductId.HasValue ?
+                new ObjectParameter("selectedProductId", selectedProductId) :
+                new ObjectParameter("selectedProductId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("findAvailableStockOfProduct", selectedProductIdParameter);
+        }
     }
 }
