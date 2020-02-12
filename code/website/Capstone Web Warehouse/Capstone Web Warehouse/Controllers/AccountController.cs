@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Capstone_Database.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -12,6 +14,7 @@ namespace Capstone_Web_Warehouse.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private OnlineEntities data = new OnlineEntities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 

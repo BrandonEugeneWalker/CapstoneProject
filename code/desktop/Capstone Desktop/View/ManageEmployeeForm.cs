@@ -1,43 +1,40 @@
 ﻿using System;
-using System.Data;
-using System.Globalization;
+using System.Data.Entity;
 using System.Windows.Forms;
-using Capstone_Desktop.Database;
-using Capstone_Desktop.Database.employee;
-using Capstone_Desktop.Model;
+using Capstone_Database.Model;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
+    /// <summary>This form is used to manage employees in the database.</summary>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class ManageEmployeeForm : Form
     {
         #region Data members
 
         private readonly BindingSource employeeListSource = new BindingSource();
 
-        private MySqlDataAdapter tableDataAdapter = new MySqlDataAdapter();
-
-        private MySqlCommandBuilder tableCommandBuilder = new MySqlCommandBuilder();
-
-        private readonly DataTable dataTable;
+        private readonly OnlineEntities capstoneDatabaseContext;
 
         #endregion
 
         #region Properties
 
+        /// <summary>Gets or sets the current employee.</summary>
+        /// <value>The current employee.</value>
         public Employee CurrentEmployee { get; set; }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>Initializes a new instance of the <see cref="ManageEmployeeForm" /> class.</summary>
+        /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageEmployeeForm(Employee loggedInEmployee)
         {
             this.InitializeComponent();
             this.CurrentEmployee = loggedInEmployee;
-            this.dataTable = new DataTable {
-                Locale = CultureInfo.InvariantCulture
-            };
+            this.capstoneDatabaseContext = new OnlineEntities();
         }
 
         #endregion
@@ -55,20 +52,19 @@ namespace Capstone_Desktop.View
             foreach (DataGridViewRow currentRow in this.employeeGridView.SelectedRows)
             {
                 var rowIndex = currentRow.Index;
-                var id = int.Parse(this.dataTable.Rows[rowIndex][0].ToString());
                 try
                 {
-                    var results = DeleteEmployeeSqlCommands.DeleteEmployeeById(id);
-                    removedCount += results;
-                    this.dataTable.Rows.RemoveAt(rowIndex);
+                    this.employeeGridView.Rows.RemoveAt(rowIndex);
+                    this.capstoneDatabaseContext.SaveChanges();
+                    removedCount++;
                 }
                 catch (MySqlException)
                 {
-                    MessageBox.Show(@"Trouble removing Employee of id: " + id);
+                    MessageBox.Show(@"Trouble removing that employee.");
                 }
             }
 
-            MessageBox.Show(@"Successfully removed " + removedCount + @"employee(s) from the database.");
+            MessageBox.Show(@"Successfully removed " + removedCount + @" employee(s) from the database.");
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -82,7 +78,7 @@ namespace Capstone_Desktop.View
 
         private void SubmitChangesButton_Click(object sender, EventArgs e)
         {
-            this.tableDataAdapter.Update(this.dataTable); //TODO
+            this.capstoneDatabaseContext.SaveChanges();
         }
 
         private void ManageEmployeeForm_Load(object sender, EventArgs e)
@@ -95,12 +91,8 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                var query = "select * from Employee";
-                this.dataTable.Clear();
-                this.tableDataAdapter = new MySqlDataAdapter(query, CapstoneSqlConnection.SqlConnection);
-                this.tableCommandBuilder = new MySqlCommandBuilder(this.tableDataAdapter);
-                this.tableDataAdapter.Fill(this.dataTable);
-                this.employeeListSource.DataSource = this.dataTable;
+                this.capstoneDatabaseContext.Employees.Load();
+                this.employeeListSource.DataSource = this.capstoneDatabaseContext.Employees.Local.ToBindingList();
 
                 this.refreshTable();
             }

@@ -1,14 +1,22 @@
 ﻿using System;
-using Capstone_Desktop.Database.employee;
-using Capstone_Desktop.Model;
+using System.Linq;
+using Capstone_Database.Model;
 
 namespace Capstone_Desktop.Controller
 {
     /// <summary>Class handles the business logic that controls the Login page of the application.</summary>
     public class LoginFormController
     {
+        #region Data members
+
+        private readonly OnlineEntities capstoneDatabaseContext = new OnlineEntities();
+
+        #endregion
+
         #region Properties
 
+        /// <summary>Gets or sets the current employee.</summary>
+        /// <value>The current employee.</value>
         public Employee CurrentEmployee { get; set; }
 
         #endregion
@@ -30,7 +38,8 @@ namespace Capstone_Desktop.Controller
         {
             try
             {
-                var employee = SelectEmployeeSqlCommands.GetEmployeeByIdPassword(id, password);
+                var employee =
+                    this.capstoneDatabaseContext.selectEmployeeByIdAndPassword(id, password).ToList()[0];
                 this.CurrentEmployee = employee;
 
                 if (this.checkIfManager(employee))
@@ -52,7 +61,7 @@ namespace Capstone_Desktop.Controller
 
         private bool checkIfManager(Employee employee)
         {
-            return employee.IsManager;
+            return employee.isManager == true;
         }
 
         #endregion

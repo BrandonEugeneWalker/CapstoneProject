@@ -7,18 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Capstone_Web_Warehouse.Models
+namespace Capstone_Database.Model
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class AspNetUserClaim
+    public partial class selectEmployeeByIdAndPassword_Result
     {
-        public int Id { get; set; }
-        public string UserId { get; set; }
-        public string ClaimType { get; set; }
-        public string ClaimValue { get; set; }
-    
-        public virtual AspNetUser AspNetUser { get; set; }
     }
 }
