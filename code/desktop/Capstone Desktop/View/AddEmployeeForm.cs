@@ -34,7 +34,7 @@ namespace Capstone_Desktop.View
 
         #region Constructors
 
-        /// <summary>Initializes a new instance of the <see cref="AddEmployeeForm"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="AddEmployeeForm" /> class.</summary>
         public AddEmployeeForm()
         {
             this.InitializeComponent();

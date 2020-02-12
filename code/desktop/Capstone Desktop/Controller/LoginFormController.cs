@@ -15,6 +15,8 @@ namespace Capstone_Desktop.Controller
 
         #region Properties
 
+        /// <summary>Gets or sets the current employee.</summary>
+        /// <value>The current employee.</value>
         public Employee CurrentEmployee { get; set; }
 
         #endregion

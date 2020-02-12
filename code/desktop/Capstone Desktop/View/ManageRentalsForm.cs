@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data;
 using System.Data.Entity;
-using System.Globalization;
 using System.Windows.Forms;
 using Capstone_Database.Model;
 using MySql.Data.MySqlClient;
@@ -16,7 +14,7 @@ namespace Capstone_Desktop.View
 
         private readonly BindingSource rentalListSource = new BindingSource();
 
-        private readonly DataTable dataTable;
+        private readonly OnlineEntities capstoneDatabaseContext;
 
         #endregion
 
@@ -25,8 +23,6 @@ namespace Capstone_Desktop.View
         /// <summary>Gets or sets the current employee.</summary>
         /// <value>The current employee.</value>
         public Employee CurrentEmployee { get; set; }
-
-        private readonly OnlineEntities capstoneDatabaseContext;
 
         #endregion
 
@@ -43,10 +39,6 @@ namespace Capstone_Desktop.View
             {
                 this.managerButton.Enabled = true;
             }
-
-            this.dataTable = new DataTable {
-                Locale = CultureInfo.InvariantCulture
-            };
         }
 
         #endregion
@@ -114,7 +106,7 @@ namespace Capstone_Desktop.View
         {
             foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
             {
-                ItemRental currentItem = (ItemRental) currentRow.DataBoundItem;
+                var currentItem = (ItemRental) currentRow.DataBoundItem;
 
                 if (currentItem.status.Equals("WaitingShipment"))
                 {
@@ -133,7 +125,7 @@ namespace Capstone_Desktop.View
         {
             foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
             {
-                ItemRental currentItem = (ItemRental)currentRow.DataBoundItem;
+                var currentItem = (ItemRental) currentRow.DataBoundItem;
 
                 if (currentItem.status.Equals("WaitingReturn"))
                 {
@@ -150,13 +142,6 @@ namespace Capstone_Desktop.View
 
         private void rentalStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
-        }
-
-        private void swapEnabledRentalButtons()
-        {
-            this.returnButton.Enabled = !this.returnButton.Enabled;
-            this.rentedButton.Enabled = !this.rentedButton.Enabled;
         }
 
         #endregion
