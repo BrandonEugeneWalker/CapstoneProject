@@ -29,7 +29,7 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult MediaLibrary()
         {
-            return View(this.data.Products.ToList());
+            return View(this.data.Stocks.ToList());
         }
     }
 }

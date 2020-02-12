@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Capstone_Database.Model.Product>
+﻿@model IEnumerable<Capstone_Database.Model.Stock>
 
 @{
     ViewBag.Title = "Media Library";
@@ -19,13 +19,13 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                @Html.DisplayNameFor(model => model.Product.name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.description)
+                @Html.DisplayNameFor(model => model.Product.description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.type)
+                @Html.DisplayNameFor(model => model.Product.type)
             </th>
             <th></th>
         </tr>
@@ -34,17 +34,17 @@
             if (Request.QueryString.HasKeys())
             {
                 var searchString = Request.QueryString.ToString().Remove(0, 11).ToLower();
-                if (item.name.ToLower().Contains(searchString))
+                if (item.Product.name.ToLower().Contains(searchString))
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.name)
+                            @Html.DisplayFor(modelItem => item.Product.name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.description)
+                            @Html.DisplayFor(modelItem => item.Product.description)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.type)
+                            @Html.DisplayFor(modelItem => item.Product.type)
                         </td>
                         <td>
                             <input type="button" name="orderButton" value="Order" onClick="window.location.reload()"/>
@@ -56,13 +56,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.name)
+                        @Html.DisplayFor(modelItem => item.Product.name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.description)
+                        @Html.DisplayFor(modelItem => item.Product.description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.type)
+                        @Html.DisplayFor(modelItem => item.Product.type)
                     </td>
                     <td>
                         <input type="button" name="orderButton" value="Order" onClick="window.location.reload()"/>
