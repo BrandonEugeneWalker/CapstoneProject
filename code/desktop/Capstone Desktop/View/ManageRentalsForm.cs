@@ -1,0 +1,137 @@
+﻿using System;
+using System.Data;
+using System.Globalization;
+using System.Windows.Forms;
+using Capstone_Database.Model;
+using MySql.Data.MySqlClient;
+
+namespace Capstone_Desktop.View
+{
+    /// <summary>This form is used to view and manage the status of the rentals.</summary>
+    /// <seealso cref="System.Windows.Forms.Form" />
+    public partial class ManageRentalsForm : Form
+    {
+        #region Data members
+
+        private readonly BindingSource rentalListSource = new BindingSource();
+
+        private readonly DataTable dataTable;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>Gets or sets the current employee.</summary>
+        /// <value>The current employee.</value>
+        public Employee CurrentEmployee { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>Initializes a new instance of the <see cref="ManageRentalsForm" /> class.</summary>
+        /// <param name="loggedInEmployee">The logged in employee.</param>
+        public ManageRentalsForm(Employee loggedInEmployee)
+        {
+            this.InitializeComponent();
+            this.CurrentEmployee = loggedInEmployee;
+            if (this.CurrentEmployee.isManager == true)
+            {
+                this.managerButton.Enabled = true;
+            }
+
+            this.dataTable = new DataTable {
+                Locale = CultureInfo.InvariantCulture
+            };
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void ManageEmployeeForm_Load(object sender, EventArgs e)
+        {
+            //WaitingShipment
+            //WaitingReturn
+            this.rentalGridView.DataSource = this.rentalListSource;
+            this.rentalStatusComboBox.SelectedIndex = 0;
+            this.rentedButton.Enabled = true;
+            this.returnButton.Enabled = false;
+        }
+
+        private void getData()
+        {
+            try
+            {
+                this.rentalListSource.DataSource = this.dataTable;
+
+                for (var i = 0; i < this.rentalGridView.Columns.Count; i++)
+                {
+                    this.rentalGridView.Columns[i].MinimumWidth = 100;
+                }
+
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@"There was a problem connecting to the database, is the VPN enabled?");
+            }
+        }
+
+        private void refreshTable()
+        {
+            this.rentalGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+        }
+
+        private void managerButton_Click(object sender, EventArgs e)
+        {
+            if (this.CurrentEmployee.isManager == true)
+            {
+                Hide();
+                var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
+                manageEmployeeForm.ShowDialog();
+                Show();
+            }
+        }
+
+        private void manageItemsButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void rentedButton_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void returnButton_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void rentalStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.rentalStatusComboBox.SelectedIndex == 0)
+            {
+                this.getData();
+                this.swapEnabledRentalButtons();
+            }
+            else
+            {
+                this.getData();
+                this.swapEnabledRentalButtons();
+            }
+        }
+
+        private void swapEnabledRentalButtons()
+        {
+            this.returnButton.Enabled = !this.returnButton.Enabled;
+            this.rentedButton.Enabled = !this.rentedButton.Enabled;
+        }
+
+        #endregion
+    }
+}

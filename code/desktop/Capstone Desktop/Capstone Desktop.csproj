@@ -36,11 +36,23 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Capstone Project\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Capstone Project\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=8.0.19.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>packages\MySql.Data.8.0.19\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.10.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Capstone Project\packages\MySql.Data.Entity.6.10.9\lib\net452\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.EntityFramework, Version=8.0.19.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Capstone Project\packages\MySql.Data.EntityFramework.8.0.19\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
@@ -84,12 +96,6 @@
   <ItemGroup>
     <Compile Include="Controller\AddEmployeeFormController.cs" />
     <Compile Include="Controller\LoginFormController.cs" />
-    <Compile Include="Database\CapstoneSQLConnection.cs" />
-    <Compile Include="Database\employee\DeleteEmployeeSqlCommands.cs" />
-    <Compile Include="Database\employee\InsertEmployeeSqlCommands.cs" />
-    <Compile Include="Database\employee\SelectEmployeeSqlCommands.cs" />
-    <Compile Include="Model\Employee.cs" />
-    <Compile Include="Model\LibraryItem.cs" />
     <Compile Include="View\AddEmployeeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,12 +110,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\ManageEmployeeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +121,12 @@
     </Compile>
     <Compile Include="View\ManageItemsForm.Designer.cs">
       <DependentUpon>ManageItemsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ManageRentalsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ManageRentalsForm.Designer.cs">
+      <DependentUpon>ManageRentalsForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -143,6 +149,9 @@
     <EmbeddedResource Include="View\ManageItemsForm.resx">
       <DependentUpon>ManageItemsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\ManageRentalsForm.resx">
+      <DependentUpon>ManageRentalsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -160,6 +169,14 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\database\Capstone Database\Capstone Database.csproj">
+      <Project>{c88a11f5-9fd8-4a7a-9bf2-7423f6d05e57}</Project>
+      <Name>Capstone Database</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

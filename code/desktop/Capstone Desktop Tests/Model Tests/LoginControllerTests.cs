@@ -18,9 +18,9 @@ namespace Capstone_Desktop_Tests.Model_Tests
             var testLoginFormController = new LoginFormController();
             var results = testLoginFormController.TryToLogin(1234, "password");
             Assert.True(results);
-            Assert.AreEqual("Brandon Walker", testLoginFormController.CurrentEmployee.EmployeeName);
-            Assert.AreEqual(1234, testLoginFormController.CurrentEmployee.EmployeeId);
-            Assert.True(testLoginFormController.CurrentEmployee.IsManager);
+            Assert.AreEqual("Brandon Walker", testLoginFormController.CurrentEmployee.name);
+            Assert.AreEqual(1234, testLoginFormController.CurrentEmployee.employeeId);
+            Assert.True(testLoginFormController.CurrentEmployee.isManager);
         }
 
         [Test]
