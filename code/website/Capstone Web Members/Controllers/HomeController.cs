@@ -6,7 +6,7 @@ namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly OnlineEntities data = new OnlineEntities();
+        private readonly OnlineEntities db = new OnlineEntities();
 
         public ActionResult Index()
         {
@@ -29,7 +29,8 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult MediaLibrary()
         {
-            return View(this.data.Stocks.ToList());
+            var availableProducts = this.db.retrieveAvailableProducts().ToList();
+            return View(availableProducts);
         }
     }
 }

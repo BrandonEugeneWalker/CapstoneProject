@@ -52,9 +52,14 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retrieveAllProducts_Result>("retrieveAllProducts");
         }
     
-        public virtual ObjectResult<retrieveAvailableProducts_Result> retrieveAvailableProducts()
+        public virtual ObjectResult<Product> retrieveAvailableProducts()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retrieveAvailableProducts_Result>("retrieveAvailableProducts");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveAvailableProducts");
+        }
+    
+        public virtual ObjectResult<Product> retrieveAvailableProducts(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveAvailableProducts", mergeOption);
         }
     
         public virtual ObjectResult<ItemRental> retrieveProductsWaitingReturn()

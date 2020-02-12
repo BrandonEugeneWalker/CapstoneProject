@@ -416,7 +416,7 @@
             <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="retrieveAllProducts" ReturnType="Collection(Model.retrieveAllProducts_Result)" />
-          <FunctionImport Name="retrieveAvailableProducts" ReturnType="Collection(Model.retrieveAvailableProducts_Result)" />
+          <FunctionImport Name="retrieveAvailableProducts" EntitySet="Products" ReturnType="Collection(Model.Product)" />
           <FunctionImport Name="retrieveProductsWaitingReturn" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
           <FunctionImport Name="retrieveProductsWaitingShipment" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
           <FunctionImport Name="retrieveRentedCount" ReturnType="Collection(Model.retrieveRentedCount_Result)">
@@ -538,9 +538,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="retrieveAvailableProducts" FunctionName="Model.Store.retrieveAvailableProducts">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.retrieveAvailableProducts_Result" />
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="retrieveProductsWaitingReturn" FunctionName="Model.Store.retrieveProductsWaitingReturn">
           </FunctionImportMapping>
