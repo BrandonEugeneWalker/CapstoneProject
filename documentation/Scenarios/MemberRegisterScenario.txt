@@ -1,0 +1,11 @@
+Member Register:
+1.	A user load website home page.
+2.	A user clicks register in several places.
+3.	A user registers their login information.
+4.	A user registers an account.
+5.	A member logs in with information.
+6.	A member logs out.
+Alternate:
+3a: User enters invalid data) A user input invalid login data.
+	.4: A user is informed that data is invalid.
+	.5: A user re attempt to register with valid data.

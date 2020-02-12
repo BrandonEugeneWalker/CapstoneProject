@@ -1,0 +1,10 @@
+Warehouse Update Status:
+1.	An employee load warehouse page.
+2.	An employee login.
+3.	An employee clicks manage items page.
+4.	An employee update item rental status.
+5.	An employee logs out.
+Alternate:
+2a: No login) An employee clicks manage items page.
+	.3: An employee is redirected to login page.
+	.4: An employee not access manage items page without logging in.

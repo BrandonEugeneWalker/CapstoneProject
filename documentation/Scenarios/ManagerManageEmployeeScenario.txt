@@ -1,0 +1,10 @@
+Manager Manage Employee:
+1.	A manager loads warehouse page.
+2.	A manager login.
+3.	A manager clicks manage employees page.
+4.	A manager adds employees.
+5.	A manager logs out.
+Alternate:
+2a: Manager skip login) A manager click manage employees page.
+	.3: A manager is redirected to login page.
+	.4: A manager not access manage employee page without logging in.
