@@ -200,5 +200,26 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Employee>("selectEmployeeByIdAndPassword", mergeOption, idParameter, pwdParameter);
         }
+    
+        public virtual int insertEmployee(Nullable<int> id, string pw, Nullable<sbyte> isMan, string epName)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            var pwParameter = pw != null ?
+                new ObjectParameter("pw", pw) :
+                new ObjectParameter("pw", typeof(string));
+    
+            var isManParameter = isMan.HasValue ?
+                new ObjectParameter("isMan", isMan) :
+                new ObjectParameter("isMan", typeof(sbyte));
+    
+            var epNameParameter = epName != null ?
+                new ObjectParameter("epName", epName) :
+                new ObjectParameter("epName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertEmployee", idParameter, pwParameter, isManParameter, epNameParameter);
+        }
     }
 }
