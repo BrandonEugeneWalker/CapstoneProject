@@ -49,13 +49,13 @@ namespace Capstone_Web_Warehouse.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "User")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Pass")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]

@@ -151,8 +151,17 @@
           <Parameter Name="selectedStockId" Type="int" Mode="In" />
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
+        <Function Name="insertEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="pw" Type="varchar" Mode="In" />
+          <Parameter Name="isMan" Type="tinyint" Mode="In" />
+          <Parameter Name="epName" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="retrieveAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveAvailableProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="retrieveMemberAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+        </Function>
         <Function Name="retrieveProductsWaitingReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveProductsWaitingShipment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveRentedCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
@@ -167,6 +176,10 @@
         </Function>
         <Function Name="searchProductsType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="typeSearch" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="selectEmployeeByIdAndPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="pwd" Type="varchar" Mode="In" />
         </Function>
         <Function Name="updateMemberReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedRentalId" Type="int" Mode="In" />
@@ -428,6 +441,16 @@
           <FunctionImport Name="updateReturnProcessed">
           <Parameter Name="selectedRentalId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="insertEmployee">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="pw" Mode="In" Type="String" />
+            <Parameter Name="isMan" Mode="In" Type="SByte" />
+            <Parameter Name="epName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="selectEmployeeByIdAndPassword" ReturnType="Collection(Model.selectEmployeeByIdAndPassword_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="pwd" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -437,6 +460,7 @@
         <ComplexType Name="searchProductsName_Result" />
         <ComplexType Name="searchProductsNameType_Result" />
         <ComplexType Name="searchProductsType_Result" />
+        <ComplexType Name="selectEmployeeByIdAndPassword_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -551,6 +575,12 @@
           <FunctionImportMapping FunctionImportName="updateMemberReturn" FunctionName="Model.Store.updateMemberReturn" />
           <FunctionImportMapping FunctionImportName="updateRentalShipped" FunctionName="Model.Store.updateRentalShipped" />
           <FunctionImportMapping FunctionImportName="updateReturnProcessed" FunctionName="Model.Store.updateReturnProcessed" />
+          <FunctionImportMapping FunctionImportName="insertEmployee" FunctionName="Model.Store.insertEmployee" />
+          <FunctionImportMapping FunctionImportName="selectEmployeeByIdAndPassword" FunctionName="Model.Store.selectEmployeeByIdAndPassword">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Model.selectEmployeeByIdAndPassword_Result" />
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
