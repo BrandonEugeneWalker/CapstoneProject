@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using System.Net;
+using System.Data.Entity;
 
 namespace Capstone_Web_Warehouse.Controllers
 {
@@ -18,14 +20,13 @@ namespace Capstone_Web_Warehouse.Controllers
 
         public ActionResult ManageItems()
         {
-            ViewBag.Message = "Item management page.";
-
-            return View(this.data.ItemRentals.ToList());
+            return Redirect("~/Rentals/Index");
         }
 
         public ActionResult ManageEmployees()
         {
             return Redirect("~/Employees/Index");
         }
+
     }
 }
