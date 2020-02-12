@@ -1,0 +1,14 @@
+Member View Library:
+1.	A member load website home page.
+2.	A member login to website.
+3.	A member clicks to view media page.
+4.	A member view media library.
+5.	A member logs out.
+Alternate:
+2a: Member skip login) A member click to view media page.
+	.3: A member is redirected to login page.
+	.4: A member not view media page without logging in.
+	.5: A member re-attempts to login with correct information.
+	.6: A member logs in.
+	.7: A member views media library.
+	.8: A member logs out.

@@ -1,0 +1,8 @@
+Manager Login:
+1.	A manager loads warehouse page.
+2.	A manager login to website.
+3.	A manager logs out.
+Alternate:
+2a: Invalid login: A manager enter incorrect login information.
+	.3: A manager is informed that information is incorrect.
+	.4: A manager re-attempt to login with correct information.
