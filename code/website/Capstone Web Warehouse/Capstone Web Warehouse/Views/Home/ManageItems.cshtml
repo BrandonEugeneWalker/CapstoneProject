@@ -11,13 +11,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.itemRentalId)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Stock.Product.name)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Member.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Member.address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
         </th>
         <th></th>
     </tr>
@@ -25,16 +28,19 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.itemRentalId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Stock.Product.name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Member.name)
             </td>
             <td>
-                Return(Not Implemented)
+                @Html.DisplayFor(modelItem => item.Member.address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                Update(Not Implemented)
             </td>
         </tr>
     }

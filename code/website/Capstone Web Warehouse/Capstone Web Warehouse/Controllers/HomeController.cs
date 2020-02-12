@@ -22,5 +22,10 @@ namespace Capstone_Web_Warehouse.Controllers
 
             return View(this.data.ItemRentals.ToList());
         }
+
+        public ActionResult ManageEmployees()
+        {
+            return Redirect("~/Employees/Index");
+        }
     }
 }
