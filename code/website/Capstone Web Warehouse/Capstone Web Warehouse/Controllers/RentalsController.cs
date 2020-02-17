@@ -1,58 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 
 namespace Capstone_Web_Warehouse.Controllers
 {
+    /// <summary>Controller for manage rental pages.</summary>
+    /// <seealso cref="System.Web.Mvc.Controller" />
     public class RentalsController : Controller
     {
-        private OnlineEntities db = new OnlineEntities();
+        private readonly OnlineEntities database = new OnlineEntities();
 
-        // GET: Rentals
+        /// <summary>  Returns manage rentals index page.</summary>
+        /// <returns>Returns manage rentals index page with list of rentals.</returns>
         public ActionResult Index()
         {
-            var itemRentals = db.ItemRentals.Include(i => i.Member).Include(i => i.Stock);
+            var itemRentals = database.ItemRentals.Include(i => i.Member).Include(i => i.Stock);
             return View(itemRentals.ToList());
         }
 
-        // GET: Rentals/Edit/5
+        /// <summary>
+        ///     <para>
+        ///         Returns update page for manage rentals.
+        ///     </para>
+        ///     <precondition>The selected rental ID != null && must exist in the database.</precondition>
+        /// </summary>
+        /// <param name="id">  The selected itemRental ID for the rental to be modified.</param>
+        /// <returns>The item rental update page view with selected rental ID.</returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ItemRental itemRental = db.ItemRentals.Find(id);
-            if (itemRental == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.memberId = new SelectList(db.Members, "memberId", "name", itemRental.memberId);
-            ViewBag.stockId = new SelectList(db.Stocks, "stockId", "stockId", itemRental.stockId);
-            return View(itemRental);
+
+            var itemRental = database.ItemRentals.Find(id);
+            return itemRental == null ? (ActionResult) HttpNotFound() : View(itemRental);
         }
 
-        // POST: Rentals/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        ///     Edits the specified item rental.
+        ///     Used for update button.
+        /// </summary>
+        /// <param name="itemRental">The itemRental to be updated.</param>
+        /// <returns>The item rentals index page if input valid. || The item rentals update page with entered information.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "itemRentalId,stockId,memberId,status")] ItemRental itemRental)
+        public ActionResult Edit([Bind(Include = "itemRentalId,stockId,memberId,status")]
+            ItemRental itemRental)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(itemRental).State = EntityState.Modified;
-                db.SaveChanges();
+                database.Entry(itemRental).State = EntityState.Modified;
+                database.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.memberId = new SelectList(db.Members, "memberId", "name", itemRental.memberId);
-            ViewBag.stockId = new SelectList(db.Stocks, "stockId", "stockId", itemRental.stockId);
+
             return View(itemRental);
         }
 
@@ -60,8 +64,9 @@ namespace Capstone_Web_Warehouse.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                database.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }

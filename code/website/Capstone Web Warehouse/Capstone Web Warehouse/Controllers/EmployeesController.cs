@@ -1,124 +1,147 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 
 namespace Capstone_Web_Warehouse.Controllers
 {
+    /// <summary>Controller class for employee management pages.</summary>
+    /// <seealso cref="System.Web.Mvc.Controller" />
     public class EmployeesController : Controller
     {
-        private OnlineEntities db = new OnlineEntities();
+        private readonly OnlineEntities database = new OnlineEntities();
 
-        // GET: Employees
+        /// <summary>  Index/Home page for employee management.</summary>
+        /// <returns>employee management index page with list of all employees.</returns>
         public ActionResult Index()
         {
-            return View(db.Employees.ToList());
+            return View(database.Employees.ToList());
         }
 
-        // GET: Employees/Details/5
+        /// <summary>
+        ///     Detail view of the selected employee.
+        ///     <precondtion>the selected employeeID != null && employee with ID must exist in database.</precondtion>
+        /// </summary>
+        /// <param name="id">The employee ID.</param>
+        /// <returns>view of the employee details for selected ID.</returns>
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
-            return View(employee);
+
+            var employee = database.Employees.Find(id);
+            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
         }
 
-        // GET: Employees/Create
+        /// <summary>  Returns employee creation page view.</summary>
+        /// <returns>The employee creation view.</returns>
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Employees/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        ///     Creates the specified employee.
+        ///     Used for create button on employee creation page.
+        ///     <postcondition>Employee is added to the database.</postcondition>
+        /// </summary>
+        /// <param name="employee">The employee to be created and added to database.</param>
+        /// <returns>
+        ///     Returns to employee management index page if input valid || the same page with the employee data previously
+        ///     entered if input is invalid.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "employeeId,password,isManager,name")] Employee employee)
+        public ActionResult Create([Bind(Include = "employeeId,password,isManager,name")]
+            Employee employee)
         {
             if (ModelState.IsValid)
             {
                 sbyte manager = 0;
-                if (employee.isManager != null && (bool) employee.isManager)
-                {
-                    manager = 1;
-                }
-                db.insertEmployee(null, employee.password, manager, employee.name);
-                //db.Employees.Add(employee);
-                db.SaveChanges();
+                if (employee.isManager != null && (bool) employee.isManager) manager = 1;
+                database.insertEmployee(null, employee.password, manager, employee.name);
+                database.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             return View(employee);
         }
 
-        // GET: Employees/Edit/5
+        /// <summary>
+        ///     Returns employee edit page view.
+        ///     <precondition>employee ID can not be null && employee with ID must exist in database.</precondition>
+        /// </summary>
+        /// <param name="id">  The employee ID.</param>
+        /// <returns>Employee edit view for selected ID.</returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
 
-            return View(employee);
+            var employee = database.Employees.Find(id);
+            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
         }
 
-        // POST: Employees/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        ///     <para>
+        ///         Edits the specified employee.
+        ///         For the employee edit button.
+        ///     </para>
+        ///     <postcondition>Employee is edited in the database.</postcondition>
+        /// </summary>
+        /// <param name="employee">The employee to be edited.</param>
+        /// <returns>The employee management index if valid. || Employee edit page with entered data.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "employeeId,password,isManager,name")] Employee employee)
+        public ActionResult Edit([Bind(Include = "employeeId,password,isManager,name")]
+            Employee employee)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(employee).State = EntityState.Modified;
-                db.SaveChanges();
+                database.Entry(employee).State = EntityState.Modified;
+                database.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(employee);
         }
 
-        // GET: Employees/Delete/5
+        /// <summary>
+        ///     <para>
+        ///         Returns employee deletions page view.
+        ///     </para>
+        ///     <precondition>employee id != null && employee ID must exist in database.</precondition>
+        /// </summary>
+        /// <param name="id">  The employee id to delete.</param>
+        /// <returns>Returns employee deletion page.</returns>
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
-            return View(employee);
+
+            var employee = database.Employees.Find(id);
+            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
         }
 
-        // POST: Employees/Delete/5
-        [HttpPost, ActionName("Delete")]
+
+        /// <summary>  Returns delete confirmation message.</summary>
+        /// <param name="id">  the employee id to be deleted.</param>
+        /// <returns>Employee management index page.</returns>
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Employee employee = db.Employees.Find(id);
-            db.Employees.Remove(employee);
-            db.SaveChanges();
+            var employee = database.Employees.Find(id);
+            database.Employees.Remove(employee);
+            database.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -126,8 +149,9 @@ namespace Capstone_Web_Warehouse.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                database.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }

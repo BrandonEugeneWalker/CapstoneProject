@@ -23,24 +23,25 @@
         <th>Update Status</th>
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Member.name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Member.address)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Stock.Product.name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.status)
-    </td>
-    <td>
-        @Html.ActionLink("Update", "Edit", new { id = item.itemRentalId })
-    </td>
-</tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock.Product.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Edit", new {id = item.itemRentalId})
+            </td>
+        </tr>
+    }
 
 </table>
