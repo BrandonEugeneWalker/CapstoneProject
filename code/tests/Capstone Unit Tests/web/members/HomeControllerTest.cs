@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Capstone_Unit_Tests.web.members
 {
@@ -12,9 +13,10 @@ namespace Capstone_Unit_Tests.web.members
     [TestClass]
     public class HomeControllerTest
     {
+        private readonly Mock<OnlineEntities> databaseMock = new Mock<OnlineEntities>();
 
         /// Setup for Test Products
-        private static IEnumerable<Product> GetTestProducts()
+        private IEnumerable<Product> GetTestProducts()
         {
             var productA = new Product
             {
@@ -28,14 +30,12 @@ namespace Capstone_Unit_Tests.web.members
             {
                 productId = 1,
                 name = "Fellowship of the Ring",
-                description = "The fate of Middle-earth hangs in the balance as Frodo and " +
-                              "eight companions who form the Fellowship of the Ring begin their " +
-                              "journey to Mount Doom - Movie Adaptation",
+                description = "The first movie",
                 type = "Movie",
                 category = "Fantasy"
             };
 
-            var testProducts = new List<Product>() { productA, productB };
+            var testProducts = new List<Product> { productA, productB };
 
             return testProducts;
         }
@@ -69,7 +69,7 @@ namespace Capstone_Unit_Tests.web.members
             var result = controller.About() as ViewResult;
 
             // Assert
-            Assert.AreEqual("About Us", result.ViewBag.Message);
+            Assert.AreEqual("About Us", result?.ViewBag.Message);
             Assert.IsNotNull(result);
         }
 
@@ -86,7 +86,7 @@ namespace Capstone_Unit_Tests.web.members
             var result = controller.Contact() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Contact Information:", result.ViewBag.Message);
+            Assert.AreEqual("Contact Information:", result?.ViewBag.Message);
             Assert.IsNotNull(result);
         }
 
@@ -98,11 +98,11 @@ namespace Capstone_Unit_Tests.web.members
         {
             // Arrange
             var controller = new HomeController();
+         //   controller.DatabaseContext = this.databaseMock.Object;
+
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
-            var model = result.Model;
-            var testProducts = GetTestProducts();
 
             // Assert
             Assert.IsNotNull(result);
@@ -111,16 +111,15 @@ namespace Capstone_Unit_Tests.web.members
         /// <summary>
         /// Tests the controller behavior for the Media Library when ordering a product
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="productId">The product identifier.</param>
         [TestMethod]
-        public void OrderProduct(int id)
+        public void OrderProduct(int productId)
         {
             // Arrange
             var controller = new HomeController();
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
-            var model = result.Model;
 
             // Assert
             Assert.IsNotNull(result);

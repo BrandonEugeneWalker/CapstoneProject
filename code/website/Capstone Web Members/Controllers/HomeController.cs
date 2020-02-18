@@ -7,9 +7,9 @@ namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly OnlineEntities db = new OnlineEntities();
+        public OnlineEntities DatabaseContext = new OnlineEntities();
 
-        public List<Product> AvailableProducts => this.db.retrieveAvailableProducts().ToList();
+        public List<Product> AvailableProducts => this.DatabaseContext.retrieveAvailableProducts().ToList();
 
         public ActionResult Index()
         {
@@ -32,15 +32,17 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult MediaLibrary()
         {
+            ViewBag.Message = "Available Media:";
+
             return View(this.AvailableProducts);
         }
 
-        public ActionResult OrderProduct(int id)
+        public ActionResult OrderProduct(int productId)
         {
-            var results = this.db.findAvailableStockOfProduct(id).ToList();
+            var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
             var availableStockId = results[0];
             // TODO Remove this hardcoded MemberId when login is complete
-            this.db.createMemberOrder(availableStockId, 1);
+            this.DatabaseContext.createMemberOrder(availableStockId, 1);
 
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
