@@ -6,6 +6,6 @@ Member Register:
 5.	A member logs in with information.
 6.	A member logs out.
 Alternate:
-3a: User enters invalid data) A user input invalid login data.
+3a: User enters invalid data) A user inputs invalid password that does not contain a upper letter, a lower letter, a digit, and a symbol, or is not of length 6.
 	.4: A user is informed that data is invalid.
 	.5: A user re attempt to register with valid data.
