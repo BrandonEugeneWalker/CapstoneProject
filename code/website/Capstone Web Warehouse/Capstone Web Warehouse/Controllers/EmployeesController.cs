@@ -16,7 +16,7 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>employee management index page with list of all employees.</returns>
         public ActionResult Index()
         {
-            return View(database.Employees.ToList());
+            return this.View(database.Employees.ToList());
         }
 
         /// <summary>
@@ -58,13 +58,17 @@ namespace Capstone_Web_Warehouse.Controllers
         public ActionResult Create([Bind(Include = "employeeId,password,isManager,name")]
             Employee employee)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 sbyte manager = 0;
-                if (employee.isManager != null && (bool) employee.isManager) manager = 1;
-                database.insertEmployee(null, employee.password, manager, employee.name);
-                database.SaveChanges();
-                return RedirectToAction("Index");
+                if (employee.isManager != null && (bool) employee.isManager)
+                {
+                    manager = 1;
+                }
+
+                this.database.insertEmployee(null, employee.password, manager, employee.name);
+                this.database.SaveChanges();
+                return this.RedirectToAction("Index");
             }
 
             return View(employee);
