@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Net.Http.Headers;
+using System.Web.Mvc;
 using Capstone_Web_Members.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -30,7 +31,8 @@ namespace Capstone_Web_Members.Tests.Controllers
             var result = controller.About() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
+            Assert.AreEqual("About Us", result.ViewBag.Message);
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
@@ -43,6 +45,7 @@ namespace Capstone_Web_Members.Tests.Controllers
             var result = controller.Contact() as ViewResult;
 
             // Assert
+            Assert.AreEqual("Contact Information:", result.ViewBag.Message);
             Assert.IsNotNull(result);
         }
 
@@ -54,6 +57,22 @@ namespace Capstone_Web_Members.Tests.Controllers
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
+            var model = result.Model;
+            
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void OrderProduct(int id)
+        {
+            // Arrange
+            var controller = new HomeController();
+
+            // Act
+            var result = controller.MediaLibrary() as ViewResult;
+            var model = result.Model;
 
             // Assert
             Assert.IsNotNull(result);

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 
@@ -7,6 +8,8 @@ namespace Capstone_Web_Members.Controllers
     public class HomeController : Controller
     {
         private readonly OnlineEntities db = new OnlineEntities();
+
+        public List<Product> AvailableProducts => this.db.retrieveAvailableProducts().ToList();
 
         public ActionResult Index()
         {
@@ -29,8 +32,7 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult MediaLibrary()
         {
-            var availableProducts = this.db.retrieveAvailableProducts().ToList();
-            return View(availableProducts);
+            return View(this.AvailableProducts);
         }
 
         public ActionResult OrderProduct(int id)
