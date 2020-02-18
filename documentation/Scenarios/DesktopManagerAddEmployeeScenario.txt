@@ -1,0 +1,16 @@
+Manager Manage Employee:
+1.	A manager loads warehouse application.
+2.	A manager logs in.
+3.	A manager clicks add.
+4.	A manager enters employee data.
+5.	A manager clicks submit.
+6.	A manager has added an employee.
+7.	A manager logs out.
+
+Alternate:
+5a: Bad employee information) A manager enters either bad password(not 6 length or contain combination of 1 symbol, 1 number, 1 uppercase and 1 lowercase letter) or bad name that is not just all letters.
+	.6: A manager is informed of what information is bad.
+	.7: A manager fixes bad information.
+	.8: A manager clicks sumbit.
+	.9: A manager has added an employee.
+	.10: A manager logs out.
