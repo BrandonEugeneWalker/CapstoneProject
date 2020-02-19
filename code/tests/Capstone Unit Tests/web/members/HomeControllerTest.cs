@@ -13,7 +13,6 @@ namespace Capstone_Unit_Tests.web.members
     [TestClass]
     public class HomeControllerTest
     {
-        private readonly Mock<OnlineEntities> databaseMock = new Mock<OnlineEntities>();
 
         /// Setup for Test Products
         private IEnumerable<Product> GetTestProducts()
@@ -97,23 +96,22 @@ namespace Capstone_Unit_Tests.web.members
         public void MediaLibrary()
         {
             // Arrange
+            var databaseMock = new Mock<OnlineEntities>();
             var controller = new HomeController();
-         //   controller.DatabaseContext = this.databaseMock.Object;
-
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
         }
 
         /// <summary>
         /// Tests the controller behavior for the Media Library when ordering a product
         /// </summary>
-        /// <param name="productId">The product identifier.</param>
         [TestMethod]
-        public void OrderProduct(int productId)
+        public void OrderProduct()
         {
             // Arrange
             var controller = new HomeController();
