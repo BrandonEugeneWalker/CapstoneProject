@@ -1,4 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -16,7 +20,7 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>employee management index page with list of all employees.</returns>
         public ActionResult Index()
         {
-            return this.View(database.Employees.ToList());
+            return View(database.Employees.ToList());
         }
 
         /// <summary>
@@ -58,17 +62,17 @@ namespace Capstone_Web_Warehouse.Controllers
         public ActionResult Create([Bind(Include = "employeeId,password,isManager,name")]
             Employee employee)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 sbyte manager = 0;
-                if (employee.isManager != null && (bool) employee.isManager)
+                if (employee.isManager != null && (bool)employee.isManager)
                 {
                     manager = 1;
                 }
 
-                this.database.insertEmployee(null, employee.password, manager, employee.name);
-                this.database.SaveChanges();
-                return this.RedirectToAction("Index");
+                database.insertEmployee(null, employee.password, manager, employee.name);
+                database.SaveChanges();
+                return RedirectToAction("Index");
             }
 
             return View(employee);
@@ -88,7 +92,12 @@ namespace Capstone_Web_Warehouse.Controllers
             }
 
             var employee = database.Employees.Find(id);
-            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
+            if (employee == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(employee);
         }
 
         /// <summary>
@@ -108,6 +117,7 @@ namespace Capstone_Web_Warehouse.Controllers
             if (ModelState.IsValid)
             {
                 database.Entry(employee).State = EntityState.Modified;
+                database.Entry(employee).Property("password").IsModified = false;
                 database.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -159,4 +169,5 @@ namespace Capstone_Web_Warehouse.Controllers
             base.Dispose(disposing);
         }
     }
+
 }
