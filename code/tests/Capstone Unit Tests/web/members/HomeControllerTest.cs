@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
@@ -37,6 +38,34 @@ namespace Capstone_Unit_Tests.web.members
             var testProducts = new List<Product> { productA, productB };
 
             return testProducts;
+        }
+
+        private static IEnumerable<Stock> GetTestStocks()
+        {
+            var stockA = new Stock
+            {
+                stockId = 1,
+                productId = 1
+            };
+            var stockB = new Stock
+            {
+                stockId = 2,
+                productId = 2
+            };
+
+            var testStock = new List<Stock> { stockA, stockB };
+
+            return testStock;
+        }
+
+        private static Mock<OnlineEntities> GetMockDatabase()
+        {
+            var databaseMock = new Mock<OnlineEntities>();
+            //TODO Properly set up the Mock to potentially have data
+
+            databaseMock.Object.Products = (DbSet<Product>) GetTestProducts();
+
+            return databaseMock;
         }
 
         /// <summary>
@@ -115,7 +144,7 @@ namespace Capstone_Unit_Tests.web.members
         public void MediaLibrary_ModelIsNotNull()
         {
             // Arrange
-            var databaseMock = new Mock<OnlineEntities>();
+            var databaseMock = GetMockDatabase();
             var products = GetTestProducts();
 
             var controller = new HomeController(databaseMock.Object, products);
@@ -136,10 +165,11 @@ namespace Capstone_Unit_Tests.web.members
         public void OrderProduct_Action_IsNotNull()
         {
             // Arrange
+            var databaseMock = GetMockDatabase();
             var controller = new HomeController();
 
             // Act
-            var result = controller.MediaLibrary() as ViewResult;
+            var result = controller.OrderProduct(1) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
