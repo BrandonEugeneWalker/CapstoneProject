@@ -7,9 +7,21 @@ namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
-        public OnlineEntities DatabaseContext = new OnlineEntities();
+        public OnlineEntities DatabaseContext;
 
-        public List<Product> AvailableProducts => this.DatabaseContext.retrieveAvailableProducts().ToList();
+        public List<Product> AvailableProducts;
+
+        public HomeController()
+        {
+            this.DatabaseContext = new OnlineEntities();
+            this.AvailableProducts = this.DatabaseContext.retrieveAvailableProducts().ToList();
+        }
+
+        public HomeController(OnlineEntities databaseContext, IEnumerable<Product> products)
+        {
+            this.DatabaseContext = databaseContext;
+            this.AvailableProducts = products.ToList();
+        }
 
         public ActionResult Index()
         {

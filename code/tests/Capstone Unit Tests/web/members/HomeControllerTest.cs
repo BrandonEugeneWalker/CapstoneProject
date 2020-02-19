@@ -15,7 +15,7 @@ namespace Capstone_Unit_Tests.web.members
     {
 
         /// Setup for Test Products
-        private IEnumerable<Product> GetTestProducts()
+        private static IEnumerable<Product> GetTestProducts()
         {
             var productA = new Product
             {
@@ -97,7 +97,11 @@ namespace Capstone_Unit_Tests.web.members
         {
             // Arrange
             var databaseMock = new Mock<OnlineEntities>();
-            var controller = new HomeController();
+            var products = GetTestProducts();
+
+
+
+            var controller = new HomeController(databaseMock.Object, products);
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
