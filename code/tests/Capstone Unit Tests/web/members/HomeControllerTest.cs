@@ -40,10 +40,10 @@ namespace Capstone_Unit_Tests.web.members
         }
 
         /// <summary>
-        /// Tests the controller behavior for the member web Index
+        /// Tests that the Index Page is not null.
         /// </summary>
         [TestMethod]
-        public void Index()
+        public void Index_IsNotNull()
         {
             // Arrange
             var controller = new HomeController();
@@ -59,7 +59,7 @@ namespace Capstone_Unit_Tests.web.members
         /// Tests the controller behavior for the member web About page
         /// </summary>
         [TestMethod]
-        public void About()
+        public void About_IsNotNull()
         {
             // Arrange
             var controller = new HomeController();
@@ -76,7 +76,7 @@ namespace Capstone_Unit_Tests.web.members
         /// Tests the controller behavior for the member web Contact info page
         /// </summary>
         [TestMethod]
-        public void Contact()
+        public void Contact_IsNotNull()
         {
             // Arrange
             var controller = new HomeController();
@@ -90,16 +90,14 @@ namespace Capstone_Unit_Tests.web.members
         }
 
         /// <summary>
-        /// Tests the controller behavior for the Media Library
+        /// Tests that the Media Library is not null
         /// </summary>
         [TestMethod]
-        public void MediaLibrary()
+        public void MediaLibrary_IsNotNull()
         {
             // Arrange
             var databaseMock = new Mock<OnlineEntities>();
             var products = GetTestProducts();
-
-
 
             var controller = new HomeController(databaseMock.Object, products);
 
@@ -108,14 +106,34 @@ namespace Capstone_Unit_Tests.web.members
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Model);
         }
 
         /// <summary>
-        /// Tests the controller behavior for the Media Library when ordering a product
+        /// Tests that the Media Library model is not null
         /// </summary>
         [TestMethod]
-        public void OrderProduct()
+        public void MediaLibrary_ModelIsNotNull()
+        {
+            // Arrange
+            var databaseMock = new Mock<OnlineEntities>();
+            var products = GetTestProducts();
+
+            var controller = new HomeController(databaseMock.Object, products);
+
+            // Act
+            var result = controller.MediaLibrary() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result?.Model);
+        }
+
+        //TODO -Will need further in depth testing, does not reach the ActionResult as
+        //TODO -it is triggered by a link, but uses the controllers properties
+        /// <summary>
+        /// Tests that the ActionResult for OrderProduct is not null within the mock
+        /// </summary>
+        [TestMethod]
+        public void OrderProduct_Action_IsNotNull()
         {
             // Arrange
             var controller = new HomeController();
@@ -125,6 +143,7 @@ namespace Capstone_Unit_Tests.web.members
 
             // Assert
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
         }
     }
 }
