@@ -17,10 +17,10 @@ namespace Capstone_Web_Members.Controllers
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProducts().ToList();
         }
 
-        public HomeController(OnlineEntities databaseContext, IEnumerable<Product> products)
+        public HomeController(OnlineEntities databaseContext)
         {
             this.DatabaseContext = databaseContext;
-            this.AvailableProducts = products.ToList();
+            //this.AvailableProducts = this.DatabaseContext.Products.ToList();
         }
 
         public ActionResult Index()

@@ -82,7 +82,8 @@ namespace Capstone_Unit_Tests.web.members
         public void Index_IsNotNull()
         {
             // Arrange
-            var controller = new HomeController();
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.Index() as ViewResult;
@@ -98,7 +99,8 @@ namespace Capstone_Unit_Tests.web.members
         public void About_IsNotNull()
         {
             // Arrange
-            var controller = new HomeController();
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.About() as ViewResult;
@@ -115,7 +117,8 @@ namespace Capstone_Unit_Tests.web.members
         public void Contact_IsNotNull()
         {
             // Arrange
-            var controller = new HomeController();
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.Contact() as ViewResult;
@@ -133,9 +136,7 @@ namespace Capstone_Unit_Tests.web.members
         {
             // Arrange
             var databaseMock = new Mock<OnlineEntities>();
-            var products = getTestProducts();
-
-            var controller = new HomeController(databaseMock.Object, products);
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
@@ -152,9 +153,7 @@ namespace Capstone_Unit_Tests.web.members
         {
             // Arrange
             var databaseMock = getMockDatabase();
-            var products = getTestProducts();
-
-            var controller = new HomeController(databaseMock.Object, products);
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
@@ -173,7 +172,7 @@ namespace Capstone_Unit_Tests.web.members
         {
             // Arrange
             var databaseMock = getMockDatabase();
-            var controller = new HomeController();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.OrderProduct(1) as ViewResult;
