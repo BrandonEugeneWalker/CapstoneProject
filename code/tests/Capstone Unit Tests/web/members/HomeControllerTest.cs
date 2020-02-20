@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
@@ -16,7 +17,7 @@ namespace Capstone_Unit_Tests.web.members
     {
 
         /// Setup for Test Products
-        private static IEnumerable<Product> GetTestProducts()
+        private static DbSet<Product> getTestProducts()
         {
             var productA = new Product
             {
@@ -35,12 +36,19 @@ namespace Capstone_Unit_Tests.web.members
                 category = "Fantasy"
             };
 
-            var testProducts = new List<Product> { productA, productB };
+            var testProducts = new List<Product> { productA, productB }.AsQueryable();
 
-            return testProducts;
+            var productsMock = new Mock<DbSet<Product>>();
+
+            productsMock.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(testProducts.Provider);
+            productsMock.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(testProducts.Expression);
+            productsMock.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(testProducts.ElementType);
+            productsMock.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(testProducts.GetEnumerator());
+
+            return productsMock.Object;
         }
 
-        private static IEnumerable<Stock> GetTestStocks()
+        private static IEnumerable<Stock> getTestStocks()
         {
             var stockA = new Stock
             {
@@ -58,12 +66,11 @@ namespace Capstone_Unit_Tests.web.members
             return testStock;
         }
 
-        private static Mock<OnlineEntities> GetMockDatabase()
+        private static Mock<OnlineEntities> getMockDatabase()
         {
             var databaseMock = new Mock<OnlineEntities>();
             //TODO Properly set up the Mock to potentially have data
-
-            databaseMock.Object.Products = (DbSet<Product>) GetTestProducts();
+            databaseMock.Object.Products = getTestProducts();
 
             return databaseMock;
         }
@@ -126,7 +133,7 @@ namespace Capstone_Unit_Tests.web.members
         {
             // Arrange
             var databaseMock = new Mock<OnlineEntities>();
-            var products = GetTestProducts();
+            var products = getTestProducts();
 
             var controller = new HomeController(databaseMock.Object, products);
 
@@ -144,8 +151,8 @@ namespace Capstone_Unit_Tests.web.members
         public void MediaLibrary_ModelIsNotNull()
         {
             // Arrange
-            var databaseMock = GetMockDatabase();
-            var products = GetTestProducts();
+            var databaseMock = getMockDatabase();
+            var products = getTestProducts();
 
             var controller = new HomeController(databaseMock.Object, products);
 
@@ -165,7 +172,7 @@ namespace Capstone_Unit_Tests.web.members
         public void OrderProduct_Action_IsNotNull()
         {
             // Arrange
-            var databaseMock = GetMockDatabase();
+            var databaseMock = getMockDatabase();
             var controller = new HomeController();
 
             // Act
