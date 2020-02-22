@@ -52,20 +52,13 @@ namespace Capstone_Desktop.View
 
         private void submitButton_Click(object sender, EventArgs e)
         {
-            var id = (int) this.idNummericUpDown.Value;
             var password = this.passwordTextBox.Text;
-            var isManager = this.isManagerCheckBox.Checked;
+            var isManager = Convert.ToSByte(this.isManagerCheckBox.Checked);
             var name = this.nameTextBox.Text;
 
             try
             {
-                var newEmployee = new Employee {
-                    employeeId = id,
-                    password = password,
-                    isManager = isManager,
-                    name = name
-                };
-                this.capstoneDatabaseContext.Employees.Add(newEmployee);
+                this.capstoneDatabaseContext.insertEmployee(null, password, isManager, name);
                 this.capstoneDatabaseContext.SaveChanges();
                 Close();
             }
