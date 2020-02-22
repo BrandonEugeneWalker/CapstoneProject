@@ -6,6 +6,10 @@ using Capstone_Database.Model;
 
 namespace Capstone_Web_Members.Controllers
 {
+    /// <summary>
+    /// Controller class for Member Management pages
+    /// </summary>
+    /// <seealso cref="System.Web.Mvc.Controller" />
     public class MembersController : Controller
     {
         #region Data members
@@ -16,13 +20,22 @@ namespace Capstone_Web_Members.Controllers
 
         #region Methods
 
-        // GET: Members
+        /// <summary>
+        /// Indexes this instance.
+        /// </summary>
+        /// <returns>A list of all members</returns>
         public ActionResult Index()
         {
             return View(this.dbContext.Members.ToList());
         }
 
-        // GET: Members/Details/5
+        /// <summary>
+        /// Shows the details the specified member.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Returns page showcasing details of a given member
+        /// </returns>
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,15 +47,23 @@ namespace Capstone_Web_Members.Controllers
             return member == null ? (ActionResult)HttpNotFound() : View(member);
         }
 
-        // GET: Members/Create
+        /// <summary>
+        /// Creates this instance.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Members/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Creates the specified member.
+        /// </summary>
+        /// <param name="member">The member.</param>
+        /// <returns>
+        /// Navigates to the Member Web Homepage
+        /// Creates / Registers the new member
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "memberId,username,name,password,address,isLibrarian,isBanned")]
@@ -58,7 +79,13 @@ namespace Capstone_Web_Members.Controllers
             return View(member);
         }
 
-        // GET: Members/Edit/5
+        /// <summary>
+        /// Edits the specified Member.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Returns the edit view page for the selected Member
+        /// </returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -75,9 +102,13 @@ namespace Capstone_Web_Members.Controllers
             return View(member);
         }
 
-        // POST: Members/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Edits the specified member.
+        /// </summary>
+        /// <param name="member">The member.</param>
+        /// <returns>
+        /// Returns the edit view page for the selected Member
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "memberId,username,name,password,address,isLibrarian,isBanned")]
@@ -93,7 +124,13 @@ namespace Capstone_Web_Members.Controllers
             return View(member);
         }
 
-        // GET: Members/Delete/5
+        /// <summary>
+        /// Deletes the specified Member.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Returns the Delete page of a given Member
+        /// </returns>
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,7 +147,13 @@ namespace Capstone_Web_Members.Controllers
             return View(member);
         }
 
-        // POST: Members/Delete/5
+        /// <summary>
+        /// Deletes the confirmed Member.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Returns to index after confirming member deletion
+        /// </returns>
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
