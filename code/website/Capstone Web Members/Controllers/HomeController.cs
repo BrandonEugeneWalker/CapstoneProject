@@ -9,6 +9,8 @@ namespace Capstone_Web_Members.Controllers
     {
         public OnlineEntities DatabaseContext;
 
+
+
         public List<Product> AvailableProducts;
 
         public HomeController()
@@ -44,6 +46,11 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult MediaLibrary()
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             ViewBag.Message = "Available Media:";
 
             return View(this.AvailableProducts);
@@ -51,10 +58,14 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult OrderProduct(int productId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
             var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
             var availableStockId = results[0];
-            // TODO Remove this hardcoded MemberId when login is complete
-            this.DatabaseContext.createMemberOrder(availableStockId, 1);
+            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId);
 
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
