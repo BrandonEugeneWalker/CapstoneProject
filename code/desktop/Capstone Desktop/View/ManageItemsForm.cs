@@ -75,8 +75,13 @@ namespace Capstone_Desktop.View
 
                 for (var i = 0; i < this.itemsGridView.Columns.Count; i++)
                 {
-                    this.itemsGridView.Columns[i].MinimumWidth = 100;
+                    this.itemsGridView.Columns[i].MinimumWidth = 200;
                 }
+
+                this.itemsGridView.Columns[2].Visible = false;
+                this.itemsGridView.Columns[3].Visible = false;
+                this.itemsGridView.Columns[4].Visible = false;
+                
 
                 this.refreshTable();
             }
@@ -98,7 +103,7 @@ namespace Capstone_Desktop.View
                 Hide();
                 var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
                 manageEmployeeForm.ShowDialog();
-                Show();
+                Close();
             }
         }
 
@@ -107,7 +112,7 @@ namespace Capstone_Desktop.View
             Hide();
             var manageRentalsForm = new ManageRentalsForm(this.CurrentEmployee);
             manageRentalsForm.ShowDialog();
-            Show();
+            Close();
         }
 
         #endregion

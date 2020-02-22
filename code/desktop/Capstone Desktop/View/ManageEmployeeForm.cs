@@ -70,9 +70,7 @@ namespace Capstone_Desktop.View
         private void AddButton_Click(object sender, EventArgs e)
         {
             var addEmployeeForm = new AddEmployeeForm();
-            Hide();
             addEmployeeForm.ShowDialog();
-            Show();
             this.getData();
         }
 
@@ -94,6 +92,13 @@ namespace Capstone_Desktop.View
                 this.capstoneDatabaseContext.Employees.Load();
                 this.employeeListSource.DataSource = this.capstoneDatabaseContext.Employees.Local.ToBindingList();
 
+                for (var i = 0; i < this.employeeGridView.Columns.Count; i++)
+                {
+                    this.employeeGridView.Columns[i].MinimumWidth = 200;
+                }
+
+                this.employeeGridView.Columns[4].Visible = false;
+
                 this.refreshTable();
             }
             catch (MySqlException)
@@ -112,7 +117,7 @@ namespace Capstone_Desktop.View
             var manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
             Hide();
             manageItemsForm.ShowDialog();
-            Show();
+            Close();
         }
 
         #endregion
