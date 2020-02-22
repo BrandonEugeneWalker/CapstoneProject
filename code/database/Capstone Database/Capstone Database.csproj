@@ -142,6 +142,9 @@
     <Compile Include="Model\selectEmployeeByIdAndPassword_Result.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\selectMemberByIdAndPassword_Result.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Stock.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>

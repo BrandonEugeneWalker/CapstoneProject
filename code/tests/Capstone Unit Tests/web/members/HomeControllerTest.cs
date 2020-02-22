@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
@@ -15,7 +17,7 @@ namespace Capstone_Unit_Tests.web.members
     {
 
         /// Setup for Test Products
-        private IEnumerable<Product> GetTestProducts()
+        private static DbSet<Product> getTestProducts()
         {
             var productA = new Product
             {
@@ -34,19 +36,54 @@ namespace Capstone_Unit_Tests.web.members
                 category = "Fantasy"
             };
 
-            var testProducts = new List<Product> { productA, productB };
+            var testProducts = new List<Product> { productA, productB }.AsQueryable();
 
-            return testProducts;
+            var productsMock = new Mock<DbSet<Product>>();
+
+            productsMock.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(testProducts.Provider);
+            productsMock.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(testProducts.Expression);
+            productsMock.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(testProducts.ElementType);
+            productsMock.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(testProducts.GetEnumerator());
+
+            return productsMock.Object;
+        }
+
+        private static IEnumerable<Stock> getTestStocks()
+        {
+            var stockA = new Stock
+            {
+                stockId = 1,
+                productId = 1
+            };
+            var stockB = new Stock
+            {
+                stockId = 2,
+                productId = 2
+            };
+
+            var testStock = new List<Stock> { stockA, stockB };
+
+            return testStock;
+        }
+
+        private static Mock<OnlineEntities> getMockDatabase()
+        {
+            var databaseMock = new Mock<OnlineEntities>();
+            //TODO Properly set up the Mock to potentially have data
+            databaseMock.Object.Products = getTestProducts();
+
+            return databaseMock;
         }
 
         /// <summary>
-        /// Tests the controller behavior for the member web Index
+        /// Tests that the Index Page is not null.
         /// </summary>
         [TestMethod]
-        public void Index()
+        public void Index_IsNotNull()
         {
             // Arrange
-            var controller = new HomeController();
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.Index() as ViewResult;
@@ -59,10 +96,11 @@ namespace Capstone_Unit_Tests.web.members
         /// Tests the controller behavior for the member web About page
         /// </summary>
         [TestMethod]
-        public void About()
+        public void About_IsNotNull()
         {
             // Arrange
-            var controller = new HomeController();
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.About() as ViewResult;
@@ -76,10 +114,11 @@ namespace Capstone_Unit_Tests.web.members
         /// Tests the controller behavior for the member web Contact info page
         /// </summary>
         [TestMethod]
-        public void Contact()
+        public void Contact_IsNotNull()
         {
             // Arrange
-            var controller = new HomeController();
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.Contact() as ViewResult;
@@ -90,37 +129,57 @@ namespace Capstone_Unit_Tests.web.members
         }
 
         /// <summary>
-        /// Tests the controller behavior for the Media Library
+        /// Tests that the Media Library is not null
         /// </summary>
         [TestMethod]
-        public void MediaLibrary()
+        public void MediaLibrary_IsNotNull()
         {
             // Arrange
             var databaseMock = new Mock<OnlineEntities>();
-            var controller = new HomeController();
+            var controller = new HomeController(databaseMock.Object);
 
             // Act
             var result = controller.MediaLibrary() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        /// <summary>
+        /// Tests that the Media Library model is not null
+        /// </summary>
+        [TestMethod]
+        public void MediaLibrary_ModelIsNotNull()
+        {
+            // Arrange
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
+
+            // Act
+            var result = controller.MediaLibrary() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result?.Model);
+        }
+
+        //TODO -Will need further in depth testing, does not reach the ActionResult as
+        //TODO -it is triggered by a link, but uses the controllers properties
+        /// <summary>
+        /// Tests that the ActionResult for OrderProduct is not null within the mock
+        /// </summary>
+        [TestMethod]
+        public void OrderProduct_Action_IsNotNull()
+        {
+            // Arrange
+            var databaseMock = getMockDatabase();
+            var controller = new HomeController(databaseMock.Object);
+
+            // Act
+            var result = controller.OrderProduct(1) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Model);
-        }
-
-        /// <summary>
-        /// Tests the controller behavior for the Media Library when ordering a product
-        /// </summary>
-        [TestMethod]
-        public void OrderProduct()
-        {
-            // Arrange
-            var controller = new HomeController();
-
-            // Act
-            var result = controller.MediaLibrary() as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
         }
     }
 }
