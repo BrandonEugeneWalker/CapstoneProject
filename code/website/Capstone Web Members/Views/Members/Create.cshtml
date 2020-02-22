@@ -1,78 +1,85 @@
-﻿@model Capstone_Database.Model.Member
+﻿@using Capstone_Web_Members.Settings
+@model Capstone_Database.Model.Member
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Member Registration";
 }
 
-<h2>Create</h2>
+<h2>Register as a new Member!</h2>
 
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Member</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <hr/>
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         <div class="form-group">
-            @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.username, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.username, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.username, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.name, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.name, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.name, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <h5>
+            <b>Password Criteria: </b>
+        </h5>
+        <h5>-Length of @AccountSettings.PasswordRequiredLength characters or greater</h5>
+        if (AccountSettings.PasswordRequireUppercase)
+        {
+        <h5>-At least one uppercase letter</h5>
+        }
+        if (AccountSettings.PasswordRequireLowercase)
+        {
+        <h5>-At least one lowercase letter</h5>
+        }
+        if (AccountSettings.PasswordRequireDigit)
+        {
+        <h5>-At least one numeric digit</h5>
+        }
+        if (AccountSettings.PasswordRequireNonLetterOrDigit)
+        {
+        <h5>-At least one special character</h5>
+        }
+        @{
+            //TODO Add confirm password / hide text
+        }
+        <div class="form-group">
+            @Html.LabelFor(model => model.password, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.password, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.password, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.address, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.address, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.isLibrarian, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.isLibrarian, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.isLibrarian, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.isBanned, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.isBanned, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.isBanned, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.address, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.address, "", new {@class = "text-danger"})
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default"/>
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back Home", "Index")
 </div>
 
 @section Scripts {
