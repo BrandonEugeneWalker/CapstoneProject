@@ -92,6 +92,13 @@ namespace Capstone_Desktop.View
                 this.capstoneDatabaseContext.Employees.Load();
                 this.employeeListSource.DataSource = this.capstoneDatabaseContext.Employees.Local.ToBindingList();
 
+                for (var i = 0; i < this.employeeGridView.Columns.Count; i++)
+                {
+                    this.employeeGridView.Columns[i].MinimumWidth = 200;
+                }
+
+                this.employeeGridView.Columns[4].Visible = false;
+
                 this.refreshTable();
             }
             catch (MySqlException)

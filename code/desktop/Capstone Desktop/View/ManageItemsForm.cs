@@ -75,8 +75,13 @@ namespace Capstone_Desktop.View
 
                 for (var i = 0; i < this.itemsGridView.Columns.Count; i++)
                 {
-                    this.itemsGridView.Columns[i].MinimumWidth = 100;
+                    this.itemsGridView.Columns[i].MinimumWidth = 200;
                 }
+
+                this.itemsGridView.Columns[2].Visible = false;
+                this.itemsGridView.Columns[3].Visible = false;
+                this.itemsGridView.Columns[4].Visible = false;
+                
 
                 this.refreshTable();
             }

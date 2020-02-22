@@ -52,12 +52,8 @@ namespace Capstone_Desktop.View
 
         private void ManageEmployeeForm_Load(object sender, EventArgs e)
         {
-            //WaitingShipment
-            //WaitingReturn
             this.rentalGridView.DataSource = this.rentalListSource;
             this.rentalStatusComboBox.SelectedIndex = 0;
-            //this.rentedButton.Enabled = true;
-            //this.returnButton.Enabled = false;
             this.getData();
         }
 
@@ -70,8 +66,11 @@ namespace Capstone_Desktop.View
 
                 for (var i = 0; i < this.rentalGridView.Columns.Count; i++)
                 {
-                    this.rentalGridView.Columns[i].MinimumWidth = 100;
+                    this.rentalGridView.Columns[i].MinimumWidth = 200;
                 }
+
+                this.rentalGridView.Columns[4].Visible = false;
+                this.rentalGridView.Columns[5].Visible = false;
 
                 this.refreshTable();
             }
