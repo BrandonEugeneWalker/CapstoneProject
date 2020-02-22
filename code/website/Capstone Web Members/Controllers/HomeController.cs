@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
-using Microsoft.Ajax.Utilities;
 
 namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
         public OnlineEntities DatabaseContext;
+
+
 
         public List<Product> AvailableProducts;
 
@@ -46,6 +46,11 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult MediaLibrary()
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             ViewBag.Message = "Available Media:";
 
             return View(this.AvailableProducts);
@@ -53,13 +58,14 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult OrderProduct(int productId)
         {
-            if (Session["currentMemberId"] != null)
+            if (Session["currentMemberId"] == null)
             {
-                var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
-                var availableStockId = results[0];
-                var memberId = int.Parse(Session["currentMemberId"].ToString());
-                this.DatabaseContext.createMemberOrder(availableStockId, memberId);
+                return RedirectToAction("Login", "Members");
             }
+            var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
+            var availableStockId = results[0];
+            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId);
 
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
