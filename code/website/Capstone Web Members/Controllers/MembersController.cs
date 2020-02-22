@@ -184,10 +184,25 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>
         /// Returns to the previous page after logging in
         /// </returns>
+        [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        }
+
+        /// <summary>
+        /// Logs the off.
+        /// </summary>
+        /// <returns>
+        /// Returns to the Index, logged out
+        /// </returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            //TODO remove session
+            return RedirectToAction("Index", "Home");
         }
     }
 }
