@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using Microsoft.Ajax.Utilities;
 
 namespace Capstone_Web_Members.Controllers
 {
@@ -51,10 +53,13 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult OrderProduct(int productId)
         {
-            var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
-            var availableStockId = results[0];
-            // TODO Remove this hardcoded MemberId when login is complete
-            this.DatabaseContext.createMemberOrder(availableStockId, 1);
+            if (Session["currentMemberId"] != null)
+            {
+                var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
+                var availableStockId = results[0];
+                var memberId = int.Parse(Session["currentMemberId"].ToString());
+                this.DatabaseContext.createMemberOrder(availableStockId, memberId);
+            }
 
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }

@@ -194,7 +194,7 @@ namespace Capstone_Web_Members.Controllers
             {
                 // Session the member ID here
                 var loggedInMemberId = matchingMembers[0].memberId;
-
+                Session["currentMemberId"] = loggedInMemberId;
                 return RedirectToAction("Index", "Home");
             }
 
@@ -221,7 +221,7 @@ namespace Capstone_Web_Members.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            //TODO remove session
+            Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
     }
