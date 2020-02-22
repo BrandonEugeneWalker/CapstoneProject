@@ -191,6 +191,10 @@
           <Parameter Name="id" Type="int" Mode="In" />
           <Parameter Name="pwd" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="selectMemberByIdAndPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="updateMemberReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedRentalId" Type="int" Mode="In" />
         </Function>
@@ -471,6 +475,10 @@
             <Parameter Name="newAddress" Mode="In" Type="String" />
             <Parameter Name="isLibrarian" Mode="In" Type="SByte" />
           </FunctionImport>
+          <FunctionImport Name="selectMemberByIdAndPassword" EntitySet="Members" ReturnType="Collection(Model.Member)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -481,6 +489,7 @@
         <ComplexType Name="searchProductsNameType_Result" />
         <ComplexType Name="searchProductsType_Result" />
         <ComplexType Name="selectEmployeeByIdAndPassword_Result" />
+        <ComplexType Name="selectMemberByIdAndPassword_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -582,6 +591,8 @@
           <FunctionImportMapping FunctionImportName="insertEmployee" FunctionName="Model.Store.insertEmployee" />
           <FunctionImportMapping FunctionImportName="findAvailableStockOfProduct" FunctionName="Model.Store.findAvailableStockOfProduct" />
           <FunctionImportMapping FunctionImportName="insertMember" FunctionName="Model.Store.insertMember" />
+          <FunctionImportMapping FunctionImportName="selectMemberByIdAndPassword" FunctionName="Model.Store.selectMemberByIdAndPassword">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

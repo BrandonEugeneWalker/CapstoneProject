@@ -1,6 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 
@@ -180,16 +182,34 @@ namespace Capstone_Web_Members.Controllers
         /// <summary>
         /// Logs in the user and returns to the previous URL
         /// </summary>
-        /// <param name="returnUrl">The return URL.</param>
         /// <returns>
         /// Returns to the previous page after logging in
         /// </returns>
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login(Member member)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            var matchingMembers = dbContext.selectMemberByIdAndPassword(member.username, member.password).ToList();
+
+            if (matchingMembers.Count > 0)
+            {
+                // Session the member ID here
+                var loggedInMemberId = matchingMembers[0].memberId;
+
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Login(Member member)
+        //{
+            
+
+        //    return View();
+        //}
 
         /// <summary>
         /// Logs the off.

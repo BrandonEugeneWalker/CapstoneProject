@@ -260,5 +260,31 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMember", newUsernameParameter, newNameParameter, newPasswordParameter, newAddressParameter, isLibrarianParameter);
         }
+    
+        public virtual ObjectResult<Member> selectMemberByIdAndPassword(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("selectMemberByIdAndPassword", usernameParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult<Member> selectMemberByIdAndPassword(string username, string password, MergeOption mergeOption)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("selectMemberByIdAndPassword", mergeOption, usernameParameter, passwordParameter);
+        }
     }
 }
