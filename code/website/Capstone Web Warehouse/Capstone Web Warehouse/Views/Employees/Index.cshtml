@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Capstone_Database.Model.Employee>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Employees</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Employee ID
+        </th>
+        <th>
+            Employee Name
+        </th>
+        <th>
+            Manager?
+        </th>
+        <th>Manage Employee</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.employeeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isManager)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = item.employeeId}) |
+                @Html.ActionLink("Details", "Details", new {id = item.employeeId}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.employeeId})
+            </td>
+        </tr>
+    }
+
+</table>

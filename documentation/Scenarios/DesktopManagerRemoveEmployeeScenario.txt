@@ -1,0 +1,7 @@
+Manager Remove Employee:
+1.	A manager loads warehouse application.
+2.	A manager logs in.
+3.	A manager selects employee row wishing to be removed.
+4.	A manager clicks remove.
+5.	A manager has removed the employee.
+6.	A manager logs out.

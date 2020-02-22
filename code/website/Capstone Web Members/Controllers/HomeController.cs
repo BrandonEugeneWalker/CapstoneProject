@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Capstone_Database;
-using Capstone_Database.DAL;
-using Capstone_Web_Members.Models;
+using Capstone_Database.Model;
 
 namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Capstone_Database.DAL.CapstoneContext data = new CapstoneContext();
+        public OnlineEntities DatabaseContext = new OnlineEntities();
+
+        public List<Product> AvailableProducts => this.DatabaseContext.retrieveAvailableProducts().ToList();
 
         public ActionResult Index()
         {
@@ -32,7 +32,19 @@ namespace Capstone_Web_Members.Controllers
 
         public ActionResult MediaLibrary()
         {
-            return View(this.data.Products.ToList());
+            ViewBag.Message = "Available Media:";
+
+            return View(this.AvailableProducts);
+        }
+
+        public ActionResult OrderProduct(int productId)
+        {
+            var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
+            var availableStockId = results[0];
+            // TODO Remove this hardcoded MemberId when login is complete
+            this.DatabaseContext.createMemberOrder(availableStockId, 1);
+
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
     }
 }

@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Capstone_Database.Model;
 using Capstone_Desktop.Controller;
-using Capstone_Desktop.Database.employee;
-using Capstone_Desktop.Model;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
+    /// <summary>This form is used to add employees to the database.</summary>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class AddEmployeeForm : Form
     {
-        #region Constructors
+        #region Data members
 
-        private AddEmployeeFormController addEmployeeFormController { get; set; }
-
-        private static string PASSWORD_REQUIREMENTS =
+        private static readonly string PASSWORD_REQUIREMENTS =
             "A password must be at least 6 characters long, " +
             "\n Contains at least one: " +
             "\n * Number " +
@@ -23,13 +22,28 @@ namespace Capstone_Desktop.View
             "\n * Special Character " +
             "\n Passwords have a maximum length of 16 characters.";
 
+        private readonly OnlineEntities capstoneDatabaseContext;
+
+        #endregion
+
+        #region Properties
+
+        private AddEmployeeFormController EmployeeController { get; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>Initializes a new instance of the <see cref="AddEmployeeForm" /> class.</summary>
         public AddEmployeeForm()
         {
             this.InitializeComponent();
-            this.addEmployeeFormController = new AddEmployeeFormController();
+            this.EmployeeController = new AddEmployeeFormController();
             this.submitButton.Enabled = false;
             this.passwordRequirementsLabel.Text = PASSWORD_REQUIREMENTS;
             this.isValidLabel.ForeColor = Color.Red;
+
+            this.capstoneDatabaseContext = new OnlineEntities();
         }
 
         #endregion
@@ -45,8 +59,14 @@ namespace Capstone_Desktop.View
 
             try
             {
-                var newEmployee = new Employee(id, name, isManager);
-                InsertEmployeeSqlCommands.InsertEmployee(newEmployee, password);
+                var newEmployee = new Employee {
+                    employeeId = id,
+                    password = password,
+                    isManager = isManager,
+                    name = name
+                };
+                this.capstoneDatabaseContext.Employees.Add(newEmployee);
+                this.capstoneDatabaseContext.SaveChanges();
                 Close();
             }
             catch (ArgumentOutOfRangeException argumentOutOfRangeException)
@@ -68,12 +88,10 @@ namespace Capstone_Desktop.View
             Close();
         }
 
-        #endregion
-
         private void passwordTextBox_TextChanged(object sender, EventArgs e)
         {
             var password = this.passwordTextBox.Text;
-            var isValid = this.addEmployeeFormController.IsValidPassword(password);
+            var isValid = this.EmployeeController.IsValidPassword(password);
 
             if (isValid)
             {
@@ -88,5 +106,7 @@ namespace Capstone_Desktop.View
                 this.submitButton.Enabled = false;
             }
         }
+
+        #endregion
     }
 }

@@ -31,12 +31,11 @@
             this.logoutButton = new System.Windows.Forms.Button();
             this.companyLabel = new System.Windows.Forms.Label();
             this.manageItemsLabel = new System.Windows.Forms.Label();
-            this.markReturnedButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.submitChangesButton = new System.Windows.Forms.Button();
-            this.markShippedButton = new System.Windows.Forms.Button();
             this.managerButton = new System.Windows.Forms.Button();
             this.itemsGridView = new System.Windows.Forms.DataGridView();
+            this.manageRentalsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,24 +69,14 @@
             this.manageItemsLabel.Name = "manageItemsLabel";
             this.manageItemsLabel.Size = new System.Drawing.Size(1256, 85);
             this.manageItemsLabel.TabIndex = 2;
-            this.manageItemsLabel.Text = "Manage Items";
+            this.manageItemsLabel.Text = "View and Manage Items";
             this.manageItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // markReturnedButton
-            // 
-            this.markReturnedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.markReturnedButton.Location = new System.Drawing.Point(1105, 578);
-            this.markReturnedButton.Name = "markReturnedButton";
-            this.markReturnedButton.Size = new System.Drawing.Size(141, 46);
-            this.markReturnedButton.TabIndex = 4;
-            this.markReturnedButton.Text = "Mark Returned";
-            this.markReturnedButton.UseVisualStyleBackColor = true;
-            this.markReturnedButton.Click += new System.EventHandler(this.markReturnedButton_Click);
             // 
             // addButton
             // 
+            this.addButton.Enabled = false;
             this.addButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addButton.Location = new System.Drawing.Point(811, 578);
+            this.addButton.Location = new System.Drawing.Point(1105, 578);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(141, 46);
             this.addButton.TabIndex = 5;
@@ -107,22 +96,11 @@
             this.submitChangesButton.UseVisualStyleBackColor = true;
             this.submitChangesButton.Click += new System.EventHandler(this.SubmitChangesButton_Click);
             // 
-            // markShippedButton
-            // 
-            this.markShippedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.markShippedButton.Location = new System.Drawing.Point(958, 578);
-            this.markShippedButton.Name = "markShippedButton";
-            this.markShippedButton.Size = new System.Drawing.Size(141, 46);
-            this.markShippedButton.TabIndex = 7;
-            this.markShippedButton.Text = "Mark Shipped";
-            this.markShippedButton.UseVisualStyleBackColor = true;
-            this.markShippedButton.Click += new System.EventHandler(this.markShippedButton_Click);
-            // 
             // managerButton
             // 
             this.managerButton.Enabled = false;
             this.managerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.managerButton.Location = new System.Drawing.Point(1105, 64);
+            this.managerButton.Location = new System.Drawing.Point(958, 64);
             this.managerButton.Name = "managerButton";
             this.managerButton.Size = new System.Drawing.Size(141, 46);
             this.managerButton.TabIndex = 8;
@@ -132,6 +110,7 @@
             // 
             // itemsGridView
             // 
+            this.itemsGridView.AllowUserToAddRows = false;
             this.itemsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.itemsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.itemsGridView.Location = new System.Drawing.Point(12, 164);
@@ -140,16 +119,26 @@
             this.itemsGridView.Size = new System.Drawing.Size(1240, 384);
             this.itemsGridView.TabIndex = 9;
             // 
+            // manageRentalsButton
+            // 
+            this.manageRentalsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manageRentalsButton.Location = new System.Drawing.Point(1105, 64);
+            this.manageRentalsButton.Name = "manageRentalsButton";
+            this.manageRentalsButton.Size = new System.Drawing.Size(141, 46);
+            this.manageRentalsButton.TabIndex = 10;
+            this.manageRentalsButton.Text = "Manage Rentals";
+            this.manageRentalsButton.UseVisualStyleBackColor = true;
+            this.manageRentalsButton.Click += new System.EventHandler(this.manageRentalsButton_Click);
+            // 
             // ManageItemsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.manageRentalsButton);
             this.Controls.Add(this.itemsGridView);
             this.Controls.Add(this.managerButton);
-            this.Controls.Add(this.markShippedButton);
             this.Controls.Add(this.submitChangesButton);
             this.Controls.Add(this.addButton);
-            this.Controls.Add(this.markReturnedButton);
             this.Controls.Add(this.manageItemsLabel);
             this.Controls.Add(this.logoutButton);
             this.Controls.Add(this.companyLabel);
@@ -158,7 +147,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "ManageItemsForm";
-            this.Text = "Manage Employees";
+            this.Text = "Items";
             this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).EndInit();
             this.ResumeLayout(false);
@@ -170,11 +159,10 @@
         private System.Windows.Forms.Button logoutButton;
         private System.Windows.Forms.Label companyLabel;
         private System.Windows.Forms.Label manageItemsLabel;
-        private System.Windows.Forms.Button markReturnedButton;
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button submitChangesButton;
-        private System.Windows.Forms.Button markShippedButton;
         private System.Windows.Forms.Button managerButton;
         private System.Windows.Forms.DataGridView itemsGridView;
+        private System.Windows.Forms.Button manageRentalsButton;
     }
 }

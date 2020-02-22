@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Capstone_Database.Model.ItemRental>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Rentals</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Member.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Member.address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Stock.Product.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>Update Status</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock.Product.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Edit", new {id = item.itemRentalId})
+            </td>
+        </tr>
+    }
+
+</table>

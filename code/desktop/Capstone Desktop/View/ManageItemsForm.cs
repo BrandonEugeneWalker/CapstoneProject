@@ -1,47 +1,44 @@
 ﻿using System;
-using System.Data;
-using System.Globalization;
+using System.Data.Entity;
 using System.Windows.Forms;
-using Capstone_Desktop.Database;
-using Capstone_Desktop.Model;
+using Capstone_Database.Model;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
+    /// <summary>This form is used to managed view stock items in the database.</summary>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class ManageItemsForm : Form
     {
         #region Data members
 
         private readonly BindingSource itemListSource = new BindingSource();
 
-        private MySqlDataAdapter tableDataAdapter = new MySqlDataAdapter();
-
-        private MySqlCommandBuilder tableCommandBuilder = new MySqlCommandBuilder();
-
-        private readonly DataTable dataTable;
+        private readonly OnlineEntities capstoneDatabaseContext;
 
         #endregion
 
         #region Properties
 
+        /// <summary>Gets or sets the current employee.</summary>
+        /// <value>The current employee.</value>
         public Employee CurrentEmployee { get; set; }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>Initializes a new instance of the <see cref="ManageItemsForm" /> class.</summary>
+        /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageItemsForm(Employee loggedInEmployee)
         {
             this.InitializeComponent();
+            this.capstoneDatabaseContext = new OnlineEntities();
             this.CurrentEmployee = loggedInEmployee;
-            if (this.CurrentEmployee.IsManager)
+            if (this.CurrentEmployee.isManager == true)
             {
                 this.managerButton.Enabled = true;
             }
-
-            this.dataTable = new DataTable {
-                Locale = CultureInfo.InvariantCulture
-            };
         }
 
         #endregion
@@ -53,10 +50,6 @@ namespace Capstone_Desktop.View
             Close();
         }
 
-        private void RemoveButton_Click(object sender, EventArgs e)
-        {
-        }
-
         private void AddButton_Click(object sender, EventArgs e)
         {
             //TODO
@@ -64,12 +57,11 @@ namespace Capstone_Desktop.View
 
         private void SubmitChangesButton_Click(object sender, EventArgs e)
         {
-            this.tableDataAdapter.Update(this.dataTable); //TODO
+            //TODO
         }
 
         private void ManageEmployeeForm_Load(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the '_Capstone_DatabaseDataSet.Product' table. You can move, or remove it, as needed.
             this.itemsGridView.DataSource = this.itemListSource;
             this.getData();
         }
@@ -78,16 +70,8 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                var query =
-                    "SELECT p.`productId`, p.`name`, p.`category`, p.`type`, COUNT(s.`productId`) AS \"In Stock\" " +
-                    "FROM `Product` AS p, `Stock` AS s " +
-                    "WHERE p.`productId` = s.`productId` " +
-                    "GROUP BY p.`productId`";
-                this.dataTable.Clear();
-                this.tableDataAdapter = new MySqlDataAdapter(query, CapstoneSqlConnection.SqlConnection);
-                this.tableCommandBuilder = new MySqlCommandBuilder(this.tableDataAdapter);
-                this.tableDataAdapter.Fill(this.dataTable);
-                this.itemListSource.DataSource = this.dataTable;
+                this.capstoneDatabaseContext.Stocks.Load();
+                this.itemListSource.DataSource = this.capstoneDatabaseContext.Stocks.Local.ToBindingList();
 
                 for (var i = 0; i < this.itemsGridView.Columns.Count; i++)
                 {
@@ -107,25 +91,23 @@ namespace Capstone_Desktop.View
             this.itemsGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 
-        private void markReturnedButton_Click(object sender, EventArgs e)
-        {
-            //TODO
-        }
-
-        private void markShippedButton_Click(object sender, EventArgs e)
-        {
-            //TODO
-        }
-
         private void managerButton_Click(object sender, EventArgs e)
         {
-            if (this.CurrentEmployee.IsManager)
+            if (this.CurrentEmployee.isManager == true)
             {
                 Hide();
                 var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
                 manageEmployeeForm.ShowDialog();
                 Show();
             }
+        }
+
+        private void manageRentalsButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var manageRentalsForm = new ManageRentalsForm(this.CurrentEmployee);
+            manageRentalsForm.ShowDialog();
+            Show();
         }
 
         #endregion

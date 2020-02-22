@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Capstone_Database.Models.Product>
+﻿@model List<Capstone_Database.Model.Product>
 
 @{
     ViewBag.Title = "Media Library";
@@ -19,19 +19,23 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.description)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.type)
+                Type
             </th>
             <th></th>
         </tr>
         @foreach (var item in Model)
         {
-
+            if (Request.QueryString.HasKeys())
+            {
+                var searchString = Request.QueryString.ToString().Remove(0, 11).ToLower();
+                if (item.name.ToLower().Contains(searchString))
+                {
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.name)
@@ -43,9 +47,29 @@
                             @Html.DisplayFor(modelItem => item.type)
                         </td>
                         <td>
-                            Order(Not Implemented)
+                            @Html.ActionLink("Order", "OrderProduct", new { id = item.productId })
                         </td>
                     </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.type)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Order", "OrderProduct", new { id = item.productId })
+                    </td>
+                </tr>
+            }
+
 
         }
     </table>
