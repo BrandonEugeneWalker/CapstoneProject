@@ -73,7 +73,7 @@ namespace Capstone_Web_Members.Controllers
             {
                 this.dbContext.insertMember(member.username, member.name, member.password, member.address, 0);
                 this.dbContext.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(member);
@@ -176,5 +176,18 @@ namespace Capstone_Web_Members.Controllers
         }
 
         #endregion
+
+        /// <summary>
+        /// Logs in the user and returns to the previous URL
+        /// </summary>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <returns>
+        /// Returns to the previous page after logging in
+        /// </returns>
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
     }
 }
