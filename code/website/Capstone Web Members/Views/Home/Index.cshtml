@@ -5,7 +5,7 @@
 <div class="jumbotron">
     <h1>West Georgia Library</h1>
     <p class="lead">Welcome to the West Georgia Library, your online media ordering site.</p>
-    @if (!Request.IsAuthenticated)
+    @if (Session["currentMemberId"] == null)
      {
          <p>
              <a href="~/Members/Create" class="btn btn-primary btn-lg">Sign Up Here!</a>
@@ -14,7 +14,7 @@
 </div>
 
 <div class="row">
-    @if (!Request.IsAuthenticated)
+    @if (Session["currentMemberId"] == null)
     {
         <div class="col-md-4">
             <h2>Getting started</h2>

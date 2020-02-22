@@ -12,8 +12,14 @@
     <hr/>
     <form asp-action="Search">
         <p>
-            Search by Name:
+            Name:
             <input type="text" id="nameSearch" name="nameSearch"/>
+        </p>
+        <p>
+            Type:
+            <input type="radio" , name="type" , value="Book" />
+            <input type="radio" , name="type" , value="Movie" />
+            <input type="radio" , name="type" , value="CD" />
         </p>
     </form>
     <table class="table">
@@ -27,50 +33,26 @@
             <th>
                 Type
             </th>
-            <th></th>
+            <th>
+
+            </th>
         </tr>
         @foreach (var item in Model)
         {
-            if (Request.QueryString.HasKeys())
-            {
-                var searchString = Request.QueryString.ToString().Remove(0, 11).ToLower();
-                if (item.name.ToLower().Contains(searchString))
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.type)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Order", "OrderProduct", new { item.productId })
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.type)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Order", "OrderProduct", new { item.productId })
-                    </td>
-                </tr>
-            }
-
-
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+                <td>
+                    @Html.ActionLink("Order", "OrderProduct", new { item.productId })
+                </td>
+            </tr>
         }
     </table>
 
