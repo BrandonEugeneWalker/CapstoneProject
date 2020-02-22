@@ -1,0 +1,89 @@
+﻿@using Capstone_Web_Members.Settings
+@model Capstone_Database.Model.Member
+
+@{
+    ViewBag.Title = "Member Registration";
+}
+
+<h2>Register as a new Member!</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-10">
+            <b>Username</b>
+            @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <b>Name</b>
+            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div align="left">
+        <h5>
+            <b>Password Criteria: </b>
+        </h5>
+        <h5>-Length of @AccountSettings.PasswordRequiredLength characters or greater</h5>
+        @if (AccountSettings.PasswordRequireUppercase)
+        {
+            <h5>-At least one uppercase letter</h5>
+        }
+        @if (AccountSettings.PasswordRequireLowercase)
+        {
+            <h5>-At least one lowercase letter</h5>
+        }
+        @if (AccountSettings.PasswordRequireDigit)
+        {
+            <h5>-At least one numeric digit</h5>
+        }
+        @if (AccountSettings.PasswordRequireNonLetterOrDigit)
+        {
+            <h5>-At least one special character</h5>
+        }
+        @{
+            //TODO Add confirm password / hide text
+        }
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10" align="left">
+            <b>Password</b>
+            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <b>Address</b>
+            @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Register" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back Home", "Index", "Home")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

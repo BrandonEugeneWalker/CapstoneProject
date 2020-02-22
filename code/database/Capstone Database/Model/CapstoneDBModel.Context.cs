@@ -235,5 +235,56 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("findAvailableStockOfProduct", selectedProductIdParameter);
         }
+    
+        public virtual int insertMember(string newUsername, string newName, string newPassword, string newAddress, Nullable<sbyte> isLibrarian)
+        {
+            var newUsernameParameter = newUsername != null ?
+                new ObjectParameter("newUsername", newUsername) :
+                new ObjectParameter("newUsername", typeof(string));
+    
+            var newNameParameter = newName != null ?
+                new ObjectParameter("newName", newName) :
+                new ObjectParameter("newName", typeof(string));
+    
+            var newPasswordParameter = newPassword != null ?
+                new ObjectParameter("newPassword", newPassword) :
+                new ObjectParameter("newPassword", typeof(string));
+    
+            var newAddressParameter = newAddress != null ?
+                new ObjectParameter("newAddress", newAddress) :
+                new ObjectParameter("newAddress", typeof(string));
+    
+            var isLibrarianParameter = isLibrarian.HasValue ?
+                new ObjectParameter("isLibrarian", isLibrarian) :
+                new ObjectParameter("isLibrarian", typeof(sbyte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMember", newUsernameParameter, newNameParameter, newPasswordParameter, newAddressParameter, isLibrarianParameter);
+        }
+    
+        public virtual ObjectResult<Member> selectMemberByIdAndPassword(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("selectMemberByIdAndPassword", usernameParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult<Member> selectMemberByIdAndPassword(string username, string password, MergeOption mergeOption)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter("username", username) :
+                new ObjectParameter("username", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("password", password) :
+                new ObjectParameter("password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("selectMemberByIdAndPassword", mergeOption, usernameParameter, passwordParameter);
+        }
     }
 }
