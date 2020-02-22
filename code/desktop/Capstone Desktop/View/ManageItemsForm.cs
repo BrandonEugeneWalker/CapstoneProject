@@ -98,7 +98,7 @@ namespace Capstone_Desktop.View
                 Hide();
                 var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
                 manageEmployeeForm.ShowDialog();
-                Show();
+                Close();
             }
         }
 
@@ -107,7 +107,7 @@ namespace Capstone_Desktop.View
             Hide();
             var manageRentalsForm = new ManageRentalsForm(this.CurrentEmployee);
             manageRentalsForm.ShowDialog();
-            Show();
+            Close();
         }
 
         #endregion

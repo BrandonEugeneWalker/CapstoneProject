@@ -93,12 +93,15 @@ namespace Capstone_Desktop.View
                 Hide();
                 var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
                 manageEmployeeForm.ShowDialog();
-                Show();
+                Close();
             }
         }
 
         private void manageItemsButton_Click(object sender, EventArgs e)
         {
+            ManageItemsForm manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
+            Hide();
+            manageItemsForm.ShowDialog();
             Close();
         }
 

@@ -70,9 +70,7 @@ namespace Capstone_Desktop.View
         private void AddButton_Click(object sender, EventArgs e)
         {
             var addEmployeeForm = new AddEmployeeForm();
-            Hide();
             addEmployeeForm.ShowDialog();
-            Show();
             this.getData();
         }
 
@@ -112,7 +110,7 @@ namespace Capstone_Desktop.View
             var manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
             Hide();
             manageItemsForm.ShowDialog();
-            Show();
+            Close();
         }
 
         #endregion
