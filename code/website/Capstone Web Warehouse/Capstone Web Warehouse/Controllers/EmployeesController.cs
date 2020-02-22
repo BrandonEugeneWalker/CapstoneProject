@@ -16,6 +16,19 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities database = new OnlineEntities();
 
+        /// <summary>Initializes a new instance of the <see cref="EmployeesController"/> class.</summary>
+        public EmployeesController()
+        {
+            database = new OnlineEntities();
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="EmployeesController"/> class.</summary>
+        /// <param name="entity">The entity.</param>
+        public EmployeesController(OnlineEntities entity)
+        {
+            database = entity;
+        }
+
         /// <summary>  Index/Home page for employee management.</summary>
         /// <returns>employee management index page with list of all employees.</returns>
         public ActionResult Index()

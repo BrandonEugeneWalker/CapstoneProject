@@ -12,6 +12,16 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities database = new OnlineEntities();
 
+        public RentalsController()
+        {
+            database = new OnlineEntities();
+        }
+
+        public RentalsController(OnlineEntities entity)
+        {
+            database = entity;
+        }
+
         /// <summary>  Returns manage rentals index page.</summary>
         /// <returns>Returns manage rentals index page with list of rentals.</returns>
         public ActionResult Index()
