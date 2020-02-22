@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -16,13 +12,13 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities database = new OnlineEntities();
 
-        /// <summary>Initializes a new instance of the <see cref="EmployeesController"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="EmployeesController" /> class.</summary>
         public EmployeesController()
         {
             database = new OnlineEntities();
         }
 
-        /// <summary>Initializes a new instance of the <see cref="EmployeesController"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="EmployeesController" /> class.</summary>
         /// <param name="entity">The entity.</param>
         public EmployeesController(OnlineEntities entity)
         {
@@ -33,6 +29,10 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>employee management index page with list of all employees.</returns>
         public ActionResult Index()
         {
+            var employee = Session["Employee"] as Employee;
+
+            if (employee == null || (bool) !employee.isManager) return Redirect("~/Home/Login");
+
             return View(database.Employees.ToList());
         }
 
@@ -44,10 +44,7 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>view of the employee details for selected ID.</returns>
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var employee = database.Employees.Find(id);
             return employee == null ? (ActionResult) HttpNotFound() : View(employee);
@@ -57,6 +54,10 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>The employee creation view.</returns>
         public ActionResult Create()
         {
+            var employee = Session["Employee"] as Employee;
+
+            if (employee == null || (bool) !employee.isManager) return RedirectToAction("Index");
+
             return View();
         }
 
@@ -78,10 +79,7 @@ namespace Capstone_Web_Warehouse.Controllers
             if (ModelState.IsValid)
             {
                 sbyte manager = 0;
-                if (employee.isManager != null && (bool)employee.isManager)
-                {
-                    manager = 1;
-                }
+                if (employee.isManager != null && (bool) employee.isManager) manager = 1;
 
                 database.insertEmployee(null, employee.password, manager, employee.name);
                 database.SaveChanges();
@@ -99,16 +97,10 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>Employee edit view for selected ID.</returns>
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var employee = database.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
+            if (employee == null) return HttpNotFound();
 
             return View(employee);
         }
@@ -148,10 +140,7 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>Returns employee deletion page.</returns>
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var employee = database.Employees.Find(id);
             return employee == null ? (ActionResult) HttpNotFound() : View(employee);
@@ -174,13 +163,9 @@ namespace Capstone_Web_Warehouse.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                database.Dispose();
-            }
+            if (disposing) database.Dispose();
 
             base.Dispose(disposing);
         }
     }
-
 }

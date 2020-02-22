@@ -6,11 +6,11 @@ using Owin;
 
 namespace Capstone_Web_Warehouse
 {
-    public partial class Startup
+    public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
+
         }
     }
 }

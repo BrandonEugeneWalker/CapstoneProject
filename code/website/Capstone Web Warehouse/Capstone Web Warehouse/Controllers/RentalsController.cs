@@ -26,6 +26,10 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>Returns manage rentals index page with list of rentals.</returns>
         public ActionResult Index()
         {
+            var employee = Session["Employee"] as Employee;
+
+            if (employee == null) return RedirectToAction("Login");
+
             var itemRentals = database.ItemRentals.Include(i => i.Member).Include(i => i.Stock);
             return View(itemRentals.ToList());
         }
@@ -40,10 +44,7 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>The item rental update page view with selected rental ID.</returns>
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var itemRental = database.ItemRentals.Find(id);
             return itemRental == null ? (ActionResult) HttpNotFound() : View(itemRental);
@@ -72,10 +73,7 @@ namespace Capstone_Web_Warehouse.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                database.Dispose();
-            }
+            if (disposing) database.Dispose();
 
             base.Dispose(disposing);
         }
