@@ -5,20 +5,18 @@
 }
 
 <h2>Media Library</h2>
-
-
 <div>
     <h4>Media:</h4>
     <hr/>
     <form asp-action="Search">
         <p>
             Name:
-            <input type="text" id="nameSearch" name="nameSearch" />    
+            <input type="text" id="nameSearch" name="nameSearch" /> &nbsp;&nbsp;
             Type:
-            <input type="radio" , name="type" , value="Book"/> Book 
-            <input type="radio" , name="type" , value="Movie"> Movie 
-            <input type="radio" , name="type" , value="CD"/> CD 
-            <input type="submit" value="Submit"/>
+            &nbsp;<input type="radio" name="typeSearch" value="Book" /> Book
+            &nbsp;<input type="radio" name="typeSearch" value="Movie"> Movie
+            &nbsp;<input type="radio" name="typeSearch" value="CD" /> CD
+            &nbsp;<input type="submit" value="Submit" />
         </p>
     </form>
     <table class="table">

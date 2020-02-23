@@ -2,15 +2,13 @@
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using Microsoft.Ajax.Utilities;
 
 namespace Capstone_Web_Members.Controllers
 {
     public class HomeController : Controller
     {
         public OnlineEntities DatabaseContext;
-
-
-
         public List<Product> AvailableProducts;
 
         public HomeController()
@@ -44,7 +42,7 @@ namespace Capstone_Web_Members.Controllers
             return View();
         }
 
-        public ActionResult MediaLibrary()
+        public ActionResult MediaLibrary(string nameSearch, string typeSearch)
         {
             if (Session["currentMemberId"] == null)
             {
@@ -62,6 +60,7 @@ namespace Capstone_Web_Members.Controllers
             {
                 return RedirectToAction("Login", "Members");
             }
+
             var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
             var availableStockId = results[0];
             var memberId = int.Parse(Session["currentMemberId"].ToString());
