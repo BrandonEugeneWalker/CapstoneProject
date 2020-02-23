@@ -47,7 +47,14 @@
                     @Html.DisplayFor(modelItem => item.type)
                 </td>
                 <td>
-                    @Html.ActionLink("Order", "OrderProduct", new { item.productId })
+                    @if (ViewBag.HasThreeOrders)
+                    {
+                        <b><s>Order</s></b>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Order", "OrderProduct", new { item.productId })
+                    }
                 </td>
             </tr>
         }

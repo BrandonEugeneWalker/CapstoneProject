@@ -139,7 +139,7 @@ namespace Capstone_Unit_Tests.web.members
             var controller = new HomeController(databaseMock.Object);
 
             // Act
-            var result = controller.MediaLibrary() as ViewResult;
+            var result = controller.MediaLibrary(null, null) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -156,7 +156,7 @@ namespace Capstone_Unit_Tests.web.members
             var controller = new HomeController(databaseMock.Object);
 
             // Act
-            var result = controller.MediaLibrary() as ViewResult;
+            var result = controller.MediaLibrary(null, null) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result?.Model);

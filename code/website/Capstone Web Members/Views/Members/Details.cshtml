@@ -1,17 +1,19 @@
 ﻿@model Capstone_Database.Model.Member
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Member Profile";
 }
 
-<h2>Details</h2>
+<h2>Member Profile</h2>
 
 <div>
-    <h4>Member</h4>
+    <h4>
+        @Html.ActionLink("View Rental History", "RentalHistory")
+    </h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.username)
+            <b>Username</b>
         </dt>
 
         <dd>
@@ -19,7 +21,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.name)
+            <b>Name</b>
         </dt>
 
         <dd>
@@ -27,40 +29,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.password)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.address)
+            <b>Address</b>
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.address)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.isLibrarian)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.isLibrarian)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.isBanned)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.isBanned)
-        </dd>
-
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.memberId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit Profile", "Edit", new { id = Model.memberId })
 </p>
