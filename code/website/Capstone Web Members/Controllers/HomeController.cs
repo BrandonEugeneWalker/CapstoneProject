@@ -115,6 +115,17 @@ namespace Capstone_Web_Members.Controllers
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
                                          .ToList();
 
+            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            var rentedCount = this.DatabaseContext.retrieveRentedCount(memberId).ToList()[0];
+            if (rentedCount >= 3)
+            {
+                ViewBag.HasThreeOrders = true;
+            }
+            else
+            {
+                ViewBag.HasThreeOrders = false;
+            }
+
             ViewBag.Message = "Available Media:";
 
             return View(this.AvailableProducts);

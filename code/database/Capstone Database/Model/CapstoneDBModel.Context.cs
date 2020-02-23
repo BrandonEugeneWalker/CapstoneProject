@@ -82,13 +82,13 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingShipment", mergeOption);
         }
     
-        public virtual ObjectResult<retrieveRentedCount_Result> retrieveRentedCount(string selectedMemberId)
+        public virtual ObjectResult<Nullable<int>> retrieveRentedCount(Nullable<int> selectedMemberId)
         {
-            var selectedMemberIdParameter = selectedMemberId != null ?
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
                 new ObjectParameter("selectedMemberId", selectedMemberId) :
-                new ObjectParameter("selectedMemberId", typeof(string));
+                new ObjectParameter("selectedMemberId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retrieveRentedCount_Result>("retrieveRentedCount", selectedMemberIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("retrieveRentedCount", selectedMemberIdParameter);
         }
     
         public virtual ObjectResult<Product> searchProductsName(string nameSearch)

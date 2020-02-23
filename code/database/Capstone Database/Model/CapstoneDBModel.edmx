@@ -51,7 +51,7 @@
             <PropertyRef Name="productId" />
           </Key>
           <Property Name="productId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="category" Type="varchar" MaxLength="30" Nullable="false" />
@@ -179,7 +179,7 @@
         <Function Name="retrieveProductsWaitingReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveProductsWaitingShipment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveRentedCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
-          <Parameter Name="selectedMemberId" Type="varchar" Mode="In" />
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
         <Function Name="searchProductsName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="nameSearch" Type="varchar" Mode="In" />
@@ -437,8 +437,8 @@
           <FunctionImport Name="retrieveAvailableProducts" EntitySet="Products" ReturnType="Collection(Model.Product)" />
           <FunctionImport Name="retrieveProductsWaitingReturn" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
           <FunctionImport Name="retrieveProductsWaitingShipment" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
-          <FunctionImport Name="retrieveRentedCount" ReturnType="Collection(Model.retrieveRentedCount_Result)">
-          <Parameter Name="selectedMemberId" Mode="In" Type="String" />
+          <FunctionImport Name="retrieveRentedCount" ReturnType="Collection(Int32)">
+          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="searchProductsName" EntitySet="Products" ReturnType="Collection(Model.Product)">
           <Parameter Name="nameSearch" Mode="In" Type="String" />
@@ -582,9 +582,6 @@
           <FunctionImportMapping FunctionImportName="retrieveProductsWaitingShipment" FunctionName="Model.Store.retrieveProductsWaitingShipment">
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="retrieveRentedCount" FunctionName="Model.Store.retrieveRentedCount">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Model.retrieveRentedCount_Result" />
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="searchProductsName" FunctionName="Model.Store.searchProductsName">
           </FunctionImportMapping>
