@@ -312,5 +312,30 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveAvailableProductsWithSearch", mergeOption, nameSearchParameter, typeSearchParameter);
         }
+    
+        public virtual int editMember(string newUsername, string newName, string newPassword, string newAddress, Nullable<int> currentMemberId)
+        {
+            var newUsernameParameter = newUsername != null ?
+                new ObjectParameter("newUsername", newUsername) :
+                new ObjectParameter("newUsername", typeof(string));
+    
+            var newNameParameter = newName != null ?
+                new ObjectParameter("newName", newName) :
+                new ObjectParameter("newName", typeof(string));
+    
+            var newPasswordParameter = newPassword != null ?
+                new ObjectParameter("newPassword", newPassword) :
+                new ObjectParameter("newPassword", typeof(string));
+    
+            var newAddressParameter = newAddress != null ?
+                new ObjectParameter("newAddress", newAddress) :
+                new ObjectParameter("newAddress", typeof(string));
+    
+            var currentMemberIdParameter = currentMemberId.HasValue ?
+                new ObjectParameter("currentMemberId", currentMemberId) :
+                new ObjectParameter("currentMemberId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editMember", newUsernameParameter, newNameParameter, newPasswordParameter, newAddressParameter, currentMemberIdParameter);
+        }
     }
 }

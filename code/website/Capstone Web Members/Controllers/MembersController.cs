@@ -1,5 +1,4 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Capstone_Database.Model;
@@ -7,48 +6,53 @@ using Capstone_Database.Model;
 namespace Capstone_Web_Members.Controllers
 {
     /// <summary>
-    /// Controller class for Member Management pages
+    ///     Controller class for Member Management pages
     /// </summary>
     /// <seealso cref="System.Web.Mvc.Controller" />
     public class MembersController : Controller
     {
         #region Data members
 
-        private readonly OnlineEntities dbContext = new OnlineEntities();
+        public OnlineEntities DatabaseContext = new OnlineEntities();
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// Indexes this instance.
+        ///     Indexes this instance.
         /// </summary>
         /// <returns>A list of all members</returns>
         public ActionResult Index()
         {
-            return View(this.dbContext.Members.ToList());
-        }
-
-        /// <summary>
-        /// Shows the details the specified member.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>
-        /// Returns page showcasing details of a given member
-        /// </returns>
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            if (Session["currentMemberId"] == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Login", "Members");
             }
 
-            var member = this.dbContext.Members.Find(id);
-            return member == null ? (ActionResult)HttpNotFound() : View(member);
+            return View(this.DatabaseContext.Members.ToList());
         }
 
         /// <summary>
-        /// Creates this instance.
+        ///     Shows the details of the logged in member.
+        /// </summary>
+        /// <returns>
+        ///     Returns page showcasing details of the logged in member
+        /// </returns>
+        public ActionResult Details()
+        {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
+            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            var member = this.DatabaseContext.Members.Find(memberId);
+            return member == null ? (ActionResult) HttpNotFound() : View(member);
+        }
+
+        /// <summary>
+        ///     Creates this instance.
         /// </summary>
         /// <returns></returns>
         public ActionResult Create()
@@ -57,12 +61,12 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        /// Creates the specified member.
+        ///     Creates the specified member.
         /// </summary>
         /// <param name="member">The member.</param>
         /// <returns>
-        /// Navigates to the Member Web Homepage
-        /// Creates / Registers the new member
+        ///     Navigates to the Member Web Homepage
+        ///     Creates / Registers the new member
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -71,8 +75,8 @@ namespace Capstone_Web_Members.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.dbContext.insertMember(member.username, member.name, member.password, member.address, 0);
-                this.dbContext.SaveChanges();
+                this.DatabaseContext.insertMember(member.username, member.name, member.password, member.address, 0);
+                this.DatabaseContext.SaveChanges();
 
                 return RedirectToAction("Login");
             }
@@ -81,65 +85,81 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        /// Edits the specified Member.
+        ///     Edits the specified Member.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>
-        /// Returns the edit view page for the selected Member
+        ///     Returns the edit view page for the selected Member
         /// </returns>
         public ActionResult Edit(int? id)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var member = this.dbContext.Members.Find(id);
+            var member = this.DatabaseContext.Members.Find(id);
             if (member == null)
             {
                 return HttpNotFound();
             }
 
+            member.password = string.Empty;
             return View(member);
         }
 
         /// <summary>
-        /// Edits the specified member.
+        ///     Edits the specified member.
         /// </summary>
         /// <param name="member">The member.</param>
         /// <returns>
-        /// Returns the edit view page for the selected Member
+        ///     Returns the edit view page for the selected Member
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "memberId,username,name,password,address,isLibrarian,isBanned")]
             Member member)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             if (ModelState.IsValid)
             {
-                this.dbContext.Entry(member).State = EntityState.Modified;
-                this.dbContext.SaveChanges();
-                return RedirectToAction("Index");
+                this.DatabaseContext.editMember(member.username, member.name, member.password, member.address,
+                    member.memberId);
+                return RedirectToAction("Details");
             }
 
             return View(member);
         }
 
         /// <summary>
-        /// Deletes the specified Member.
+        ///     Deletes the specified Member.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>
-        /// Returns the Delete page of a given Member
+        ///     Returns the Delete page of a given Member
         /// </returns>
         public ActionResult Delete(int? id)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var member = this.dbContext.Members.Find(id);
+            var member = this.DatabaseContext.Members.Find(id);
             if (member == null)
             {
                 return HttpNotFound();
@@ -149,20 +169,25 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        /// Deletes the confirmed Member.
+        ///     Deletes the confirmed Member.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>
-        /// Returns to index after confirming member deletion
+        ///     Returns to index after confirming member deletion
         /// </returns>
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var member = this.dbContext.Members.Find(id);
-            this.dbContext.Members.Remove(member);
-            this.dbContext.SaveChanges();
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
+            var member = this.DatabaseContext.Members.Find(id);
+            this.DatabaseContext.Members.Remove(member);
+            this.DatabaseContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -170,24 +195,22 @@ namespace Capstone_Web_Members.Controllers
         {
             if (disposing)
             {
-                this.dbContext.Dispose();
+                this.DatabaseContext.Dispose();
             }
 
             base.Dispose(disposing);
         }
 
-        #endregion
-
         /// <summary>
-        /// Logs in the user and returns to the previous URL
+        ///     Logs in the user and returns to the previous URL
         /// </summary>
         /// <returns>
-        /// Returns to the previous page after logging in
+        ///     Returns to the previous page after logging in
         /// </returns>
         [AllowAnonymous]
         public ActionResult Login(Member member)
         {
-            var matchingMembers = dbContext.selectMemberByIdAndPassword(member.username, member.password).ToList();
+            var matchingMembers = this.DatabaseContext.selectMemberByIdAndPassword(member.username, member.password).ToList();
 
             if (matchingMembers.Count > 0)
             {
@@ -206,5 +229,7 @@ namespace Capstone_Web_Members.Controllers
             Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
+
+        #endregion
     }
 }
