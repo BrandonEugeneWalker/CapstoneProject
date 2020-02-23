@@ -5,15 +5,18 @@
 }
 
 <h2>Media Library</h2>
-
-
 <div>
     <h4>Media:</h4>
     <hr/>
     <form asp-action="Search">
         <p>
-            Search by Name:
-            <input type="text" id="nameSearch" name="nameSearch"/>
+            Name:
+            <input type="text" id="nameSearch" name="nameSearch" /> &nbsp;&nbsp;
+            Type:
+            &nbsp;<input type="radio" name="typeSearch" value="Book" /> Book
+            &nbsp;<input type="radio" name="typeSearch" value="Movie"> Movie
+            &nbsp;<input type="radio" name="typeSearch" value="CD" /> CD
+            &nbsp;<input type="submit" value="Submit" />
         </p>
     </form>
     <table class="table">
@@ -27,50 +30,26 @@
             <th>
                 Type
             </th>
-            <th></th>
+            <th>
+
+            </th>
         </tr>
         @foreach (var item in Model)
         {
-            if (Request.QueryString.HasKeys())
-            {
-                var searchString = Request.QueryString.ToString().Remove(0, 11).ToLower();
-                if (item.name.ToLower().Contains(searchString))
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.type)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Order", "OrderProduct", new { item.productId })
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.type)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Order", "OrderProduct", new { item.productId })
-                    </td>
-                </tr>
-            }
-
-
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+                <td>
+                    @Html.ActionLink("Order", "OrderProduct", new { item.productId })
+                </td>
+            </tr>
         }
     </table>
 

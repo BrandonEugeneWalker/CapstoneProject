@@ -286,5 +286,31 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("selectMemberByIdAndPassword", mergeOption, usernameParameter, passwordParameter);
         }
+    
+        public virtual ObjectResult<Product> retrieveAvailableProductsWithSearch(string nameSearch, string typeSearch)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter("nameSearch", nameSearch) :
+                new ObjectParameter("nameSearch", typeof(string));
+    
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter("typeSearch", typeSearch) :
+                new ObjectParameter("typeSearch", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveAvailableProductsWithSearch", nameSearchParameter, typeSearchParameter);
+        }
+    
+        public virtual ObjectResult<Product> retrieveAvailableProductsWithSearch(string nameSearch, string typeSearch, MergeOption mergeOption)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter("nameSearch", nameSearch) :
+                new ObjectParameter("nameSearch", typeof(string));
+    
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter("typeSearch", typeSearch) :
+                new ObjectParameter("typeSearch", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveAvailableProductsWithSearch", mergeOption, nameSearchParameter, typeSearchParameter);
+        }
     }
 }

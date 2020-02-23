@@ -73,7 +73,8 @@ namespace Capstone_Web_Members.Controllers
             {
                 this.dbContext.insertMember(member.username, member.name, member.password, member.address, 0);
                 this.dbContext.SaveChanges();
-                return RedirectToAction("Index", "Home");
+
+                return RedirectToAction("Login");
             }
 
             return View(member);
@@ -190,7 +191,6 @@ namespace Capstone_Web_Members.Controllers
 
             if (matchingMembers.Count > 0)
             {
-                // Session the member ID here
                 var loggedInMemberId = matchingMembers[0].memberId;
                 Session["currentMemberId"] = loggedInMemberId;
                 return RedirectToAction("Index", "Home");
@@ -199,22 +199,6 @@ namespace Capstone_Web_Members.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Login(Member member)
-        //{
-            
-
-        //    return View();
-        //}
-
-        /// <summary>
-        /// Logs the off.
-        /// </summary>
-        /// <returns>
-        /// Returns to the Index, logged out
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()

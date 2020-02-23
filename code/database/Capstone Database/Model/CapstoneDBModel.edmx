@@ -169,6 +169,10 @@
         </Function>
         <Function Name="retrieveAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveAvailableProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="retrieveAvailableProductsWithSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="nameSearch" Type="varchar" Mode="In" />
+          <Parameter Name="typeSearch" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="retrieveMemberAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
@@ -479,6 +483,10 @@
             <Parameter Name="username" Mode="In" Type="String" />
             <Parameter Name="password" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="retrieveAvailableProductsWithSearch" EntitySet="Products" ReturnType="Collection(Model.Product)">
+            <Parameter Name="nameSearch" Mode="In" Type="String" />
+            <Parameter Name="typeSearch" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -490,6 +498,7 @@
         <ComplexType Name="searchProductsType_Result" />
         <ComplexType Name="selectEmployeeByIdAndPassword_Result" />
         <ComplexType Name="selectMemberByIdAndPassword_Result" />
+        <ComplexType Name="retrieveAvailableProductsWithSearch_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -592,6 +601,8 @@
           <FunctionImportMapping FunctionImportName="findAvailableStockOfProduct" FunctionName="Model.Store.findAvailableStockOfProduct" />
           <FunctionImportMapping FunctionImportName="insertMember" FunctionName="Model.Store.insertMember" />
           <FunctionImportMapping FunctionImportName="selectMemberByIdAndPassword" FunctionName="Model.Store.selectMemberByIdAndPassword">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="retrieveAvailableProductsWithSearch" FunctionName="Model.Store.retrieveAvailableProductsWithSearch">
           </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
