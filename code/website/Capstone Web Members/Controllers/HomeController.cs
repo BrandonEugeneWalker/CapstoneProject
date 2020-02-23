@@ -116,14 +116,20 @@ namespace Capstone_Web_Members.Controllers
                                          .ToList();
 
             var memberId = int.Parse(Session["currentMemberId"].ToString());
-            var rentedCount = this.DatabaseContext.retrieveRentedCount(memberId).ToList()[0];
+
+            var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+            int? rentedCount = 0;
+            if (rentedCountResult.Count > 0)
+            {
+                rentedCount = rentedCountResult[0];
+            }
+
+
+            ViewBag.HasThreeOrders = false;
+
             if (rentedCount >= 3)
             {
                 ViewBag.HasThreeOrders = true;
-            }
-            else
-            {
-                ViewBag.HasThreeOrders = false;
             }
 
             ViewBag.Message = "Available Media:";

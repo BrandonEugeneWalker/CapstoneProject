@@ -124,6 +124,9 @@
     <Compile Include="Model\retrieveAvailableProducts_Result.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\retrieveMembersRentals_Result.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\retrieveProductsWaitingReturn_Result.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>

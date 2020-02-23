@@ -239,7 +239,10 @@ namespace Capstone_Web_Members.Controllers
                 return RedirectToAction("Login", "Members");
             }
 
-            throw new System.NotImplementedException();
+            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            var rentedItems = this.DatabaseContext.retrieveMembersRentals(memberId).ToList();
+
+            return View(rentedItems);
         }
     }
 }

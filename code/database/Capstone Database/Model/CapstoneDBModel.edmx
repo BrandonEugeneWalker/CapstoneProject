@@ -183,6 +183,9 @@
         <Function Name="retrieveMemberAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
+        <Function Name="retrieveMembersRentals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+        </Function>
         <Function Name="retrieveProductsWaitingReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveProductsWaitingShipment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveRentedCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
@@ -501,6 +504,9 @@
             <Parameter Name="newAddress" Mode="In" Type="String" />
             <Parameter Name="currentMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="retrieveMembersRentals" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)">
+            <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -513,6 +519,7 @@
         <ComplexType Name="selectEmployeeByIdAndPassword_Result" />
         <ComplexType Name="selectMemberByIdAndPassword_Result" />
         <ComplexType Name="retrieveAvailableProductsWithSearch_Result" />
+        <ComplexType Name="retrieveMembersRentals_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -616,6 +623,8 @@
           <FunctionImportMapping FunctionImportName="retrieveAvailableProductsWithSearch" FunctionName="Model.Store.retrieveAvailableProductsWithSearch">
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="editMember" FunctionName="Model.Store.editMember" />
+          <FunctionImportMapping FunctionImportName="retrieveMembersRentals" FunctionName="Model.Store.retrieveMembersRentals">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

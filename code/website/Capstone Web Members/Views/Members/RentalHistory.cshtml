@@ -15,7 +15,13 @@
                 Name
             </th>
             <th>
+                Description
+            </th>
+            <th>
                 Type
+            </th>
+            <th>
+                Category
             </th>
             <th>
                 Status
@@ -26,20 +32,26 @@
         </tr>
         @foreach (var rental in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelRental => rental.Stock.Product.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelRental => rental.Stock.Product.type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelRental => rental.status)
-                </td>
-                <td>
-
-                </td>
-            </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelRental => rental.Stock.Product.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelRental => rental.Stock.Product.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelRental => rental.Stock.Product.type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelRental => rental.Stock.Product.category)
+        </td>
+        <td>
+            @Html.DisplayFor(modelRental => rental.status)
+        </td>
+        <td>
+            Return button
+        </td>
+    </tr>
         }
     </table>
 
