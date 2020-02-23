@@ -88,7 +88,7 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///    The Media Library page, showing all items available to order
+        ///     The Media Library page, showing all items available to order
         /// </summary>
         /// <param name="nameSearch">The name search.</param>
         /// <param name="typeSearch">The type search.</param>
@@ -124,7 +124,6 @@ namespace Capstone_Web_Members.Controllers
                 rentedCount = rentedCountResult[0];
             }
 
-
             ViewBag.HasThreeOrders = false;
 
             if (rentedCount >= 3)
@@ -156,6 +155,24 @@ namespace Capstone_Web_Members.Controllers
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             this.DatabaseContext.createMemberOrder(availableStockId, memberId);
 
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+        }
+
+        /// <summary>
+        ///     Returns a product rental item
+        /// </summary>
+        /// <param name="rentalId">The rental identifier.</param>
+        /// <returns>
+        ///     The rental history page after returning selected rental
+        /// </returns>
+        public ActionResult ReturnProduct(int rentalId)
+        {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
+            this.DatabaseContext.updateMemberReturn(rentalId);
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
 

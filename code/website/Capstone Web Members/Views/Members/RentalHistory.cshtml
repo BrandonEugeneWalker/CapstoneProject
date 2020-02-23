@@ -1,4 +1,5 @@
-﻿@model List<Capstone_Database.Model.ItemRental>
+﻿@using Capstone_Web_Members.Controllers
+@model List<Capstone_Database.Model.ItemRental>
 
 @{
     ViewBag.Title = "RentalHistory";
@@ -8,7 +9,7 @@
 
 <div>
     <h4>Media:</h4>
-    <hr />
+    <hr/>
     <table class="table">
         <tr>
             <th>
@@ -32,26 +33,33 @@
         </tr>
         @foreach (var rental in Model)
         {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelRental => rental.Stock.Product.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelRental => rental.Stock.Product.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelRental => rental.Stock.Product.type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelRental => rental.Stock.Product.category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelRental => rental.status)
-        </td>
-        <td>
-            Return button
-        </td>
-    </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.status)
+                </td>
+                <td>
+                    @if (rental.status.Equals("Rented"))
+                    {
+                        @Html.ActionLink("Return", "ReturnProduct", "Home", new { rentalId = rental.itemRentalId }, "")
+                    }
+                    else
+                    {
+                        <b>&nbsp;</b>
+                    }
+                </td>
+            </tr>
         }
     </table>
 
