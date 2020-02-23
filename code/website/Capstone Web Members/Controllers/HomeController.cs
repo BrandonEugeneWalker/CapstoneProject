@@ -48,6 +48,17 @@ namespace Capstone_Web_Members.Controllers
             {
                 return RedirectToAction("Login", "Members");
             }
+            if (nameSearch == null)
+            {
+                nameSearch = string.Empty;
+            }
+
+            if (typeSearch == null)
+            {
+                typeSearch = string.Empty;
+            }
+
+            this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch).ToList();
 
             ViewBag.Message = "Available Media:";
 
