@@ -1,11 +1,7 @@
-﻿@using Capstone_Database.Model
-@model List<Capstone_Database.Model.Product>
+﻿@model List<Capstone_Database.Model.Product>
 
 @{
     ViewBag.Title = "Media Library";
-    var memberId = int.Parse(Session["currentMemberId"].ToString());
-    var databaseContext = new OnlineEntities();
-    ViewBag.MaxOrders = true;
 }
 
 <h2>Media Library</h2>

@@ -231,5 +231,15 @@ namespace Capstone_Web_Members.Controllers
         }
 
         #endregion
+
+        public ActionResult RentalHistory()
+        {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
+            throw new System.NotImplementedException();
+        }
     }
 }
