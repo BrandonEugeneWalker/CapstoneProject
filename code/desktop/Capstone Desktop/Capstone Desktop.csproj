@@ -127,6 +127,12 @@
     <Compile Include="View\ManageRentalsForm.Designer.cs">
       <DependentUpon>ManageRentalsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\RemoveConfirmationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\RemoveConfirmationForm.Designer.cs">
+      <DependentUpon>RemoveConfirmationForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\ManageRentalsForm.resx">
       <DependentUpon>ManageRentalsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\RemoveConfirmationForm.resx">
+      <DependentUpon>RemoveConfirmationForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

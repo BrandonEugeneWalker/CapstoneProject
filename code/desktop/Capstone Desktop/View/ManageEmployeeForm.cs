@@ -54,9 +54,8 @@ namespace Capstone_Desktop.View
                 var rowIndex = currentRow.Index;
                 try
                 {
-                    this.employeeGridView.Rows.RemoveAt(rowIndex);
-                    this.capstoneDatabaseContext.SaveChanges();
-                    removedCount++;
+                    Employee currentEmployee = (Employee)currentRow.DataBoundItem;
+                    removedCount += this.AttemptToRemoveEmployee(currentEmployee, rowIndex);
                 }
                 catch (MySqlException)
                 {
@@ -65,6 +64,29 @@ namespace Capstone_Desktop.View
             }
 
             MessageBox.Show(@"Successfully removed " + removedCount + @" employee(s) from the database.");
+        }
+
+        private int AttemptToRemoveEmployee(Employee employee, int rowIndex)
+        {
+            RemoveConfirmationForm confirmationForm = new RemoveConfirmationForm(employee);
+            var dialogResult = confirmationForm.ShowDialog();
+
+            int results = 0;
+
+            switch (dialogResult)
+            {
+                case DialogResult.Yes:
+                    this.employeeGridView.Rows.RemoveAt(rowIndex);
+                    this.capstoneDatabaseContext.SaveChanges();
+                    results = 1;
+                    break;
+                case DialogResult.Abort:
+                    MessageBox.Show("No employee was selected.");
+                    break;
+            }
+
+            return results;
+
         }
 
         private void AddButton_Click(object sender, EventArgs e)
