@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Capstone_Database.Model
 {
     using System;
@@ -20,19 +18,11 @@ namespace Capstone_Database.Model
         public Member()
         {
             this.ItemRentals = new HashSet<ItemRental>();
-            this.ItemReturns = new HashSet<ItemReturn>();
         }
     
         public int memberId { get; set; }
         public string username { get; set; }
-        [Required]
-        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Name must be letters only.")]
         public string name { get; set; }
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", ErrorMessage = "Password must include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character")]
         public string password { get; set; }
         public string address { get; set; }
         public sbyte isLibrarian { get; set; }
@@ -40,7 +30,5 @@ namespace Capstone_Database.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ItemRental> ItemRentals { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ItemReturn> ItemReturns { get; set; }
     }
 }

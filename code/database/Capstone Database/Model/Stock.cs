@@ -18,7 +18,6 @@ namespace Capstone_Database.Model
         public Stock()
         {
             this.ItemRentals = new HashSet<ItemRental>();
-            this.ItemReturns = new HashSet<ItemReturn>();
         }
     
         public int stockId { get; set; }
@@ -26,8 +25,6 @@ namespace Capstone_Database.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ItemRental> ItemRentals { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ItemReturn> ItemReturns { get; set; }
         public virtual Product Product { get; set; }
     }
 }

@@ -12,14 +12,14 @@ namespace Capstone_Database.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemReturn
+    public partial class ItemShip
     {
-        public int itemReturnId { get; set; }
+        public int itemShipId { get; set; }
         public int employeeId { get; set; }
         public int itemRentalId { get; set; }
         public string itemCondition { get; set; }
         public string itemDescription { get; set; }
-        public System.DateTime returnDateTime { get; set; }
+        public System.DateTime shipDateTime { get; set; }
     
         public virtual Employee Employee { get; set; }
         public virtual ItemRental ItemRental { get; set; }
