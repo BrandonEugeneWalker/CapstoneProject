@@ -7,7 +7,7 @@ using Capstone_Web_Members.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Capstone_Unit_Tests.web.members
+namespace Capstone_Unit_Tests.web_members
 {
     /// <summary>
     /// Tests the HomeController behavior
