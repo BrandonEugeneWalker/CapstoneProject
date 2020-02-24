@@ -96,10 +96,10 @@ namespace Capstone_Web_Members.Controllers
         /// </returns>
         public ActionResult MediaLibrary(string nameSearch, string typeSearch)
         {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
+            //if (Session["currentMemberId"] == null)
+            //{
+            //    return RedirectToAction("Login", "Members");
+            //}
 
             if (nameSearch == null)
             {
@@ -116,21 +116,21 @@ namespace Capstone_Web_Members.Controllers
 
             var memberId = int.Parse(Session["currentMemberId"].ToString());
 
-            var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
-            int? rentedCount = 0;
-            if (rentedCountResult.Count > 0)
-            {
-                rentedCount = rentedCountResult[0];
-            }
+            //var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+            //int? rentedCount = 0;
+            //if (rentedCountResult.Count > 0)
+            //{
+            //    rentedCount = rentedCountResult[0];
+            //}
 
-            ViewBag.HasThreeOrders = false;
+            //ViewBag.HasThreeOrders = false;
 
-            if (rentedCount >= 3)
-            {
-                ViewBag.HasThreeOrders = true;
-            }
+            //if (rentedCount >= 3)
+            //{
+            //    ViewBag.HasThreeOrders = true;
+            //}
 
-            ViewBag.Message = "Available Media:";
+            //ViewBag.Message = "Available Media:";
 
             return View(this.AvailableProducts);
         }

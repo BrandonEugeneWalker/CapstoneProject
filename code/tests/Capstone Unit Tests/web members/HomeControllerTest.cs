@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
@@ -16,7 +18,7 @@ namespace Capstone_Unit_Tests.web_members
     public class HomeControllerTest
     {
 
-        private static Mock<DbSet<Product>> getTestProducts()
+        private static List<Product> getTestProducts()
         {
             var productA = new Product
             {
@@ -35,16 +37,16 @@ namespace Capstone_Unit_Tests.web_members
                 category = "Fantasy"
             };
 
-            var testProducts = new List<Product> { productA, productB }.AsQueryable();
+            var testProducts = new List<Product> { productA, productB };
 
             var productsMock = new Mock<DbSet<Product>>();
 
-            productsMock.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(testProducts.Provider);
-            productsMock.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(testProducts.Expression);
-            productsMock.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(testProducts.ElementType);
-            productsMock.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(testProducts.GetEnumerator());
+            //productsMock.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(testProducts.Provider);
+            //productsMock.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(testProducts.Expression);
+            //productsMock.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(testProducts.ElementType);
+            //productsMock.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(testProducts.GetEnumerator());
 
-            return productsMock;
+            return testProducts;
         }
 
         private static Mock<DbSet<Stock>> getTestStocks()
@@ -74,10 +76,18 @@ namespace Capstone_Unit_Tests.web_members
         private static Mock<MemberContext> getMemberContext()
         {
             var memberContextMock = new Mock<MemberContext>();
-            memberContextMock.Setup(x => x.Products).Returns(getTestProducts().Object);
+            //memberContextMock.Setup(x => x.Products).Returns(getTestProducts().Object);
             memberContextMock.Setup(x => x.Stocks).Returns(getTestStocks().Object);
 
-            //memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty)).Returns()
+            var mockObjectResult = new TestableObjectResult<Product>();
+            memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
+                .Returns(mockObjectResult);
+
+            var mockedProductResult = new Mock<TestableObjectResult<Product>>();
+            mockedProductResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator());
+
+            memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
+                .Returns(mockedProductResult.Object);
 
             return memberContextMock;
         }
