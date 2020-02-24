@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using System.Windows.Forms;
 using Capstone_Database.Model;
 using MySql.Data.MySqlClient;
@@ -64,13 +65,41 @@ namespace Capstone_Desktop.View
                 this.capstoneDatabaseContext.ItemRentals.Load();
                 this.rentalListSource.DataSource = this.capstoneDatabaseContext.ItemRentals.Local.ToBindingList();
 
-                for (var i = 0; i < this.rentalGridView.Columns.Count; i++)
-                {
-                    this.rentalGridView.Columns[i].MinimumWidth = 200;
-                }
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@"There was a problem connecting to the database, is the VPN enabled?");
+            }
+        }
 
-                this.rentalGridView.Columns[4].Visible = false;
-                this.rentalGridView.Columns[5].Visible = false;
+        private void filterByWaitingShipment()
+        {
+            try
+            {
+                this.capstoneDatabaseContext.ItemRentals.Load();
+
+                var rentalWaitingForShipment =
+                    this.capstoneDatabaseContext.ItemRentals.Where(rental => rental.status.Equals("WaitingShipment"));
+                this.rentalListSource.DataSource = rentalWaitingForShipment.ToList();
+
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@"There was a problem connecting to the database, is the VPN enabled?");
+            }
+        }
+
+        private void filterByWaitingReturn()
+        {
+            try
+            {
+                this.capstoneDatabaseContext.ItemRentals.Load();
+
+                var rentalWaitingForShipment =
+                    this.capstoneDatabaseContext.ItemRentals.Where(rental => rental.status.Equals("WaitingReturn"));
+                this.rentalListSource.DataSource = rentalWaitingForShipment.ToList();
 
                 this.refreshTable();
             }
@@ -82,6 +111,15 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
+            for (var i = 0; i < this.rentalGridView.Columns.Count; i++)
+            {
+                this.rentalGridView.Columns[i].MinimumWidth = 200;
+            }
+
+            this.rentalGridView.Columns[4].Visible = false;
+            this.rentalGridView.Columns[5].Visible = false;
+            this.rentalGridView.Columns[6].Visible = false;
+            this.rentalGridView.Columns[7].Visible = false;
             this.rentalGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 
@@ -98,7 +136,7 @@ namespace Capstone_Desktop.View
 
         private void manageItemsButton_Click(object sender, EventArgs e)
         {
-            ManageItemsForm manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
+            var manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
             Hide();
             manageItemsForm.ShowDialog();
             Close();
@@ -144,6 +182,18 @@ namespace Capstone_Desktop.View
 
         private void rentalStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (this.rentalStatusComboBox.SelectedIndex == 0)
+            {
+                this.getData();
+            }
+            else if (this.rentalStatusComboBox.SelectedIndex == 1)
+            {
+                this.filterByWaitingShipment();
+            }
+            else if (this.rentalStatusComboBox.SelectedIndex == 2)
+            {
+                this.filterByWaitingReturn();
+            }
         }
 
         #endregion

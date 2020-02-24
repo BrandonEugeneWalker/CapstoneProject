@@ -80,8 +80,6 @@ namespace Capstone_Desktop.View
 
                 this.itemsGridView.Columns[2].Visible = false;
                 this.itemsGridView.Columns[3].Visible = false;
-                this.itemsGridView.Columns[4].Visible = false;
-                
 
                 this.refreshTable();
             }

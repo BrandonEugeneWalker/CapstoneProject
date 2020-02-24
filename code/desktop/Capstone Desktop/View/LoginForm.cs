@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using Capstone_Database.Model;
 using Capstone_Desktop.View;
 using MySql.Data.MySqlClient;
-using System.Linq;
 
 namespace Capstone_Desktop
 {
@@ -11,7 +11,7 @@ namespace Capstone_Desktop
     /// <seealso cref="System.Windows.Forms.Form" />
     public partial class LoginForm : Form
     {
-        #region Properties
+        #region Data members
 
         private Employee currentEmployee;
 

@@ -54,7 +54,7 @@ namespace Capstone_Desktop.View
                 var rowIndex = currentRow.Index;
                 try
                 {
-                    Employee currentEmployee = (Employee)currentRow.DataBoundItem;
+                    var currentEmployee = (Employee) currentRow.DataBoundItem;
                     removedCount += this.AttemptToRemoveEmployee(currentEmployee, rowIndex);
                 }
                 catch (MySqlException)
@@ -68,10 +68,10 @@ namespace Capstone_Desktop.View
 
         private int AttemptToRemoveEmployee(Employee employee, int rowIndex)
         {
-            RemoveConfirmationForm confirmationForm = new RemoveConfirmationForm(employee);
+            var confirmationForm = new RemoveConfirmationForm(employee);
             var dialogResult = confirmationForm.ShowDialog();
 
-            int results = 0;
+            var results = 0;
 
             switch (dialogResult)
             {
@@ -86,7 +86,6 @@ namespace Capstone_Desktop.View
             }
 
             return results;
-
         }
 
         private void AddButton_Click(object sender, EventArgs e)
