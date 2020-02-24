@@ -15,7 +15,7 @@ namespace Capstone_Unit_Tests.web_members
         /// <value>
         /// The products.
         /// </value>
-        public virtual DbSet<Product> Products { get; set; }
+        public override DbSet<Product> Products { get; set; }
 
         /// <summary>
         /// Gets or sets the stocks.
@@ -23,7 +23,7 @@ namespace Capstone_Unit_Tests.web_members
         /// <value>
         /// The stocks.
         /// </value>
-        public virtual DbSet<Stock> Stocks { get; set; }
+        public override DbSet<Stock> Stocks { get; set; }
 
         /// <summary>
         /// Gets or sets the members.
@@ -31,7 +31,7 @@ namespace Capstone_Unit_Tests.web_members
         /// <value>
         /// The members.
         /// </value>
-        public virtual DbSet<Member> Members { get; set; }
+        public override DbSet<Member> Members { get; set; }
 
         /// <summary>
         /// Gets or sets the item rentals.
@@ -39,6 +39,6 @@ namespace Capstone_Unit_Tests.web_members
         /// <value>
         /// The item rentals.
         /// </value>
-        public virtual DbSet<ItemRental> ItemRentals { get; set; }
+        public override DbSet<ItemRental> ItemRentals { get; set; }
     }
 }

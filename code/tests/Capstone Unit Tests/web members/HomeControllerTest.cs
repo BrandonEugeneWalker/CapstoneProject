@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
@@ -76,6 +77,8 @@ namespace Capstone_Unit_Tests.web_members
             var memberContextMock = new Mock<MemberContext>();
             memberContextMock.Setup(x => x.Products).Returns(getTestProducts().Object);
             memberContextMock.Setup(x => x.Stocks).Returns(getTestStocks().Object);
+
+            //memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty)).Returns()
 
             return memberContextMock;
         }
