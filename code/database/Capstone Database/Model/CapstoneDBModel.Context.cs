@@ -29,10 +29,11 @@ namespace Capstone_Database.Model
     
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<ItemRental> ItemRentals { get; set; }
-        public virtual DbSet<ItemReturn> ItemReturns { get; set; }
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
+        public virtual DbSet<ItemShip> ItemShips { get; set; }
+        public virtual DbSet<ItemReturn> ItemReturns { get; set; }
     
         public virtual int createMemberOrder(Nullable<int> selectedStockId, Nullable<int> selectedMemberId)
         {

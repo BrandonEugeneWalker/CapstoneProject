@@ -14,6 +14,13 @@ namespace Capstone_Database.Model
     
     public partial class ItemRental
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ItemRental()
+        {
+            this.ItemShips = new HashSet<ItemShip>();
+            this.ItemReturns = new HashSet<ItemReturn>();
+        }
+    
         public int itemRentalId { get; set; }
         public int stockId { get; set; }
         public int memberId { get; set; }
@@ -21,5 +28,9 @@ namespace Capstone_Database.Model
     
         public virtual Member Member { get; set; }
         public virtual Stock Stock { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemShip> ItemShips { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemReturn> ItemReturns { get; set; }
     }
 }
