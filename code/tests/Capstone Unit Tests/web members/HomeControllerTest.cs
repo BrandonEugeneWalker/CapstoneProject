@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
@@ -39,17 +37,10 @@ namespace Capstone_Unit_Tests.web_members
 
             var testProducts = new List<Product> { productA, productB };
 
-            var productsMock = new Mock<DbSet<Product>>();
-
-            //productsMock.As<IQueryable<Product>>().Setup(m => m.Provider).Returns(testProducts.Provider);
-            //productsMock.As<IQueryable<Product>>().Setup(m => m.Expression).Returns(testProducts.Expression);
-            //productsMock.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(testProducts.ElementType);
-            //productsMock.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(testProducts.GetEnumerator());
-
             return testProducts;
         }
 
-        private static Mock<DbSet<Stock>> getTestStocks()
+        private static List<Stock> getTestStocks()
         {
             var stockA = new Stock
             {
@@ -62,30 +53,20 @@ namespace Capstone_Unit_Tests.web_members
                 productId = 2
             };
 
-            var testStock = new List<Stock> { stockA, stockB }.AsQueryable();
+            var testStock = new List<Stock> { stockA, stockB };
 
-            var stocksMock = new Mock<DbSet<Stock>>();
-            stocksMock.As<IQueryable<Stock>>().Setup(m => m.Provider).Returns(testStock.Provider);
-            stocksMock.As<IQueryable<Stock>>().Setup(m => m.Expression).Returns(testStock.Expression);
-            stocksMock.As<IQueryable<Stock>>().Setup(m => m.ElementType).Returns(testStock.ElementType);
-            stocksMock.As<IQueryable<Stock>>().Setup(m => m.GetEnumerator()).Returns(testStock.GetEnumerator());
-
-            return stocksMock;
+            return testStock;
         }
 
         private static Mock<MemberContext> getMemberContext()
         {
             var memberContextMock = new Mock<MemberContext>();
-            //memberContextMock.Setup(x => x.Products).Returns(getTestProducts().Object);
-            memberContextMock.Setup(x => x.Stocks).Returns(getTestStocks().Object);
 
             var mockObjectResult = new TestableObjectResult<Product>();
             memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
                 .Returns(mockObjectResult);
-
             var mockedProductResult = new Mock<TestableObjectResult<Product>>();
             mockedProductResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator());
-
             memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
                 .Returns(mockedProductResult.Object);
 
@@ -190,7 +171,6 @@ namespace Capstone_Unit_Tests.web_members
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Model);
         }
     }
 }
