@@ -33,7 +33,6 @@ namespace Capstone_Web_Members.Controllers
         public HomeController()
         {
             this.DatabaseContext = new OnlineEntities();
-            this.AvailableProducts = this.DatabaseContext.retrieveAvailableProducts().ToList();
         }
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace Capstone_Web_Members.Controllers
         public HomeController(OnlineEntities databaseContext)
         {
             this.DatabaseContext = databaseContext;
-            //this.AvailableProducts = this.DatabaseContext.Products.ToList();
         }
 
         #endregion

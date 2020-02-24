@@ -16,8 +16,7 @@ namespace Capstone_Unit_Tests.web_members
     public class HomeControllerTest
     {
 
-        /// Setup for Test Products
-        private static DbSet<Product> getTestProducts()
+        private static Mock<DbSet<Product>> getTestProducts()
         {
             var productA = new Product
             {
@@ -29,7 +28,7 @@ namespace Capstone_Unit_Tests.web_members
             };
             var productB = new Product
             {
-                productId = 1,
+                productId = 2,
                 name = "Fellowship of the Ring",
                 description = "The first movie",
                 type = "Movie",
@@ -45,10 +44,10 @@ namespace Capstone_Unit_Tests.web_members
             productsMock.As<IQueryable<Product>>().Setup(m => m.ElementType).Returns(testProducts.ElementType);
             productsMock.As<IQueryable<Product>>().Setup(m => m.GetEnumerator()).Returns(testProducts.GetEnumerator());
 
-            return productsMock.Object;
+            return productsMock;
         }
 
-        private static IEnumerable<Stock> getTestStocks()
+        private static Mock<DbSet<Stock>> getTestStocks()
         {
             var stockA = new Stock
             {
@@ -61,18 +60,24 @@ namespace Capstone_Unit_Tests.web_members
                 productId = 2
             };
 
-            var testStock = new List<Stock> { stockA, stockB };
+            var testStock = new List<Stock> { stockA, stockB }.AsQueryable();
 
-            return testStock;
+            var stocksMock = new Mock<DbSet<Stock>>();
+            stocksMock.As<IQueryable<Stock>>().Setup(m => m.Provider).Returns(testStock.Provider);
+            stocksMock.As<IQueryable<Stock>>().Setup(m => m.Expression).Returns(testStock.Expression);
+            stocksMock.As<IQueryable<Stock>>().Setup(m => m.ElementType).Returns(testStock.ElementType);
+            stocksMock.As<IQueryable<Stock>>().Setup(m => m.GetEnumerator()).Returns(testStock.GetEnumerator());
+
+            return stocksMock;
         }
 
-        private static Mock<OnlineEntities> getMockDatabase()
+        private static Mock<MemberContext> getMemberContext()
         {
-            var databaseMock = new Mock<OnlineEntities>();
-            //TODO Properly set up the Mock to potentially have data
-            databaseMock.Object.Products = getTestProducts();
+            var memberContextMock = new Mock<MemberContext>();
+            memberContextMock.Setup(x => x.Products).Returns(getTestProducts().Object);
+            memberContextMock.Setup(x => x.Stocks).Returns(getTestStocks().Object);
 
-            return databaseMock;
+            return memberContextMock;
         }
 
         /// <summary>
@@ -82,8 +87,7 @@ namespace Capstone_Unit_Tests.web_members
         public void Index_IsNotNull()
         {
             // Arrange
-            var databaseMock = getMockDatabase();
-            var controller = new HomeController(databaseMock.Object);
+            var controller = new HomeController(getMemberContext().Object);
 
             // Act
             var result = controller.Index() as ViewResult;
@@ -99,8 +103,7 @@ namespace Capstone_Unit_Tests.web_members
         public void About_IsNotNull()
         {
             // Arrange
-            var databaseMock = getMockDatabase();
-            var controller = new HomeController(databaseMock.Object);
+            var controller = new HomeController(getMemberContext().Object);
 
             // Act
             var result = controller.About() as ViewResult;
@@ -117,8 +120,7 @@ namespace Capstone_Unit_Tests.web_members
         public void Contact_IsNotNull()
         {
             // Arrange
-            var databaseMock = getMockDatabase();
-            var controller = new HomeController(databaseMock.Object);
+            var controller = new HomeController(getMemberContext().Object);
 
             // Act
             var result = controller.Contact() as ViewResult;
@@ -135,8 +137,7 @@ namespace Capstone_Unit_Tests.web_members
         public void MediaLibrary_IsNotNull()
         {
             // Arrange
-            var databaseMock = new Mock<OnlineEntities>();
-            var controller = new HomeController(databaseMock.Object);
+            var controller = new HomeController(getMemberContext().Object);
 
             // Act
             var result = controller.MediaLibrary(null, null) as ViewResult;
@@ -152,8 +153,7 @@ namespace Capstone_Unit_Tests.web_members
         public void MediaLibrary_ModelIsNotNull()
         {
             // Arrange
-            var databaseMock = getMockDatabase();
-            var controller = new HomeController(databaseMock.Object);
+            var controller = new HomeController(getMemberContext().Object);
 
             // Act
             var result = controller.MediaLibrary(null, null) as ViewResult;
@@ -171,8 +171,7 @@ namespace Capstone_Unit_Tests.web_members
         public void OrderProduct_Action_IsNotNull()
         {
             // Arrange
-            var databaseMock = getMockDatabase();
-            var controller = new HomeController(databaseMock.Object);
+            var controller = new HomeController(getMemberContext().Object);
 
             // Act
             var result = controller.OrderProduct(1) as ViewResult;
