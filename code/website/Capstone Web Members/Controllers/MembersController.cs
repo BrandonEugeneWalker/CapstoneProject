@@ -13,9 +13,26 @@ namespace Capstone_Web_Members.Controllers
     {
         #region Data members
 
-        public OnlineEntities DatabaseContext = new OnlineEntities();
+        public OnlineEntities DatabaseContext;
 
         #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MembersController"/> class.
+        /// </summary>
+        public MembersController()
+        {
+            this.DatabaseContext = new OnlineEntities();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MembersController"/> class.
+        /// </summary>
+        /// <param name="databaseContext">The database context.</param>
+        public MembersController(OnlineEntities databaseContext)
+        {
+            this.DatabaseContext = databaseContext;
+        }
 
         #region Methods
 
@@ -210,7 +227,8 @@ namespace Capstone_Web_Members.Controllers
         [AllowAnonymous]
         public ActionResult Login(Member member)
         {
-            var matchingMembers = this.DatabaseContext.selectMemberByIdAndPassword(member.username, member.password).ToList();
+            var matchingMembers = this.DatabaseContext.selectMemberByIdAndPassword(member.username, member.password)
+                                      .ToList();
 
             if (matchingMembers.Count > 0)
             {
@@ -230,8 +248,6 @@ namespace Capstone_Web_Members.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        #endregion
-
         public ActionResult RentalHistory()
         {
             if (Session["currentMemberId"] == null)
@@ -244,5 +260,7 @@ namespace Capstone_Web_Members.Controllers
 
             return View(rentedItems);
         }
+
+        #endregion
     }
 }

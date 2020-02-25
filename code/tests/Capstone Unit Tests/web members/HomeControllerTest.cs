@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
@@ -62,13 +60,20 @@ namespace Capstone_Unit_Tests.web_members
         {
             var memberContextMock = new Mock<MemberContext>();
 
-            var mockObjectResult = new TestableObjectResult<Product>();
+            var mockProductsResult = new TestableObjectResult<Product>();
             memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
-                .Returns(mockObjectResult);
+                .Returns(mockProductsResult);
             var mockedProductResult = new Mock<TestableObjectResult<Product>>();
             mockedProductResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator());
             memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
                 .Returns(mockedProductResult.Object);
+
+            var mockIntResult = new TestableObjectResult<int?>();
+            memberContextMock.Setup(x => x.retrieveRentedCount(0))
+                             .Returns(mockIntResult);
+            var mockedIntResult = new Mock<TestableObjectResult<int?>>();
+            mockedIntResult.Setup(x => x.GetEnumerator()).Returns(new List<int?>{1,2,3}.GetEnumerator());
+            memberContextMock.Setup(x => x.retrieveRentedCount(0)).Returns(mockIntResult);
 
             return memberContextMock;
         }
