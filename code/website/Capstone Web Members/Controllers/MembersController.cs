@@ -42,10 +42,10 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>A list of all members</returns>
         public ActionResult Index()
         {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
+            //if (Session["currentMemberId"] == null)
+            //{
+            //    return RedirectToAction("Login", "Members");
+            //}
 
             return View(this.DatabaseContext.Members.ToList());
         }

@@ -128,6 +128,8 @@ namespace Capstone_Unit_Tests.web_members
             Assert.IsNotNull(result);
         }
 
+        //TODO The way that MediaLibrary gets the count of rentals is
+        //TODO flawed and prevents testing being finished. REWORK
         /// <summary>
         /// Tests that the Media Library is not null
         /// </summary>

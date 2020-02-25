@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -14,16 +15,50 @@ namespace Capstone_Unit_Tests.web_members
     [TestClass]
     public class MembersControllerTest
     {
+
+        private static List<Member> getTestMembers()
+        {
+            var memberA = new Member {
+                memberId = 1,
+                username = "memberA",
+                name = "mem A",
+                password = "p@ssw0rd",
+                address = "123 Address St Atlanta, GA 30000",
+                isLibrarian = 0,
+                isBanned = 0
+            };
+            var memberB = new Member
+            {
+                memberId = 1,
+                username = "memberB",
+                name = "mem B",
+                password = "hunter2",
+                address = "321 Address St Atlanta, GA 30000",
+                isLibrarian = 0,
+                isBanned = 0
+            };
+
+            var testMembers = new List<Member> {memberA, memberB};
+
+            return testMembers;
+        }
+
+
         private static Mock<MemberContext> getMemberContext()
         {
             var memberContextMock = new Mock<MemberContext>();
+            var members = getTestMembers().AsQueryable();
+            var membersMock = new Mock<DbSet<Member>>();
+            membersMock.As<IQueryable<Member>>().Setup(m => m.Provider).Returns(members.Provider);
+            membersMock.As<IQueryable<Member>>().Setup(m => m.Expression).Returns(members.Expression);
+            membersMock.As<IQueryable<Member>>().Setup(m => m.ElementType).Returns(members.ElementType);
+            membersMock.As<IQueryable<Member>>().Setup(m => m.GetEnumerator()).Returns(members.GetEnumerator());
 
-            var mockIntResult = new TestableObjectResult<int?>();
-            memberContextMock.Setup(x => x.retrieveRentedCount(0))
-                             .Returns(mockIntResult);
-            var mockedIntResult = new Mock<TestableObjectResult<int?>>();
-            mockedIntResult.Setup(x => x.GetEnumerator()).Returns(new List<int?> { 1, 2, 3 }.GetEnumerator());
-            memberContextMock.Setup(x => x.retrieveRentedCount(0)).Returns(mockIntResult);
+            memberContextMock.Setup(x => x.Members).Returns(membersMock.Object);
+
+
+
+
             return memberContextMock;
         }
 
