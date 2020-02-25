@@ -7,6 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Linq;
+using System.Web.Mvc;
+
 namespace Capstone_Database.Model
 {
     using System;
@@ -20,12 +23,13 @@ namespace Capstone_Database.Model
             this.ItemShips = new HashSet<ItemShip>();
             this.ItemReturns = new HashSet<ItemReturn>();
         }
+
+        private static OnlineEntities entity = new OnlineEntities();
     
         public int itemRentalId { get; set; }
         public int stockId { get; set; }
         public int memberId { get; set; }
         public string status { get; set; }
-    
         public virtual Member Member { get; set; }
         public virtual Stock Stock { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

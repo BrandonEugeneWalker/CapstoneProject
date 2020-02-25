@@ -21,7 +21,10 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>Manage items index view.</returns>
         public ActionResult ManageItems()
         {
-            if (Session["Employee"] == null) return RedirectToAction("Login");
+            if (Session["Employee"] == null)
+            {
+                return RedirectToAction("Login");
+            }
 
             return Redirect("~/Rentals/Index");
         }
@@ -32,8 +35,10 @@ namespace Capstone_Web_Warehouse.Controllers
         {
             var employee = Session["Employee"] as Employee;
 
-            if (employee == null || (bool) !employee.isManager) return RedirectToAction("Login");
-
+            if (employee == null || (bool) !employee.isManager)
+            {
+                return RedirectToAction("Login");
+            }
 
             return Redirect("~/Employees/Index");
         }
@@ -46,7 +51,8 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 var currentEmp = employee[0];
                 Session["Employee"] = currentEmp;
-
+                Session["Name"] = currentEmp.name;
+                Session["ID"] = currentEmp.employeeId;
                 return RedirectToAction("ManageItems");
             }
 

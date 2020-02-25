@@ -28,12 +28,12 @@ namespace Capstone_Web_Warehouse.Controllers
         {
             var employee = Session["Employee"] as Employee;
 
-            if (employee == null) return RedirectToAction("Login");
+            if (employee == null) return Redirect("~/Home/Login");
 
-            var itemRentals = database.ItemRentals.Include(i => i.Member).Include(i => i.Stock);
+            var itemRentals = database.ItemRentals.Include(i => i.Member).Include(i => i.Stock).Where(i => i.status.Equals("WaitingReturn") || i.status.Equals("WaitingShipment"));
             return View(itemRentals.ToList());
         }
-
+/*
         /// <summary>
         ///     <para>
         ///         Returns update page for manage rentals.
@@ -44,7 +44,10 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>The item rental update page view with selected rental ID.</returns>
         public ActionResult Edit(int? id)
         {
-            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
             var itemRental = database.ItemRentals.Find(id);
             return itemRental == null ? (ActionResult) HttpNotFound() : View(itemRental);
@@ -69,6 +72,26 @@ namespace Capstone_Web_Warehouse.Controllers
             }
 
             return View(itemRental);
+        }*/
+
+        public ActionResult UpdateStatus(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var rental = database.ItemRentals.Find(id);
+            if (rental.status.Equals("WaitingShipment"))
+            {
+                rental.status = "Rented";
+                database.SaveChanges();
+            }else if (rental.status.Equals("WaitingReturn"))
+            {
+                rental.status = "Returned";
+                database.SaveChanges();
+            }
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
 
         protected override void Dispose(bool disposing)
