@@ -10,6 +10,24 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities data = new OnlineEntities();
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// </summary>
+        public HomeController()
+        {
+            data = new OnlineEntities();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// </summary>
+        /// <param name="entity"></param>
+        public HomeController(OnlineEntities entity)
+        {
+            data = entity;
+        }
+
         /// <summary>  Returns home page index page.</summary>
         /// <returns>Home index view.</returns>
         public ActionResult Index()
@@ -43,6 +61,9 @@ namespace Capstone_Web_Warehouse.Controllers
             return Redirect("~/Employees/Index");
         }
 
+        /*
+         * Validates login information from employee table.
+         */
         public ActionResult Login(Employee model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -59,6 +80,9 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(model);
         }
 
+        /*
+        * Clears current employee session and logs user off.
+        */
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {

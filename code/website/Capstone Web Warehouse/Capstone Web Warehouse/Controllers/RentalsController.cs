@@ -74,6 +74,9 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(itemRental);
         }*/
 
+        /*
+         * Updates rental status to either rented or returned.
+         */
         public ActionResult UpdateStatus(int? id)
         {
             if (id == null)
