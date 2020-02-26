@@ -83,11 +83,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="cs4982s20dDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>cs4982s20dDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Model\CapstoneDBModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -169,17 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="cs4982s20dDataSet.xsc">
-      <DependentUpon>cs4982s20dDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="cs4982s20dDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>cs4982s20dDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="cs4982s20dDataSet.xss">
-      <DependentUpon>cs4982s20dDataSet.xsd</DependentUpon>
-    </None>
     <EntityDeploy Include="Model\CapstoneDBModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CapstoneDBModel.Designer.cs</LastGenOutput>
