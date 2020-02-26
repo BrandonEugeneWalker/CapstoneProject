@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Web;
 using Capstone_Database.Model;
 
 namespace Capstone_Unit_Tests.web_members
@@ -40,5 +41,7 @@ namespace Capstone_Unit_Tests.web_members
         /// The item rentals.
         /// </value>
         public override DbSet<ItemRental> ItemRentals { get; set; }
+
+        public HttpContext SessionState { get; set; }
     }
 }

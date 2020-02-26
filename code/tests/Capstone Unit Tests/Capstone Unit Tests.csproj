@@ -110,6 +110,7 @@
       <HintPath>..\..\..\Capstone Project\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\Capstone Project\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -141,6 +142,7 @@
     <Compile Include="web members\HomeControllerTest.cs" />
     <Compile Include="web members\MemberContext.cs" />
     <Compile Include="web members\MembersControllerTest.cs" />
+    <Compile Include="web members\TestableObjectResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
