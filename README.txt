@@ -26,7 +26,7 @@ Our employee system allows WGEL to keep our product pages up to date and tidy.
   
   **Passwords**
   User: TheJeselnik
-  Password: P@ss12
+  Password: P@ss123
   
   User: test
   Password: P@ss12
