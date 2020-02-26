@@ -32,23 +32,10 @@ namespace Capstone_Web_Members.Controllers
         public MembersController(OnlineEntities databaseContext)
         {
             this.DatabaseContext = databaseContext;
+            Session["currentMemberId"] = 1;
         }
 
         #region Methods
-
-        /// <summary>
-        ///     Indexes this instance.
-        /// </summary>
-        /// <returns>A list of all members</returns>
-        public ActionResult Index()
-        {
-            //if (Session["currentMemberId"] == null)
-            //{
-            //    return RedirectToAction("Login", "Members");
-            //}
-
-            return View(this.DatabaseContext.Members.ToList());
-        }
 
         /// <summary>
         ///     Shows the details of the logged in member.
@@ -69,7 +56,7 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Creates this instance.
+        ///     Creates first instance of the Create / Registration page
         /// </summary>
         /// <returns></returns>
         public ActionResult Create()
@@ -78,7 +65,7 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Creates the specified member.
+        ///     Creates the specified member from the Registration page.
         /// </summary>
         /// <param name="member">The member.</param>
         /// <returns>
@@ -155,57 +142,6 @@ namespace Capstone_Web_Members.Controllers
             }
 
             return View(member);
-        }
-
-        /// <summary>
-        ///     Deletes the specified Member.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>
-        ///     Returns the Delete page of a given Member
-        /// </returns>
-        public ActionResult Delete(int? id)
-        {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var member = this.DatabaseContext.Members.Find(id);
-            if (member == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(member);
-        }
-
-        /// <summary>
-        ///     Deletes the confirmed Member.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>
-        ///     Returns to index after confirming member deletion
-        /// </returns>
-        [HttpPost]
-        [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
-            var member = this.DatabaseContext.Members.Find(id);
-            this.DatabaseContext.Members.Remove(member);
-            this.DatabaseContext.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
