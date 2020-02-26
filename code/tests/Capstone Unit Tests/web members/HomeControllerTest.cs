@@ -179,5 +179,18 @@ namespace Capstone_Unit_Tests.web_members
             // Assert
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void ReturnProduct_Action_IsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.OrderProduct(1) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
     }
 }
