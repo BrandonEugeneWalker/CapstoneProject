@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\database\Capstone Database\Model\Member.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated from a template.
+//
+//     Manual changes to this file may cause unexpected behavior in your application.
+//     Manual changes to this file will be overwritten if the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace Capstone_Database.Model
+{
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class Member
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2214:DoNotCallOverridableMethodsInConstructors&quot;)]
+        public Member()
+        {
+            this.ItemRentals = new HashSet&lt;ItemRental&gt;();
+        }
+    
+        public int memberId { get; set; }
+        public string username { get; set; }
+        [Required]
+        [RegularExpression(&quot;^[a-zA-Z ]*$&quot;, ErrorMessage = &quot;Name must be letters only.&quot;)]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = &quot;The {0} must be at least {2} characters long.&quot;, MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = &quot;Password&quot;)]
+        [RegularExpression(@&quot;^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{6,}$&quot;, ErrorMessage = &quot;Password must include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character&quot;)]
+        public string password { get; set; }
+        public string address { get; set; }
+        public sbyte isLibrarian { get; set; }
+        public sbyte isBanned { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemRental&gt; ItemRentals { get; set; }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[19,9,19,24,1],[20,9,20,10,1],[21,13,21,58,1],[22,9,22,10,1],[24,31,24,35,0],[24,36,24,40,1],[25,34,25,38,1],[25,39,25,43,1],[28,30,28,34,1],[28,35,28,39,1],[34,34,34,38,1],[34,39,34,43,1],[35,33,35,37,1],[35,38,35,42,1],[36,36,36,40,0],[36,41,36,45,1],[37,33,37,37,0],[37,38,37,42,1],[40,62,40,66,0],[40,67,40,71,1]]);
+    </script>
+  </body>
+</html>

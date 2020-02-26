@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\ManageEmployeeForm.Designer.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+namespace Capstone_Desktop.View
+{
+    partial class ManageEmployeeForm
+    {
+        /// &lt;summary&gt;
+        /// Required designer variable.
+        /// &lt;/summary&gt;
+        private System.ComponentModel.IContainer components = null;
+
+        /// &lt;summary&gt;
+        /// Clean up any resources being used.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing &amp;&amp; (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// &lt;summary&gt;
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// &lt;/summary&gt;
+        private void InitializeComponent()
+        {
+            this.logoutButton = new System.Windows.Forms.Button();
+            this.companyLabel = new System.Windows.Forms.Label();
+            this.loginLabel = new System.Windows.Forms.Label();
+            this.employeeGridView = new System.Windows.Forms.DataGridView();
+            this.removeButton = new System.Windows.Forms.Button();
+            this.addButton = new System.Windows.Forms.Button();
+            this.submitChangesButton = new System.Windows.Forms.Button();
+            this.manageItemsButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.employeeGridView)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // logoutButton
+            // 
+            this.logoutButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logoutButton.Location = new System.Drawing.Point(1105, 12);
+            this.logoutButton.Name = &quot;logoutButton&quot;;
+            this.logoutButton.Size = new System.Drawing.Size(141, 46);
+            this.logoutButton.TabIndex = 0;
+            this.logoutButton.Text = &quot;Logout&quot;;
+            this.logoutButton.UseVisualStyleBackColor = true;
+            this.logoutButton.Click += new System.EventHandler(this.LogoutButton_Click);
+            // 
+            // companyLabel
+            // 
+            this.companyLabel.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.companyLabel.Location = new System.Drawing.Point(1, 9);
+            this.companyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.companyLabel.Name = &quot;companyLabel&quot;;
+            this.companyLabel.Size = new System.Drawing.Size(1257, 85);
+            this.companyLabel.TabIndex = 1;
+            this.companyLabel.Text = &quot;West Georgia Entertainment Library&quot;;
+            this.companyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // loginLabel
+            // 
+            this.loginLabel.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loginLabel.Location = new System.Drawing.Point(2, 76);
+            this.loginLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.loginLabel.Name = &quot;loginLabel&quot;;
+            this.loginLabel.Size = new System.Drawing.Size(1256, 85);
+            this.loginLabel.TabIndex = 2;
+            this.loginLabel.Text = &quot;Manage Employees&quot;;
+            this.loginLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // employeeGridView
+            // 
+            this.employeeGridView.AllowUserToAddRows = false;
+            this.employeeGridView.AllowUserToResizeRows = false;
+            this.employeeGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.employeeGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.employeeGridView.Location = new System.Drawing.Point(12, 164);
+            this.employeeGridView.Name = &quot;employeeGridView&quot;;
+            this.employeeGridView.RowHeadersWidth = 62;
+            this.employeeGridView.RowTemplate.Height = 28;
+            this.employeeGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.employeeGridView.Size = new System.Drawing.Size(1234, 391);
+            this.employeeGridView.TabIndex = 3;
+            // 
+            // removeButton
+            // 
+            this.removeButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.removeButton.Location = new System.Drawing.Point(1105, 578);
+            this.removeButton.Name = &quot;removeButton&quot;;
+            this.removeButton.Size = new System.Drawing.Size(141, 46);
+            this.removeButton.TabIndex = 4;
+            this.removeButton.Text = &quot;Remove&quot;;
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.RemoveButton_Click);
+            // 
+            // addButton
+            // 
+            this.addButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addButton.Location = new System.Drawing.Point(958, 578);
+            this.addButton.Name = &quot;addButton&quot;;
+            this.addButton.Size = new System.Drawing.Size(141, 46);
+            this.addButton.TabIndex = 5;
+            this.addButton.Text = &quot;Add&quot;;
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // submitChangesButton
+            // 
+            this.submitChangesButton.Enabled = false;
+            this.submitChangesButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.submitChangesButton.Location = new System.Drawing.Point(12, 578);
+            this.submitChangesButton.Name = &quot;submitChangesButton&quot;;
+            this.submitChangesButton.Size = new System.Drawing.Size(141, 46);
+            this.submitChangesButton.TabIndex = 6;
+            this.submitChangesButton.Text = &quot;Submit Changes&quot;;
+            this.submitChangesButton.UseVisualStyleBackColor = true;
+            this.submitChangesButton.Click += new System.EventHandler(this.SubmitChangesButton_Click);
+            // 
+            // manageItemsButton
+            // 
+            this.manageItemsButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manageItemsButton.Location = new System.Drawing.Point(1105, 64);
+            this.manageItemsButton.Name = &quot;manageItemsButton&quot;;
+            this.manageItemsButton.Size = new System.Drawing.Size(141, 46);
+            this.manageItemsButton.TabIndex = 7;
+            this.manageItemsButton.Text = &quot;Manage Items&quot;;
+            this.manageItemsButton.UseVisualStyleBackColor = true;
+            this.manageItemsButton.Click += new System.EventHandler(this.manageItemsButton_Click);
+            // 
+            // ManageEmployeeForm
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.manageItemsButton);
+            this.Controls.Add(this.submitChangesButton);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.removeButton);
+            this.Controls.Add(this.employeeGridView);
+            this.Controls.Add(this.loginLabel);
+            this.Controls.Add(this.logoutButton);
+            this.Controls.Add(this.companyLabel);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1280, 720);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1280, 720);
+            this.Name = &quot;ManageEmployeeForm&quot;;
+            this.Text = &quot;Manage Employees&quot;;
+            this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.employeeGridView)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button logoutButton;
+        private System.Windows.Forms.Label companyLabel;
+        private System.Windows.Forms.Label loginLabel;
+        private System.Windows.Forms.DataGridView employeeGridView;
+        private System.Windows.Forms.Button removeButton;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button submitChangesButton;
+        private System.Windows.Forms.Button manageItemsButton;
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[8,9,8,68,0],[15,9,15,10,0],[16,13,16,51,0],[17,13,17,14,0],[18,17,18,38,0],[19,13,19,14,0],[20,13,20,37,0],[21,9,21,10,0],[30,9,30,10,0],[31,13,31,67,0],[32,13,32,66,0],[33,13,33,64,0],[34,13,34,77,0],[35,13,35,67,0],[36,13,36,64,0],[37,13,37,74,0],[38,13,38,72,0],[39,13,39,93,0],[40,13,40,34,0],[44,13,44,173,0],[45,13,45,77,0],[46,13,46,53,0],[47,13,47,71,0],[48,13,48,44,0],[49,13,49,47,0],[50,13,50,62,0],[51,13,51,89,0],[55,13,55,170,0],[56,13,56,73,0],[57,13,57,85,0],[58,13,58,53,0],[59,13,59,72,0],[60,13,60,44,0],[61,13,61,75,0],[62,13,62,88,0],[66,13,66,171,0],[67,13,67,72,0],[68,13,68,83,0],[69,13,69,49,0],[70,13,70,70,0],[71,13,71,42,0],[72,13,72,55,0],[73,13,73,86,0],[77,13,77,62,0],[78,13,78,65,0],[79,13,79,115,0],[80,13,80,135,0],[81,13,81,80,0],[82,13,82,61,0],[83,13,83,56,0],[84,13,84,59,0],[85,13,85,89,0],[86,13,86,77,0],[87,13,87,48,0],[91,13,91,173,0],[92,13,92,78,0],[93,13,93,53,0],[94,13,94,71,0],[95,13,95,44,0],[96,13,96,47,0],[97,13,97,62,0],[98,13,98,89,0],[102,13,102,170,0],[103,13,103,74,0],[104,13,104,47,0],[105,13,105,68,0],[106,13,106,41,0],[107,13,107,41,0],[108,13,108,59,0],[109,13,109,83,0],[113,13,113,54,0],[114,13,114,180,0],[115,13,115,83,0],[116,13,116,67,0],[117,13,117,78,0],[118,13,118,51,0],[119,13,119,62,0],[120,13,120,69,0],[121,13,121,103,0],[125,13,125,178,0],[126,13,126,82,0],[127,13,127,63,0],[128,13,128,76,0],[129,13,129,49,0],[130,13,130,58,0],[131,13,131,67,0],[132,13,132,99,0],[136,13,136,74,0],[137,13,137,66,0],[138,13,138,55,0],[139,13,139,57,0],[140,13,140,47,0],[141,13,141,50,0],[142,13,142,54,0],[143,13,143,48,0],[144,13,144,50,0],[145,13,145,50,0],[146,13,146,38,0],[147,13,147,67,0],[148,13,148,38,0],[149,13,149,67,0],[150,13,150,46,0],[151,13,151,44,0],[152,13,152,80,0],[153,13,153,91,0],[154,13,154,38,0],[156,9,156,10,0]]);
+    </script>
+  </body>
+</html>

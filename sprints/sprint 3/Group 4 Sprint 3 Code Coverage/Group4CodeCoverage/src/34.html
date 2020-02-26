@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\database\Capstone Database\Model\Employee.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated from a template.
+//
+//     Manual changes to this file may cause unexpected behavior in your application.
+//     Manual changes to this file will be overwritten if the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace Capstone_Database.Model
+{
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class Employee
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2214:DoNotCallOverridableMethodsInConstructors&quot;)]
+        public Employee()
+        {
+            this.ItemShips = new HashSet&lt;ItemShip&gt;();
+            this.ItemReturns = new HashSet&lt;ItemReturn&gt;();
+        }
+    
+        public int employeeId { get; set; }
+        [Required(ErrorMessage = &quot;Password is required.&quot;)]
+        [StringLength(100, ErrorMessage = &quot;The {0} must be at least {2} characters long.&quot;, MinimumLength = 6)]
+        [Display(Name = &quot;Password&quot;)]
+        [RegularExpression(@&quot;^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{6,}$&quot;, ErrorMessage = &quot;Password must include: 1 uppercase letter; 1 lowercase letter; 1 number; 1 special character.&quot;)]
+        public string password { get; set; }
+        public Nullable&lt;bool&gt; isManager { get; set; }
+        public string name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemShip&gt; ItemShips { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemReturn&gt; ItemReturns { get; set; }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[19,9,19,26,1],[20,9,20,10,1],[21,13,21,54,1],[22,13,22,58,1],[23,9,23,10,1],[25,33,25,37,1],[25,38,25,42,1],[30,34,30,38,0],[30,39,30,43,0],[31,43,31,47,0],[31,48,31,52,0],[32,30,32,34,0],[32,35,32,39,1],[35,58,35,62,0],[35,63,35,67,1],[37,62,37,66,0],[37,67,37,71,1]]);
+    </script>
+  </body>
+</html>

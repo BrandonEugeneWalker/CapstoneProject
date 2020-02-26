@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse.Tests\Controllers\EmployeesControllerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Capstone_Web_Warehouse.Controllers;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+using Moq;
+
+namespace Capstone_Web_Warehouse.Controllers.Tests
+{
+    [TestClass()]
+    public class EmployeesControllerTests
+    {
+        [TestMethod()]
+        public void EditViewGoodIDTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var edit = ec.Edit(1000) as ViewResult;
+            Assert.IsNotNull(edit);
+            Assert.IsNotNull(edit.Model);
+            Assert.IsInstanceOfType(edit.Model, typeof(Employee));
+            var model = (Employee) edit.Model;
+            Assert.AreEqual(1000,model.employeeId);
+        }
+
+        [TestMethod()]
+        public void EditNullIdTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;};
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp2);
+            var ec = new EmployeesController(context.Object);
+            int? bad = null;
+            var edit = ec.Edit(bad) as ViewResult;
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod()]
+        public void EditIdNotFoundTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot; };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp2);
+            var ec = new EmployeesController(context.Object);
+            var edit = ec.Edit(3) as ViewResult;
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod()]
+        public void EditIdMismatchTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot; };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp2);
+            var ec = new EmployeesController(context.Object);
+            var edit = ec.Edit(2000) as ViewResult;
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod()]
+        public void DetailsGoodIdTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var detail = ec.Details(1000) as ViewResult;
+            Assert.IsNotNull(detail);
+            Assert.IsNotNull(detail.Model);
+            Assert.IsInstanceOfType(detail.Model, typeof(Employee));
+            var model = (Employee)detail.Model;
+            Assert.AreEqual(1000, model.employeeId);
+        }
+
+        [TestMethod()]
+        public void DetailsIdNullTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            int? bad = null;
+            var detail = ec.Details(bad) as ViewResult;
+            Assert.IsNull(detail);
+        }
+
+        [TestMethod()]
+        public void DetailsIdNotFoundTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var detail = ec.Details(3000) as ViewResult;
+            Assert.IsNull(detail);
+        }
+
+        [TestMethod()]
+        public void DeleteTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var delete = ec.Delete(1000) as ViewResult;
+            Assert.IsNotNull(delete);
+            Assert.IsNotNull(delete.Model);
+            Assert.IsInstanceOfType(delete.Model, typeof(Employee));
+            var model = (Employee)delete.Model;
+            Assert.AreEqual(1000, model.employeeId);
+        }
+
+        private static Mock&lt;DbSet&lt;T&gt;&gt; CreateDbSetMock&lt;T&gt;(IEnumerable&lt;T&gt; elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock&lt;DbSet&lt;T&gt;&gt;();
+
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,9,20,10,1],[21,13,21,61,1],[22,13,22,61,1],[23,13,27,15,1],[29,13,29,54,1],[30,13,30,51,1],[31,13,31,66,1],[32,13,32,70,1],[33,13,33,62,1],[34,13,34,52,1],[35,13,35,36,1],[36,13,36,42,1],[37,13,37,67,1],[38,13,38,47,1],[39,13,39,52,1],[40,9,40,10,1],[44,9,44,10,1],[45,13,45,74,1],[46,13,46,61,1],[47,13,51,15,1],[53,13,53,54,1],[54,13,54,51,1],[55,13,55,66,1],[56,13,56,70,1],[57,13,57,62,1],[58,13,58,29,1],[59,13,59,51,1],[60,13,60,33,1],[61,9,61,10,1],[65,9,65,10,1],[66,13,66,75,1],[67,13,67,61,1],[68,13,72,15,1],[74,13,74,54,1],[75,13,75,51,1],[76,13,76,66,1],[77,13,77,70,1],[78,13,78,62,1],[79,13,79,49,1],[80,13,80,33,1],[81,9,81,10,1],[85,9,85,10,1],[86,13,86,75,1],[87,13,87,61,1],[88,13,92,15,1],[94,13,94,54,1],[95,13,95,51,1],[96,13,96,66,1],[97,13,97,70,1],[98,13,98,62,1],[99,13,99,52,1],[100,13,100,33,1],[101,9,101,10,1],[105,9,105,10,1],[106,13,106,61,1],[107,13,107,61,1],[108,13,112,15,1],[114,13,114,54,1],[115,13,115,51,1],[116,13,116,66,1],[117,13,117,70,1],[118,13,118,62,1],[119,13,119,57,1],[120,13,120,38,1],[121,13,121,44,1],[122,13,122,69,1],[123,13,123,48,1],[124,13,124,53,1],[125,9,125,10,1],[129,9,129,10,1],[130,13,130,61,1],[131,13,131,61,1],[132,13,136,15,1],[138,13,138,54,1],[139,13,139,51,1],[140,13,140,66,1],[141,13,141,70,1],[142,13,142,62,1],[143,13,143,29,1],[144,13,144,56,1],[145,13,145,35,1],[146,9,146,10,1],[150,9,150,10,1],[151,13,151,61,1],[152,13,152,61,1],[153,13,157,15,1],[159,13,159,54,1],[160,13,160,51,1],[161,13,161,66,1],[162,13,162,70,1],[163,13,163,62,1],[164,13,164,57,1],[165,13,165,35,1],[166,9,166,10,1],[170,9,170,10,1],[171,13,171,61,1],[172,13,172,61,1],[173,13,177,15,1],[179,13,179,54,1],[180,13,180,51,1],[181,13,181,66,1],[182,13,182,70,1],[183,13,183,62,1],[184,13,184,56,1],[185,13,185,38,1],[186,13,186,44,1],[187,13,187,69,1],[188,13,188,48,1],[189,13,189,53,1],[190,9,190,10,1],[193,9,193,10,1],[194,13,194,62,1],[195,13,195,50,1],[197,13,197,104,1],[198,13,198,108,1],[199,13,199,110,1],[200,13,200,118,1],[202,13,202,30,1],[203,9,203,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\AddEmployeeForm.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using MySql.Data.MySqlClient;
+
+namespace Capstone_Desktop.View
+{
+    /// &lt;summary&gt;This form is used to add employees to the database.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Windows.Forms.Form&quot; /&gt;
+    public partial class AddEmployeeForm : Form
+    {
+        #region Data members
+
+        private static readonly string PASSWORD_REQUIREMENTS =
+            &quot;A password must be at least 6 characters long, &quot; +
+            &quot;\n Contains at least one: &quot; +
+            &quot;\n * Number &quot; +
+            &quot;\n * Lowercase Letter &quot; +
+            &quot;\n * Uppercase Letter &quot; +
+            &quot;\n * Special Character &quot; +
+            &quot;\n Passwords have a maximum length of 16 characters.&quot;;
+
+        private readonly OnlineEntities capstoneDatabaseContext;
+
+        #endregion
+
+        #region Properties
+
+        private AddEmployeeFormController EmployeeController { get; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;AddEmployeeForm&quot; /&gt; class.&lt;/summary&gt;
+        public AddEmployeeForm()
+        {
+            this.InitializeComponent();
+            this.EmployeeController = new AddEmployeeFormController();
+            this.submitButton.Enabled = false;
+            this.passwordRequirementsLabel.Text = PASSWORD_REQUIREMENTS;
+            this.isValidLabel.ForeColor = Color.Red;
+
+            this.capstoneDatabaseContext = new OnlineEntities();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void submitButton_Click(object sender, EventArgs e)
+        {
+            var password = this.passwordTextBox.Text;
+            var isManager = Convert.ToSByte(this.isManagerCheckBox.Checked);
+            var name = this.nameTextBox.Text;
+
+            try
+            {
+                this.capstoneDatabaseContext.insertEmployee(null, password, isManager, name);
+                this.capstoneDatabaseContext.SaveChanges();
+                Close();
+            }
+            catch (ArgumentOutOfRangeException argumentOutOfRangeException)
+            {
+                MessageBox.Show(argumentOutOfRangeException.Message);
+            }
+            catch (ArgumentNullException argumentNullException)
+            {
+                MessageBox.Show(argumentNullException.Message);
+            }
+            catch (MySqlException mySqlException)
+            {
+                MessageBox.Show(mySqlException.Message);
+            }
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void passwordTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var password = this.passwordTextBox.Text;
+            var isValid = this.EmployeeController.IsValidPassword(password);
+
+            if (isValid)
+            {
+                this.isValidLabel.Text = @&quot;Valid&quot;;
+                this.isValidLabel.ForeColor = Color.Green;
+                this.submitButton.Enabled = true;
+            }
+            else
+            {
+                this.isValidLabel.Text = @&quot;Invalid&quot;;
+                this.isValidLabel.ForeColor = Color.Red;
+                this.submitButton.Enabled = false;
+            }
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[16,9,23,68,0],[31,64,31,68,0],[38,9,38,33,0],[39,9,39,10,0],[40,13,40,40,0],[41,13,41,71,0],[42,13,42,47,0],[43,13,43,73,0],[44,13,44,53,0],[46,13,46,65,0],[47,9,47,10,0],[54,9,54,10,0],[55,13,55,54,0],[56,13,56,77,0],[57,13,57,46,0],[60,13,60,14,0],[61,17,61,94,0],[62,17,62,60,0],[63,17,63,25,0],[64,13,64,14,0],[65,13,65,76,0],[66,13,66,14,0],[67,17,67,70,0],[68,13,68,14,0],[69,13,69,64,0],[70,13,70,14,0],[71,17,71,64,0],[72,13,72,14,0],[73,13,73,50,0],[74,13,74,14,0],[75,17,75,57,0],[76,13,76,14,0],[77,9,77,10,0],[80,9,80,10,0],[81,13,81,21,0],[82,9,82,10,0],[85,9,85,10,0],[86,13,86,54,0],[87,13,87,77,0],[89,13,89,25,0],[90,13,90,14,0],[91,17,91,51,0],[92,17,92,59,0],[93,17,93,50,0],[94,13,94,14,0],[96,13,96,14,0],[97,17,97,53,0],[98,17,98,57,0],[99,17,99,51,0],[100,13,100,14,0],[101,9,101,10,0]]);
+    </script>
+  </body>
+</html>

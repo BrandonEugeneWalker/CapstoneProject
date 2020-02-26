@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse\Controllers\EmployeesController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Warehouse.Controllers
+{
+    /// &lt;summary&gt;Controller class for employee management pages.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Web.Mvc.Controller&quot; /&gt;
+    public class EmployeesController : Controller
+    {
+        private readonly OnlineEntities database = new OnlineEntities();
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;EmployeesController&quot; /&gt; class.&lt;/summary&gt;
+        public EmployeesController()
+        {
+            database = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;EmployeesController&quot; /&gt; class.&lt;/summary&gt;
+        /// &lt;param name=&quot;entity&quot;&gt;The entity.&lt;/param&gt;
+        public EmployeesController(OnlineEntities entity)
+        {
+            database = entity;
+        }
+
+        /// &lt;summary&gt;  Index/Home page for employee management.&lt;/summary&gt;
+        /// &lt;returns&gt;employee management index page with list of all employees.&lt;/returns&gt;
+        public ActionResult Index()
+        {
+            var employee = Session[&quot;Employee&quot;] as Employee;
+
+            if (employee == null || (bool) !employee.isManager) return Redirect(&quot;~/Home/Login&quot;);
+
+            return View(database.Employees.ToList());
+        }
+
+        /// &lt;summary&gt;
+        ///     Detail view of the selected employee.
+        ///     &lt;precondtion&gt;the selected employeeID != null &amp;&amp; employee with ID must exist in database.&lt;/precondtion&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The employee ID.&lt;/param&gt;
+        /// &lt;returns&gt;view of the employee details for selected ID.&lt;/returns&gt;
+        public ActionResult Details(int? id)
+        {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var employee = database.Employees.Find(id);
+            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
+        }
+
+        /// &lt;summary&gt;  Returns employee creation page view.&lt;/summary&gt;
+        /// &lt;returns&gt;The employee creation view.&lt;/returns&gt;
+        public ActionResult Create()
+        {
+            var employee = Session[&quot;Employee&quot;] as Employee;
+
+            if (employee == null || (bool) !employee.isManager) return RedirectToAction(&quot;Index&quot;);
+
+            return View();
+        }
+
+        /// &lt;summary&gt;
+        ///     Creates the specified employee.
+        ///     Used for create button on employee creation page.
+        ///     &lt;postcondition&gt;Employee is added to the database.&lt;/postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to be created and added to database.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     Returns to employee management index page if input valid || the same page with the employee data previously
+        ///     entered if input is invalid.
+        /// &lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = &quot;employeeId,password,isManager,name&quot;)]
+            Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                sbyte manager = 0;
+                if (employee.isManager != null &amp;&amp; (bool) employee.isManager) manager = 1;
+
+                database.insertEmployee(null, employee.password, manager, employee.name);
+                database.SaveChanges();
+                return RedirectToAction(&quot;Index&quot;);
+            }
+
+            return View(employee);
+        }
+
+        /// &lt;summary&gt;
+        ///     Returns employee edit page view.
+        ///     &lt;precondition&gt;employee ID can not be null &amp;&amp; employee with ID must exist in database.&lt;/precondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;  The employee ID.&lt;/param&gt;
+        /// &lt;returns&gt;Employee edit view for selected ID.&lt;/returns&gt;
+        public ActionResult Edit(int? id)
+        {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var employee = database.Employees.Find(id);
+            if (employee == null) return HttpNotFound();
+
+            return View(employee);
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Edits the specified employee.
+        ///         For the employee edit button.
+        ///     &lt;/para&gt;
+        ///     &lt;postcondition&gt;Employee is edited in the database.&lt;/postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to be edited.&lt;/param&gt;
+        /// &lt;returns&gt;The employee management index if valid. || Employee edit page with entered data.&lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = &quot;employeeId,password,isManager,name&quot;)]
+            Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                database.Entry(employee).State = EntityState.Modified;
+                database.Entry(employee).Property(&quot;password&quot;).IsModified = false;
+                database.SaveChanges();
+                return RedirectToAction(&quot;Index&quot;);
+            }
+
+            return View(employee);
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Returns employee deletions page view.
+        ///     &lt;/para&gt;
+        ///     &lt;precondition&gt;employee id != null &amp;&amp; employee ID must exist in database.&lt;/precondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;  The employee id to delete.&lt;/param&gt;
+        /// &lt;returns&gt;Returns employee deletion page.&lt;/returns&gt;
+        public ActionResult Delete(int? id)
+        {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var employee = database.Employees.Find(id);
+            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
+        }
+
+
+        /// &lt;summary&gt;  Returns delete confirmation message.&lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;  the employee id to be deleted.&lt;/param&gt;
+        /// &lt;returns&gt;Employee management index page.&lt;/returns&gt;
+        [HttpPost]
+        [ActionName(&quot;Delete&quot;)]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var employee = database.Employees.Find(id);
+            database.Employees.Remove(employee);
+            database.SaveChanges();
+            return RedirectToAction(&quot;Index&quot;);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) database.Dispose();
+
+            base.Dispose(disposing);
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,9,13,73,0],[13,9,13,73,1],[16,9,16,37,0],[17,9,17,10,0],[18,13,18,45,0],[19,9,19,10,0],[23,9,23,58,1],[24,9,24,10,1],[25,13,25,31,1],[26,9,26,10,1],[31,9,31,10,0],[32,13,32,60,0],[34,13,34,64,0],[34,65,34,97,0],[36,13,36,54,0],[37,9,37,10,0],[46,9,46,10,1],[47,13,47,28,1],[47,29,47,88,1],[49,13,49,56,1],[50,13,50,86,1],[51,9,51,10,1],[56,9,56,10,0],[57,13,57,60,0],[59,13,59,64,0],[59,65,59,98,0],[61,13,61,27,0],[62,9,62,10,0],[78,9,78,10,0],[79,13,79,36,0],[80,13,80,14,0],[81,17,81,35,0],[82,17,82,77,0],[82,78,82,90,0],[84,17,84,90,0],[85,17,85,40,0],[86,17,86,50,0],[89,13,89,35,0],[90,9,90,10,0],[99,9,99,10,1],[100,13,100,28,1],[100,29,100,88,1],[102,13,102,56,1],[103,13,103,34,1],[103,35,103,57,1],[105,13,105,35,1],[106,9,106,10,1],[121,9,121,10,0],[122,13,122,36,0],[123,13,123,14,0],[124,17,124,71,0],[125,17,125,82,0],[126,17,126,40,0],[127,17,127,50,0],[130,13,130,35,0],[131,9,131,10,0],[142,9,142,10,1],[143,13,143,28,1],[143,29,143,88,0],[145,13,145,56,1],[146,13,146,86,1],[147,9,147,10,1],[157,9,157,10,0],[158,13,158,56,0],[159,13,159,49,0],[160,13,160,36,0],[161,13,161,46,0],[162,9,162,10,0],[165,9,165,10,0],[166,13,166,27,0],[166,28,166,47,0],[168,13,168,37,0],[169,9,169,10,0]]);
+    </script>
+  </body>
+</html>

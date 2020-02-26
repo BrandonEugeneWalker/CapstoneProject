@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\ManageEmployeeForm.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Data.Entity;
+using System.Windows.Forms;
+using Capstone_Database.Model;
+using MySql.Data.MySqlClient;
+
+namespace Capstone_Desktop.View
+{
+    /// &lt;summary&gt;This form is used to manage employees in the database.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Windows.Forms.Form&quot; /&gt;
+    public partial class ManageEmployeeForm : Form
+    {
+        #region Data members
+
+        private readonly BindingSource employeeListSource = new BindingSource();
+
+        private readonly OnlineEntities capstoneDatabaseContext;
+
+        #endregion
+
+        #region Properties
+
+        /// &lt;summary&gt;Gets or sets the current employee.&lt;/summary&gt;
+        /// &lt;value&gt;The current employee.&lt;/value&gt;
+        public Employee CurrentEmployee { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;ManageEmployeeForm&quot; /&gt; class.&lt;/summary&gt;
+        /// &lt;param name=&quot;loggedInEmployee&quot;&gt;The logged in employee.&lt;/param&gt;
+        public ManageEmployeeForm(Employee loggedInEmployee)
+        {
+            this.InitializeComponent();
+            this.CurrentEmployee = loggedInEmployee;
+            this.capstoneDatabaseContext = new OnlineEntities();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void RemoveButton_Click(object sender, EventArgs e)
+        {
+            var removedCount = 0;
+            foreach (DataGridViewRow currentRow in this.employeeGridView.SelectedRows)
+            {
+                var rowIndex = currentRow.Index;
+                try
+                {
+                    var currentEmployee = (Employee) currentRow.DataBoundItem;
+                    removedCount += this.AttemptToRemoveEmployee(currentEmployee, rowIndex);
+                }
+                catch (MySqlException)
+                {
+                    MessageBox.Show(@&quot;Trouble removing that employee.&quot;);
+                }
+            }
+
+            MessageBox.Show(@&quot;Successfully removed &quot; + removedCount + @&quot; employee(s) from the database.&quot;);
+        }
+
+        private int AttemptToRemoveEmployee(Employee employee, int rowIndex)
+        {
+            var confirmationForm = new RemoveConfirmationForm(employee);
+            var dialogResult = confirmationForm.ShowDialog();
+
+            var results = 0;
+
+            switch (dialogResult)
+            {
+                case DialogResult.Yes:
+                    this.employeeGridView.Rows.RemoveAt(rowIndex);
+                    this.capstoneDatabaseContext.SaveChanges();
+                    results = 1;
+                    break;
+                case DialogResult.Abort:
+                    MessageBox.Show(&quot;No employee was selected.&quot;);
+                    break;
+            }
+
+            return results;
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            var addEmployeeForm = new AddEmployeeForm();
+            addEmployeeForm.ShowDialog();
+            this.getData();
+        }
+
+        private void SubmitChangesButton_Click(object sender, EventArgs e)
+        {
+            this.capstoneDatabaseContext.SaveChanges();
+        }
+
+        private void ManageEmployeeForm_Load(object sender, EventArgs e)
+        {
+            this.employeeGridView.DataSource = this.employeeListSource;
+            this.getData();
+        }
+
+        private void getData()
+        {
+            try
+            {
+                this.capstoneDatabaseContext.Employees.Load();
+                this.employeeListSource.DataSource = this.capstoneDatabaseContext.Employees.Local.ToBindingList();
+
+                for (var i = 0; i &lt; this.employeeGridView.Columns.Count; i++)
+                {
+                    this.employeeGridView.Columns[i].MinimumWidth = 200;
+                }
+
+                this.employeeGridView.Columns[4].Visible = false;
+
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@&quot;There was a problem connecting to the database, is the VPN enabled?&quot;);
+            }
+        }
+
+        private void refreshTable()
+        {
+            this.employeeGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+        }
+
+        private void manageItemsButton_Click(object sender, EventArgs e)
+        {
+            var manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
+            Hide();
+            manageItemsForm.ShowDialog();
+            Close();
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[15,9,15,81,0],[25,43,25,47,0],[25,48,25,52,0],[33,9,33,61,0],[34,9,34,10,0],[35,13,35,40,0],[36,13,36,53,0],[37,13,37,65,0],[38,9,38,10,0],[45,9,45,10,0],[46,13,46,21,0],[47,9,47,10,0],[50,9,50,10,0],[51,13,51,34,0],[52,13,52,20,0],[52,22,52,48,0],[52,49,52,51,0],[52,52,52,86,0],[53,13,53,14,0],[54,17,54,49,0],[56,17,56,18,0],[57,21,57,79,0],[58,21,58,93,0],[59,17,59,18,0],[60,17,60,39,0],[61,17,61,18,0],[62,21,62,73,0],[63,17,63,18,0],[64,13,64,14,0],[66,13,66,107,0],[67,9,67,10,0],[70,9,70,10,0],[71,13,71,73,0],[72,13,72,62,0],[74,13,74,29,0],[76,13,76,34,0],[79,21,79,67,0],[80,21,80,64,0],[81,21,81,33,0],[82,21,82,27,0],[84,21,84,66,0],[85,21,85,27,0],[88,13,88,28,0],[89,9,89,10,0],[92,9,92,10,0],[93,13,93,57,0],[94,13,94,42,0],[95,13,95,28,0],[96,9,96,10,0],[99,9,99,10,0],[100,13,100,56,0],[101,9,101,10,0],[104,9,104,10,0],[105,13,105,72,0],[106,13,106,28,0],[107,9,107,10,0],[110,9,110,10,0],[112,13,112,14,0],[113,17,113,63,0],[114,17,114,115,0],[116,22,116,31,0],[116,33,116,72,0],[116,74,116,77,0],[117,17,117,18,0],[118,21,118,73,0],[119,17,119,18,0],[121,17,121,66,0],[123,17,123,37,0],[124,13,124,14,0],[125,13,125,35,0],[126,13,126,14,0],[127,17,127,105,0],[128,13,128,14,0],[129,9,129,10,0],[132,9,132,10,0],[133,13,133,107,0],[134,9,134,10,0],[137,9,137,10,0],[138,13,138,77,0],[139,13,139,20,0],[140,13,140,42,0],[141,13,141,21,0],[142,9,142,10,0]]);
+    </script>
+  </body>
+</html>

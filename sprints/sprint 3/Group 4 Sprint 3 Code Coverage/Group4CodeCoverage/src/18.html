@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse.Tests\Controllers\HomeControllerTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Web.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Capstone_Web_Warehouse.Controllers;
+using Moq;
+using System.Collections.Generic;
+using System.Data.Entity;
+using Capstone_Database.Model;
+using System.Linq;
+
+namespace Capstone_Web_Warehouse.Tests.Controllers
+{
+    [TestClass]
+    public class HomeControllerTest
+    {
+        [TestMethod]
+        public void Index()
+        {
+            var controller = new HomeController();
+
+            // Act
+            var result = controller.Index() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        private static Mock&lt;DbSet&lt;T&gt;&gt; CreateDbSetMock&lt;T&gt;(IEnumerable&lt;T&gt; elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock&lt;DbSet&lt;T&gt;&gt;();
+
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,9,17,10,1],[18,13,18,51,1],[21,13,21,59,1],[24,13,24,38,1],[25,9,25,10,1],[28,9,28,10,0],[29,13,29,62,0],[30,13,30,50,0],[32,13,32,104,0],[33,13,33,108,0],[34,13,34,110,0],[35,13,35,118,0],[37,13,37,30,0],[38,9,38,10,0]]);
+    </script>
+  </body>
+</html>

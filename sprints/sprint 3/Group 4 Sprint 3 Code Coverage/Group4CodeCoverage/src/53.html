@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\web members\MemberContext.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Data.Entity;
+using System.Web;
+using Capstone_Database.Model;
+
+namespace Capstone_Unit_Tests.web_members
+{
+    /// &lt;summary&gt;
+    /// Representation of the DB Context (OnlineEntities) for testing
+    /// May need to be moved from the testing project
+    /// &lt;/summary&gt;
+    public class MemberContext : OnlineEntities
+    {
+        /// &lt;summary&gt;
+        /// Gets or sets the products.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        /// The products.
+        /// &lt;/value&gt;
+        public override DbSet&lt;Product&gt; Products { get; set; }
+
+        /// &lt;summary&gt;
+        /// Gets or sets the stocks.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        /// The stocks.
+        /// &lt;/value&gt;
+        public override DbSet&lt;Stock&gt; Stocks { get; set; }
+
+        /// &lt;summary&gt;
+        /// Gets or sets the members.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        /// The members.
+        /// &lt;/value&gt;
+        public override DbSet&lt;Member&gt; Members { get; set; }
+
+        /// &lt;summary&gt;
+        /// Gets or sets the item rentals.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        /// The item rentals.
+        /// &lt;/value&gt;
+        public override DbSet&lt;ItemRental&gt; ItemRentals { get; set; }
+
+        public HttpContext SessionState { get; set; }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[19,51,19,55,0],[19,56,19,60,0],[27,47,27,51,0],[27,52,27,56,0],[35,49,35,53,0],[35,54,35,58,0],[43,57,43,61,0],[43,62,43,66,0],[45,43,45,47,0],[45,48,45,52,0]]);
+    </script>
+  </body>
+</html>

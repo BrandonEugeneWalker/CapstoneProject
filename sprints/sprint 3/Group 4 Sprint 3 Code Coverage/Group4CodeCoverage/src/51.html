@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\web members\HomeControllerTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+using Capstone_Web_Members.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.web_members
+{
+    /// &lt;summary&gt;
+    /// Tests the HomeController behavior
+    /// &lt;/summary&gt;
+    [TestClass]
+    public class HomeControllerTest
+    {
+
+        private static List&lt;Product&gt; getTestProducts()
+        {
+            var productA = new Product
+            {
+                productId = 1,
+                name = &quot;The Hobbit&quot;,
+                description = &quot;One small boi goes on an adventure&quot;,
+                type = &quot;Book&quot;,
+                category = &quot;Adventure&quot;
+            };
+            var productB = new Product
+            {
+                productId = 2,
+                name = &quot;Fellowship of the Ring&quot;,
+                description = &quot;The first movie&quot;,
+                type = &quot;Movie&quot;,
+                category = &quot;Fantasy&quot;
+            };
+
+            var testProducts = new List&lt;Product&gt; { productA, productB };
+
+            return testProducts;
+        }
+
+        private static List&lt;Stock&gt; getTestStocks()
+        {
+            var stockA = new Stock
+            {
+                stockId = 1,
+                productId = 1
+            };
+            var stockB = new Stock
+            {
+                stockId = 2,
+                productId = 2
+            };
+
+            var testStock = new List&lt;Stock&gt; { stockA, stockB };
+
+            return testStock;
+        }
+
+        private static Mock&lt;MemberContext&gt; getMemberContext()
+        {
+            var memberContextMock = new Mock&lt;MemberContext&gt;();
+
+            var mockProductsResult = new TestableObjectResult&lt;Product&gt;();
+            memberContextMock.Setup(x =&gt; x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
+                .Returns(mockProductsResult);
+            var mockedProductResult = new Mock&lt;TestableObjectResult&lt;Product&gt;&gt;();
+            mockedProductResult.Setup(x =&gt; x.GetEnumerator()).Returns(getTestProducts().GetEnumerator());
+            memberContextMock.Setup(x =&gt; x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
+                .Returns(mockedProductResult.Object);
+
+            var mockIntResult = new TestableObjectResult&lt;int?&gt;();
+            memberContextMock.Setup(x =&gt; x.retrieveRentedCount(0))
+                             .Returns(mockIntResult);
+            var mockedIntResult = new Mock&lt;TestableObjectResult&lt;int?&gt;&gt;();
+            mockedIntResult.Setup(x =&gt; x.GetEnumerator()).Returns(new List&lt;int?&gt;{1,2,3}.GetEnumerator());
+            memberContextMock.Setup(x =&gt; x.retrieveRentedCount(0)).Returns(mockIntResult);
+
+            return memberContextMock;
+        }
+
+        /// &lt;summary&gt;
+        /// Tests that the Index Page is not null.
+        /// &lt;/summary&gt;
+        [TestMethod]
+        public void Index_IsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.Index() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        /// &lt;summary&gt;
+        /// Tests the controller behavior for the member web About page
+        /// &lt;/summary&gt;
+        [TestMethod]
+        public void About_IsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.About() as ViewResult;
+
+            // Assert
+            Assert.AreEqual(&quot;About Us&quot;, result?.ViewBag.Message);
+            Assert.IsNotNull(result);
+        }
+
+        /// &lt;summary&gt;
+        /// Tests the controller behavior for the member web Contact info page
+        /// &lt;/summary&gt;
+        [TestMethod]
+        public void Contact_IsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.Contact() as ViewResult;
+
+            // Assert
+            Assert.AreEqual(&quot;Contact Information:&quot;, result?.ViewBag.Message);
+            Assert.IsNotNull(result);
+        }
+
+        //TODO The way that MediaLibrary gets the count of rentals is
+        //TODO flawed and prevents testing being finished. REWORK
+        /// &lt;summary&gt;
+        /// Tests that the Media Library is not null
+        /// &lt;/summary&gt;
+        [TestMethod]
+        public void MediaLibrary_IsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.MediaLibrary(null, null) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        /// &lt;summary&gt;
+        /// Tests that the Media Library model is not null
+        /// &lt;/summary&gt;
+        [TestMethod]
+        public void MediaLibrary_ModelIsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.MediaLibrary(null, null) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result?.Model);
+        }
+
+        //TODO -Will need further in depth testing, does not reach the ActionResult as
+        //TODO -it is triggered by a link, but uses the controllers properties
+        /// &lt;summary&gt;
+        /// Tests that the ActionResult for OrderProduct is not null within the mock
+        /// &lt;/summary&gt;
+        [TestMethod]
+        public void OrderProduct_Action_IsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.OrderProduct(1) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void ReturnProduct_Action_IsNotNull()
+        {
+            // Arrange
+            var controller = new HomeController(getMemberContext().Object);
+
+            // Act
+            var result = controller.OrderProduct(1) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[18,9,18,10,1],[19,13,26,15,1],[27,13,34,15,1],[36,13,36,73,1],[38,13,38,33,1],[39,9,39,10,1],[42,9,42,10,0],[43,13,47,15,0],[48,13,52,15,0],[54,13,54,64,0],[56,13,56,30,0],[57,9,57,10,0],[60,9,60,10,1],[61,13,61,63,1],[63,13,63,74,1],[64,13,65,46,1],[66,13,66,81,1],[67,13,67,106,1],[68,13,69,54,1],[71,13,71,66,1],[72,13,73,54,1],[74,13,74,74,1],[75,13,75,106,1],[76,13,76,91,1],[78,13,78,38,1],[79,9,79,10,1],[86,9,86,10,1],[88,13,88,76,1],[91,13,91,59,1],[94,13,94,38,1],[95,9,95,10,1],[102,9,102,10,1],[104,13,104,76,1],[107,13,107,59,1],[110,13,110,66,1],[111,13,111,38,1],[112,9,112,10,1],[119,9,119,10,1],[121,13,121,76,1],[124,13,124,61,1],[127,13,127,78,1],[128,13,128,38,1],[129,9,129,10,1],[138,9,138,10,1],[140,13,140,76,1],[143,13,143,76,1],[146,13,146,38,0],[147,9,147,10,0],[154,9,154,10,1],[156,13,156,76,1],[159,13,159,76,1],[162,13,162,45,0],[163,9,163,10,0],[172,9,172,10,1],[174,13,174,76,1],[177,13,177,67,1],[180,13,180,38,0],[181,9,181,10,0],[185,9,185,10,1],[187,13,187,76,1],[190,13,190,67,1],[193,13,193,38,0],[194,9,194,10,0]]);
+    </script>
+  </body>
+</html>

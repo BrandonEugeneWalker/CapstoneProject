@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\database\Capstone Database\Model\ItemRental.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated from a template.
+//
+//     Manual changes to this file may cause unexpected behavior in your application.
+//     Manual changes to this file will be overwritten if the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+
+using System.Linq;
+using System.Web.Mvc;
+
+namespace Capstone_Database.Model
+{
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class ItemRental
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2214:DoNotCallOverridableMethodsInConstructors&quot;)]
+        public ItemRental()
+        {
+            this.ItemShips = new HashSet&lt;ItemShip&gt;();
+            this.ItemReturns = new HashSet&lt;ItemReturn&gt;();
+        }
+
+        private static OnlineEntities entity = new OnlineEntities();
+    
+        public int itemRentalId { get; set; }
+        public int stockId { get; set; }
+        public int memberId { get; set; }
+        public string status { get; set; }
+        public virtual Member Member { get; set; }
+        public virtual Stock Stock { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemShip&gt; ItemShips { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemReturn&gt; ItemReturns { get; set; }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[21,9,21,28,0],[22,9,22,10,0],[23,13,23,54,0],[24,13,24,58,0],[25,9,25,10,0],[27,9,27,69,0],[29,35,29,39,0],[29,40,29,44,0],[30,30,30,34,0],[30,35,30,39,0],[31,31,31,35,0],[31,36,31,40,0],[32,32,32,36,0],[32,37,32,41,0],[33,40,33,44,0],[33,45,33,49,0],[34,38,34,42,0],[34,43,34,47,0],[36,58,36,62,0],[36,63,36,67,0],[38,62,38,66,0],[38,67,38,71,0]]);
+    </script>
+  </body>
+</html>

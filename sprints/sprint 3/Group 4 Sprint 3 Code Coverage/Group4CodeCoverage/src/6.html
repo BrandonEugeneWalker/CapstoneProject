@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\ManageRentalsForm.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Windows.Forms;
+using Capstone_Database.Model;
+using MySql.Data.MySqlClient;
+
+namespace Capstone_Desktop.View
+{
+    /// &lt;summary&gt;This form is used to view and manage the status of the rentals.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Windows.Forms.Form&quot; /&gt;
+    public partial class ManageRentalsForm : Form
+    {
+        #region Data members
+
+        private readonly BindingSource rentalListSource = new BindingSource();
+
+        private readonly OnlineEntities capstoneDatabaseContext;
+
+        #endregion
+
+        #region Properties
+
+        /// &lt;summary&gt;Gets or sets the current employee.&lt;/summary&gt;
+        /// &lt;value&gt;The current employee.&lt;/value&gt;
+        public Employee CurrentEmployee { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;ManageRentalsForm&quot; /&gt; class.&lt;/summary&gt;
+        /// &lt;param name=&quot;loggedInEmployee&quot;&gt;The logged in employee.&lt;/param&gt;
+        public ManageRentalsForm(Employee loggedInEmployee)
+        {
+            this.InitializeComponent();
+            this.CurrentEmployee = loggedInEmployee;
+            this.capstoneDatabaseContext = new OnlineEntities();
+            if (this.CurrentEmployee.isManager == true)
+            {
+                this.managerButton.Enabled = true;
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void ManageRentalsForm_Load(object sender, EventArgs e)
+        {
+            this.rentalGridView.DataSource = this.rentalListSource;
+            this.rentalStatusComboBox.SelectedIndex = 0;
+            this.getData();
+        }
+
+        private void getData()
+        {
+            try
+            {
+                this.capstoneDatabaseContext.ItemRentals.Load();
+                this.rentalListSource.DataSource = this.capstoneDatabaseContext.ItemRentals.Local.ToBindingList();
+
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@&quot;There was a problem connecting to the database, is the VPN enabled?&quot;);
+            }
+        }
+
+        private void filterByWaitingShipment()
+        {
+            try
+            {
+                this.capstoneDatabaseContext.ItemRentals.Load();
+
+                var rentalWaitingForShipment =
+                    this.capstoneDatabaseContext.ItemRentals.Where(rental =&gt; rental.status.Equals(&quot;WaitingShipment&quot;));
+                this.rentalListSource.DataSource = rentalWaitingForShipment.ToList();
+
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@&quot;There was a problem connecting to the database, is the VPN enabled?&quot;);
+            }
+        }
+
+        private void filterByWaitingReturn()
+        {
+            try
+            {
+                this.capstoneDatabaseContext.ItemRentals.Load();
+
+                var rentalWaitingForShipment =
+                    this.capstoneDatabaseContext.ItemRentals.Where(rental =&gt; rental.status.Equals(&quot;WaitingReturn&quot;));
+                this.rentalListSource.DataSource = rentalWaitingForShipment.ToList();
+
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@&quot;There was a problem connecting to the database, is the VPN enabled?&quot;);
+            }
+        }
+
+        private void refreshTable()
+        {
+            for (var i = 0; i &lt; this.rentalGridView.Columns.Count; i++)
+            {
+                this.rentalGridView.Columns[i].MinimumWidth = 200;
+            }
+
+            this.rentalGridView.Columns[4].Visible = false;
+            this.rentalGridView.Columns[5].Visible = false;
+            this.rentalGridView.Columns[6].Visible = false;
+            this.rentalGridView.Columns[7].Visible = false;
+            this.rentalGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+        }
+
+        private void managerButton_Click(object sender, EventArgs e)
+        {
+            if (this.CurrentEmployee.isManager == true)
+            {
+                Hide();
+                var manageEmployeeForm = new ManageEmployeeForm(this.CurrentEmployee);
+                manageEmployeeForm.ShowDialog();
+                Close();
+            }
+        }
+
+        private void manageItemsButton_Click(object sender, EventArgs e)
+        {
+            var manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
+            Hide();
+            manageItemsForm.ShowDialog();
+            Close();
+        }
+
+        private void rentedButton_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
+            {
+                var currentItem = (ItemRental) currentRow.DataBoundItem;
+
+                if (currentItem.status.Equals(&quot;WaitingShipment&quot;))
+                {
+                    currentItem.status = &quot;Rented&quot;;
+                    this.capstoneDatabaseContext.SaveChanges();
+                    this.rentalGridView.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show(@&quot;That rental cannot be updated to shipped status.&quot;);
+                }
+            }
+        }
+
+        private void returnButton_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
+            {
+                var currentItem = (ItemRental) currentRow.DataBoundItem;
+
+                if (currentItem.status.Equals(&quot;WaitingReturn&quot;))
+                {
+                    currentItem.status = &quot;Returned&quot;;
+                    this.capstoneDatabaseContext.SaveChanges();
+                    this.rentalGridView.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show(@&quot;That rental cannot be updated to returned status.&quot;);
+                }
+            }
+        }
+
+        private void rentalStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.rentalStatusComboBox.SelectedIndex == 0)
+            {
+                this.getData();
+            }
+            else if (this.rentalStatusComboBox.SelectedIndex == 1)
+            {
+                this.filterByWaitingShipment();
+            }
+            else if (this.rentalStatusComboBox.SelectedIndex == 2)
+            {
+                this.filterByWaitingReturn();
+            }
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[16,9,16,79,0],[26,43,26,47,0],[26,48,26,52,0],[34,9,34,60,0],[35,9,35,10,0],[36,13,36,40,0],[37,13,37,53,0],[38,13,38,65,0],[39,13,39,56,0],[40,13,40,14,0],[41,17,41,51,0],[42,13,42,14,0],[43,9,43,10,0],[50,9,50,10,0],[51,13,51,21,0],[52,9,52,10,0],[55,9,55,10,0],[56,13,56,68,0],[57,13,57,57,0],[58,13,58,28,0],[59,9,59,10,0],[62,9,62,10,0],[64,13,64,14,0],[65,17,65,65,0],[66,17,66,115,0],[68,17,68,37,0],[69,13,69,14,0],[70,13,70,35,0],[71,13,71,14,0],[72,17,72,105,0],[73,13,73,14,0],[74,9,74,10,0],[77,9,77,10,0],[79,13,79,14,0],[80,17,80,65,0],[82,17,83,119,0],[84,17,84,86,0],[86,17,86,37,0],[87,13,87,14,0],[88,13,88,35,0],[89,13,89,14,0],[90,17,90,105,0],[91,13,91,14,0],[92,9,92,10,0],[95,9,95,10,0],[97,13,97,14,0],[98,17,98,65,0],[100,17,101,117,0],[102,17,102,86,0],[104,17,104,37,0],[105,13,105,14,0],[106,13,106,35,0],[107,13,107,14,0],[108,17,108,105,0],[109,13,109,14,0],[110,9,110,10,0],[113,9,113,10,0],[114,18,114,27,0],[114,29,114,66,0],[114,68,114,71,0],[115,13,115,14,0],[116,17,116,67,0],[117,13,117,14,0],[119,13,119,60,0],[120,13,120,60,0],[121,13,121,60,0],[122,13,122,60,0],[123,13,123,105,0],[124,9,124,10,0],[127,9,127,10,0],[128,13,128,56,0],[129,13,129,14,0],[130,17,130,24,0],[131,17,131,87,0],[132,17,132,49,0],[133,17,133,25,0],[134,13,134,14,0],[135,9,135,10,0],[138,9,138,10,0],[139,13,139,77,0],[140,13,140,20,0],[141,13,141,42,0],[142,13,142,21,0],[143,9,143,10,0],[146,9,146,10,0],[147,13,147,20,0],[147,22,147,48,0],[147,49,147,51,0],[147,52,147,84,0],[148,13,148,14,0],[149,17,149,73,0],[151,17,151,66,0],[152,17,152,18,0],[153,21,153,51,0],[154,21,154,64,0],[155,21,155,51,0],[156,17,156,18,0],[158,17,158,18,0],[159,21,159,90,0],[160,17,160,18,0],[161,13,161,14,0],[162,9,162,10,0],[165,9,165,10,0],[166,13,166,20,0],[166,22,166,48,0],[166,49,166,51,0],[166,52,166,84,0],[167,13,167,14,0],[168,17,168,73,0],[170,17,170,64,0],[171,17,171,18,0],[172,21,172,53,0],[173,21,173,64,0],[174,21,174,51,0],[175,17,175,18,0],[177,17,177,18,0],[178,21,178,91,0],[179,17,179,18,0],[180,13,180,14,0],[181,9,181,10,0],[184,9,184,10,0],[185,13,185,62,0],[186,13,186,14,0],[187,17,187,32,0],[188,13,188,14,0],[189,18,189,67,0],[190,13,190,14,0],[191,17,191,48,0],[192,13,192,14,0],[193,18,193,67,0],[194,13,194,14,0],[195,17,195,46,0],[196,13,196,14,0],[197,9,197,10,0]]);
+    </script>
+  </body>
+</html>

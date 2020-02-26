@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse\Controllers\RentalsController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Warehouse.Controllers
+{
+    /// &lt;summary&gt;Controller for manage rental pages.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Web.Mvc.Controller&quot; /&gt;
+    public class RentalsController : Controller
+    {
+        private readonly OnlineEntities database = new OnlineEntities();
+
+        public RentalsController()
+        {
+            database = new OnlineEntities();
+        }
+
+        public RentalsController(OnlineEntities entity)
+        {
+            database = entity;
+        }
+
+        /// &lt;summary&gt;  Returns manage rentals index page.&lt;/summary&gt;
+        /// &lt;returns&gt;Returns manage rentals index page with list of rentals.&lt;/returns&gt;
+        public ActionResult Index()
+        {
+            var employee = Session[&quot;Employee&quot;] as Employee;
+
+            if (employee == null) return Redirect(&quot;~/Home/Login&quot;);
+
+            var itemRentals = database.ItemRentals.Include(i =&gt; i.Member).Include(i =&gt; i.Stock).Where(i =&gt; i.status.Equals(&quot;WaitingReturn&quot;) || i.status.Equals(&quot;WaitingShipment&quot;));
+            return View(itemRentals.ToList());
+        }
+/*
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Returns update page for manage rentals.
+        ///     &lt;/para&gt;
+        ///     &lt;precondition&gt;The selected rental ID != null &amp;&amp; must exist in the database.&lt;/precondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;  The selected itemRental ID for the rental to be modified.&lt;/param&gt;
+        /// &lt;returns&gt;The item rental update page view with selected rental ID.&lt;/returns&gt;
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var itemRental = database.ItemRentals.Find(id);
+            return itemRental == null ? (ActionResult) HttpNotFound() : View(itemRental);
+        }
+
+        /// &lt;summary&gt;
+        ///     Edits the specified item rental.
+        ///     Used for update button.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;itemRental&quot;&gt;The itemRental to be updated.&lt;/param&gt;
+        /// &lt;returns&gt;The item rentals index page if input valid. || The item rentals update page with entered information.&lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = &quot;itemRentalId,stockId,memberId,status&quot;)]
+            ItemRental itemRental)
+        {
+            if (ModelState.IsValid)
+            {
+                database.Entry(itemRental).State = EntityState.Modified;
+                database.SaveChanges();
+                return RedirectToAction(&quot;Index&quot;);
+            }
+
+            return View(itemRental);
+        }*/
+
+        /*
+         * Updates rental status to either rented or returned.
+         */
+        public ActionResult UpdateStatus(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var rental = database.ItemRentals.Find(id);
+            if (rental.status.Equals(&quot;WaitingShipment&quot;))
+            {
+                rental.status = &quot;Rented&quot;;
+                database.SaveChanges();
+            }else if (rental.status.Equals(&quot;WaitingReturn&quot;))
+            {
+                rental.status = &quot;Returned&quot;;
+                database.SaveChanges();
+            }
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) database.Dispose();
+
+            base.Dispose(disposing);
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,9,13,73,0],[13,9,13,73,0],[15,9,15,35,0],[16,9,16,10,0],[17,13,17,45,0],[18,9,18,10,0],[20,9,20,56,0],[21,9,21,10,0],[22,13,22,31,0],[23,9,23,10,0],[28,9,28,10,0],[29,13,29,60,0],[31,13,31,34,0],[31,35,31,67,0],[33,13,33,180,0],[34,13,34,47,0],[35,9,35,10,0],[81,9,81,10,0],[82,13,82,28,0],[83,13,83,14,0],[84,17,84,76,0],[87,13,87,56,0],[88,13,88,57,0],[89,13,89,14,0],[90,17,90,42,0],[91,17,91,40,0],[92,13,92,14,0],[92,19,92,61,0],[93,13,93,14,0],[94,17,94,44,0],[95,17,95,40,0],[96,13,96,14,0],[97,13,97,75,0],[98,9,98,10,0],[101,9,101,10,0],[102,13,102,27,0],[102,28,102,47,0],[104,13,104,37,0],[105,9,105,10,0]]);
+    </script>
+  </body>
+</html>

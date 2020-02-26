@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\csuser\Source\Repos\CapstoneProject\code\website\Capstone Web Members\Controllers\HomeController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Members.Controllers
+{
+    /// &lt;summary&gt;
+    ///     Controller managing the main sites of the Member side of the West GA Electronic Library
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;Controller&quot; /&gt;
+    public class HomeController : Controller
+    {
+        #region Data members
+
+        /// &lt;summary&gt;
+        ///     The database context
+        /// &lt;/summary&gt;
+        public OnlineEntities DatabaseContext;
+
+        /// &lt;summary&gt;
+        ///     The available products
+        /// &lt;/summary&gt;
+        public List&lt;Product&gt; AvailableProducts;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;HomeController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        public HomeController()
+        {
+            this.DatabaseContext = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;HomeController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;databaseContext&quot;&gt;The database context.&lt;/param&gt;
+        public HomeController(OnlineEntities databaseContext)
+        {
+            this.DatabaseContext = databaseContext;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     Index / Home page of the website
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;
+        ///     The home page of the website
+        /// &lt;/returns&gt;
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        /// &lt;summary&gt;
+        ///     About page of the website
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;
+        ///     The contact page of the website
+        /// &lt;/returns&gt;
+        public ActionResult About()
+        {
+            ViewBag.Message = &quot;About Us&quot;;
+
+            return View();
+        }
+
+        /// &lt;summary&gt;
+        ///     Contact page of the website
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;
+        ///     The contact page of the website
+        /// &lt;/returns&gt;
+        public ActionResult Contact()
+        {
+            ViewBag.Message = &quot;Contact Information:&quot;;
+
+            return View();
+        }
+
+        //TODO work on observability of this page. After tests are mocking
+        /// &lt;summary&gt;
+        ///     The Media Library page, showing all items available to order
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;nameSearch&quot;&gt;The name search.&lt;/param&gt;
+        /// &lt;param name=&quot;typeSearch&quot;&gt;The type search.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     The media library page
+        /// &lt;/returns&gt;
+        public ActionResult MediaLibrary(string nameSearch, string typeSearch)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            if (nameSearch == null)
+            {
+                nameSearch = string.Empty;
+            }
+
+            if (typeSearch == null)
+            {
+                typeSearch = string.Empty;
+            }
+
+            this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
+                                         .ToList();
+
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+
+            var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+            int? rentedCount = 0;
+            if (rentedCountResult.Count &gt; 0)
+            {
+                rentedCount = rentedCountResult[0];
+            }
+
+            ViewBag.HasThreeOrders = false;
+
+            if (rentedCount &gt;= 3)
+            {
+                ViewBag.HasThreeOrders = true;
+            }
+
+            ViewBag.Message = &quot;Available Media:&quot;;
+
+            return View(this.AvailableProducts);
+        }
+
+        /// &lt;summary&gt;
+        ///     Orders the product.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;The product identifier.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     The media library page after ordering selected product
+        /// &lt;/returns&gt;
+        public ActionResult OrderProduct(int productId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
+            var availableStockId = results[0];
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId);
+
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+        }
+
+        /// &lt;summary&gt;
+        ///     Returns a product rental item
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;rentalId&quot;&gt;The rental identifier.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     The rental history page after returning selected rental
+        /// &lt;/returns&gt;
+        public ActionResult ReturnProduct(int rentalId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            this.DatabaseContext.updateMemberReturn(rentalId);
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[33,9,33,32,0],[34,9,34,10,0],[35,13,35,57,0],[36,9,36,10,0],[42,9,42,62,1],[43,9,43,10,1],[44,13,44,52,1],[45,9,45,10,1],[58,9,58,10,1],[59,13,59,27,1],[60,9,60,10,1],[69,9,69,10,1],[70,13,70,42,1],[72,13,72,27,1],[73,9,73,10,1],[82,9,82,10,1],[83,13,83,54,1],[85,13,85,27,1],[86,9,86,10,1],[98,9,98,10,1],[99,13,99,52,1],[100,13,100,14,0],[101,17,101,61,0],[104,13,104,36,0],[105,13,105,14,0],[106,17,106,43,0],[107,13,107,14,0],[109,13,109,36,0],[110,13,110,14,0],[111,17,111,43,0],[112,13,112,14,0],[114,13,115,52,0],[117,13,117,77,0],[119,13,119,97,0],[120,13,120,34,0],[121,13,121,45,0],[122,13,122,14,0],[123,17,123,52,0],[124,13,124,14,0],[126,13,126,44,0],[128,13,128,34,0],[129,13,129,14,0],[130,17,130,47,0],[131,13,131,14,0],[133,13,133,50,0],[135,13,135,49,0],[136,9,136,10,0],[146,9,146,10,1],[147,13,147,52,1],[148,13,148,14,0],[149,17,149,61,0],[152,13,152,96,0],[153,13,153,47,0],[154,13,154,77,0],[155,13,155,80,0],[157,13,157,75,0],[158,9,158,10,0],[168,9,168,10,0],[169,13,169,52,0],[170,13,170,14,0],[171,17,171,61,0],[174,13,174,63,0],[175,13,175,75,0],[176,9,176,10,0]]);
+    </script>
+  </body>
+</html>
