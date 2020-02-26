@@ -32,7 +32,7 @@ namespace Capstone_Web_Members.Controllers
         public MembersController(OnlineEntities databaseContext)
         {
             this.DatabaseContext = databaseContext;
-            Session["currentMemberId"] = 1;
+            //Session["currentMemberId"] = 1;
         }
 
         #region Methods
@@ -80,7 +80,6 @@ namespace Capstone_Web_Members.Controllers
             if (ModelState.IsValid)
             {
                 this.DatabaseContext.insertMember(member.username, member.name, member.password, member.address, 0);
-                this.DatabaseContext.SaveChanges();
 
                 return RedirectToAction("Login");
             }
