@@ -86,12 +86,7 @@ namespace Capstone_Desktop
                     this.capstoneDatabaseContext.selectEmployeeByIdAndPassword(id, password).ToList()[0];
                 this.currentEmployee = employee;
 
-                if (employee.isManager == true)
-                {
-                    return true;
-                }
-
-                return false;
+                return this.currentEmployee.isManager == true;
             }
             catch (ArgumentOutOfRangeException)
             {
