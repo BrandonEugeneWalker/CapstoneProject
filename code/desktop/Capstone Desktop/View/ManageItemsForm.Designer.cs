@@ -148,7 +148,7 @@
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "ManageItemsForm";
             this.Text = "Items";
-            this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
+            this.Load += new System.EventHandler(this.ManageItemsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).EndInit();
             this.ResumeLayout(false);
 

@@ -51,7 +51,7 @@ namespace Capstone_Desktop.View
             Close();
         }
 
-        private void ManageEmployeeForm_Load(object sender, EventArgs e)
+        private void ManageRentalsForm_Load(object sender, EventArgs e)
         {
             this.rentalGridView.DataSource = this.rentalListSource;
             this.rentalStatusComboBox.SelectedIndex = 0;

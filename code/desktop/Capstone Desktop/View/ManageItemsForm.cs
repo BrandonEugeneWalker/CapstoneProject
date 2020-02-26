@@ -60,7 +60,7 @@ namespace Capstone_Desktop.View
             //TODO
         }
 
-        private void ManageEmployeeForm_Load(object sender, EventArgs e)
+        private void ManageItemsForm_Load(object sender, EventArgs e)
         {
             this.itemsGridView.DataSource = this.itemListSource;
             this.getData();

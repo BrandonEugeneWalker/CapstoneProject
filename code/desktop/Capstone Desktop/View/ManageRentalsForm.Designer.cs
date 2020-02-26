@@ -175,7 +175,7 @@
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "ManageRentalsForm";
             this.Text = "Rentals";
-            this.Load += new System.EventHandler(this.ManageEmployeeForm_Load);
+            this.Load += new System.EventHandler(this.ManageRentalsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.rentalGridView)).EndInit();
             this.ResumeLayout(false);
 
