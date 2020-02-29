@@ -48,41 +48,9 @@ namespace Capstone_Web_Members.Controllers
 
         #region Methods
 
-        /// <summary>
-        ///     Index / Home page of the website
-        /// </summary>
-        /// <returns>
-        ///     The home page of the website
-        /// </returns>
         public ActionResult Index()
         {
-            return View();
-        }
-
-        /// <summary>
-        ///     About page of the website
-        /// </summary>
-        /// <returns>
-        ///     The contact page of the website
-        /// </returns>
-        public ActionResult About()
-        {
-            ViewBag.Message = "About Us";
-
-            return View();
-        }
-
-        /// <summary>
-        ///     Contact page of the website
-        /// </summary>
-        /// <returns>
-        ///     The contact page of the website
-        /// </returns>
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Contact Information:";
-
-            return View();
+            return RedirectToAction("MediaLibrary");
         }
 
         //TODO work on observability of this page. After tests are mocking

@@ -178,7 +178,7 @@ namespace Capstone_Web_Members.Controllers
             {
                 var loggedInMemberId = matchingMembers[0].memberId;
                 Session["currentMemberId"] = loggedInMemberId;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("MediaLibrary", "Home");
             }
 
             return View();
@@ -189,7 +189,7 @@ namespace Capstone_Web_Members.Controllers
         public ActionResult LogOff()
         {
             Session.Abandon();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Members");
         }
 
         #endregion

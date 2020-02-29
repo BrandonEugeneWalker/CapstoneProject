@@ -21,9 +21,6 @@
             @Html.DisplayNameFor(model => model.password)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.address)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.isLibrarian)
         </th>
         <th>
@@ -44,9 +41,6 @@
             @Html.DisplayFor(modelItem => item.password)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.address)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.isLibrarian)
         </td>
         <td>
@@ -54,8 +48,7 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.memberId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.memberId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.memberId })
+            @Html.ActionLink("Details", "Details", new { id=item.memberId })
         </td>
     </tr>
 }
