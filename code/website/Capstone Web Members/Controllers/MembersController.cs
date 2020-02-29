@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using Capstone_Web_Members.ViewModels;
 
 namespace Capstone_Web_Members.Controllers
 {
@@ -52,7 +53,10 @@ namespace Capstone_Web_Members.Controllers
 
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             var member = this.DatabaseContext.Members.Find(memberId);
-            return member == null ? (ActionResult) HttpNotFound() : View(member);
+            var rentedItems = this.DatabaseContext.retrieveMembersRentals(memberId).ToList();
+            var memberProfileViewModel = new MemberProfileViewModel{ MemberModel = member, ItemRentalsModel = rentedItems};
+
+            return View(memberProfileViewModel);
         }
 
         /// <summary>
@@ -181,19 +185,6 @@ namespace Capstone_Web_Members.Controllers
         {
             Session.Abandon();
             return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult RentalHistory()
-        {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
-            var memberId = int.Parse(Session["currentMemberId"].ToString());
-            var rentedItems = this.DatabaseContext.retrieveMembersRentals(memberId).ToList();
-
-            return View(rentedItems);
         }
 
         #endregion

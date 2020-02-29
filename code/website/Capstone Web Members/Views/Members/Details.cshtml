@@ -1,23 +1,18 @@
-﻿@model Capstone_Database.Model.Member
+﻿@model Capstone_Web_Members.ViewModels.MemberProfileViewModel
 
 @{
     ViewBag.Title = "Member Profile";
 }
 
-<h2>Member Profile</h2>
-
+<h2>Member Details</h2>
 <div>
-    <h4>
-        @Html.ActionLink("View Rental History", "RentalHistory")
-    </h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             <b>Username</b>
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.username)
+            @Html.DisplayFor(model => model.MemberModel.username)
         </dd>
 
         <dt>
@@ -25,7 +20,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.name)
+            @Html.DisplayFor(model => model.MemberModel.name)
         </dd>
 
         <dt>
@@ -33,11 +28,55 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.address)
+            @Html.DisplayFor(model => model.MemberModel.address)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit Profile", "Edit", new { id = Model.memberId })
+    @Html.ActionLink("Edit Profile", "Edit", new { id = Model.MemberModel.memberId })
 </p>
+
+<h2>Rental History</h2>
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Category
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+        @foreach (var rental in Model.ItemRentalsModel)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Stock.Product.category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.status)
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
