@@ -7,32 +7,39 @@
 <h2>Member Details</h2>
 <div>
     <dl class="dl-horizontal">
-        <dt>
+        <dt style="font-size: large">
             <b>Username</b>
         </dt>
 
-        <dd>
+        <dd style="font-size: large">
             @Html.DisplayFor(model => model.MemberModel.username)
         </dd>
 
-        <dt>
-            <b>Name</b>
+        <dt style="font-size: large">
+            <b style="font-size: large">Name</b>
         </dt>
 
-        <dd>
+        <dd style="font-size: large">
             @Html.DisplayFor(model => model.MemberModel.name)
         </dd>
-
-        <dt>
-            <b>Address</b>
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.MemberModel.address)
-        </dd>
-
     </dl>
 </div>
+
+<h2>Addresses</h2>
+<div>
+    <table class="table">
+        @foreach (var address in Model.AddressesModel)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelRental => address.address)
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+
 <p>
     @Html.ActionLink("Edit Profile", "Edit", new { id = Model.MemberModel.memberId })
 </p>

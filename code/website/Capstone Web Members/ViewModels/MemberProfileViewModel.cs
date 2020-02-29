@@ -4,7 +4,8 @@ using Capstone_Database.Model;
 namespace Capstone_Web_Members.ViewModels
 {
     /// <summary>
-    ///     ViewModel for storing the current Member and their ItemRental history via multiple models on a single view
+    ///     ViewModel for storing the current Member, their ItemRental history, and Addresses via multiple models on a single
+    ///     view
     /// </summary>
     public class MemberProfileViewModel
     {
@@ -25,6 +26,14 @@ namespace Capstone_Web_Members.ViewModels
         ///     The item rentals model.
         /// </value>
         public List<ItemRental> ItemRentalsModel { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the addresses model.
+        /// </summary>
+        /// <value>
+        ///     The addresses model.
+        /// </value>
+        public List<Address> AddressesModel { get; set; }
 
         #endregion
     }

@@ -34,6 +34,7 @@ namespace Capstone_Database.Model
         public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<ItemShip> ItemShips { get; set; }
         public virtual DbSet<ItemReturn> ItemReturns { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
     
         public virtual int createMemberOrder(Nullable<int> selectedStockId, Nullable<int> selectedMemberId)
         {
@@ -237,7 +238,7 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("findAvailableStockOfProduct", selectedProductIdParameter);
         }
     
-        public virtual int insertMember(string newUsername, string newName, string newPassword, string newAddress, Nullable<sbyte> isLibrarian)
+        public virtual int insertMember(string newUsername, string newName, string newPassword, Nullable<sbyte> isLibrarian)
         {
             var newUsernameParameter = newUsername != null ?
                 new ObjectParameter("newUsername", newUsername) :
@@ -251,15 +252,11 @@ namespace Capstone_Database.Model
                 new ObjectParameter("newPassword", newPassword) :
                 new ObjectParameter("newPassword", typeof(string));
     
-            var newAddressParameter = newAddress != null ?
-                new ObjectParameter("newAddress", newAddress) :
-                new ObjectParameter("newAddress", typeof(string));
-    
             var isLibrarianParameter = isLibrarian.HasValue ?
                 new ObjectParameter("isLibrarian", isLibrarian) :
                 new ObjectParameter("isLibrarian", typeof(sbyte));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMember", newUsernameParameter, newNameParameter, newPasswordParameter, newAddressParameter, isLibrarianParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMember", newUsernameParameter, newNameParameter, newPasswordParameter, isLibrarianParameter);
         }
     
         public virtual ObjectResult<Member> selectMemberByIdAndPassword(string username, string password)
@@ -314,7 +311,7 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveAvailableProductsWithSearch", mergeOption, nameSearchParameter, typeSearchParameter);
         }
     
-        public virtual int editMember(string newUsername, string newName, string newPassword, string newAddress, Nullable<int> currentMemberId)
+        public virtual int editMember(string newUsername, string newName, string newPassword, Nullable<int> currentMemberId)
         {
             var newUsernameParameter = newUsername != null ?
                 new ObjectParameter("newUsername", newUsername) :
@@ -328,15 +325,11 @@ namespace Capstone_Database.Model
                 new ObjectParameter("newPassword", newPassword) :
                 new ObjectParameter("newPassword", typeof(string));
     
-            var newAddressParameter = newAddress != null ?
-                new ObjectParameter("newAddress", newAddress) :
-                new ObjectParameter("newAddress", typeof(string));
-    
             var currentMemberIdParameter = currentMemberId.HasValue ?
                 new ObjectParameter("currentMemberId", currentMemberId) :
                 new ObjectParameter("currentMemberId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editMember", newUsernameParameter, newNameParameter, newPasswordParameter, newAddressParameter, currentMemberIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editMember", newUsernameParameter, newNameParameter, newPasswordParameter, currentMemberIdParameter);
         }
     
         public virtual ObjectResult<ItemRental> retrieveMembersRentals(Nullable<int> selectedMemberId)
@@ -355,6 +348,24 @@ namespace Capstone_Database.Model
                 new ObjectParameter("selectedMemberId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveMembersRentals", mergeOption, selectedMemberIdParameter);
+        }
+    
+        public virtual ObjectResult<Address> retrieveMembersAddresses(Nullable<int> selectedMemberId)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter("selectedMemberId", selectedMemberId) :
+                new ObjectParameter("selectedMemberId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Address>("retrieveMembersAddresses", selectedMemberIdParameter);
+        }
+    
+        public virtual ObjectResult<Address> retrieveMembersAddresses(Nullable<int> selectedMemberId, MergeOption mergeOption)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter("selectedMemberId", selectedMemberId) :
+                new ObjectParameter("selectedMemberId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Address>("retrieveMembersAddresses", mergeOption, selectedMemberIdParameter);
         }
     }
 }

@@ -10,7 +10,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Capstone_Database.Model
 {
-    using System;
     using System.Collections.Generic;
     
     public partial class Member
@@ -19,6 +18,7 @@ namespace Capstone_Database.Model
         public Member()
         {
             this.ItemRentals = new HashSet<ItemRental>();
+            this.Addresses = new HashSet<Address>();
         }
     
         public int memberId { get; set; }
@@ -32,11 +32,12 @@ namespace Capstone_Database.Model
         [Display(Name = "Password")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", ErrorMessage = "Password must include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character")]
         public string password { get; set; }
-        public string address { get; set; }
         public sbyte isLibrarian { get; set; }
         public sbyte isBanned { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ItemRental> ItemRentals { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Address> Addresses { get; set; }
     }
 }

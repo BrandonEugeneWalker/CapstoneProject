@@ -5,6 +5,14 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="addressId" />
+          </Key>
+          <Property Name="addressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="address" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="memberId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Employee">
           <Key>
             <PropertyRef Name="employeeId" />
@@ -53,7 +61,6 @@
           <Property Name="username" Type="varchar" MaxLength="16" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="address" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="isLibrarian" Type="tinyint" Nullable="false" />
           <Property Name="isBanned" Type="tinyint" Nullable="false" />
         </EntityType>
@@ -130,6 +137,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="memberAddressID">
+          <End Role="Member" Type="Self.Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Address" Type="Self.Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="memberId_ItemRental">
           <End Role="Member" Type="Self.Member" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -180,7 +201,6 @@
           <Parameter Name="newUsername" Type="varchar" Mode="In" />
           <Parameter Name="newName" Type="varchar" Mode="In" />
           <Parameter Name="newPassword" Type="varchar" Mode="In" />
-          <Parameter Name="newAddress" Type="varchar" Mode="In" />
           <Parameter Name="currentMemberId" Type="int" Mode="In" />
         </Function>
         <Function Name="findAvailableStockOfProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
@@ -196,7 +216,6 @@
           <Parameter Name="newUsername" Type="varchar" Mode="In" />
           <Parameter Name="newName" Type="varchar" Mode="In" />
           <Parameter Name="newPassword" Type="varchar" Mode="In" />
-          <Parameter Name="newAddress" Type="varchar" Mode="In" />
           <Parameter Name="isLibrarian" Type="tinyint" Mode="In" />
         </Function>
         <Function Name="retrieveAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
@@ -206,6 +225,9 @@
           <Parameter Name="typeSearch" Type="varchar" Mode="In" />
         </Function>
         <Function Name="retrieveMemberAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="retrieveMembersAddresses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
         <Function Name="retrieveMembersRentals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
@@ -244,6 +266,7 @@
           <Parameter Name="selectedRentalId" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Address" EntityType="Self.Address" Schema="cs4982s20d" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="cs4982s20d" store:Type="Tables" />
           <EntitySet Name="ItemRental" EntityType="Self.ItemRental" Schema="cs4982s20d" store:Type="Tables" />
           <EntitySet Name="ItemReturn" EntityType="Self.ItemReturn" Schema="cs4982s20d" store:Type="Tables" />
@@ -266,6 +289,10 @@
           <AssociationSet Name="itemShipItemRentalID" Association="Self.itemShipItemRentalID">
             <End Role="ItemRental" EntitySet="ItemRental" />
             <End Role="ItemShip" EntitySet="ItemShip" />
+          </AssociationSet>
+          <AssociationSet Name="memberAddressID" Association="Self.memberAddressID">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Address" EntitySet="Address" />
           </AssociationSet>
           <AssociationSet Name="memberId_ItemRental" Association="Self.memberId_ItemRental">
             <End Role="Member" EntitySet="Member" />
@@ -316,10 +343,10 @@
           <Property Name="username" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="isLibrarian" Type="SByte" Nullable="false" />
           <Property Name="isBanned" Type="SByte" Nullable="false" />
           <NavigationProperty Name="ItemRentals" Relationship="Self.memberId_ItemRental" FromRole="Member" ToRole="ItemRental" />
+          <NavigationProperty Name="Addresses" Relationship="Model.memberAddressID" FromRole="Member" ToRole="Address" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -448,7 +475,6 @@
             <Parameter Name="newUsername" Mode="In" Type="String" />
             <Parameter Name="newName" Mode="In" Type="String" />
             <Parameter Name="newPassword" Mode="In" Type="String" />
-            <Parameter Name="newAddress" Mode="In" Type="String" />
             <Parameter Name="isLibrarian" Mode="In" Type="SByte" />
           </FunctionImport>
           <FunctionImport Name="selectMemberByIdAndPassword" EntitySet="Members" ReturnType="Collection(Model.Member)">
@@ -463,7 +489,6 @@
             <Parameter Name="newUsername" Mode="In" Type="String" />
             <Parameter Name="newName" Mode="In" Type="String" />
             <Parameter Name="newPassword" Mode="In" Type="String" />
-            <Parameter Name="newAddress" Mode="In" Type="String" />
             <Parameter Name="currentMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="retrieveMembersRentals" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)">
@@ -487,6 +512,14 @@
             <End Role="ItemRental" EntitySet="ItemRentals" />
             <End Role="ItemReturn" EntitySet="ItemReturns" />
           </AssociationSet>
+          <EntitySet Name="Addresses" EntityType="Model.Address" />
+          <AssociationSet Name="memberAddressID" Association="Model.memberAddressID">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Address" EntitySet="Addresses" />
+          </AssociationSet>
+          <FunctionImport Name="retrieveMembersAddresses" EntitySet="Addresses" ReturnType="Collection(Model.Address)">
+          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -582,6 +615,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="addressId" />
+          </Key>
+          <Property Name="addressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="address" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="memberId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Member" Relationship="Model.memberAddressID" FromRole="Address" ToRole="Member" />
+        </EntityType>
+        <Association Name="memberAddressID">
+          <End Type="Model.Member" Role="Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Address" Role="Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="retrieveMembersAddresses_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -615,7 +672,6 @@
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="isLibrarian" ColumnName="isLibrarian" />
                 <ScalarProperty Name="isBanned" ColumnName="isBanned" />
               </MappingFragment>
@@ -699,6 +755,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Addresses">
+            <EntityTypeMapping TypeName="Model.Address">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="addressId" ColumnName="addressId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="retrieveMembersAddresses" FunctionName="Model.Store.retrieveMembersAddresses">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

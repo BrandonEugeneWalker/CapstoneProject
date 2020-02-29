@@ -83,6 +83,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Address.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\CapstoneDBModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -123,6 +126,9 @@
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\retrieveAvailableProducts_Result.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\retrieveMembersAddresses_Result.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\retrieveMembersRentals_Result.cs">

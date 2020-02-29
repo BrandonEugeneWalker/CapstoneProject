@@ -18,8 +18,10 @@ namespace Capstone_Web_Members.Controllers
 
         #endregion
 
+        #region Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="MembersController"/> class.
+        ///     Initializes a new instance of the <see cref="MembersController" /> class.
         /// </summary>
         public MembersController()
         {
@@ -27,7 +29,7 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MembersController"/> class.
+        ///     Initializes a new instance of the <see cref="MembersController" /> class.
         /// </summary>
         /// <param name="databaseContext">The database context.</param>
         public MembersController(OnlineEntities databaseContext)
@@ -35,6 +37,8 @@ namespace Capstone_Web_Members.Controllers
             this.DatabaseContext = databaseContext;
             //Session["currentMemberId"] = 1;
         }
+
+        #endregion
 
         #region Methods
 
@@ -54,7 +58,9 @@ namespace Capstone_Web_Members.Controllers
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             var member = this.DatabaseContext.Members.Find(memberId);
             var rentedItems = this.DatabaseContext.retrieveMembersRentals(memberId).ToList();
-            var memberProfileViewModel = new MemberProfileViewModel{ MemberModel = member, ItemRentalsModel = rentedItems};
+            var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
+            var memberProfileViewModel = new MemberProfileViewModel
+                {MemberModel = member, ItemRentalsModel = rentedItems, AddressesModel = addresses};
 
             return View(memberProfileViewModel);
         }
@@ -78,12 +84,12 @@ namespace Capstone_Web_Members.Controllers
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "memberId,username,name,password,address,isLibrarian,isBanned")]
+        public ActionResult Create([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
             Member member)
         {
             if (ModelState.IsValid)
             {
-                this.DatabaseContext.insertMember(member.username, member.name, member.password, member.address, 0);
+                this.DatabaseContext.insertMember(member.username, member.name, member.password, 0);
 
                 return RedirectToAction("Login");
             }
@@ -129,7 +135,7 @@ namespace Capstone_Web_Members.Controllers
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "memberId,username,name,password,address,isLibrarian,isBanned")]
+        public ActionResult Edit([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
             Member member)
         {
             if (Session["currentMemberId"] == null)
@@ -139,8 +145,7 @@ namespace Capstone_Web_Members.Controllers
 
             if (ModelState.IsValid)
             {
-                this.DatabaseContext.editMember(member.username, member.name, member.password, member.address,
-                    member.memberId);
+                this.DatabaseContext.editMember(member.username, member.name, member.password, member.memberId);
                 return RedirectToAction("Details");
             }
 
