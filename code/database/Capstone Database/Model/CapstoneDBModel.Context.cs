@@ -367,5 +367,72 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Address>("retrieveMembersAddresses", mergeOption, selectedMemberIdParameter);
         }
+    
+        public virtual int editAddress(Nullable<int> currentAddressId, string newAddress, string newAddress2, string newCity, string newState, Nullable<int> newZip)
+        {
+            var currentAddressIdParameter = currentAddressId.HasValue ?
+                new ObjectParameter("currentAddressId", currentAddressId) :
+                new ObjectParameter("currentAddressId", typeof(int));
+    
+            var newAddressParameter = newAddress != null ?
+                new ObjectParameter("newAddress", newAddress) :
+                new ObjectParameter("newAddress", typeof(string));
+    
+            var newAddress2Parameter = newAddress2 != null ?
+                new ObjectParameter("newAddress2", newAddress2) :
+                new ObjectParameter("newAddress2", typeof(string));
+    
+            var newCityParameter = newCity != null ?
+                new ObjectParameter("newCity", newCity) :
+                new ObjectParameter("newCity", typeof(string));
+    
+            var newStateParameter = newState != null ?
+                new ObjectParameter("newState", newState) :
+                new ObjectParameter("newState", typeof(string));
+    
+            var newZipParameter = newZip.HasValue ?
+                new ObjectParameter("newZip", newZip) :
+                new ObjectParameter("newZip", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editAddress", currentAddressIdParameter, newAddressParameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
+        }
+    
+        public virtual int insertAddress(string newAddress, Nullable<int> newMemberId, string newAddress2, string newCity, string newState, Nullable<int> newZip)
+        {
+            var newAddressParameter = newAddress != null ?
+                new ObjectParameter("newAddress", newAddress) :
+                new ObjectParameter("newAddress", typeof(string));
+    
+            var newMemberIdParameter = newMemberId.HasValue ?
+                new ObjectParameter("newMemberId", newMemberId) :
+                new ObjectParameter("newMemberId", typeof(int));
+    
+            var newAddress2Parameter = newAddress2 != null ?
+                new ObjectParameter("newAddress2", newAddress2) :
+                new ObjectParameter("newAddress2", typeof(string));
+    
+            var newCityParameter = newCity != null ?
+                new ObjectParameter("newCity", newCity) :
+                new ObjectParameter("newCity", typeof(string));
+    
+            var newStateParameter = newState != null ?
+                new ObjectParameter("newState", newState) :
+                new ObjectParameter("newState", typeof(string));
+    
+            var newZipParameter = newZip.HasValue ?
+                new ObjectParameter("newZip", newZip) :
+                new ObjectParameter("newZip", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertAddress", newAddressParameter, newMemberIdParameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
+        }
+    
+        public virtual int removeAddress(Nullable<int> currentAddressId)
+        {
+            var currentAddressIdParameter = currentAddressId.HasValue ?
+                new ObjectParameter("currentAddressId", currentAddressId) :
+                new ObjectParameter("currentAddressId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("removeAddress", currentAddressIdParameter);
+        }
     }
 }

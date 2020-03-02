@@ -24,6 +24,10 @@ namespace Capstone_Database.Model
         public string address { get; set; }
         public int memberId { get; set; }
         public Nullable<sbyte> removed { get; set; }
+        public string address2 { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public int zip { get; set; }
     
         public virtual Member Member { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

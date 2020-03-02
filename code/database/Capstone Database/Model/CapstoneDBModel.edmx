@@ -11,6 +11,10 @@
           </Key>
           <Property Name="addressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="address" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="address2" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="state" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="zip" Type="int" Nullable="false" />
           <Property Name="memberId" Type="int" Nullable="false" />
           <Property Name="removed" Type="tinyint" />
         </EntityType>
@@ -213,6 +217,14 @@
           <Parameter Name="selectedStockId" Type="int" Mode="In" />
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
+        <Function Name="editAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="currentAddressId" Type="int" Mode="In" />
+          <Parameter Name="newAddress" Type="varchar" Mode="In" />
+          <Parameter Name="newAddress2" Type="varchar" Mode="In" />
+          <Parameter Name="newCity" Type="varchar" Mode="In" />
+          <Parameter Name="newState" Type="varchar" Mode="In" />
+          <Parameter Name="newZip" Type="int" Mode="In" />
+        </Function>
         <Function Name="editMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="newUsername" Type="varchar" Mode="In" />
           <Parameter Name="newName" Type="varchar" Mode="In" />
@@ -221,6 +233,14 @@
         </Function>
         <Function Name="findAvailableStockOfProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedProductId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="insertAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="newAddress" Type="varchar" Mode="In" />
+          <Parameter Name="newMemberId" Type="int" Mode="In" />
+          <Parameter Name="newAddress2" Type="varchar" Mode="In" />
+          <Parameter Name="newCity" Type="varchar" Mode="In" />
+          <Parameter Name="newState" Type="varchar" Mode="In" />
+          <Parameter Name="newZip" Type="int" Mode="In" />
         </Function>
         <Function Name="insertEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="id" Type="int" Mode="In" />
@@ -233,6 +253,9 @@
           <Parameter Name="newName" Type="varchar" Mode="In" />
           <Parameter Name="newPassword" Type="varchar" Mode="In" />
           <Parameter Name="isLibrarian" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="removeAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="currentAddressId" Type="int" Mode="In" />
         </Function>
         <Function Name="retrieveAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveAvailableProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
@@ -546,6 +569,25 @@
             <End Role="Address" EntitySet="Addresses" />
             <End Role="ItemRental" EntitySet="ItemRentals" />
           </AssociationSet>
+          <FunctionImport Name="editAddress">
+            <Parameter Name="currentAddressId" Mode="In" Type="Int32" />
+            <Parameter Name="newAddress" Mode="In" Type="String" />
+            <Parameter Name="newAddress2" Mode="In" Type="String" />
+            <Parameter Name="newCity" Mode="In" Type="String" />
+            <Parameter Name="newState" Mode="In" Type="String" />
+            <Parameter Name="newZip" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="insertAddress">
+            <Parameter Name="newAddress" Mode="In" Type="String" />
+            <Parameter Name="newMemberId" Mode="In" Type="Int32" />
+            <Parameter Name="newAddress2" Mode="In" Type="String" />
+            <Parameter Name="newCity" Mode="In" Type="String" />
+            <Parameter Name="newState" Mode="In" Type="String" />
+            <Parameter Name="newZip" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="removeAddress">
+          <Parameter Name="currentAddressId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -651,6 +693,10 @@
           <NavigationProperty Name="Member" Relationship="Model.memberAddressID" FromRole="Address" ToRole="Member" />
           <NavigationProperty Name="ItemRentals" Relationship="Model.addressId_ItemRental" FromRole="Address" ToRole="ItemRental" />
           <Property Name="removed" Type="SByte" />
+          <Property Name="address2" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="zip" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="memberAddressID">
           <End Type="Model.Member" Role="Member" Multiplicity="1">
@@ -801,6 +847,10 @@
           <EntitySetMapping Name="Addresses">
             <EntityTypeMapping TypeName="Model.Address">
               <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="zip" ColumnName="zip" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="address2" ColumnName="address2" />
                 <ScalarProperty Name="removed" ColumnName="removed" />
                 <ScalarProperty Name="memberId" ColumnName="memberId" />
                 <ScalarProperty Name="address" ColumnName="address" />
@@ -810,6 +860,9 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="retrieveMembersAddresses" FunctionName="Model.Store.retrieveMembersAddresses">
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="editAddress" FunctionName="Model.Store.editAddress" />
+          <FunctionImportMapping FunctionImportName="insertAddress" FunctionName="Model.Store.insertAddress" />
+          <FunctionImportMapping FunctionImportName="removeAddress" FunctionName="Model.Store.removeAddress" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
