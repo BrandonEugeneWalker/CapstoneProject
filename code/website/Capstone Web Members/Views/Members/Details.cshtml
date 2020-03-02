@@ -30,6 +30,9 @@
 </p>
 
 <h2>Addresses</h2>
+<p>
+    @Html.ActionLink("Create New", "Create", "Addresses")
+</p>
 <div>
     <table class="table">
         @foreach (var address in Model.AddressesModel)
@@ -38,15 +41,16 @@
                 <td>
                     @Html.DisplayFor(modelRental => address.address)
                 </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Addresses", new{ id = address.addressId}, "" )
+                </td>
+                <td>
+                    @Html.ActionLink("Remove", "Remove", "Addresses", new{ id = address.addressId}, "" )
+                </td>
             </tr>
         }
     </table>
-
 </div>
-
-<p>
-    @Html.ActionLink("Edit Addresses", "Edit", new { id = Model.MemberModel.memberId })
-</p>
 
 <h2>Rental History</h2>
 <div>
