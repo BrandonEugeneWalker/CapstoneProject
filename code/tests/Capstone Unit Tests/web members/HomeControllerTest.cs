@@ -78,56 +78,6 @@ namespace Capstone_Unit_Tests.web_members
             return memberContextMock;
         }
 
-        /// <summary>
-        /// Tests that the Index Page is not null.
-        /// </summary>
-        [TestMethod]
-        public void Index_IsNotNull()
-        {
-            // Arrange
-            var controller = new HomeController(getMemberContext().Object);
-
-            // Act
-            var result = controller.Index() as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        /// <summary>
-        /// Tests the controller behavior for the member web About page
-        /// </summary>
-        [TestMethod]
-        public void About_IsNotNull()
-        {
-            // Arrange
-            var controller = new HomeController(getMemberContext().Object);
-
-            // Act
-            var result = controller.About() as ViewResult;
-
-            // Assert
-            Assert.AreEqual("About Us", result?.ViewBag.Message);
-            Assert.IsNotNull(result);
-        }
-
-        /// <summary>
-        /// Tests the controller behavior for the member web Contact info page
-        /// </summary>
-        [TestMethod]
-        public void Contact_IsNotNull()
-        {
-            // Arrange
-            var controller = new HomeController(getMemberContext().Object);
-
-            // Act
-            var result = controller.Contact() as ViewResult;
-
-            // Assert
-            Assert.AreEqual("Contact Information:", result?.ViewBag.Message);
-            Assert.IsNotNull(result);
-        }
-
         //TODO The way that MediaLibrary gets the count of rentals is
         //TODO flawed and prevents testing being finished. REWORK
         /// <summary>

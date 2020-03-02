@@ -6,7 +6,6 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using System.ComponentModel.DataAnnotations;
 
 namespace Capstone_Database.Model
 {
@@ -23,10 +22,6 @@ namespace Capstone_Database.Model
         }
     
         public int employeeId { get; set; }
-        [Required(ErrorMessage = "Password is required.")]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [Display(Name = "Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", ErrorMessage = "Password must include: 1 uppercase letter; 1 lowercase letter; 1 number; 1 special character.")]
         public string password { get; set; }
         public Nullable<bool> isManager { get; set; }
         public string name { get; set; }

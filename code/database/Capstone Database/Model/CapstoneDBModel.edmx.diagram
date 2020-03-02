@@ -21,6 +21,7 @@
         <AssociationConnector Association="Model.itemReturnItemRentalID" />
         <EntityTypeShape EntityType="Model.Address" Width="1.5" PointX="5.25" PointY="8.75" />
         <AssociationConnector Association="Model.memberAddressID" />
+        <AssociationConnector Association="Model.addressId_ItemRental" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

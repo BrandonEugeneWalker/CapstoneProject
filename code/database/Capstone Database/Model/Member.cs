@@ -6,10 +6,10 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using System.ComponentModel.DataAnnotations;
 
 namespace Capstone_Database.Model
 {
+    using System;
     using System.Collections.Generic;
     
     public partial class Member
@@ -23,14 +23,7 @@ namespace Capstone_Database.Model
     
         public int memberId { get; set; }
         public string username { get; set; }
-        [Required]
-        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Name must be letters only.")]
         public string name { get; set; }
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", ErrorMessage = "Password must include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character")]
         public string password { get; set; }
         public sbyte isLibrarian { get; set; }
         public sbyte isBanned { get; set; }

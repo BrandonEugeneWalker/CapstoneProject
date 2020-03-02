@@ -14,10 +14,19 @@ namespace Capstone_Database.Model
     
     public partial class Address
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Address()
+        {
+            this.ItemRentals = new HashSet<ItemRental>();
+        }
+    
         public int addressId { get; set; }
         public string address { get; set; }
         public int memberId { get; set; }
+        public Nullable<sbyte> removed { get; set; }
     
         public virtual Member Member { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemRental> ItemRentals { get; set; }
     }
 }

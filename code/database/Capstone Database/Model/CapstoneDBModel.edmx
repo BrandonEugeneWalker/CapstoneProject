@@ -12,6 +12,7 @@
           <Property Name="addressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="address" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="memberId" Type="int" Nullable="false" />
+          <Property Name="removed" Type="tinyint" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -29,6 +30,7 @@
           <Property Name="itemRentalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="stockId" Type="int" Nullable="false" />
           <Property Name="memberId" Type="int" Nullable="false" />
+          <Property Name="addressId" Type="int" Nullable="false" />
           <Property Name="status" Type="enum" Nullable="false" />
         </EntityType>
         <EntityType Name="ItemReturn">
@@ -81,6 +83,20 @@
           <Property Name="stockId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="productId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="addressId_ItemRental">
+          <End Role="Address" Type="Self.Address" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemRental" Type="Self.ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="addressId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="addressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="itemReturnEmployeeID">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -274,6 +290,10 @@
           <EntitySet Name="Member" EntityType="Self.Member" Schema="cs4982s20d" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="cs4982s20d" store:Type="Tables" />
           <EntitySet Name="Stock" EntityType="Self.Stock" Schema="cs4982s20d" store:Type="Tables" />
+          <AssociationSet Name="addressId_ItemRental" Association="Self.addressId_ItemRental">
+            <End Role="Address" EntitySet="Address" />
+            <End Role="ItemRental" EntitySet="ItemRental" />
+          </AssociationSet>
           <AssociationSet Name="itemReturnEmployeeID" Association="Self.itemReturnEmployeeID">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="ItemReturn" EntitySet="ItemReturn" />
@@ -334,6 +354,8 @@
           <NavigationProperty Name="Stock" Relationship="Self.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
           <NavigationProperty Name="ItemShips" Relationship="Model.irID" FromRole="ItemRental" ToRole="ItemShip" />
           <NavigationProperty Name="ItemReturns" Relationship="Model.itemReturnItemRentalID" FromRole="ItemRental" ToRole="ItemReturn" />
+          <Property Name="addressId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Address" Relationship="Model.addressId_ItemRental" FromRole="ItemRental" ToRole="Address" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -520,6 +542,10 @@
           <FunctionImport Name="retrieveMembersAddresses" EntitySet="Addresses" ReturnType="Collection(Model.Address)">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <AssociationSet Name="addressId_ItemRental" Association="Model.addressId_ItemRental">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="ItemRental" EntitySet="ItemRentals" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -623,6 +649,8 @@
           <Property Name="address" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="memberId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Member" Relationship="Model.memberAddressID" FromRole="Address" ToRole="Member" />
+          <NavigationProperty Name="ItemRentals" Relationship="Model.addressId_ItemRental" FromRole="Address" ToRole="ItemRental" />
+          <Property Name="removed" Type="SByte" />
         </EntityType>
         <Association Name="memberAddressID">
           <End Type="Model.Member" Role="Member" Multiplicity="1">
@@ -639,6 +667,20 @@
           </ReferentialConstraint>
         </Association>
         <ComplexType Name="retrieveMembersAddresses_Result" />
+        <Association Name="addressId_ItemRental">
+          <End Type="Model.Address" Role="Address" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ItemRental" Role="ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="addressId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="addressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -658,6 +700,7 @@
           <EntitySetMapping Name="ItemRentals">
             <EntityTypeMapping TypeName="Model.ItemRental">
               <MappingFragment StoreEntitySet="ItemRental">
+                <ScalarProperty Name="addressId" ColumnName="addressId" />
                 <ScalarProperty Name="itemRentalId" ColumnName="itemRentalId" />
                 <ScalarProperty Name="stockId" ColumnName="stockId" />
                 <ScalarProperty Name="memberId" ColumnName="memberId" />
@@ -758,6 +801,7 @@
           <EntitySetMapping Name="Addresses">
             <EntityTypeMapping TypeName="Model.Address">
               <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="removed" ColumnName="removed" />
                 <ScalarProperty Name="memberId" ColumnName="memberId" />
                 <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="addressId" ColumnName="addressId" />

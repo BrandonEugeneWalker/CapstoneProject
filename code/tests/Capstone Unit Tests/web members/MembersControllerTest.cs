@@ -24,7 +24,6 @@ namespace Capstone_Unit_Tests.web_members
                 username = "memberA",
                 name = "mem A",
                 password = "p@ssw0rd",
-                address = "123 Address St Atlanta, GA 30000",
                 isLibrarian = 0,
                 isBanned = 0
             };
@@ -33,7 +32,6 @@ namespace Capstone_Unit_Tests.web_members
                 username = "memberB",
                 name = "mem B",
                 password = "hunter2",
-                address = "321 Address St Atlanta, GA 30000",
                 isLibrarian = 0,
                 isBanned = 0
             };
@@ -86,7 +84,7 @@ namespace Capstone_Unit_Tests.web_members
             // Arrange
             var controller = new MembersController(getMemberContext().Object);
             var newMember = new Member
-                {memberId = 3, username = "newMember", name = "New Member", password = "P@ss12", address = "new address"};
+                {memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
 
             // Act
             var result = controller.Create(newMember) as ViewResult;
@@ -101,7 +99,7 @@ namespace Capstone_Unit_Tests.web_members
             // Arrange
             var controller = new MembersController(getMemberContext().Object);
             var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "", address = "new address" };
+                { memberId = 3, username = "newMember", name = "New Member", password = ""};
 
             // Act
             var result = controller.Create(newMember) as ViewResult;
@@ -145,7 +143,7 @@ namespace Capstone_Unit_Tests.web_members
             // Arrange
             var controller = new MembersController(getMemberContext().Object);
             var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12", address = "new address" };
+                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
 
             // Act
             var result = controller.Edit(3) as ViewResult;
@@ -161,7 +159,7 @@ namespace Capstone_Unit_Tests.web_members
             // Arrange
             var controller = new MembersController(getMemberContext().Object);
             var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "", address = "new address" };
+                { memberId = 3, username = "newMember", name = "New Member", password = ""};
 
             // Act
             var result = controller.Edit(3) as ViewResult;
@@ -189,7 +187,7 @@ namespace Capstone_Unit_Tests.web_members
             // Arrange
             var controller = new MembersController(getMemberContext().Object);
             var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12", address = "new address" };
+                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
 
             // Act
             var result = controller.Login(newMember) as ViewResult;
@@ -204,7 +202,7 @@ namespace Capstone_Unit_Tests.web_members
             // Arrange
             var controller = new MembersController(getMemberContext().Object);
             var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12", address = "new address" };
+                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
 
             // Act
             var result = controller.Login(newMember) as ViewResult;

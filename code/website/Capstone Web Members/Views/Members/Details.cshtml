@@ -4,7 +4,7 @@
     ViewBag.Title = "Member Profile";
 }
 
-<h2>Member Details</h2>
+<h2>Member Information</h2>
 <div>
     <dl class="dl-horizontal">
         <dt style="font-size: large">
@@ -25,6 +25,10 @@
     </dl>
 </div>
 
+<p>
+    @Html.ActionLink("Edit Information", "Edit", new { id = Model.MemberModel.memberId })
+</p>
+
 <h2>Addresses</h2>
 <div>
     <table class="table">
@@ -41,7 +45,7 @@
 </div>
 
 <p>
-    @Html.ActionLink("Edit Profile", "Edit", new { id = Model.MemberModel.memberId })
+    @Html.ActionLink("Edit Addresses", "Edit", new { id = Model.MemberModel.memberId })
 </p>
 
 <h2>Rental History</h2>
