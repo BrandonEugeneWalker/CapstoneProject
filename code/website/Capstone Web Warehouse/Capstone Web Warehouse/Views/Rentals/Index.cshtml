@@ -9,13 +9,16 @@
 <table class="table">
     <tr>
         <th>
-            Member Name
-        </th>
-        <th>
-            Member Address
+            Stock ID
         </th>
         <th>
             Product Name
+        </th>
+        <th>
+            Member Name
+        </th>
+        <th>
+            Shipping Address
         </th>
         <th>
             Rental Status
@@ -27,19 +30,23 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Member.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member.address)
+                @Html.DisplayFor(modelItem => item.stockId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Stock.Product.name)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Member.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address.address1)
+                <p>@Html.DisplayFor(modelItem => item.Address.city), @Html.DisplayFor(modelItem => item.Address.state) @Html.DisplayFor(modelItem => item.Address.zip)</p>
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.status)
             </td>
             <td>
-                @Html.ActionLink("Update Status", "UpdateStatus", new { id = item.itemRentalId })
+                @Html.ActionLink("Update Status", "UpdateStatus", new {id = item.itemRentalId})
             </td>
         </tr>
     }
