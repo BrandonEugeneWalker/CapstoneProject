@@ -26,7 +26,7 @@
 </div>
 
 <p>
-    @Html.ActionLink("Edit Information", "Edit", new { id = Model.MemberModel.memberId })
+    @Html.ActionLink("Edit Information", "Edit", new {id = Model.MemberModel.memberId})
 </p>
 
 <h2>Addresses</h2>
@@ -35,17 +35,48 @@
 </p>
 <div>
     <table class="table">
+        <tr>
+            <th>
+                Street Address
+            </th>
+            <th>
+                Secondary
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Zip
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
         @foreach (var address in Model.AddressesModel)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelRental => address.address)
+                    @Html.DisplayFor(modelRental => address.address1)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", "Addresses", new{ id = address.addressId}, "" )
+                    @Html.DisplayFor(modelRental => address.address2)
                 </td>
                 <td>
-                    @Html.ActionLink("Remove", "Remove", "Addresses", new{ id = address.addressId}, "" )
+                    @Html.DisplayFor(modelRental => address.city)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => address.state)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => address.zip)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Addresses", new { id = address.addressId }, "")
+                </td>
+                <td>
+                    @Html.ActionLink("Remove", "Remove", "Addresses", new { id = address.addressId }, "")
                 </td>
             </tr>
         }

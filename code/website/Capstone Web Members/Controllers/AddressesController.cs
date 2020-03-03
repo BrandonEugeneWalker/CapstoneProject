@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Capstone_Database.Model;
@@ -8,28 +7,32 @@ namespace Capstone_Web_Members.Controllers
 {
     public class AddressesController : Controller
     {
+        #region Data members
+
         private readonly OnlineEntities databaseContext;
+
+        #endregion
+
+        #region Constructors
 
         public AddressesController()
         {
             this.databaseContext = new OnlineEntities();
         }
+
         public AddressesController(OnlineEntities databaseContext)
         {
             this.databaseContext = databaseContext;
         }
 
-        // GET: Addresses
-        public ActionResult Index()
-        {
-            var addresses = databaseContext.Addresses.Include(a => a.Member);
-            return View(addresses.ToList());
-        }
+        #endregion
+
+        #region Methods
 
         // GET: Addresses/Create
         public ActionResult Create()
         {
-            ViewBag.memberId = new SelectList(databaseContext.Members, "memberId", "username");
+            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username");
             return View();
         }
 
@@ -38,16 +41,18 @@ namespace Capstone_Web_Members.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "address")] Address address)
+        public ActionResult Create([Bind(Include = "address1,address2,city,state,zip")]
+            Address address)
         {
             if (ModelState.IsValid)
             {
-                databaseContext.Addresses.Add(address);
-                databaseContext.SaveChanges();
-                return RedirectToAction("Index");
+                var memberId = int.Parse(Session["currentMemberId"].ToString());
+                this.databaseContext.insertAddress(address.address1, memberId, address.address2, address.city,
+                    address.state, address.zip);
+                return RedirectToAction("Details", "Members");
             }
 
-            ViewBag.memberId = new SelectList(databaseContext.Members, "memberId", "username", address.memberId);
+            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -58,12 +63,14 @@ namespace Capstone_Web_Members.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var address = databaseContext.Addresses.Find(id);
+
+            var address = this.databaseContext.Addresses.Find(id);
             if (address == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.memberId = new SelectList(databaseContext.Members, "memberId", "username", address.memberId);
+
+            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -72,15 +79,17 @@ namespace Capstone_Web_Members.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "addressId,address,memberId,removed")] Address address)
+        public ActionResult Edit([Bind(Include = "addressId,address1,address2,city,state,zip,memberId,removed")]
+            Address address)
         {
             if (ModelState.IsValid)
             {
-                databaseContext.Entry(address).State = EntityState.Modified;
-                databaseContext.SaveChanges();
-                return RedirectToAction("Index");
+                this.databaseContext.editAddress(address.addressId, address.address1, address.address2, address.city,
+                    address.state, address.zip);
+                return RedirectToAction("Details", "Members");
             }
-            ViewBag.memberId = new SelectList(databaseContext.Members, "memberId", "username", address.memberId);
+
+            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -88,15 +97,18 @@ namespace Capstone_Web_Members.Controllers
         {
             if (disposing)
             {
-                databaseContext.Dispose();
+                this.databaseContext.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
         public ActionResult Remove(int id)
         {
-            // TODO update address column "removed" to 1
+            this.databaseContext.removeAddress(id);
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
+
+        #endregion
     }
 }
