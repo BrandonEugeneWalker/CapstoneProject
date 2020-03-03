@@ -11,7 +11,7 @@
           </Key>
           <Property Name="addressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="address1" Type="varchar" MaxLength="300" Nullable="false" />
-          <Property Name="address2" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="address2" Type="varchar" MaxLength="300" />
           <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="state" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="zip" Type="int" Nullable="false" />
