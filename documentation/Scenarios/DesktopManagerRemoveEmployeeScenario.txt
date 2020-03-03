@@ -1,7 +1,13 @@
 Manager Remove Employee:
 1.	A manager loads warehouse application.
 2.	A manager logs in.
-3.	A manager selects employee row wishing to be removed.
+3.	A manager selects employee wishing to be removed.
 4.	A manager clicks remove.
-5.	A manager has removed the employee.
-6.	A manager logs out.
+5.	A manager clicks yes on confirmation window.
+6.	A manager has removed employee.
+7.  A manager logs out.
+
+Alternate:
+5a: Manager clicks no) A manager clicks no on confirmation page.
+	.6: A manager has not removed employee.
+	.7: A manager logs out.
