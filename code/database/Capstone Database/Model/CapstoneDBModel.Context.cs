@@ -368,15 +368,15 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Address>("retrieveMembersAddresses", mergeOption, selectedMemberIdParameter);
         }
     
-        public virtual int editAddress(Nullable<int> currentAddressId, string newAddress, string newAddress2, string newCity, string newState, Nullable<int> newZip)
+        public virtual int editAddress(Nullable<int> currentAddressId, string newAddress1, string newAddress2, string newCity, string newState, Nullable<int> newZip)
         {
             var currentAddressIdParameter = currentAddressId.HasValue ?
                 new ObjectParameter("currentAddressId", currentAddressId) :
                 new ObjectParameter("currentAddressId", typeof(int));
     
-            var newAddressParameter = newAddress != null ?
-                new ObjectParameter("newAddress", newAddress) :
-                new ObjectParameter("newAddress", typeof(string));
+            var newAddress1Parameter = newAddress1 != null ?
+                new ObjectParameter("newAddress1", newAddress1) :
+                new ObjectParameter("newAddress1", typeof(string));
     
             var newAddress2Parameter = newAddress2 != null ?
                 new ObjectParameter("newAddress2", newAddress2) :
@@ -394,14 +394,14 @@ namespace Capstone_Database.Model
                 new ObjectParameter("newZip", newZip) :
                 new ObjectParameter("newZip", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editAddress", currentAddressIdParameter, newAddressParameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editAddress", currentAddressIdParameter, newAddress1Parameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
         }
     
-        public virtual int insertAddress(string newAddress, Nullable<int> newMemberId, string newAddress2, string newCity, string newState, Nullable<int> newZip)
+        public virtual int insertAddress(string newAddress1, Nullable<int> newMemberId, string newAddress2, string newCity, string newState, Nullable<int> newZip)
         {
-            var newAddressParameter = newAddress != null ?
-                new ObjectParameter("newAddress", newAddress) :
-                new ObjectParameter("newAddress", typeof(string));
+            var newAddress1Parameter = newAddress1 != null ?
+                new ObjectParameter("newAddress1", newAddress1) :
+                new ObjectParameter("newAddress1", typeof(string));
     
             var newMemberIdParameter = newMemberId.HasValue ?
                 new ObjectParameter("newMemberId", newMemberId) :
@@ -423,7 +423,7 @@ namespace Capstone_Database.Model
                 new ObjectParameter("newZip", newZip) :
                 new ObjectParameter("newZip", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertAddress", newAddressParameter, newMemberIdParameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertAddress", newAddress1Parameter, newMemberIdParameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
         }
     
         public virtual int removeAddress(Nullable<int> currentAddressId)

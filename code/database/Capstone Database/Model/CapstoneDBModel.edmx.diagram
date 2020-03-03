@@ -19,10 +19,10 @@
         <EntityTypeShape EntityType="Model.ItemReturn" Width="1.5" PointX="8.25" PointY="4.25" />
         <AssociationConnector Association="Model.itemReturnEmployeeID" />
         <AssociationConnector Association="Model.itemReturnItemRentalID" />
-        <EntityTypeShape EntityType="Model.Address" Width="1.5" PointX="5.25" PointY="8.75" />
-        <AssociationConnector Association="Model.memberAddressID" />
+        <EntityTypeShape EntityType="Model.Address" Width="1.5" PointX="5.25" PointY="8.125" />
         <AssociationConnector Association="Model.addressId_ItemRental" />
-      </Diagram>
+        <AssociationConnector Association="Model.memberAddressID" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

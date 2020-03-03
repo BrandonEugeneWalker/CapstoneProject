@@ -10,7 +10,7 @@
             <PropertyRef Name="addressId" />
           </Key>
           <Property Name="addressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="address" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="address1" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="address2" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="state" Type="varchar" MaxLength="50" Nullable="false" />
@@ -219,7 +219,7 @@
         </Function>
         <Function Name="editAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="currentAddressId" Type="int" Mode="In" />
-          <Parameter Name="newAddress" Type="varchar" Mode="In" />
+          <Parameter Name="newAddress1" Type="varchar" Mode="In" />
           <Parameter Name="newAddress2" Type="varchar" Mode="In" />
           <Parameter Name="newCity" Type="varchar" Mode="In" />
           <Parameter Name="newState" Type="varchar" Mode="In" />
@@ -235,7 +235,7 @@
           <Parameter Name="selectedProductId" Type="int" Mode="In" />
         </Function>
         <Function Name="insertAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
-          <Parameter Name="newAddress" Type="varchar" Mode="In" />
+          <Parameter Name="newAddress1" Type="varchar" Mode="In" />
           <Parameter Name="newMemberId" Type="int" Mode="In" />
           <Parameter Name="newAddress2" Type="varchar" Mode="In" />
           <Parameter Name="newCity" Type="varchar" Mode="In" />
@@ -557,28 +557,19 @@
             <End Role="ItemRental" EntitySet="ItemRentals" />
             <End Role="ItemReturn" EntitySet="ItemReturns" />
           </AssociationSet>
-          <EntitySet Name="Addresses" EntityType="Model.Address" />
-          <AssociationSet Name="memberAddressID" Association="Model.memberAddressID">
-            <End Role="Member" EntitySet="Members" />
-            <End Role="Address" EntitySet="Addresses" />
-          </AssociationSet>
           <FunctionImport Name="retrieveMembersAddresses" EntitySet="Addresses" ReturnType="Collection(Model.Address)">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <AssociationSet Name="addressId_ItemRental" Association="Model.addressId_ItemRental">
-            <End Role="Address" EntitySet="Addresses" />
-            <End Role="ItemRental" EntitySet="ItemRentals" />
-          </AssociationSet>
           <FunctionImport Name="editAddress">
             <Parameter Name="currentAddressId" Mode="In" Type="Int32" />
-            <Parameter Name="newAddress" Mode="In" Type="String" />
+            <Parameter Name="newAddress1" Mode="In" Type="String" />
             <Parameter Name="newAddress2" Mode="In" Type="String" />
             <Parameter Name="newCity" Mode="In" Type="String" />
             <Parameter Name="newState" Mode="In" Type="String" />
             <Parameter Name="newZip" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="insertAddress">
-            <Parameter Name="newAddress" Mode="In" Type="String" />
+            <Parameter Name="newAddress1" Mode="In" Type="String" />
             <Parameter Name="newMemberId" Mode="In" Type="Int32" />
             <Parameter Name="newAddress2" Mode="In" Type="String" />
             <Parameter Name="newCity" Mode="In" Type="String" />
@@ -588,7 +579,16 @@
           <FunctionImport Name="removeAddress">
           <Parameter Name="currentAddressId" Mode="In" Type="Int32" />
           </FunctionImport>
-        </EntityContainer>
+          <EntitySet Name="Addresses" EntityType="Model.Address" />
+          <AssociationSet Name="addressId_ItemRental" Association="Model.addressId_ItemRental">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="ItemRental" EntitySet="ItemRentals" />
+          </AssociationSet>
+          <AssociationSet Name="memberAddressID" Association="Model.memberAddressID">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Address" EntitySet="Addresses" />
+          </AssociationSet>
+          </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
         <ComplexType Name="retrieveProductsWaitingReturn_Result" />
@@ -683,36 +683,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="retrieveMembersAddresses_Result" />
         <EntityType Name="Address">
           <Key>
             <PropertyRef Name="addressId" />
           </Key>
           <Property Name="addressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="address" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="memberId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Member" Relationship="Model.memberAddressID" FromRole="Address" ToRole="Member" />
-          <NavigationProperty Name="ItemRentals" Relationship="Model.addressId_ItemRental" FromRole="Address" ToRole="ItemRental" />
-          <Property Name="removed" Type="SByte" />
+          <Property Name="address1" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="address2" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="city" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="state" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="zip" Type="Int32" Nullable="false" />
+          <Property Name="memberId" Type="Int32" Nullable="false" />
+          <Property Name="removed" Type="SByte" />
+          <NavigationProperty Name="ItemRentals" Relationship="Model.addressId_ItemRental" FromRole="Address" ToRole="ItemRental" />
+          <NavigationProperty Name="Member" Relationship="Model.memberAddressID" FromRole="Address" ToRole="Member" />
         </EntityType>
-        <Association Name="memberAddressID">
-          <End Type="Model.Member" Role="Member" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.Address" Role="Address" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="memberId" />
-            </Principal>
-            <Dependent Role="Address">
-              <PropertyRef Name="memberId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="retrieveMembersAddresses_Result" />
         <Association Name="addressId_ItemRental">
           <End Type="Model.Address" Role="Address" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -727,7 +713,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="memberAddressID">
+          <End Type="Model.Member" Role="Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Address" Role="Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -844,25 +844,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Addresses">
-            <EntityTypeMapping TypeName="Model.Address">
-              <MappingFragment StoreEntitySet="Address">
-                <ScalarProperty Name="zip" ColumnName="zip" />
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="city" ColumnName="city" />
-                <ScalarProperty Name="address2" ColumnName="address2" />
-                <ScalarProperty Name="removed" ColumnName="removed" />
-                <ScalarProperty Name="memberId" ColumnName="memberId" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="addressId" ColumnName="addressId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="retrieveMembersAddresses" FunctionName="Model.Store.retrieveMembersAddresses">
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="editAddress" FunctionName="Model.Store.editAddress" />
           <FunctionImportMapping FunctionImportName="insertAddress" FunctionName="Model.Store.insertAddress" />
           <FunctionImportMapping FunctionImportName="removeAddress" FunctionName="Model.Store.removeAddress" />
+          <EntitySetMapping Name="Addresses">
+            <EntityTypeMapping TypeName="Model.Address">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="removed" ColumnName="removed" />
+                <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="zip" ColumnName="zip" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="address2" ColumnName="address2" />
+                <ScalarProperty Name="address1" ColumnName="address1" />
+                <ScalarProperty Name="addressId" ColumnName="addressId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
