@@ -7,8 +7,12 @@ using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
-    /// <summary>This form is used to view and manage the status of the rentals.</summary>
-    /// <seealso cref="System.Windows.Forms.Form" />
+    /// <summary>
+    ///   <para>This form is used to view and manage the status of the rentals.</para>
+    ///   <para>The ManageRentalsForm is opened by the ManageItemsForm and the ManageEmployeeForm.</para>
+    ///   <para>The ManageRentalsForm can return to the forms that opened it, or to the LoginForm.</para>
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.Form"/>
     public partial class ManageRentalsForm : Form
     {
         #region Data members
@@ -29,7 +33,10 @@ namespace Capstone_Desktop.View
 
         #region Constructors
 
-        /// <summary>Initializes a new instance of the <see cref="ManageRentalsForm" /> class.</summary>
+        /// <summary>
+        ///   <para>Initializes a new instance of the <see cref="ManageRentalsForm"/> class.</para>
+        ///   <para>The ManageRentalsForm handles user interactions relating to viewing and managing rentals and their status.</para>
+        /// </summary>
         /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageRentalsForm(Employee loggedInEmployee)
         {

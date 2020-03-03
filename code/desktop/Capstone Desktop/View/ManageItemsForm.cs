@@ -6,8 +6,13 @@ using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
-    /// <summary>This form is used to managed view stock items in the database.</summary>
-    /// <seealso cref="System.Windows.Forms.Form" />
+    /// <summary>
+    ///   <para>This form is used to managed view stock items in the database.</para>
+    ///   <para>The ManageItemsForm is opened by the LoginForm and the ManageEmployeesForm.</para>
+    ///   <para>The ManageItemsForm can open the ManageRentalsForm and the ManageEmployeesForm.</para>
+    ///   <para>The ManageItemsForm keeps track of the currently logged in employee and changes available transitions accordingly.</para>
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.Form"/>
     public partial class ManageItemsForm : Form
     {
         #region Data members
@@ -28,7 +33,10 @@ namespace Capstone_Desktop.View
 
         #region Constructors
 
-        /// <summary>Initializes a new instance of the <see cref="ManageItemsForm" /> class.</summary>
+        /// <summary>
+        ///   <para>Initializes a new instance of the <see cref="ManageItemsForm"/> class.</para>
+        ///   <para>The ManageItemsForm handles the user interactions relating to managing items in the database.</para>
+        /// </summary>
         /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageItemsForm(Employee loggedInEmployee)
         {

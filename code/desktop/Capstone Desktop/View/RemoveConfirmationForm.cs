@@ -4,13 +4,21 @@ using Capstone_Database.Model;
 
 namespace Capstone_Desktop.View
 {
-    /// <summary>This form is used to get user confirmation about removing an employee.</summary>
-    /// <seealso cref="System.Windows.Forms.Form" />
+    /// <summary>
+    ///   <para>This form is used to get user confirmation about removing an employee.</para>
+    ///   <para>A simple form used by the ManageEmployeeForm to confirm if a user wants to remove an employee.</para>
+    ///   <para>Opened by the ManageEmployeeForm.</para>
+    ///   <para>Closes to the ManageEmployeeForm.</para>
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.Form"/>
     public partial class RemoveConfirmationForm : Form
     {
         #region Constructors
 
-        /// <summary>Initializes a new instance of the <see cref="RemoveConfirmationForm"/> class.</summary>
+        /// <summary>
+        ///   <para>Initializes a new instance of the <see cref="RemoveConfirmationForm"/> class.</para>
+        ///   <para>The RemoveConfirmationForm handles user interactions relating to confirming if a user would like to remove an employee from the database.</para>
+        /// </summary>
         /// <param name="employee">The employee to ask about.</param>
         public RemoveConfirmationForm(Employee employee)
         {

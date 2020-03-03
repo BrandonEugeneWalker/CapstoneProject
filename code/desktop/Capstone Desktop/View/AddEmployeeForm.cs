@@ -7,8 +7,13 @@ using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
-    /// <summary>This form is used to add employees to the database.</summary>
-    /// <seealso cref="System.Windows.Forms.Form" />
+    /// <summary>
+    ///   <para>This form is used to add employees to the database.</para>
+    ///   <para></para>
+    ///   <para>The form contains text box controls for user input and wil provide feedback over user input such as passwords.</para>
+    ///   <para>This form will return to the ManageEmployees view upon closing.</para>
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.Form"/>
     public partial class AddEmployeeForm : Form
     {
         #region Data members
@@ -34,7 +39,10 @@ namespace Capstone_Desktop.View
 
         #region Constructors
 
-        /// <summary>Initializes a new instance of the <see cref="AddEmployeeForm" /> class.</summary>
+        /// <summary>
+        ///   <para>Initializes a new instance of the <see cref="AddEmployeeForm"/> class.</para>
+        ///   <para>The AddEmployeeForm is responsible for the user interactions related to adding an employee.</para>
+        /// </summary>
         public AddEmployeeForm()
         {
             this.InitializeComponent();
