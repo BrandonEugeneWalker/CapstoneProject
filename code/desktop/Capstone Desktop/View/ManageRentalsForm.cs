@@ -157,7 +157,7 @@ namespace Capstone_Desktop.View
 
                 if (currentItem.status.Equals("WaitingShipment"))
                 {
-                    currentItem.status = "Rented";
+                    currentItem.status = "WaitingReturn";
                     this.capstoneDatabaseContext.SaveChanges();
                     this.rentalGridView.Refresh();
                 }
