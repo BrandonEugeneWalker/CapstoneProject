@@ -1,25 +1,38 @@
-﻿using System.Data.Entity;
-using System.Net;
+﻿using System.Net;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 
 namespace Capstone_Web_Members.Controllers
 {
+    /// <summary>
+    ///     Controller for managing the address views and actions for adding and maintaining addresses.
+    /// </summary>
+    /// <seealso cref="System.Web.Mvc.Controller" />
     public class AddressesController : Controller
     {
         #region Data members
 
+        /// <summary>
+        ///     The database context
+        /// </summary>
         private readonly OnlineEntities databaseContext;
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AddressesController" /> class.
+        /// </summary>
         public AddressesController()
         {
             this.databaseContext = new OnlineEntities();
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AddressesController" /> class.
+        /// </summary>
+        /// <param name="databaseContext">The database context.</param>
         public AddressesController(OnlineEntities databaseContext)
         {
             this.databaseContext = databaseContext;
@@ -29,16 +42,22 @@ namespace Capstone_Web_Members.Controllers
 
         #region Methods
 
-        // GET: Addresses/Create
+        /// <summary>
+        ///     Starts the View for creating an address.
+        /// </summary>
+        /// <returns>The create page with form for adding an address</returns>
         public ActionResult Create()
         {
             ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username");
             return View();
         }
 
-        // POST: Addresses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        ///     Action for Creating an address from the Create View form. If Address is valid, redirects to Member Profile after
+        ///     adding to database. If invalid, redirects to form.
+        /// </summary>
+        /// <param name="address">The address created.</param>
+        /// <returns>Member Profile if Created Address is valid. Create Page if invalid.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "address1,address2,city,state,zip")]
@@ -56,7 +75,11 @@ namespace Capstone_Web_Members.Controllers
             return View(address);
         }
 
-        // GET: Addresses/Edit/5
+        /// <summary>
+        ///     Starts the View for editing a specified address.
+        /// </summary>
+        /// <param name="id">The addressId.</param>
+        /// <returns>The edit page with form for editing an address</returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -74,9 +97,12 @@ namespace Capstone_Web_Members.Controllers
             return View(address);
         }
 
-        // POST: Addresses/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        ///     Action for Editing an address from the Edit View form. If edited Address is valid, redirects to Member Profile
+        ///     after updating in database. If invalid, redirects to form.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns>Member Profile if Edited Address is valid. Edit Page if invalid.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "addressId,address1,address2,city,state,zip,memberId,removed")]
@@ -103,6 +129,11 @@ namespace Capstone_Web_Members.Controllers
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        ///     Removes the specified address.
+        /// </summary>
+        /// <param name="id">The addressId.</param>
+        /// <returns>Member Profile view</returns>
         public ActionResult Remove(int id)
         {
             this.databaseContext.removeAddress(id);
