@@ -4,8 +4,9 @@ Member View Library:
 3.	A member clicks to view media page.
 4.	A member views media library.
 5.	A member clicks order on media.
-6.	A member orders selected media.
-7.	A member logs out.
+6	A member selects address they want to ship too.
+7	A member orders selected media.
+8	A member logs out.
 Alternate:
 2a: Member skip login) A member click to view media page.
 	.3: A member is redirected to login page.
