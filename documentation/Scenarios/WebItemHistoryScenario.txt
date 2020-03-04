@@ -1,0 +1,12 @@
+Warehouse View Item History:
+1.	An employee load warehouse page.
+2.	An employee logs in.
+3.	An employee clicks manage stock page.
+4.	An employee clicks history on the selected stock item.
+5.	An employee views the history of the stock item.
+6.	An employee logs out.
+
+Alternate:
+2a: No login) An employee clicks manage stock page.
+	.3: An employee is redirected to login page.
+	.4: An employee not access manage items page without logging in.

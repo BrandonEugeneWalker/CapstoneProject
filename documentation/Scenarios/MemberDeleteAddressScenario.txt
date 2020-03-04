@@ -1,0 +1,10 @@
+Member Remove Address:
+1.	A member loads library website.
+2.	A member logs in to website.
+3.	A member clicks profile page.
+4.	A member clicks remove on the address they want to remove.
+5.	A member clicks confirm on confirmation.
+6.	A member has removed the address.
+7.	A member logs out.
+Alternate:
+2a: Member no log in) The profile button only appears when logged in.

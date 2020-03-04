@@ -1,0 +1,9 @@
+Member View Profile:
+1.	A member loads library website.
+2.	A member logs in to website.
+3.	A member clicks profile page.
+4.	A member views their profile information.
+5.	A member views their order history on the same page.
+6.	A member logs out.
+Alternate:
+2a: Member no log in) The profile button only appears when logged in.

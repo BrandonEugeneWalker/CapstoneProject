@@ -1,0 +1,7 @@
+Manager View Employee History:
+1.	A manager loads warehouse application.
+2.	A manager logs in.
+2.	A manager selects the employee they wish to view.
+3.	A manager clicks view history.
+4.	A manager views the history for the selected employee.
+5.	A manager logs out.

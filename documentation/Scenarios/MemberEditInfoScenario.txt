@@ -1,0 +1,14 @@
+Member Edit Information:
+1.	A member loads library website.
+2.	A member logs in to website.
+3.	A member clicks profile page.
+4.	A member clicks edit information.
+5.	A member enters information.
+6.	A member clicks save.
+7.	A member has editted their information.
+8.	A member logs out.
+Alternate:
+2a: Member no log in) The profile button only appears when logged in.
+5a: Member enters invalid data) A member inputs invalid password that does not contain a upper letter, a lower letter, a digit, and a symbol, or is not of length 6.
+	.6: A member is informed that data is invalid.
+	.7: A member re-attempt to save with valid data.

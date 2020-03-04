@@ -1,0 +1,7 @@
+Warehouse View Item History:
+1.	An employee load warehouse application.
+2.	An employee logs in.
+3.	An employee selects the stock item they wish to see.
+4.	An employee clicks view history button.
+5.	An employee views the history of the stock item.
+6.	An employee logs out.

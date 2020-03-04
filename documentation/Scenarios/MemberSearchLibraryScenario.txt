@@ -1,0 +1,16 @@
+Member Search Library:
+1.	A member load website home page.
+2.	A member login to website.
+3.	A member clicks to view media page.
+4.	A member enters search results.
+5.	A member clicks search.
+6.	A member views media library based on search parameters.
+7.	A member logs out.
+
+Alternate:
+2a: Member skip login) A member click to view media page.
+	.3: A member is redirected to login page.
+	.4: A member can not view media page without logging in.
+5a: Member selects filter) A member selects filter type.
+	.6: A member clicks search.
+	.7: A member views media library based on filter parameter.
