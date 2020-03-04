@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Employee</h4>
+    <h4>Employee Info</h4>
     <hr/>
     <dl class="dl-horizontal">
         <dt>
@@ -35,6 +35,59 @@
         </dd>
 
     </dl>
+</div>
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                Shipment ID
+            </th>
+            <th>
+                Rental ID
+            </th>
+            <th>
+                Stock ID
+            </th>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Rental Description
+            </th>
+            <th>
+                Item Condition
+            </th>
+            <th>
+                Time
+            </th>
+        </tr>
+        @foreach (var item in Model.ItemShips)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemShipId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemRentalId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemRental.stockId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemRental.Stock.Product.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemCondition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.shipDateTime)
+                </td>
+            </tr>
+        }
+    </table>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new {id = Model.employeeId}) |
