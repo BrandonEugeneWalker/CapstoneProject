@@ -232,6 +232,7 @@
     <Compile Include="Settings\AccountSettings.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\MemberProfileViewModel.cs" />
+    <Compile Include="ViewModels\OrderProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -277,6 +278,8 @@
     <Content Include="Views\Members\Login.cshtml" />
     <Content Include="Views\Addresses\Create.cshtml" />
     <Content Include="Views\Addresses\Edit.cshtml" />
+    <Content Include="Views\Home\OrderProduct.cshtml" />
+    <Content Include="Views\Home\AddressSelect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

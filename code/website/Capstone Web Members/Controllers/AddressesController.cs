@@ -72,7 +72,7 @@ namespace Capstone_Web_Members.Controllers
             }
 
             ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
-            return View(address);
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
 
         /// <summary>

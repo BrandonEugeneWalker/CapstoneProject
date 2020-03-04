@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using Capstone_Web_Members.ViewModels;
 
 namespace Capstone_Web_Members.Controllers
 {
@@ -27,6 +28,11 @@ namespace Capstone_Web_Members.Controllers
 
         #region Constructors
 
+        public ActionResult Index()
+        {
+            return RedirectToAction("MediaLibrary");
+        }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="HomeController" /> class.
         /// </summary>
@@ -47,11 +53,6 @@ namespace Capstone_Web_Members.Controllers
         #endregion
 
         #region Methods
-
-        public ActionResult Index()
-        {
-            return RedirectToAction("MediaLibrary");
-        }
 
         //TODO work on observability of this page. After tests are mocking
         /// <summary>
@@ -84,6 +85,7 @@ namespace Capstone_Web_Members.Controllers
 
             var memberId = int.Parse(Session["currentMemberId"].ToString());
 
+            // Potentially move this to OrderProduct
             var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
             int? rentedCount = 0;
             if (rentedCountResult.Count > 0)
@@ -104,13 +106,28 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Orders the product.
+        ///     Navigates to the Order Product view to confirm order
         /// </summary>
         /// <param name="productId">The product identifier.</param>
+        /// <returns>The Order Product view detailing the selected product</returns>
+        public ActionResult OrderProduct(int productId)
+        {
+            var product = this.DatabaseContext.Products.Find(productId);
+            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
+            var orderProductViewModel = new OrderProductViewModel { ProductModel = product, AddressesModel = addresses };
+            return View(orderProductViewModel);
+        }
+
+        /// <summary>
+        ///     Orders the product following user confirmation.
+        /// </summary>
+        /// <param name="productId">The product ID.</param>
+        /// <param name="addressId">The address ID.</param>
         /// <returns>
         ///     The media library page after ordering selected product
         /// </returns>
-        public ActionResult OrderProduct(int productId)
+        public ActionResult ConfirmOrder(int productId, int addressId)
         {
             if (Session["currentMemberId"] == null)
             {
@@ -120,27 +137,9 @@ namespace Capstone_Web_Members.Controllers
             var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
             var availableStockId = results[0];
             var memberId = int.Parse(Session["currentMemberId"].ToString());
-            this.DatabaseContext.createMemberOrder(availableStockId, memberId);
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId, addressId);
 
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
-        }
-
-        /// <summary>
-        ///     Returns a product rental item
-        /// </summary>
-        /// <param name="rentalId">The rental identifier.</param>
-        /// <returns>
-        ///     The rental history page after returning selected rental
-        /// </returns>
-        public ActionResult ReturnProduct(int rentalId)
-        {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
-            this.DatabaseContext.updateMemberReturn(rentalId);
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+            return View("MediaLibrary");
         }
 
         #endregion

@@ -36,7 +36,7 @@ namespace Capstone_Database.Model
         public virtual DbSet<ItemReturn> ItemReturns { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
     
-        public virtual int createMemberOrder(Nullable<int> selectedStockId, Nullable<int> selectedMemberId)
+        public virtual int createMemberOrder(Nullable<int> selectedStockId, Nullable<int> selectedMemberId, Nullable<int> selectedAddressId)
         {
             var selectedStockIdParameter = selectedStockId.HasValue ?
                 new ObjectParameter("selectedStockId", selectedStockId) :
@@ -46,7 +46,11 @@ namespace Capstone_Database.Model
                 new ObjectParameter("selectedMemberId", selectedMemberId) :
                 new ObjectParameter("selectedMemberId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("createMemberOrder", selectedStockIdParameter, selectedMemberIdParameter);
+            var selectedAddressIdParameter = selectedAddressId.HasValue ?
+                new ObjectParameter("selectedAddressId", selectedAddressId) :
+                new ObjectParameter("selectedAddressId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("createMemberOrder", selectedStockIdParameter, selectedMemberIdParameter, selectedAddressIdParameter);
         }
     
         public virtual ObjectResult<retrieveAllProducts_Result> retrieveAllProducts()
@@ -433,6 +437,24 @@ namespace Capstone_Database.Model
                 new ObjectParameter("currentAddressId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("removeAddress", currentAddressIdParameter);
+        }
+    
+        public virtual ObjectResult<Product> retrieveProductById(Nullable<int> selectedProductId)
+        {
+            var selectedProductIdParameter = selectedProductId.HasValue ?
+                new ObjectParameter("selectedProductId", selectedProductId) :
+                new ObjectParameter("selectedProductId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveProductById", selectedProductIdParameter);
+        }
+    
+        public virtual ObjectResult<Product> retrieveProductById(Nullable<int> selectedProductId, MergeOption mergeOption)
+        {
+            var selectedProductIdParameter = selectedProductId.HasValue ?
+                new ObjectParameter("selectedProductId", selectedProductId) :
+                new ObjectParameter("selectedProductId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveProductById", mergeOption, selectedProductIdParameter);
         }
     }
 }
