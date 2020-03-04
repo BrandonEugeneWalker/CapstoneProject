@@ -6,6 +6,7 @@
 <h2>Order Confirmation</h2>
 
 <div>
+    <hr />
     <h4>Confirm your order for:</h4>
     <dl class="dl-horizontal">
         <dt>
@@ -32,17 +33,24 @@
         <dd>
             @Html.DisplayFor(model => model.ProductModel.category) <br />
         </dd>
-        @Html.ActionLink("Confirm Order", "ConfirmOrder", new { Model.ProductModel.productId })
-    </dl>
-</div>
 
-<h2>Addresses</h2>
-<p>
-    @Html.ActionLink("Create New", "Create", "Addresses")
-</p>
-<div>
+        @if (Model.AddressesModel.Count < 1)
+        {
+            @Html.ActionLink("Add an Address to Complete your Order", "Create", "Addresses")
+        }
+        else
+        {
+            @Html.ActionLink("Confirm Order", "ConfirmOrder", new { Model.ProductModel.productId })
+        }
+    </dl>
+
+    <h4>Addresses</h4>
+    <p>
+        @Html.ActionLink("Create New", "Create", "Addresses")
+    </p>
     <table class="table">
         <tr>
+            <th></th>
             <th>
                 Street Address
             </th>
@@ -64,6 +72,16 @@
         @foreach (var address in Model.AddressesModel)
         {
             <tr>
+                <td>
+                    @if (Model.AddressesModel.First() == address)
+                    {
+                        @Html.RadioButton("addressSelected", address.addressId, true)
+                    }
+                    else
+                    {
+                        @Html.RadioButton("addressSelected", address.addressId)
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(modelRental => address.address1)
                 </td>

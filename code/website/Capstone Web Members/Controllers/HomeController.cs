@@ -127,7 +127,7 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>
         ///     The media library page after ordering selected product
         /// </returns>
-        public ActionResult ConfirmOrder(int productId, int addressId)
+        public ActionResult ConfirmOrder(int productId, int addressSelected)
         {
             if (Session["currentMemberId"] == null)
             {
@@ -137,7 +137,7 @@ namespace Capstone_Web_Members.Controllers
             var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
             var availableStockId = results[0];
             var memberId = int.Parse(Session["currentMemberId"].ToString());
-            this.DatabaseContext.createMemberOrder(availableStockId, memberId, addressId);
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId, addressSelected);
 
             return View("MediaLibrary");
         }
