@@ -10,7 +10,6 @@ namespace Capstone_Web_Members
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
         }
     }
 }
