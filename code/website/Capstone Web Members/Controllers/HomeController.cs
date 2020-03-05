@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using Capstone_Web_Members.ViewModels;
 
 namespace Capstone_Web_Members.Controllers
 {
@@ -84,6 +85,7 @@ namespace Capstone_Web_Members.Controllers
 
             var memberId = int.Parse(Session["currentMemberId"].ToString());
 
+            // Potentially move this to OrderProduct
             var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
             int? rentedCount = 0;
             if (rentedCountResult.Count > 0)
@@ -104,43 +106,41 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Orders the product.
+        ///     Navigates to the Order Product view to confirm order
         /// </summary>
         /// <param name="productId">The product identifier.</param>
-        /// <returns>
-        ///     The media library page after ordering selected product
-        /// </returns>
+        /// <returns>The Order Product view detailing the selected product</returns>
         public ActionResult OrderProduct(int productId)
         {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
-            var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
-            var availableStockId = results[0];
+            var product = this.DatabaseContext.Products.Find(productId);
             var memberId = int.Parse(Session["currentMemberId"].ToString());
-            this.DatabaseContext.createMemberOrder(availableStockId, memberId);
-
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+            var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
+            var orderProductViewModel = new OrderProductViewModel { ProductModel = product, AddressesModel = addresses };
+            return View(orderProductViewModel);
         }
 
         /// <summary>
-        ///     Returns a product rental item
+        ///     Orders the product following user confirmation.
         /// </summary>
-        /// <param name="rentalId">The rental identifier.</param>
+        /// <param name="productId">The product ID.</param>
+        /// <param name="addressId">The selected address.</param>
         /// <returns>
-        ///     The rental history page after returning selected rental
+        ///     The media library page after ordering selected product
         /// </returns>
-        public ActionResult ReturnProduct(int rentalId)
+        [HttpPost]
+        public ActionResult OrderProduct(string productId, string addressId)
         {
             if (Session["currentMemberId"] == null)
             {
                 return RedirectToAction("Login", "Members");
             }
 
-            this.DatabaseContext.updateMemberReturn(rentalId);
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+            var results = this.DatabaseContext.findAvailableStockOfProduct(int.Parse(productId)).ToList();
+            var availableStockId = results[0];
+            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId, int.Parse(addressId));
+
+            return RedirectToAction("MediaLibrary");
         }
 
         #endregion

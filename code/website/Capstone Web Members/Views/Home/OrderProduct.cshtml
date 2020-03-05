@@ -1,0 +1,115 @@
+﻿@model Capstone_Web_Members.ViewModels.OrderProductViewModel
+@{
+    ViewBag.Title = "OrderProduct";
+    ViewBag.SelectedAddress = 0;
+}
+
+<h2>Order Confirmation</h2>
+
+<div>
+    <hr/>
+
+    @using (Html.BeginForm())
+    {
+        <h4>Confirm your order for:</h4>
+        @Html.Hidden("productId", Model.ProductModel.productId, new {Model.ProductModel.productId})
+        <dl class="dl-horizontal">
+            <dt>
+                <b>Name:</b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ProductModel.name) <br/>
+            </dd>
+            <dt>
+                <b>Description:</b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ProductModel.description) <br/>
+            </dd>
+            <dt>
+                <b>Type:</b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ProductModel.type) <br/>
+            </dd>
+            <dt>
+                <b>Category:</b>
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ProductModel.category) <br/>
+            </dd>
+        </dl>
+        if (Model.AddressesModel.Count < 1)
+        {
+            @Html.ActionLink("Add an Address to Complete your Order", "Create", "Addresses")
+        }
+        else
+        {
+            <input type="submit" value="Confirm Order" class="btn btn-default"/>
+        }
+
+        <h4>Addresses</h4>
+        <p>
+            @Html.ActionLink("Create New", "Create", "Addresses")
+        </p>
+
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>
+                    Street Address
+                </th>
+                <th>
+                    Secondary
+                </th>
+                <th>
+                    City
+                </th>
+                <th>
+                    State
+                </th>
+                <th>
+                    Zip
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var address in Model.AddressesModel)
+            {
+                <tr>
+                    <td>
+                        @if (Model.AddressesModel.First() == address)
+                        {
+                            @Html.RadioButton("addressId", address.addressId, true, new {address.addressId})
+                        }
+                        else
+                        {
+                            @Html.RadioButton("addressId", address.addressId, false, new {address.addressId})
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelRental => address.address1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelRental => address.address2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelRental => address.city)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelRental => address.state)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelRental => address.zip)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "Addresses", new {id = address.addressId}, "")
+                    </td>
+                    <td>
+                        @Html.ActionLink("Remove", "Remove", "Addresses", new {id = address.addressId}, "")
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</div>

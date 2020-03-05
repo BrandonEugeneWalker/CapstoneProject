@@ -11,7 +11,7 @@
           </Key>
           <Property Name="addressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="address1" Type="varchar" MaxLength="300" Nullable="false" />
-          <Property Name="address2" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="address2" Type="varchar" MaxLength="300" />
           <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="state" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="zip" Type="int" Nullable="false" />
@@ -216,6 +216,7 @@
         <Function Name="createMemberOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedStockId" Type="int" Mode="In" />
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+          <Parameter Name="selectedAddressId" Type="int" Mode="In" />
         </Function>
         <Function Name="editAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="currentAddressId" Type="int" Mode="In" />
@@ -271,6 +272,9 @@
         </Function>
         <Function Name="retrieveMembersRentals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="retrieveProductById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedProductId" Type="int" Mode="In" />
         </Function>
         <Function Name="retrieveProductsWaitingReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveProductsWaitingShipment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
@@ -476,6 +480,7 @@
           <FunctionImport Name="createMemberOrder">
             <Parameter Name="selectedStockId" Mode="In" Type="Int32" />
             <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+            <Parameter Name="selectedAddressId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="retrieveAllProducts" ReturnType="Collection(Model.retrieveAllProducts_Result)" />
           <FunctionImport Name="retrieveAvailableProducts" EntitySet="Products" ReturnType="Collection(Model.Product)" />
@@ -588,6 +593,9 @@
             <End Role="Member" EntitySet="Members" />
             <End Role="Address" EntitySet="Addresses" />
           </AssociationSet>
+          <FunctionImport Name="retrieveProductById" EntitySet="Products" ReturnType="Collection(Model.Product)">
+          <Parameter Name="selectedProductId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -727,6 +735,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="retrieveProductById_Result" />
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -863,6 +872,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="retrieveProductById" FunctionName="Model.Store.retrieveProductById">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
