@@ -26,6 +26,12 @@ namespace Capstone_Database.Model
         public int memberId { get; set; }
         public string status { get; set; }
         public int addressId { get; set; }
+        public Nullable<System.DateTime> rentalDateTime { get; set; }
+        public Nullable<int> shipEmployeeId { get; set; }
+        public Nullable<System.DateTime> shipDateTime { get; set; }
+        public Nullable<int> returnEmployeeId { get; set; }
+        public Nullable<int> returnDateTime { get; set; }
+        public string returnCondition { get; set; }
     
         public virtual Member Member { get; set; }
         public virtual Stock Stock { get; set; }
@@ -34,5 +40,7 @@ namespace Capstone_Database.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ItemReturn> ItemReturns { get; set; }
         public virtual Address Address { get; set; }
+        public virtual Employee Employee { get; set; }
+        public virtual Employee Employee1 { get; set; }
     }
 }

@@ -19,6 +19,8 @@ namespace Capstone_Database.Model
         {
             this.ItemShips = new HashSet<ItemShip>();
             this.ItemReturns = new HashSet<ItemReturn>();
+            this.ItemRentals = new HashSet<ItemRental>();
+            this.ItemRentals1 = new HashSet<ItemRental>();
         }
     
         public int employeeId { get; set; }
@@ -30,5 +32,9 @@ namespace Capstone_Database.Model
         public virtual ICollection<ItemShip> ItemShips { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ItemReturn> ItemReturns { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemRental> ItemRentals { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemRental> ItemRentals1 { get; set; }
     }
 }

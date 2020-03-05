@@ -22,6 +22,7 @@ namespace Capstone_Database.Model
     
         public int stockId { get; set; }
         public int productId { get; set; }
+        public string itemCondition { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ItemRental> ItemRentals { get; set; }
