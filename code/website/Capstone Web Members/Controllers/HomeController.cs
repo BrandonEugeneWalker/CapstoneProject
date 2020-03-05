@@ -75,17 +75,18 @@ namespace Capstone_Web_Members.Controllers
                 nameSearch = string.Empty;
             }
 
+
             if (typeSearch == null)
             {
                 typeSearch = string.Empty;
             }
 
+            ViewBag.NameSearch = nameSearch;
+            ViewBag.TypeSearch = typeSearch;
+
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
                                          .ToList();
-
             var memberId = int.Parse(Session["currentMemberId"].ToString());
-
-            // Potentially move this to OrderProduct
             var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
             int? rentedCount = 0;
             if (rentedCountResult.Count > 0)
@@ -94,13 +95,10 @@ namespace Capstone_Web_Members.Controllers
             }
 
             ViewBag.HasThreeOrders = false;
-
             if (rentedCount >= 3)
             {
                 ViewBag.HasThreeOrders = true;
             }
-
-            ViewBag.Message = "Available Media:";
 
             return View(this.AvailableProducts);
         }

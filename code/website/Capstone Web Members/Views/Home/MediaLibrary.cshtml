@@ -9,12 +9,39 @@
     <form asp-action="Search">
         <p>
             Name:
-            <input type="text" id="nameSearch" name="nameSearch" /> &nbsp;&nbsp;
-            Type:
-            &nbsp;<input type="radio" name="typeSearch" value="Book" /> Book
-            &nbsp;<input type="radio" name="typeSearch" value="Movie"> Movie
-            &nbsp;<input type="radio" name="typeSearch" value="CD" /> CD
-            &nbsp;<input type="submit" value="Submit" />
+            <input type="text" id="nameSearch" name="nameSearch" value="@ViewBag.NameSearch" /> &nbsp;&nbsp;
+            Type: &nbsp;
+            @if (ViewBag.TypeSearch.Equals("Book"))
+            {
+                <input type="radio" name="typeSearch" value="Book" checked="checked" />
+            }
+            else
+            {
+                <input type="radio" name="typeSearch" value="Book" />
+            }
+            Book
+            &nbsp;
+            @if (ViewBag.TypeSearch.Equals("Movie"))
+            {
+                <input type="radio" name="typeSearch" value="Movie" checked="checked" />
+            }
+            else
+            {
+                <input type="radio" name="typeSearch" value="Movie" />
+            }
+            Movie
+            &nbsp;
+            @if (ViewBag.TypeSearch.Equals("CD"))
+            {
+                <input type="radio" name="typeSearch" value="CD" checked="checked" />
+            }
+            else
+            {
+                <input type="radio" name="typeSearch" value="CD" />
+            }
+            CD
+            &nbsp;<input type="submit" value="Submit" class="btn btn-default"/>
+            &nbsp;<input type="button" value="Clear" class="btn btn-default" onclick="location.href='@Url.Action("Index")'"/>
         </p>
     </form>
     <table class="table">
@@ -47,7 +74,7 @@
                 <td>
                     @if (ViewBag.HasThreeOrders)
                     {
-                        <b><s>Order</s></b>
+                        <b>You currently have the max amount of allowed Rentals</b>
                     }
                     else
                     {
