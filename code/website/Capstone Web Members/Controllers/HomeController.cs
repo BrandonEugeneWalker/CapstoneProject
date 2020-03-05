@@ -127,17 +127,18 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>
         ///     The media library page after ordering selected product
         /// </returns>
-        public ActionResult ConfirmOrder(int productId, int addressId)
+        [HttpPost]
+        public ActionResult OrderProduct(string productId, string addressId)
         {
             if (Session["currentMemberId"] == null)
             {
                 return RedirectToAction("Login", "Members");
             }
 
-            var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
+            var results = this.DatabaseContext.findAvailableStockOfProduct(int.Parse(productId)).ToList();
             var availableStockId = results[0];
             var memberId = int.Parse(Session["currentMemberId"].ToString());
-            this.DatabaseContext.createMemberOrder(availableStockId, memberId, addressId);
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId, int.Parse(addressId));
 
             return RedirectToAction("MediaLibrary");
         }
