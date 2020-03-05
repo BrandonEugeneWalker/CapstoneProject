@@ -1,7 +1,39 @@
-﻿
+﻿@model Capstone_Web_Members.ViewModels.OrderConfirmationViewModel
 @{
     ViewBag.Title = "OrderConfirmation";
 }
 
-<h2>OrderConfirmation</h2>
+<h2>Order Confirmed!</h2>
 
+<div>
+    <hr/>
+    <h4>You Ordered:</h4>
+    <b>Name:</b>
+    @Html.DisplayFor(model => model.ProductModel.name) <br />
+    <b>Description:</b>
+    @Html.DisplayFor(model => model.ProductModel.description) <br />
+    <b>Type:</b>
+    @Html.DisplayFor(model => model.ProductModel.type) <br />
+    <b>Category:</b>
+    @Html.DisplayFor(model => model.ProductModel.category) <br />
+</div>
+
+<div>
+    <hr/>
+    <h4>Address:</h4>
+    @Html.DisplayFor(model => model.AddressModel.address1) <br />
+    @if (Model.AddressModel.address2 != null)
+    {
+        @Html.DisplayFor(model => model.AddressModel.address2) <br />
+    }
+    @Html.DisplayFor(model => model.AddressModel.city),
+    @Html.DisplayFor(model => model.AddressModel.state)
+    @Html.DisplayFor(model => model.AddressModel.zip) <br />
+</div>
+
+<div>
+    <hr/>
+    <p>
+        <input type="submit" value="Return to Library" class="btn btn-default" onclick="location.href='@Url.Action("MediaLibrary")'"/>
+    </p>
+</div>

@@ -140,7 +140,22 @@ namespace Capstone_Web_Members.Controllers
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             this.DatabaseContext.createMemberOrder(availableStockId, memberId, int.Parse(addressId));
 
-            return RedirectToAction("MediaLibrary");
+            return RedirectToAction("OrderConfirmation", new { productId = int.Parse(productId), addressId = int.Parse(addressId) });
+        }
+
+        /// <summary>
+        /// Orders the confirmation.
+        /// </summary>
+        /// <param name="productId">The product identifier.</param>
+        /// <param name="addressId">The address identifier.</param>
+        /// <returns></returns>
+        public ActionResult OrderConfirmation(int productId, int addressId)
+        {
+            var product = this.DatabaseContext.Products.Find(productId);
+            var address = this.DatabaseContext.Addresses.Find(addressId);
+            var orderConfirmationViewModel = new OrderConfirmationViewModel {ProductModel = product, AddressModel = address};
+
+            return View(orderConfirmationViewModel);
         }
 
         #endregion

@@ -227,6 +227,7 @@
     <Compile Include="Settings\AccountSettings.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\MemberProfileViewModel.cs" />
+    <Compile Include="ViewModels\OrderConfirmationViewModel.cs" />
     <Compile Include="ViewModels\OrderProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -73,6 +73,9 @@
                     @Html.DisplayFor(modelRental => address.zip)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelRental => address.zip)
+                </td>
+                <td>
                     @Html.ActionLink("Edit", "Edit", "Addresses", new { id = address.addressId }, "")
                 </td>
                 <td>
@@ -102,6 +105,12 @@
             <th>
                 Status
             </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Rented
+            </th>
         </tr>
         @foreach (var rental in Model.ItemRentalsModel)
         {
@@ -120,6 +129,20 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelRental => rental.status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.Address.address1)
+                    @if (rental.Address.address2 != null)
+                    {
+                        <br />
+                        @Html.DisplayFor(modelRental => rental.Address.address2)
+                    }
+                    <br/>
+                    @Html.DisplayFor(modelRental => rental.Address.city), 
+                    @Html.DisplayFor(modelRental => rental.Address.state)  @Html.DisplayFor(modelRental => rental.Address.zip)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.rentalDateTime)
                 </td>
             </tr>
         }
