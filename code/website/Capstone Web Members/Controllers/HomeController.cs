@@ -28,11 +28,6 @@ namespace Capstone_Web_Members.Controllers
 
         #region Constructors
 
-        public ActionResult Index()
-        {
-            return RedirectToAction("MediaLibrary");
-        }
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="HomeController" /> class.
         /// </summary>
@@ -53,6 +48,11 @@ namespace Capstone_Web_Members.Controllers
         #endregion
 
         #region Methods
+
+        public ActionResult Index()
+        {
+            return RedirectToAction("MediaLibrary");
+        }
 
         //TODO work on observability of this page. After tests are mocking
         /// <summary>
@@ -123,11 +123,11 @@ namespace Capstone_Web_Members.Controllers
         ///     Orders the product following user confirmation.
         /// </summary>
         /// <param name="productId">The product ID.</param>
-        /// <param name="addressId">The address ID.</param>
+        /// <param name="addressId">The selected address.</param>
         /// <returns>
         ///     The media library page after ordering selected product
         /// </returns>
-        public ActionResult ConfirmOrder(int productId, int addressSelected)
+        public ActionResult ConfirmOrder(int productId, int addressId)
         {
             if (Session["currentMemberId"] == null)
             {
@@ -137,9 +137,9 @@ namespace Capstone_Web_Members.Controllers
             var results = this.DatabaseContext.findAvailableStockOfProduct(productId).ToList();
             var availableStockId = results[0];
             var memberId = int.Parse(Session["currentMemberId"].ToString());
-            this.DatabaseContext.createMemberOrder(availableStockId, memberId, addressSelected);
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId, addressId);
 
-            return View("MediaLibrary");
+            return RedirectToAction("MediaLibrary");
         }
 
         #endregion

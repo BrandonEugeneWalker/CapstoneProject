@@ -23,5 +23,13 @@ namespace Capstone_Web_Members.ViewModels
         /// The addresses model, storing the selected address to be used for the order
         /// </value>
         public List<Address> AddressesModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the selected address.
+        /// </summary>
+        /// <value>
+        /// The selected address, for storing the user's selected Address for ordering
+        /// </value>
+        public int SelectedAddress { get; set; }
     }
 }

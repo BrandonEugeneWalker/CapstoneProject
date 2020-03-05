@@ -274,7 +274,7 @@
     <Content Include="Views\Addresses\Create.cshtml" />
     <Content Include="Views\Addresses\Edit.cshtml" />
     <Content Include="Views\Home\OrderProduct.cshtml" />
-    <Content Include="Views\Home\AddressSelect.cshtml" />
+    <Content Include="Views\Home\OrderConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
