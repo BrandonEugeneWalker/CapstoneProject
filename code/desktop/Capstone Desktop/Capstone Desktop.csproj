@@ -101,6 +101,18 @@
     <Compile Include="View\AddEmployeeForm.Designer.cs">
       <DependentUpon>AddEmployeeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\EmployeeHistoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\EmployeeHistoryForm.Designer.cs">
+      <DependentUpon>EmployeeHistoryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemHistoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ItemHistoryForm.Designer.cs">
+      <DependentUpon>ItemHistoryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,6 +156,12 @@
     </Compile>
     <EmbeddedResource Include="View\AddEmployeeForm.resx">
       <DependentUpon>AddEmployeeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\EmployeeHistoryForm.resx">
+      <DependentUpon>EmployeeHistoryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ItemHistoryForm.resx">
+      <DependentUpon>ItemHistoryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
