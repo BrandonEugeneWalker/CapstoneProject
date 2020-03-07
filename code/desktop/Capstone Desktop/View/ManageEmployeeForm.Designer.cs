@@ -34,7 +34,7 @@
             this.employeeGridView = new System.Windows.Forms.DataGridView();
             this.removeButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
-            this.submitChangesButton = new System.Windows.Forms.Button();
+            this.viewHistoryButton = new System.Windows.Forms.Button();
             this.manageItemsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.employeeGridView)).BeginInit();
             this.SuspendLayout();
@@ -79,7 +79,9 @@
             this.employeeGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.employeeGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.employeeGridView.Location = new System.Drawing.Point(12, 164);
+            this.employeeGridView.MultiSelect = false;
             this.employeeGridView.Name = "employeeGridView";
+            this.employeeGridView.ReadOnly = true;
             this.employeeGridView.RowHeadersWidth = 62;
             this.employeeGridView.RowTemplate.Height = 28;
             this.employeeGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -108,17 +110,16 @@
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
-            // submitChangesButton
+            // viewHistoryButton
             // 
-            this.submitChangesButton.Enabled = false;
-            this.submitChangesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.submitChangesButton.Location = new System.Drawing.Point(12, 578);
-            this.submitChangesButton.Name = "submitChangesButton";
-            this.submitChangesButton.Size = new System.Drawing.Size(141, 46);
-            this.submitChangesButton.TabIndex = 6;
-            this.submitChangesButton.Text = "Submit Changes";
-            this.submitChangesButton.UseVisualStyleBackColor = true;
-            this.submitChangesButton.Click += new System.EventHandler(this.SubmitChangesButton_Click);
+            this.viewHistoryButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.viewHistoryButton.Location = new System.Drawing.Point(12, 578);
+            this.viewHistoryButton.Name = "viewHistoryButton";
+            this.viewHistoryButton.Size = new System.Drawing.Size(141, 46);
+            this.viewHistoryButton.TabIndex = 6;
+            this.viewHistoryButton.Text = "View History";
+            this.viewHistoryButton.UseVisualStyleBackColor = true;
+            this.viewHistoryButton.Click += new System.EventHandler(this.viewHistoryButton_Click);
             // 
             // manageItemsButton
             // 
@@ -136,7 +137,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.manageItemsButton);
-            this.Controls.Add(this.submitChangesButton);
+            this.Controls.Add(this.viewHistoryButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.removeButton);
             this.Controls.Add(this.employeeGridView);
@@ -163,7 +164,7 @@
         private System.Windows.Forms.DataGridView employeeGridView;
         private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.Button submitChangesButton;
+        private System.Windows.Forms.Button viewHistoryButton;
         private System.Windows.Forms.Button manageItemsButton;
     }
 }

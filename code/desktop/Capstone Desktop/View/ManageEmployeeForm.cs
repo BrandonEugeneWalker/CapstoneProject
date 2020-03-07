@@ -104,11 +104,6 @@ namespace Capstone_Desktop.View
             this.getData();
         }
 
-        private void SubmitChangesButton_Click(object sender, EventArgs e)
-        {
-            this.capstoneDatabaseContext.SaveChanges();
-        }
-
         private void ManageEmployeeForm_Load(object sender, EventArgs e)
         {
             this.employeeGridView.DataSource = this.employeeListSource;
@@ -151,5 +146,25 @@ namespace Capstone_Desktop.View
         }
 
         #endregion
+
+        private void viewHistoryButton_Click(object sender, EventArgs e)
+        {
+            Employee selectedEmployee = null;
+
+            if (this.employeeGridView.SelectedRows.Count != 0)
+            {
+                selectedEmployee = (Employee)this.employeeGridView.SelectedRows[0].DataBoundItem;
+            }
+
+            if (selectedEmployee != null)
+            {
+                EmployeeHistoryForm employeeHistoryForm = new EmployeeHistoryForm(selectedEmployee);
+                employeeHistoryForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(@"There was no selected employee to view the history of.");
+            }
+        }
     }
 }

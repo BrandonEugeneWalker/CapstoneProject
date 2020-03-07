@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\AddEmployeeFormController.cs" />
+    <Compile Include="Controller\EmployeeHistoryController.cs" />
     <Compile Include="View\AddEmployeeForm.cs">
       <SubType>Form</SubType>
     </Compile>

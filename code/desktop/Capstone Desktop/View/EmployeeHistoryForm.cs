@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
 
 namespace Capstone_Desktop.View
 {
@@ -22,6 +17,8 @@ namespace Capstone_Desktop.View
     {
 
         private OnlineEntities capstoneDbContext;
+
+        private EmployeeHistoryController employeeHistoryController;
 
         private Employee CurrentEmployee { get; set; }
 
@@ -42,11 +39,42 @@ namespace Capstone_Desktop.View
             InitializeComponent();
             this.CurrentEmployee = employee;
             this.capstoneDbContext = new OnlineEntities();
+            this.employeeHistoryController = new EmployeeHistoryController();
+            this.setEmployeeLabel();
+            this.populateHistoryView();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void populateHistoryView()
+        {
+            List<ItemRental> employeeHistory =
+                this.employeeHistoryController.GetEmployeeHistory(this.CurrentEmployee, this.capstoneDbContext);
+
+            this.historyGridView.DataSource = employeeHistory;
+
+            this.refreshTable();
+        }
+
+        private void refreshTable()
+        {
+            for (var i = 0; i < this.historyGridView.Columns.Count; i++)
+            {
+                this.historyGridView.Columns[i].MinimumWidth = 200;
+            }
+
+            this.historyGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+        }
+
+        private void setEmployeeLabel()
+        {
+            string employeeDescription = this.employeeHistoryController.BuildEmployeeDescription(this.CurrentEmployee);
+            string baseString = this.employeeLabel.Text;
+            string updatedLabelValue = baseString + Environment.NewLine + employeeDescription;
+            this.employeeLabel.Text = updatedLabelValue;
         }
     }
 }
