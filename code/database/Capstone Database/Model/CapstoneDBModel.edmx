@@ -40,7 +40,7 @@
           <Property Name="shipEmployeeId" Type="int" />
           <Property Name="shipDateTime" Type="datetime" Precision="0" />
           <Property Name="returnEmployeeId" Type="int" />
-          <Property Name="returnDateTime" Type="int" />
+          <Property Name="returnDateTime" Type="datetime" Precision="0" />
           <Property Name="returnCondition" Type="enum" />
         </EntityType>
         <EntityType Name="ItemReturn">
