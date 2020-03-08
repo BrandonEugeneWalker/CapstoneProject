@@ -315,28 +315,7 @@
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="ItemRentals" Relationship="Model.employeeId_ItemRental_Return" FromRole="Employee" ToRole="ItemRental" />
           <NavigationProperty Name="ItemRentals1" Relationship="Model.employeeId_ItemRental_Ship" FromRole="Employee" ToRole="ItemRental" />
-        </EntityType>
-        <EntityType Name="ItemRental">
-          <Key>
-            <PropertyRef Name="itemRentalId" />
-          </Key>
-          <Property Name="itemRentalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="stockId" Type="Int32" Nullable="false" />
-          <Property Name="memberId" Type="Int32" Nullable="false" />
-          <Property Name="status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Member" Relationship="Self.memberId_ItemRental" FromRole="ItemRental" ToRole="Member" />
-          <NavigationProperty Name="Stock" Relationship="Self.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
-          <Property Name="addressId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Address" Relationship="Model.addressId_ItemRental" FromRole="ItemRental" ToRole="Address" />
-          <Property Name="rentalDateTime" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="shipEmployeeId" Type="Int32" />
-          <Property Name="shipDateTime" Type="DateTime" />
-          <Property Name="returnEmployeeId" Type="Int32" />
-          <Property Name="returnDateTime" Type="Int32" />
-          <Property Name="returnCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Employee" Relationship="Model.employeeId_ItemRental_Return" FromRole="ItemRental" ToRole="Employee" />
-          <NavigationProperty Name="Employee1" Relationship="Model.employeeId_ItemRental_Ship" FromRole="ItemRental" ToRole="Employee" />
-        </EntityType>
+          </EntityType>
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="memberId" />
@@ -347,8 +326,8 @@
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="isLibrarian" Type="SByte" Nullable="false" />
           <Property Name="isBanned" Type="SByte" Nullable="false" />
-          <NavigationProperty Name="ItemRentals" Relationship="Self.memberId_ItemRental" FromRole="Member" ToRole="ItemRental" />
           <NavigationProperty Name="Addresses" Relationship="Model.memberAddressID" FromRole="Member" ToRole="Address" />
+          <NavigationProperty Name="ItemRentals" Relationship="Model.memberId_ItemRental" FromRole="Member" ToRole="ItemRental" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -367,38 +346,10 @@
           </Key>
           <Property Name="stockId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="productId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ItemRentals" Relationship="Self.stockId_ItemRental" FromRole="Stock" ToRole="ItemRental" />
           <NavigationProperty Name="Product" Relationship="Self.productId_Stock" FromRole="Stock" ToRole="Product" />
           <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ItemRentals" Relationship="Model.stockId_ItemRental" FromRole="Stock" ToRole="ItemRental" />
         </EntityType>
-        <Association Name="memberId_ItemRental">
-          <End Role="Member" Type="Self.Member" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="ItemRental" Type="Self.ItemRental" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="memberId" />
-            </Principal>
-            <Dependent Role="ItemRental">
-              <PropertyRef Name="memberId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="stockId_ItemRental">
-          <End Role="Stock" Type="Self.Stock" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="ItemRental" Type="Self.ItemRental" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Stock">
-              <PropertyRef Name="stockId" />
-            </Principal>
-            <Dependent Role="ItemRental">
-              <PropertyRef Name="stockId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="productId_Stock">
           <End Role="Product" Type="Self.Product" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -415,18 +366,9 @@
         </Association>
         <EntityContainer Name="OnlineEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Employees" EntityType="Self.Employee" />
-          <EntitySet Name="ItemRentals" EntityType="Self.ItemRental" />
           <EntitySet Name="Members" EntityType="Self.Member" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="Stocks" EntityType="Self.Stock" />
-          <AssociationSet Name="memberId_ItemRental" Association="Self.memberId_ItemRental">
-            <End Role="Member" EntitySet="Members" />
-            <End Role="ItemRental" EntitySet="ItemRentals" />
-          </AssociationSet>
-          <AssociationSet Name="stockId_ItemRental" Association="Self.stockId_ItemRental">
-            <End Role="Stock" EntitySet="Stocks" />
-            <End Role="ItemRental" EntitySet="ItemRentals" />
-          </AssociationSet>
           <AssociationSet Name="productId_Stock" Association="Self.productId_Stock">
             <End Role="Product" EntitySet="Products" />
             <End Role="Stock" EntitySet="Stocks" />
@@ -438,8 +380,8 @@
           </FunctionImport>
           <FunctionImport Name="retrieveAllProducts" ReturnType="Collection(Model.retrieveAllProducts_Result)" />
           <FunctionImport Name="retrieveAvailableProducts" EntitySet="Products" ReturnType="Collection(Model.Product)" />
-          <FunctionImport Name="retrieveProductsWaitingReturn" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
-          <FunctionImport Name="retrieveProductsWaitingShipment" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)" />
+          <FunctionImport Name="retrieveProductsWaitingReturn" />
+          <FunctionImport Name="retrieveProductsWaitingShipment" />
           <FunctionImport Name="retrieveRentedCount" ReturnType="Collection(Int32)">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -495,7 +437,7 @@
             <Parameter Name="newPassword" Mode="In" Type="String" />
             <Parameter Name="currentMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="retrieveMembersRentals" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)">
+          <FunctionImport Name="retrieveMembersRentals">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="retrieveMembersAddresses" EntitySet="Addresses" ReturnType="Collection(Model.Address)">
@@ -521,10 +463,6 @@
           <Parameter Name="currentAddressId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="Addresses" EntityType="Model.Address" />
-          <AssociationSet Name="addressId_ItemRental" Association="Model.addressId_ItemRental">
-            <End Role="Address" EntitySet="Addresses" />
-            <End Role="ItemRental" EntitySet="ItemRentals" />
-          </AssociationSet>
           <AssociationSet Name="memberAddressID" Association="Model.memberAddressID">
             <End Role="Member" EntitySet="Members" />
             <End Role="Address" EntitySet="Addresses" />
@@ -532,12 +470,25 @@
           <FunctionImport Name="retrieveProductById" EntitySet="Products" ReturnType="Collection(Model.Product)">
           <Parameter Name="selectedProductId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="ItemRentals" EntityType="Model.ItemRental" />
+          <AssociationSet Name="addressId_ItemRental" Association="Model.addressId_ItemRental">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="ItemRental" EntitySet="ItemRentals" />
+          </AssociationSet>
           <AssociationSet Name="employeeId_ItemRental_Return" Association="Model.employeeId_ItemRental_Return">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="ItemRental" EntitySet="ItemRentals" />
           </AssociationSet>
           <AssociationSet Name="employeeId_ItemRental_Ship" Association="Model.employeeId_ItemRental_Ship">
             <End Role="Employee" EntitySet="Employees" />
+            <End Role="ItemRental" EntitySet="ItemRentals" />
+          </AssociationSet>
+          <AssociationSet Name="memberId_ItemRental" Association="Model.memberId_ItemRental">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="ItemRental" EntitySet="ItemRentals" />
+          </AssociationSet>
+          <AssociationSet Name="stockId_ItemRental" Association="Model.stockId_ItemRental">
+            <End Role="Stock" EntitySet="Stocks" />
             <End Role="ItemRental" EntitySet="ItemRentals" />
           </AssociationSet>
           </EntityContainer>
@@ -566,23 +517,9 @@
           <Property Name="zip" Type="Int32" Nullable="false" />
           <Property Name="memberId" Type="Int32" Nullable="false" />
           <Property Name="removed" Type="SByte" />
-          <NavigationProperty Name="ItemRentals" Relationship="Model.addressId_ItemRental" FromRole="Address" ToRole="ItemRental" />
           <NavigationProperty Name="Member" Relationship="Model.memberAddressID" FromRole="Address" ToRole="Member" />
+          <NavigationProperty Name="ItemRentals" Relationship="Model.addressId_ItemRental" FromRole="Address" ToRole="ItemRental" />
         </EntityType>
-        <Association Name="addressId_ItemRental">
-          <End Type="Model.Address" Role="Address" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.ItemRental" Role="ItemRental" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Address">
-              <PropertyRef Name="addressId" />
-            </Principal>
-            <Dependent Role="ItemRental">
-              <PropertyRef Name="addressId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="memberAddressID">
           <End Type="Model.Member" Role="Member" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -598,6 +535,41 @@
           </ReferentialConstraint>
         </Association>
         <ComplexType Name="retrieveProductById_Result" />
+        <EntityType Name="ItemRental">
+          <Key>
+            <PropertyRef Name="itemRentalId" />
+          </Key>
+          <Property Name="itemRentalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stockId" Type="Int32" Nullable="false" />
+          <Property Name="memberId" Type="Int32" Nullable="false" />
+          <Property Name="addressId" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="rentalDateTime" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="shipEmployeeId" Type="Int32" />
+          <Property Name="shipDateTime" Type="DateTime" />
+          <Property Name="returnEmployeeId" Type="Int32" />
+          <Property Name="returnDateTime" Type="DateTime" />
+          <Property Name="returnCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Address" Relationship="Model.addressId_ItemRental" FromRole="ItemRental" ToRole="Address" />
+          <NavigationProperty Name="Employee" Relationship="Model.employeeId_ItemRental_Return" FromRole="ItemRental" ToRole="Employee" />
+          <NavigationProperty Name="Employee1" Relationship="Model.employeeId_ItemRental_Ship" FromRole="ItemRental" ToRole="Employee" />
+          <NavigationProperty Name="Member" Relationship="Model.memberId_ItemRental" FromRole="ItemRental" ToRole="Member" />
+          <NavigationProperty Name="Stock" Relationship="Model.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
+        </EntityType>
+        <Association Name="addressId_ItemRental">
+          <End Type="Model.Address" Role="Address" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ItemRental" Role="ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="addressId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="addressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="employeeId_ItemRental_Return">
           <End Type="Model.Employee" Role="Employee" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -626,6 +598,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="memberId_ItemRental">
+          <End Type="Model.Member" Role="Member" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ItemRental" Role="ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="memberId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="memberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="stockId_ItemRental">
+          <End Type="Model.Stock" Role="Stock" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ItemRental" Role="ItemRental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stock">
+              <PropertyRef Name="stockId" />
+            </Principal>
+            <Dependent Role="ItemRental">
+              <PropertyRef Name="stockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -639,23 +639,6 @@
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="isManager" ColumnName="isManager" />
                 <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ItemRentals">
-            <EntityTypeMapping TypeName="Model.ItemRental">
-              <MappingFragment StoreEntitySet="ItemRental">
-                <ScalarProperty Name="returnCondition" ColumnName="returnCondition" />
-                <ScalarProperty Name="returnDateTime" ColumnName="returnDateTime" />
-                <ScalarProperty Name="returnEmployeeId" ColumnName="returnEmployeeId" />
-                <ScalarProperty Name="shipDateTime" ColumnName="shipDateTime" />
-                <ScalarProperty Name="shipEmployeeId" ColumnName="shipEmployeeId" />
-                <ScalarProperty Name="rentalDateTime" ColumnName="rentalDateTime" />
-                <ScalarProperty Name="addressId" ColumnName="addressId" />
-                <ScalarProperty Name="itemRentalId" ColumnName="itemRentalId" />
-                <ScalarProperty Name="stockId" ColumnName="stockId" />
-                <ScalarProperty Name="memberId" ColumnName="memberId" />
-                <ScalarProperty Name="status" ColumnName="status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -747,6 +730,23 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="retrieveProductById" FunctionName="Model.Store.retrieveProductById">
           </FunctionImportMapping>
+          <EntitySetMapping Name="ItemRentals">
+            <EntityTypeMapping TypeName="Model.ItemRental">
+              <MappingFragment StoreEntitySet="ItemRental">
+                <ScalarProperty Name="returnCondition" ColumnName="returnCondition" />
+                <ScalarProperty Name="returnDateTime" ColumnName="returnDateTime" />
+                <ScalarProperty Name="returnEmployeeId" ColumnName="returnEmployeeId" />
+                <ScalarProperty Name="shipDateTime" ColumnName="shipDateTime" />
+                <ScalarProperty Name="shipEmployeeId" ColumnName="shipEmployeeId" />
+                <ScalarProperty Name="rentalDateTime" ColumnName="rentalDateTime" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="addressId" ColumnName="addressId" />
+                <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="stockId" ColumnName="stockId" />
+                <ScalarProperty Name="itemRentalId" ColumnName="itemRentalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

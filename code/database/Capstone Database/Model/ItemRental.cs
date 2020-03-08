@@ -17,19 +17,19 @@ namespace Capstone_Database.Model
         public int itemRentalId { get; set; }
         public int stockId { get; set; }
         public int memberId { get; set; }
-        public string status { get; set; }
         public int addressId { get; set; }
+        public string status { get; set; }
         public Nullable<System.DateTime> rentalDateTime { get; set; }
         public Nullable<int> shipEmployeeId { get; set; }
         public Nullable<System.DateTime> shipDateTime { get; set; }
         public Nullable<int> returnEmployeeId { get; set; }
-        public Nullable<int> returnDateTime { get; set; }
+        public Nullable<System.DateTime> returnDateTime { get; set; }
         public string returnCondition { get; set; }
     
-        public virtual Member Member { get; set; }
-        public virtual Stock Stock { get; set; }
         public virtual Address Address { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual Employee Employee1 { get; set; }
+        public virtual Member Member { get; set; }
+        public virtual Stock Stock { get; set; }
     }
 }

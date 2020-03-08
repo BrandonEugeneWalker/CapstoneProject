@@ -28,11 +28,11 @@ namespace Capstone_Database.Model
         }
     
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<ItemRental> ItemRentals { get; set; }
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<ItemRental> ItemRentals { get; set; }
     
         public virtual int createMemberOrder(Nullable<int> selectedStockId, Nullable<int> selectedMemberId, Nullable<int> selectedAddressId)
         {
@@ -66,24 +66,14 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveAvailableProducts", mergeOption);
         }
     
-        public virtual ObjectResult<ItemRental> retrieveProductsWaitingReturn()
+        public virtual int retrieveProductsWaitingReturn()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingReturn");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("retrieveProductsWaitingReturn");
         }
     
-        public virtual ObjectResult<ItemRental> retrieveProductsWaitingReturn(MergeOption mergeOption)
+        public virtual int retrieveProductsWaitingShipment()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingReturn", mergeOption);
-        }
-    
-        public virtual ObjectResult<ItemRental> retrieveProductsWaitingShipment()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingShipment");
-        }
-    
-        public virtual ObjectResult<ItemRental> retrieveProductsWaitingShipment(MergeOption mergeOption)
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveProductsWaitingShipment", mergeOption);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("retrieveProductsWaitingShipment");
         }
     
         public virtual ObjectResult<Nullable<int>> retrieveRentedCount(Nullable<int> selectedMemberId)
@@ -334,22 +324,13 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editMember", newUsernameParameter, newNameParameter, newPasswordParameter, currentMemberIdParameter);
         }
     
-        public virtual ObjectResult<ItemRental> retrieveMembersRentals(Nullable<int> selectedMemberId)
+        public virtual int retrieveMembersRentals(Nullable<int> selectedMemberId)
         {
             var selectedMemberIdParameter = selectedMemberId.HasValue ?
                 new ObjectParameter("selectedMemberId", selectedMemberId) :
                 new ObjectParameter("selectedMemberId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveMembersRentals", selectedMemberIdParameter);
-        }
-    
-        public virtual ObjectResult<ItemRental> retrieveMembersRentals(Nullable<int> selectedMemberId, MergeOption mergeOption)
-        {
-            var selectedMemberIdParameter = selectedMemberId.HasValue ?
-                new ObjectParameter("selectedMemberId", selectedMemberId) :
-                new ObjectParameter("selectedMemberId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveMembersRentals", mergeOption, selectedMemberIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("retrieveMembersRentals", selectedMemberIdParameter);
         }
     
         public virtual ObjectResult<Address> retrieveMembersAddresses(Nullable<int> selectedMemberId)
