@@ -14,7 +14,7 @@ namespace Capstone_Desktop.Controller
     public class EmployeeHistoryController
     {
 
-        private const String EmployeeNullMessage = @"The given employee cannot be null!";
+        private const string EmployeeNullMessage = @"The given employee cannot be null!";
 
         /// <summary>Gets the employee history of a given employee.</summary>
         /// <param name="employee">The employee.</param>
