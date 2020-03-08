@@ -97,6 +97,10 @@
     <Compile Include="Controller\AddEmployeeFormController.cs" />
     <Compile Include="Controller\EmployeeHistoryController.cs" />
     <Compile Include="Controller\ItemHistoryController.cs" />
+    <Compile Include="Controller\LoginController.cs" />
+    <Compile Include="Controller\ManageEmployeeController.cs" />
+    <Compile Include="Controller\ManageItemsController.cs" />
+    <Compile Include="Controller\ManageRentalsController.cs" />
     <Compile Include="View\AddEmployeeForm.cs">
       <SubType>Form</SubType>
     </Compile>

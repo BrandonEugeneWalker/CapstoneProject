@@ -9,23 +9,25 @@
         #region Methods
 
         /// <summary>
-        ///   <para>Determines whether [is valid password] [the specified password]. </para>
-        ///   <para>Password requirements are as follows:</para>
-        ///   <para>* Contains at least one lowercase letter.</para>
-        ///   <para>* Contains at least one uppercase letter.</para>
-        ///   <para>* Contains at least one symbol.</para>
-        ///   <para>* Must be a minimum of 6 characters long.</para>
-        ///   <para>* Cannot be longer than 16 characters.</para>
+        ///     <para>Determines whether [is valid password] [the specified password]. </para>
+        ///     <para>Password requirements are as follows:</para>
+        ///     <para>* Contains at least one lowercase letter.</para>
+        ///     <para>* Contains at least one uppercase letter.</para>
+        ///     <para>* Contains at least one symbol.</para>
+        ///     <para>* Must be a minimum of 6 characters long.</para>
+        ///     <para>* Cannot be longer than 16 characters.</para>
         /// </summary>
         /// <param name="password">The password to validate.</param>
         /// <returns>
-        ///   <c>true</c> if [is valid password] [the specified password]; otherwise, <c>false</c>.</returns>
+        ///     <c>true</c> if [is valid password] [the specified password]; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsValidPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
             {
                 return false;
             }
+
             var lowerCases = 0;
             var upperCases = 0;
             var numbers = 0;

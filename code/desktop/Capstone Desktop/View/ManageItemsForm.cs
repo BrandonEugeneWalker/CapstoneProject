@@ -99,6 +99,11 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
+            for (var i = 0; i < this.itemsGridView.Columns.Count; i++)
+            {
+                this.itemsGridView.Columns[i].MinimumWidth = 200;
+            }
+
             this.itemsGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 

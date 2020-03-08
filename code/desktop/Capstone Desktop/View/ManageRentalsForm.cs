@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Linq;
 using System.Windows.Forms;
 using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
 {
     /// <summary>
-    ///   <para>This form is used to view and manage the status of the rentals.</para>
-    ///   <para>The ManageRentalsForm is opened by the ManageItemsForm and the ManageEmployeeForm.</para>
-    ///   <para>The ManageRentalsForm can return to the forms that opened it, or to the LoginForm.</para>
+    ///     <para>This form is used to view and manage the status of the rentals.</para>
+    ///     <para>The ManageRentalsForm is opened by the ManageItemsForm and the ManageEmployeeForm.</para>
+    ///     <para>The ManageRentalsForm can return to the forms that opened it, or to the LoginForm.</para>
     /// </summary>
-    /// <seealso cref="System.Windows.Forms.Form"/>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class ManageRentalsForm : Form
     {
         #region Data members
@@ -20,6 +20,8 @@ namespace Capstone_Desktop.View
         private readonly BindingSource rentalListSource = new BindingSource();
 
         private readonly OnlineEntities capstoneDatabaseContext;
+
+        private readonly ManageRentalsController manageRentalsController;
 
         #endregion
 
@@ -34,13 +36,14 @@ namespace Capstone_Desktop.View
         #region Constructors
 
         /// <summary>
-        ///   <para>Initializes a new instance of the <see cref="ManageRentalsForm"/> class.</para>
-        ///   <para>The ManageRentalsForm handles user interactions relating to viewing and managing rentals and their status.</para>
+        ///     <para>Initializes a new instance of the <see cref="ManageRentalsForm" /> class.</para>
+        ///     <para>The ManageRentalsForm handles user interactions relating to viewing and managing rentals and their status.</para>
         /// </summary>
         /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageRentalsForm(Employee loggedInEmployee)
         {
             this.InitializeComponent();
+            this.manageRentalsController = new ManageRentalsController();
             this.CurrentEmployee = loggedInEmployee;
             this.capstoneDatabaseContext = new OnlineEntities();
             if (this.CurrentEmployee.isManager == true)
@@ -70,7 +73,8 @@ namespace Capstone_Desktop.View
             try
             {
                 this.capstoneDatabaseContext.ItemRentals.Load();
-                this.rentalListSource.DataSource = this.capstoneDatabaseContext.ItemRentals.Local.ToBindingList();
+                this.rentalListSource.DataSource =
+                    this.capstoneDatabaseContext.DetailedRentalViews.Local.ToBindingList();
 
                 this.refreshTable();
             }
@@ -84,11 +88,8 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.capstoneDatabaseContext.ItemRentals.Load();
-
-                var rentalWaitingForShipment =
-                    this.capstoneDatabaseContext.ItemRentals.Where(rental => rental.status.Equals("WaitingShipment"));
-                this.rentalListSource.DataSource = rentalWaitingForShipment.ToList();
+                this.rentalListSource.DataSource =
+                    this.manageRentalsController.GetRentalsWaitingShipment(this.capstoneDatabaseContext);
 
                 this.refreshTable();
             }
@@ -102,11 +103,8 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.capstoneDatabaseContext.ItemRentals.Load();
-
-                var rentalWaitingForShipment =
-                    this.capstoneDatabaseContext.ItemRentals.Where(rental => rental.status.Equals("WaitingReturn"));
-                this.rentalListSource.DataSource = rentalWaitingForShipment.ToList();
+                this.rentalListSource.DataSource =
+                    this.manageRentalsController.GetRentalsWaitingReturn(this.capstoneDatabaseContext);
 
                 this.refreshTable();
             }
@@ -123,10 +121,6 @@ namespace Capstone_Desktop.View
                 this.rentalGridView.Columns[i].MinimumWidth = 200;
             }
 
-            this.rentalGridView.Columns[4].Visible = false;
-            this.rentalGridView.Columns[5].Visible = false;
-            this.rentalGridView.Columns[6].Visible = false;
-            this.rentalGridView.Columns[7].Visible = false;
             this.rentalGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 
@@ -153,17 +147,13 @@ namespace Capstone_Desktop.View
         {
             foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
             {
-                var currentItem = (ItemRental) currentRow.DataBoundItem;
+                var currentItem = (DetailedRentalView) currentRow.DataBoundItem;
 
-                if (currentItem.status.Equals("WaitingShipment"))
+                var results = this.manageRentalsController.MarkRentalAsWaitingReturn(currentItem,
+                    this.capstoneDatabaseContext, this.CurrentEmployee);
+                if (!results)
                 {
-                    currentItem.status = "WaitingReturn";
-                    this.capstoneDatabaseContext.SaveChanges();
-                    this.rentalGridView.Refresh();
-                }
-                else
-                {
-                    MessageBox.Show(@"That rental cannot be updated to shipped status.");
+                    MessageBox.Show(@"That rental cannot be changed to that state.");
                 }
             }
         }
@@ -172,17 +162,13 @@ namespace Capstone_Desktop.View
         {
             foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
             {
-                var currentItem = (ItemRental) currentRow.DataBoundItem;
+                var currentItem = (DetailedRentalView) currentRow.DataBoundItem;
 
-                if (currentItem.status.Equals("WaitingReturn"))
+                var results = this.manageRentalsController.MarkRentalAsReturned(currentItem,
+                    this.capstoneDatabaseContext, this.CurrentEmployee);
+                if (!results)
                 {
-                    currentItem.status = "Returned";
-                    this.capstoneDatabaseContext.SaveChanges();
-                    this.rentalGridView.Refresh();
-                }
-                else
-                {
-                    MessageBox.Show(@"That rental cannot be updated to returned status.");
+                    MessageBox.Show(@"That rental cannot be changed to that state.");
                 }
             }
         }
