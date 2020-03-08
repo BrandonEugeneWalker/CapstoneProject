@@ -20,7 +20,7 @@ namespace Capstone_Desktop.Controller
         /// <param name="employee">The employee.</param>
         /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>Returns a list of all rentals a employee has managed.</returns>
-        public List<ItemRental> GetEmployeeHistory(Employee employee, OnlineEntities capstoneDbContext)
+        public List<DetailedRentalView> GetEmployeeHistory(Employee employee, OnlineEntities capstoneDbContext)
         {
             if (employee == null)
             {
@@ -34,9 +34,9 @@ namespace Capstone_Desktop.Controller
 
             capstoneDbContext.ItemRentals.Load();
 
-            var employeeHistoryQueryable = capstoneDbContext.ItemRentals.Local.ToBindingList().Where(
-                rental => rental.shipEmployeeId.Equals(employee.employeeId) ||
-                          rental.returnEmployeeId.Equals(employee.employeeId));
+            var employeeHistoryQueryable = capstoneDbContext.DetailedRentalViews.Local.ToBindingList().Where(rental =>
+                rental.shipEmployeeId.Equals(employee.employeeId) ||
+                rental.returnEmployeeId.Equals(employee.employeeId)).Distinct();
 
             return employeeHistoryQueryable.ToList();
         }

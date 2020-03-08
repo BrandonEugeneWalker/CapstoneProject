@@ -101,6 +101,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CapstoneDBModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Model\DetailedRentalView.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Employee.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>

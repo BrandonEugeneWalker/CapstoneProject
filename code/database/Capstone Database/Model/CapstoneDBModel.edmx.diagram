@@ -18,6 +18,7 @@
         <AssociationConnector Association="Model.employeeId_ItemRental_Ship" />
         <AssociationConnector Association="Model.memberId_ItemRental" />
         <AssociationConnector Association="Model.stockId_ItemRental" />
+        <EntityTypeShape EntityType="Model.DetailedRentalView" Width="1.5" PointX="8.375" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

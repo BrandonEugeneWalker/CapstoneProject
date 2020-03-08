@@ -72,6 +72,39 @@
           <Property Name="productId" Type="int" Nullable="false" />
           <Property Name="itemCondition" Type="enum" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.cs4982s20d.DetailedRentalView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DetailedRentalView">
+          <Key>
+            <PropertyRef Name="itemRentalId" />
+            <PropertyRef Name="stockId" />
+            <PropertyRef Name="itemName" />
+            <PropertyRef Name="memberId" />
+            <PropertyRef Name="memberName" />
+            <PropertyRef Name="address1" />
+            <PropertyRef Name="city" />
+            <PropertyRef Name="state" />
+            <PropertyRef Name="zip" />
+            <PropertyRef Name="status" />
+          </Key>
+          <Property Name="itemRentalId" Type="int" Nullable="false" />
+          <Property Name="stockId" Type="int" Nullable="false" />
+          <Property Name="itemName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="memberId" Type="int" Nullable="false" />
+          <Property Name="memberName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="address1" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="address2" Type="varchar" MaxLength="300" />
+          <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="state" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="zip" Type="int" Nullable="false" />
+          <Property Name="status" Type="enum" Nullable="false" />
+          <Property Name="rentalDateTime" Type="datetime" Precision="0" />
+          <Property Name="shipEmployeeId" Type="int" />
+          <Property Name="shipDateTime" Type="datetime" Precision="0" />
+          <Property Name="returnEmployeeId" Type="int" />
+          <Property Name="returnDateTime" Type="datetime" Precision="0" />
+          <Property Name="returnCondition" Type="enum" />
+        </EntityType>
         <Association Name="addressId_ItemRental">
           <End Role="Address" Type="Self.Address" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -272,6 +305,27 @@
           <EntitySet Name="Member" EntityType="Self.Member" Schema="cs4982s20d" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="cs4982s20d" store:Type="Tables" />
           <EntitySet Name="Stock" EntityType="Self.Stock" Schema="cs4982s20d" store:Type="Tables" />
+          <EntitySet Name="DetailedRentalView" EntityType="Self.DetailedRentalView" store:Type="Views" store:Schema="cs4982s20d">
+            <DefiningQuery>SELECT
+`DetailedRentalView`.`itemRentalId`, 
+`DetailedRentalView`.`stockId`, 
+`DetailedRentalView`.`itemName`, 
+`DetailedRentalView`.`memberId`, 
+`DetailedRentalView`.`memberName`, 
+`DetailedRentalView`.`address1`, 
+`DetailedRentalView`.`address2`, 
+`DetailedRentalView`.`city`, 
+`DetailedRentalView`.`state`, 
+`DetailedRentalView`.`zip`, 
+`DetailedRentalView`.`status`, 
+`DetailedRentalView`.`rentalDateTime`, 
+`DetailedRentalView`.`shipEmployeeId`, 
+`DetailedRentalView`.`shipDateTime`, 
+`DetailedRentalView`.`returnEmployeeId`, 
+`DetailedRentalView`.`returnDateTime`, 
+`DetailedRentalView`.`returnCondition`
+FROM `DetailedRentalView` AS `DetailedRentalView`</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="addressId_ItemRental" Association="Self.addressId_ItemRental">
             <End Role="Address" EntitySet="Address" />
             <End Role="ItemRental" EntitySet="ItemRental" />
@@ -491,6 +545,7 @@
             <End Role="Stock" EntitySet="Stocks" />
             <End Role="ItemRental" EntitySet="ItemRentals" />
           </AssociationSet>
+          <EntitySet Name="DetailedRentalViews" EntityType="Model.DetailedRentalView" />
           </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -626,6 +681,37 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="DetailedRentalView">
+          <Key>
+            <PropertyRef Name="itemRentalId" />
+            <PropertyRef Name="stockId" />
+            <PropertyRef Name="itemName" />
+            <PropertyRef Name="memberId" />
+            <PropertyRef Name="memberName" />
+            <PropertyRef Name="address1" />
+            <PropertyRef Name="city" />
+            <PropertyRef Name="state" />
+            <PropertyRef Name="zip" />
+            <PropertyRef Name="status" />
+          </Key>
+          <Property Name="itemRentalId" Type="Int32" Nullable="false" />
+          <Property Name="stockId" Type="Int32" Nullable="false" />
+          <Property Name="itemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="memberId" Type="Int32" Nullable="false" />
+          <Property Name="memberName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address1" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="address2" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="zip" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="rentalDateTime" Type="DateTime" />
+          <Property Name="shipEmployeeId" Type="Int32" />
+          <Property Name="shipDateTime" Type="DateTime" />
+          <Property Name="returnEmployeeId" Type="Int32" />
+          <Property Name="returnDateTime" Type="DateTime" />
+          <Property Name="returnCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -742,6 +828,29 @@
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="addressId" ColumnName="addressId" />
                 <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="stockId" ColumnName="stockId" />
+                <ScalarProperty Name="itemRentalId" ColumnName="itemRentalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetailedRentalViews">
+            <EntityTypeMapping TypeName="Model.DetailedRentalView">
+              <MappingFragment StoreEntitySet="DetailedRentalView">
+                <ScalarProperty Name="returnCondition" ColumnName="returnCondition" />
+                <ScalarProperty Name="returnDateTime" ColumnName="returnDateTime" />
+                <ScalarProperty Name="returnEmployeeId" ColumnName="returnEmployeeId" />
+                <ScalarProperty Name="shipDateTime" ColumnName="shipDateTime" />
+                <ScalarProperty Name="shipEmployeeId" ColumnName="shipEmployeeId" />
+                <ScalarProperty Name="rentalDateTime" ColumnName="rentalDateTime" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="zip" ColumnName="zip" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="address2" ColumnName="address2" />
+                <ScalarProperty Name="address1" ColumnName="address1" />
+                <ScalarProperty Name="memberName" ColumnName="memberName" />
+                <ScalarProperty Name="memberId" ColumnName="memberId" />
+                <ScalarProperty Name="itemName" ColumnName="itemName" />
                 <ScalarProperty Name="stockId" ColumnName="stockId" />
                 <ScalarProperty Name="itemRentalId" ColumnName="itemRentalId" />
               </MappingFragment>
