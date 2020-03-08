@@ -107,12 +107,6 @@
     <Compile Include="Model\ItemRental.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\ItemReturn.cs">
-      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ItemShip.cs">
-      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\Member.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>

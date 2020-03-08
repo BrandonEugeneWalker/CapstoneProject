@@ -17,8 +17,8 @@ namespace Capstone_Database.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Member()
         {
-            this.ItemRentals = new HashSet<ItemRental>();
             this.Addresses = new HashSet<Address>();
+            this.ItemRentals = new HashSet<ItemRental>();
         }
     
         public int memberId { get; set; }
@@ -29,8 +29,8 @@ namespace Capstone_Database.Model
         public sbyte isBanned { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ItemRental> ItemRentals { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Address> Addresses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ItemRental> ItemRentals { get; set; }
     }
 }
