@@ -13,12 +13,6 @@
         <AssociationConnector Association="Model.memberId_ItemRental" ManuallyRouted="false" />
         <AssociationConnector Association="Model.stockId_ItemRental" ManuallyRouted="false" />
         <AssociationConnector Association="Model.productId_Stock" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="Model.ItemShip" Width="1.5" PointX="3.25" PointY="0.75" />
-        <AssociationConnector Association="Model.eID1" />
-        <AssociationConnector Association="Model.irID" />
-        <EntityTypeShape EntityType="Model.ItemReturn" Width="1.5" PointX="8.625" PointY="2.125" />
-        <AssociationConnector Association="Model.itemReturnEmployeeID" />
-        <AssociationConnector Association="Model.itemReturnItemRentalID" />
         <EntityTypeShape EntityType="Model.Address" Width="1.5" PointX="8.125" PointY="8.25" />
         <AssociationConnector Association="Model.addressId_ItemRental" />
         <AssociationConnector Association="Model.memberAddressID" />

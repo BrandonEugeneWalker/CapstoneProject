@@ -313,8 +313,6 @@
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="isManager" Type="Boolean" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="ItemShips" Relationship="Model.eID1" FromRole="Employee" ToRole="ItemShip" />
-          <NavigationProperty Name="ItemReturns" Relationship="Model.itemReturnEmployeeID" FromRole="Employee" ToRole="ItemReturn" />
           <NavigationProperty Name="ItemRentals" Relationship="Model.employeeId_ItemRental_Return" FromRole="Employee" ToRole="ItemRental" />
           <NavigationProperty Name="ItemRentals1" Relationship="Model.employeeId_ItemRental_Ship" FromRole="Employee" ToRole="ItemRental" />
         </EntityType>
@@ -328,8 +326,6 @@
           <Property Name="status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Member" Relationship="Self.memberId_ItemRental" FromRole="ItemRental" ToRole="Member" />
           <NavigationProperty Name="Stock" Relationship="Self.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
-          <NavigationProperty Name="ItemShips" Relationship="Model.irID" FromRole="ItemRental" ToRole="ItemShip" />
-          <NavigationProperty Name="ItemReturns" Relationship="Model.itemReturnItemRentalID" FromRole="ItemRental" ToRole="ItemReturn" />
           <Property Name="addressId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Address" Relationship="Model.addressId_ItemRental" FromRole="ItemRental" ToRole="Address" />
           <Property Name="rentalDateTime" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
@@ -502,24 +498,6 @@
           <FunctionImport Name="retrieveMembersRentals" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="ItemShips" EntityType="Model.ItemShip" />
-          <AssociationSet Name="eID1" Association="Model.eID1">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="ItemShip" EntitySet="ItemShips" />
-          </AssociationSet>
-          <AssociationSet Name="irID" Association="Model.irID">
-            <End Role="ItemRental" EntitySet="ItemRentals" />
-            <End Role="ItemShip" EntitySet="ItemShips" />
-          </AssociationSet>
-          <EntitySet Name="ItemReturns" EntityType="Model.ItemReturn" />
-          <AssociationSet Name="itemReturnEmployeeID" Association="Model.itemReturnEmployeeID">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="ItemReturn" EntitySet="ItemReturns" />
-          </AssociationSet>
-          <AssociationSet Name="itemReturnItemRentalID" Association="Model.itemReturnItemRentalID">
-            <End Role="ItemRental" EntitySet="ItemRentals" />
-            <End Role="ItemReturn" EntitySet="ItemReturns" />
-          </AssociationSet>
           <FunctionImport Name="retrieveMembersAddresses" EntitySet="Addresses" ReturnType="Collection(Model.Address)">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -575,88 +553,6 @@
         <ComplexType Name="selectMemberByIdAndPassword_Result" />
         <ComplexType Name="retrieveAvailableProductsWithSearch_Result" />
         <ComplexType Name="retrieveMembersRentals_Result" />
-        <EntityType Name="ItemShip">
-          <Key>
-            <PropertyRef Name="itemShipId" />
-          </Key>
-          <Property Name="itemShipId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="employeeId" Type="Int32" Nullable="false" />
-          <Property Name="itemRentalId" Type="Int32" Nullable="false" />
-          <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
-          <Property Name="itemDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="shipDateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Employee" Relationship="Model.eID1" FromRole="ItemShip" ToRole="Employee" />
-          <NavigationProperty Name="ItemRental" Relationship="Model.irID" FromRole="ItemShip" ToRole="ItemRental" />
-        </EntityType>
-        <Association Name="eID1">
-          <End Type="Model.Employee" Role="Employee" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.ItemShip" Role="ItemShip" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="employeeId" />
-            </Principal>
-            <Dependent Role="ItemShip">
-              <PropertyRef Name="employeeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="irID">
-          <End Type="Model.ItemRental" Role="ItemRental" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.ItemShip" Role="ItemShip" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ItemRental">
-              <PropertyRef Name="itemRentalId" />
-            </Principal>
-            <Dependent Role="ItemShip">
-              <PropertyRef Name="itemRentalId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="ItemReturn">
-          <Key>
-            <PropertyRef Name="itemReturnId" />
-          </Key>
-          <Property Name="itemReturnId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="employeeId" Type="Int32" Nullable="false" />
-          <Property Name="itemRentalId" Type="Int32" Nullable="false" />
-          <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
-          <Property Name="itemDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="returnDateTime" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Employee" Relationship="Model.itemReturnEmployeeID" FromRole="ItemReturn" ToRole="Employee" />
-          <NavigationProperty Name="ItemRental" Relationship="Model.itemReturnItemRentalID" FromRole="ItemReturn" ToRole="ItemRental" />
-        </EntityType>
-        <Association Name="itemReturnEmployeeID">
-          <End Type="Model.Employee" Role="Employee" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.ItemReturn" Role="ItemReturn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="employeeId" />
-            </Principal>
-            <Dependent Role="ItemReturn">
-              <PropertyRef Name="employeeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="itemReturnItemRentalID">
-          <End Type="Model.ItemRental" Role="ItemRental" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.ItemReturn" Role="ItemReturn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ItemRental">
-              <PropertyRef Name="itemRentalId" />
-            </Principal>
-            <Dependent Role="ItemReturn">
-              <PropertyRef Name="itemRentalId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="retrieveMembersAddresses_Result" />
         <EntityType Name="Address">
           <Key>
