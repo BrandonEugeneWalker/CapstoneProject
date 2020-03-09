@@ -117,7 +117,7 @@ namespace Capstone_Unit_Tests.desktop.controller
             string expectedString = @" Name: Brandon Walker ID: 1234";
             string givenString = employeeHistoryController.BuildEmployeeDescription(testEmployee);
 
-            Assert.Equals(expectedString, givenString);
+            Assert.IsTrue(expectedString.Equals(givenString));
         }
     }
 }
