@@ -97,16 +97,18 @@ namespace Capstone_Web_Warehouse.Controllers
             if (rental.status.Equals("WaitingShipment"))
             {
                 rental.status = "WaitingReturn";
-                var itemShip = new ItemShip()
+            /*    var itemShip = new ItemShip()
                 {
                     employeeId = employee.employeeId,
                     itemRentalId = rental.itemRentalId,
                     itemCondition = "Good",
                     itemDescription = "Item was shipped.",
                     shipDateTime = DateTime.Now
-                };
+                };*/
 
-                database.ItemShips.Add(itemShip);
+                //database.ItemShips.Add(itemShip);
+                rental.shipEmployeeId = employee.employeeId;
+                rental.shipDateTime = DateTime.Now;
                 database.SaveChanges();
                 return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
             }
@@ -114,16 +116,21 @@ namespace Capstone_Web_Warehouse.Controllers
             if (rental.status.Equals("WaitingReturn"))
             {
                 rental.status = "Returned";
-                var itemShip = new ItemShip()
+/*                var itemShip = new ItemShip()
                 {
                     employeeId = employee.employeeId,
                     itemRentalId = rental.itemRentalId,
                     itemCondition = "Good",
                     itemDescription = "Item was received.",
                     shipDateTime = DateTime.Now
-                };
+                };*/
 
-                database.ItemShips.Add(itemShip);
+                //database.ItemShips.Add(itemShip);
+                rental.returnEmployeeId = employee.employeeId;
+                rental.returnDateTime = DateTime.Now;
+                rental.returnCondition = "Good";
+                var stock = database.Stocks.Find(rental.stockId);
+                stock.itemCondition = rental.returnCondition;
                 database.SaveChanges();
                 return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
             }

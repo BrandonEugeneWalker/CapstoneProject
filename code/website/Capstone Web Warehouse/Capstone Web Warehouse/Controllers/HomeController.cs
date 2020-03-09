@@ -61,9 +61,25 @@ namespace Capstone_Web_Warehouse.Controllers
             return Redirect("~/Employees/Index");
         }
 
+        /// <summary>  Redirect to stocks index.</summary>
+        /// <returns>stocks index page.</returns>
+        public ActionResult ManageStock()
+        {
+            if (Session["Employee"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            return Redirect("~/Stocks/Index");
+        }
+
+
         /*
          * Validates login information from employee table.
          */
+        /// <summary>Logins the employee</summary>
+        /// <param name="model">The employee to login</param>
+        /// <returns>Manage rentals page if good, same page if bad.</returns>
         public ActionResult Login(Employee model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -83,6 +99,8 @@ namespace Capstone_Web_Warehouse.Controllers
         /*
         * Clears current employee session and logs user off.
         */
+        /// <summary>Logs the employee off.</summary>
+        /// <returns>home page.</returns>
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {

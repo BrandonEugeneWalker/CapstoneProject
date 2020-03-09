@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Capstone_Database.Model.Stock>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Stock Items</h2>
+
+<table class="table">
+    <tr>
+        <th>
+           Stock ID
+        </th>
+        <th>
+            Product Name
+        </th>
+        <th>
+            Item Condition
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.OrderBy(s => s.stockId)) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.stockId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.itemCondition)
+        </td>
+
+        <td>
+            @Html.ActionLink("Details", "Details", new {id = item.stockId}) |
+            @Html.ActionLink("Delete", "Delete", new {id = item.stockId})
+        </td>
+    </tr>
+}
+
+</table>

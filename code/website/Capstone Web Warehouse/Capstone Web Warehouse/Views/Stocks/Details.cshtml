@@ -1,0 +1,109 @@
+﻿@model Capstone_Database.Model.Stock
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Stock Details</h2>
+
+<div>
+    <h4>Stock</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.stockId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stockId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.itemCondition)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.itemCondition)
+        </dd>
+
+
+
+    </dl>
+</div>
+<h2>Stock History</h2>
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                Rental ID
+            </th>
+            <th>
+                Member Name
+            </th>
+            <th>
+                Rental Date
+            </th>
+            <th>
+                Rental Status
+            </th>
+            <th>
+                Shipped By
+            </th>
+            <th>
+                Ship Date
+            </th>
+            <th>
+                Returned By
+            </th>
+            <th>
+                Return Date
+            </th>
+            <th>
+                Return Condition
+            </th>
+        </tr>
+        @foreach (var item in Model.ItemRentals.OrderByDescending(s => s.rentalDateTime))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemRentalId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rentalDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee1.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.shipDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnCondition)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

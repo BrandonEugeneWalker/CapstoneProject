@@ -36,11 +36,12 @@
 
     </dl>
 </div>
+<h2>Rental History</h2>
 <div>
     <table class="table">
         <tr>
             <th>
-                Shipment ID
+                Product Name
             </th>
             <th>
                 Rental ID
@@ -49,41 +50,76 @@
                 Stock ID
             </th>
             <th>
-                Product Name
+                Shipped By
             </th>
             <th>
-                Rental Description
+                Ship Date
             </th>
             <th>
-                Item Condition
+                Returned By
             </th>
             <th>
-                Time
+                Return Date
+            </th>
+            <th>
+                Return Condition
             </th>
         </tr>
-        @foreach (var item in Model.ItemShips)
+        @foreach (var item in Model.ItemRentals.OrderByDescending(s => s.returnDateTime))
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.itemShipId)
+                    @Html.DisplayFor(modelItem => item.Stock.Product.name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.itemRentalId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ItemRental.stockId)
+                    @Html.DisplayFor(modelItem => item.stockId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ItemRental.Stock.Product.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.itemDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.itemCondition)
+                    @Html.DisplayFor(modelItem => item.Employee1.name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.shipDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnCondition)
+                </td>
+            </tr>
+        }
+        @foreach (var item in Model.ItemRentals1.OrderByDescending(s => s.shipDateTime))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock.Product.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemRentalId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.stockId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee1.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.shipDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnCondition)
                 </td>
             </tr>
         }

@@ -23,7 +23,7 @@
         <th>Manage Employee</th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.OrderBy(s => s.name))
     {
         <tr>
             <td>
