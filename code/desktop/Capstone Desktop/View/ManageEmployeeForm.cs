@@ -7,13 +7,13 @@ using MySql.Data.MySqlClient;
 namespace Capstone_Desktop.View
 {
     /// <summary>
-    ///   <para>This form is used to manage employees in the database.</para>
-    ///   <para>The ManageEmployeeForm can be opened by the LoginForm, ManageItemsForm, and the ManageRentalsForm.</para>
-    ///   <para>The ManageEmployeeForm can open the ManageItemsForm, ManageRentalsForm and the AddEmployeeForm</para>
-    ///   <para>The ManageEmployeeForm closes to the LoginForm.</para>
-    ///   <para>The ManageEmployeeForm allows a user to see current employees in the database and add/remove them.</para>
+    ///     <para>This form is used to manage employees in the database.</para>
+    ///     <para>The ManageEmployeeForm can be opened by the LoginForm, ManageItemsForm, and the ManageRentalsForm.</para>
+    ///     <para>The ManageEmployeeForm can open the ManageItemsForm, ManageRentalsForm and the AddEmployeeForm</para>
+    ///     <para>The ManageEmployeeForm closes to the LoginForm.</para>
+    ///     <para>The ManageEmployeeForm allows a user to see current employees in the database and add/remove them.</para>
     /// </summary>
-    /// <seealso cref="System.Windows.Forms.Form"/>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class ManageEmployeeForm : Form
     {
         #region Data members
@@ -35,8 +35,8 @@ namespace Capstone_Desktop.View
         #region Constructors
 
         /// <summary>
-        ///   <para>Initializes a new instance of the <see cref="ManageEmployeeForm"/> class.</para>
-        ///   <para>The ManageEmployeeForm handles user interactions relating to viewing managing employees.</para>
+        ///     <para>Initializes a new instance of the <see cref="ManageEmployeeForm" /> class.</para>
+        ///     <para>The ManageEmployeeForm handles user interactions relating to viewing managing employees.</para>
         /// </summary>
         /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageEmployeeForm(Employee loggedInEmployee)
@@ -134,6 +134,8 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
+
+            this.employeeGridView.Columns[5].Visible = false;
             this.employeeGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 
@@ -145,20 +147,18 @@ namespace Capstone_Desktop.View
             Close();
         }
 
-        #endregion
-
         private void viewHistoryButton_Click(object sender, EventArgs e)
         {
             Employee selectedEmployee = null;
 
             if (this.employeeGridView.SelectedRows.Count != 0)
             {
-                selectedEmployee = (Employee)this.employeeGridView.SelectedRows[0].DataBoundItem;
+                selectedEmployee = (Employee) this.employeeGridView.SelectedRows[0].DataBoundItem;
             }
 
             if (selectedEmployee != null)
             {
-                EmployeeHistoryForm employeeHistoryForm = new EmployeeHistoryForm(selectedEmployee);
+                var employeeHistoryForm = new EmployeeHistoryForm(selectedEmployee);
                 employeeHistoryForm.ShowDialog();
             }
             else
@@ -166,5 +166,7 @@ namespace Capstone_Desktop.View
                 MessageBox.Show(@"There was no selected employee to view the history of.");
             }
         }
+
+        #endregion
     }
 }
