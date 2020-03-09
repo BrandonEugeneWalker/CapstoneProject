@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Windows.Forms;
 using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
@@ -21,6 +21,8 @@ namespace Capstone_Desktop.View
         private readonly BindingSource employeeListSource = new BindingSource();
 
         private readonly OnlineEntities capstoneDatabaseContext;
+
+        private readonly ManageEmployeeController manageEmployeeController;
 
         #endregion
 
@@ -44,6 +46,7 @@ namespace Capstone_Desktop.View
             this.InitializeComponent();
             this.CurrentEmployee = loggedInEmployee;
             this.capstoneDatabaseContext = new OnlineEntities();
+            this.manageEmployeeController = new ManageEmployeeController();
         }
 
         #endregion
@@ -57,44 +60,26 @@ namespace Capstone_Desktop.View
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
-            var removedCount = 0;
-            foreach (DataGridViewRow currentRow in this.employeeGridView.SelectedRows)
-            {
-                var rowIndex = currentRow.Index;
-                try
-                {
-                    var currentEmployee = (Employee) currentRow.DataBoundItem;
-                    removedCount += this.AttemptToRemoveEmployee(currentEmployee, rowIndex);
-                }
-                catch (MySqlException)
-                {
-                    MessageBox.Show(@"Trouble removing that employee.");
-                }
-            }
-
-            MessageBox.Show(@"Successfully removed " + removedCount + @" employee(s) from the database.");
+            var selectedEmployee = (Employee) this.employeeGridView.SelectedRows[0].DataBoundItem;
+            this.attemptToRemoveEmployee(selectedEmployee);
+            MessageBox.Show(@"Successfully removed the employee.");
         }
 
-        private int AttemptToRemoveEmployee(Employee employee, int rowIndex)
+        private void attemptToRemoveEmployee(Employee employee)
         {
             var confirmationForm = new RemoveConfirmationForm(employee);
             var dialogResult = confirmationForm.ShowDialog();
 
-            var results = 0;
-
             switch (dialogResult)
             {
                 case DialogResult.Yes:
-                    this.employeeGridView.Rows.RemoveAt(rowIndex);
-                    this.capstoneDatabaseContext.SaveChanges();
-                    results = 1;
+                    this.manageEmployeeController.RemoveEmployeeFromDatabase(employee, this.capstoneDatabaseContext);
+                    this.getData();
                     break;
                 case DialogResult.Abort:
-                    MessageBox.Show("No employee was selected.");
+                    MessageBox.Show(@"No employee was selected.");
                     break;
             }
-
-            return results;
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -114,15 +99,13 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.capstoneDatabaseContext.Employees.Load();
-                this.employeeListSource.DataSource = this.capstoneDatabaseContext.Employees.Local.ToBindingList();
+                this.employeeListSource.DataSource =
+                    this.manageEmployeeController.GetEmployees(this.capstoneDatabaseContext);
 
                 for (var i = 0; i < this.employeeGridView.Columns.Count; i++)
                 {
                     this.employeeGridView.Columns[i].MinimumWidth = 200;
                 }
-
-                this.employeeGridView.Columns[4].Visible = false;
 
                 this.refreshTable();
             }
@@ -134,7 +117,7 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
-
+            this.employeeGridView.Columns[4].Visible = false;
             this.employeeGridView.Columns[5].Visible = false;
             this.employeeGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }

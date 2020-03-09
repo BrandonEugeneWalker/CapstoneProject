@@ -22,16 +22,19 @@ namespace Capstone_Desktop.Controller
         #region Methods
 
         /// <summary>
-        ///   <para>
-        ///  Gets and returns the rental history of a stock item.</para>
-        ///   <para>The given stock and database cannot be null.</para>
+        ///     <para>
+        ///         Gets and returns the rental history of a stock item.
+        ///     </para>
+        ///     <para>The given stock and database cannot be null.</para>
         /// </summary>
         /// <param name="stock">The stock to get the history of.</param>
         /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>A list of rentals that stock is involved in.</returns>
-        /// <exception cref="ArgumentNullException">stock
-        /// or
-        /// capstoneDbContext - The given database context cannot be null!</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     stock
+        ///     or
+        ///     capstoneDbContext - The given database context cannot be null!
+        /// </exception>
         public List<DetailedRentalView> GetStockHistory(Stock stock, OnlineEntities capstoneDbContext)
         {
             if (stock == null)

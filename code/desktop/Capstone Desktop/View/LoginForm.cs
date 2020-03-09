@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
 using Capstone_Database.Model;
 using Capstone_Desktop.Controller;
@@ -28,7 +27,7 @@ namespace Capstone_Desktop
 
         private readonly OnlineEntities capstoneDatabaseContext = new OnlineEntities();
 
-        private LoginController loginController;
+        private readonly LoginController loginController;
 
         #endregion
 
