@@ -34,6 +34,7 @@ namespace Capstone_Database.Model
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<ItemRental> ItemRentals { get; set; }
         public virtual DbSet<DetailedRentalView> DetailedRentalViews { get; set; }
+        public virtual DbSet<StockDetailView> StockDetailViews { get; set; }
     
         public virtual int createMemberOrder(Nullable<int> selectedStockId, Nullable<int> selectedMemberId, Nullable<int> selectedAddressId)
         {

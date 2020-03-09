@@ -105,6 +105,26 @@ warning 6002: The table/view 'def.cs4982s20d.DetailedRentalView' does not have a
           <Property Name="returnDateTime" Type="datetime" Precision="0" />
           <Property Name="returnCondition" Type="enum" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="StockDetailView">
+          <Key>
+            <PropertyRef Name="stockId" />
+            <PropertyRef Name="productId" />
+            <PropertyRef Name="productName" />
+            <PropertyRef Name="productDescription" />
+            <PropertyRef Name="productType" />
+            <PropertyRef Name="productCategory" />
+            <PropertyRef Name="itemCondition" />
+          </Key>
+          <Property Name="stockId" Type="int" Nullable="false" />
+          <Property Name="productId" Type="int" Nullable="false" />
+          <Property Name="productName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="productDescription" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="productType" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="productCategory" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="itemCondition" Type="enum" Nullable="false" />
+        </EntityType>
         <Association Name="addressId_ItemRental">
           <End Role="Address" Type="Self.Address" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -326,6 +346,17 @@ warning 6002: The table/view 'def.cs4982s20d.DetailedRentalView' does not have a
 `DetailedRentalView`.`returnCondition`
 FROM `DetailedRentalView` AS `DetailedRentalView`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="StockDetailView" EntityType="Self.StockDetailView" store:Type="Views" store:Schema="cs4982s20d">
+            <DefiningQuery>SELECT
+`StockDetailView`.`stockId`, 
+`StockDetailView`.`productId`, 
+`StockDetailView`.`productName`, 
+`StockDetailView`.`productDescription`, 
+`StockDetailView`.`productType`, 
+`StockDetailView`.`productCategory`, 
+`StockDetailView`.`itemCondition`
+FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="addressId_ItemRental" Association="Self.addressId_ItemRental">
             <End Role="Address" EntitySet="Address" />
             <End Role="ItemRental" EntitySet="ItemRental" />
@@ -546,6 +577,7 @@ FROM `DetailedRentalView` AS `DetailedRentalView`</DefiningQuery>
             <End Role="ItemRental" EntitySet="ItemRentals" />
           </AssociationSet>
           <EntitySet Name="DetailedRentalViews" EntityType="Model.DetailedRentalView" />
+          <EntitySet Name="StockDetailViews" EntityType="Model.StockDetailView" />
           </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -712,6 +744,24 @@ FROM `DetailedRentalView` AS `DetailedRentalView`</DefiningQuery>
           <Property Name="returnDateTime" Type="DateTime" />
           <Property Name="returnCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="StockDetailView">
+          <Key>
+            <PropertyRef Name="stockId" />
+            <PropertyRef Name="productId" />
+            <PropertyRef Name="productName" />
+            <PropertyRef Name="productDescription" />
+            <PropertyRef Name="productType" />
+            <PropertyRef Name="productCategory" />
+            <PropertyRef Name="itemCondition" />
+          </Key>
+          <Property Name="stockId" Type="Int32" Nullable="false" />
+          <Property Name="productId" Type="Int32" Nullable="false" />
+          <Property Name="productName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="productDescription" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="productType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="productCategory" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -853,6 +903,19 @@ FROM `DetailedRentalView` AS `DetailedRentalView`</DefiningQuery>
                 <ScalarProperty Name="itemName" ColumnName="itemName" />
                 <ScalarProperty Name="stockId" ColumnName="stockId" />
                 <ScalarProperty Name="itemRentalId" ColumnName="itemRentalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockDetailViews">
+            <EntityTypeMapping TypeName="Model.StockDetailView">
+              <MappingFragment StoreEntitySet="StockDetailView">
+                <ScalarProperty Name="itemCondition" ColumnName="itemCondition" />
+                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
+                <ScalarProperty Name="productType" ColumnName="productType" />
+                <ScalarProperty Name="productDescription" ColumnName="productDescription" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="stockId" ColumnName="stockId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

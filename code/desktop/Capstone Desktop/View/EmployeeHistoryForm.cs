@@ -51,7 +51,7 @@ namespace Capstone_Desktop.View
 
         private void populateHistoryView()
         {
-            List<ItemRental> employeeHistory =
+            var employeeHistory =
                 this.employeeHistoryController.GetEmployeeHistory(this.CurrentEmployee, this.capstoneDbContext);
 
             this.historyGridView.DataSource = employeeHistory;

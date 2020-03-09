@@ -78,16 +78,8 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.capstoneDatabaseContext.Stocks.Load();
-                this.itemListSource.DataSource = this.capstoneDatabaseContext.Stocks.Local.ToBindingList();
-
-                for (var i = 0; i < this.itemsGridView.Columns.Count; i++)
-                {
-                    this.itemsGridView.Columns[i].MinimumWidth = 200;
-                }
-
-                this.itemsGridView.Columns[2].Visible = false;
-                this.itemsGridView.Columns[3].Visible = false;
+                this.capstoneDatabaseContext.StockDetailViews.Load();
+                this.itemListSource.DataSource = this.capstoneDatabaseContext.StockDetailViews.Local.ToBindingList();
 
                 this.refreshTable();
             }

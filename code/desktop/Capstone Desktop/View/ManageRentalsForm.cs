@@ -72,7 +72,7 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.capstoneDatabaseContext.ItemRentals.Load();
+                this.capstoneDatabaseContext.DetailedRentalViews.Load();
                 this.rentalListSource.DataSource =
                     this.capstoneDatabaseContext.DetailedRentalViews.Local.ToBindingList();
 
@@ -116,11 +116,6 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
-            for (var i = 0; i < this.rentalGridView.Columns.Count; i++)
-            {
-                this.rentalGridView.Columns[i].MinimumWidth = 200;
-            }
-
             this.rentalGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 
