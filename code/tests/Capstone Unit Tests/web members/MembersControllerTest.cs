@@ -17,30 +17,7 @@ namespace Capstone_Unit_Tests.web_members
     {
         #region Methods
 
-        private static IEnumerable<Member> getTestMembers()
-        {
-            var memberA = new Member {
-                memberId = 1,
-                username = "memberA",
-                name = "mem A",
-                password = "p@ssw0rd",
-                isLibrarian = 0,
-                isBanned = 0
-            };
-            var memberB = new Member {
-                memberId = 1,
-                username = "memberB",
-                name = "mem B",
-                password = "hunter2",
-                isLibrarian = 0,
-                isBanned = 0
-            };
-
-            var testMembers = new List<Member> {memberA, memberB};
-
-            return testMembers;
-        }
-
+        //TODO REMOVE
         private static Mock<MemberContext> getMemberContext()
         {
             var memberContextMock = new Mock<MemberContext>();
@@ -59,8 +36,6 @@ namespace Capstone_Unit_Tests.web_members
             membersMock.As<IQueryable<Member>>().Setup(m => m.ElementType).Returns(members.ElementType);
             membersMock.As<IQueryable<Member>>().Setup(m => m.GetEnumerator()).Returns(members.GetEnumerator());
             memberContextMock.Setup(x => x.Members).Returns(membersMock.Object);
-
-
 
             return memberContextMock;
         }
@@ -223,6 +198,54 @@ namespace Capstone_Unit_Tests.web_members
 
             // Assert
             Assert.IsNotNull(result);
+        }
+
+        private static Mock<DbSet<T>> createDbSetMock<T>(IEnumerable<T> elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock<DbSet<T>>();
+
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+
+        private static IEnumerable<Member> getTestMembers()
+        {
+            var memberA = new Member
+            {
+                memberId = 1,
+                username = "memberA",
+                name = "mem A",
+                password = "p@ssw0rd",
+                isLibrarian = 0,
+                isBanned = 0
+            };
+            var memberB = new Member
+            {
+                memberId = 2,
+                username = "memberB",
+                name = "mem B",
+                password = "hunter2",
+                isLibrarian = 0,
+                isBanned = 0
+            };
+            var memberC = new Member
+            {
+                memberId = 3,
+                username = "memberB",
+                name = "mem C",
+                password = "Hunter2!",
+                isLibrarian = 0,
+                isBanned = 0
+            };
+
+            var testMembers = new List<Member> { memberA, memberB, memberC };
+
+            return testMembers;
         }
 
         #endregion
