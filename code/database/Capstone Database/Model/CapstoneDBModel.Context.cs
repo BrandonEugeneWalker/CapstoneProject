@@ -326,13 +326,22 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editMember", newUsernameParameter, newNameParameter, newPasswordParameter, currentMemberIdParameter);
         }
     
-        public virtual int retrieveMembersRentals(Nullable<int> selectedMemberId)
+        public virtual ObjectResult<ItemRental> retrieveMembersRentals(Nullable<int> selectedMemberId)
         {
             var selectedMemberIdParameter = selectedMemberId.HasValue ?
                 new ObjectParameter("selectedMemberId", selectedMemberId) :
                 new ObjectParameter("selectedMemberId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("retrieveMembersRentals", selectedMemberIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveMembersRentals", selectedMemberIdParameter);
+        }
+    
+        public virtual ObjectResult<ItemRental> retrieveMembersRentals(Nullable<int> selectedMemberId, MergeOption mergeOption)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter("selectedMemberId", selectedMemberId) :
+                new ObjectParameter("selectedMemberId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveMembersRentals", mergeOption, selectedMemberIdParameter);
         }
     
         public virtual ObjectResult<Address> retrieveMembersAddresses(Nullable<int> selectedMemberId)
