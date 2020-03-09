@@ -86,7 +86,8 @@ namespace Capstone_Desktop.Controller
         ///     or
         ///     detailedRentalView
         /// </exception>
-        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext, Employee employee)
+        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext,
+            Employee employee)
         {
             if (capstoneDbContext == null)
             {
@@ -97,6 +98,7 @@ namespace Capstone_Desktop.Controller
             {
                 throw new ArgumentNullException(nameof(detailedRentalView), RentalNullError);
             }
+
             if (employee == null)
             {
                 throw new ArgumentNullException(nameof(employee), EmployeeNullError);
@@ -115,20 +117,20 @@ namespace Capstone_Desktop.Controller
         }
 
         /// <summary>
-        ///     <para>
-        ///         Marks the rental as returned.
-        ///     </para>
-        ///     <para>Throws an exception if either the database or rental are null.</para>
+        ///   <para>
+        ///       Marks the rental as returned.
+        ///   </para>
+        ///   <para>Throws an exception if either the database or rental are null.</para>
         /// </summary>
         /// <param name="detailedRentalView">The detailed rental view.</param>
         /// <param name="capstoneDbContext">The capstone database context.</param>
+        /// <param name="employee">The employee marking the rental as returned.</param>
         /// <returns>True if successful, false if not.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        ///     capstoneDbContext
-        ///     or
-        ///     detailedRentalView
-        /// </exception>
-        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext, Employee employee)
+        /// <exception cref="System.ArgumentNullException">capstoneDbContext
+        ///   or
+        ///   detailedRentalView</exception>
+        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext,
+            Employee employee)
         {
             if (capstoneDbContext == null)
             {

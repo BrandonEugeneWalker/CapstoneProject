@@ -7,12 +7,15 @@ using MySql.Data.MySqlClient;
 namespace Capstone_Desktop.View
 {
     /// <summary>
-    ///   <para>This form is used to managed view stock items in the database.</para>
-    ///   <para>The ManageItemsForm is opened by the LoginForm and the ManageEmployeesForm.</para>
-    ///   <para>The ManageItemsForm can open the ManageRentalsForm and the ManageEmployeesForm.</para>
-    ///   <para>The ManageItemsForm keeps track of the currently logged in employee and changes available transitions accordingly.</para>
+    ///     <para>This form is used to managed view stock items in the database.</para>
+    ///     <para>The ManageItemsForm is opened by the LoginForm and the ManageEmployeesForm.</para>
+    ///     <para>The ManageItemsForm can open the ManageRentalsForm and the ManageEmployeesForm.</para>
+    ///     <para>
+    ///         The ManageItemsForm keeps track of the currently logged in employee and changes available transitions
+    ///         accordingly.
+    ///     </para>
     /// </summary>
-    /// <seealso cref="System.Windows.Forms.Form"/>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class ManageItemsForm : Form
     {
         #region Data members
@@ -34,8 +37,8 @@ namespace Capstone_Desktop.View
         #region Constructors
 
         /// <summary>
-        ///   <para>Initializes a new instance of the <see cref="ManageItemsForm"/> class.</para>
-        ///   <para>The ManageItemsForm handles the user interactions relating to managing items in the database.</para>
+        ///     <para>Initializes a new instance of the <see cref="ManageItemsForm" /> class.</para>
+        ///     <para>The ManageItemsForm handles the user interactions relating to managing items in the database.</para>
         /// </summary>
         /// <param name="loggedInEmployee">The logged in employee.</param>
         public ManageItemsForm(Employee loggedInEmployee)
@@ -118,8 +121,6 @@ namespace Capstone_Desktop.View
             Close();
         }
 
-        #endregion
-
         private void viewHistoryButton_Click(object sender, EventArgs e)
         {
             StockDetailView currentDetailStock = null;
@@ -132,8 +133,8 @@ namespace Capstone_Desktop.View
             if (currentDetailStock != null)
             {
                 this.capstoneDatabaseContext.Stocks.Load();
-                Stock currentStock = this.capstoneDatabaseContext.Stocks.Find(currentDetailStock.stockId);
-                ItemHistoryForm itemHistoryForm = new ItemHistoryForm(currentStock);
+                var currentStock = this.capstoneDatabaseContext.Stocks.Find(currentDetailStock.stockId);
+                var itemHistoryForm = new ItemHistoryForm(currentStock);
                 itemHistoryForm.ShowDialog();
             }
             else
@@ -141,5 +142,7 @@ namespace Capstone_Desktop.View
                 MessageBox.Show(@"No stock item selected to view the history of.");
             }
         }
+
+        #endregion
     }
 }

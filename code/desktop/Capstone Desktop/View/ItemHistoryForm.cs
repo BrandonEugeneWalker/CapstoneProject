@@ -46,6 +46,7 @@ namespace Capstone_Desktop.View
             this.CurrentStock = stock;
             this.itemHistoryController = new ItemHistoryController();
             this.capstoneDbContext = new OnlineEntities();
+            this.setStockDescription();
             this.getData();
         }
 

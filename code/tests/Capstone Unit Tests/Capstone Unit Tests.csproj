@@ -138,6 +138,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="desktop\controller\AddEmployeeFormControllerTests.cs" />
+    <Compile Include="desktop\controller\EmployeeHistoryControllerTests.cs" />
+    <Compile Include="desktop\controller\ItemHistoryControllerTests.cs" />
+    <Compile Include="desktop\controller\LoginControllerTests.cs" />
+    <Compile Include="desktop\controller\ManageEmployeesControllerTests.cs" />
+    <Compile Include="desktop\controller\ManageRentalsControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="web members\HomeControllerTest.cs" />
     <Compile Include="web members\MemberContext.cs" />
