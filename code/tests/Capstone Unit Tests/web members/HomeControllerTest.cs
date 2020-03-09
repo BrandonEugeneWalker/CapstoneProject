@@ -17,31 +17,6 @@ namespace Capstone_Unit_Tests.web_members
     {
         #region Methods
 
-        //TODO REMOVE
-        private static Mock<MemberContext> getMemberContext()
-        {
-            var memberContextMock = new Mock<MemberContext>();
-
-            var mockProductsResult = new TestableObjectResult<Product>();
-            memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
-                             .Returns(mockProductsResult);
-            var mockedProductResult = new Mock<TestableObjectResult<Product>>();
-            mockedProductResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator());
-            memberContextMock.Setup(x => x.retrieveAvailableProductsWithSearch(string.Empty, string.Empty))
-                             .Returns(mockedProductResult.Object);
-
-            var mockIntResult = new TestableObjectResult<int?>();
-            memberContextMock.Setup(x => x.retrieveRentedCount(0))
-                             .Returns(mockIntResult);
-            var mockedIntResult = new Mock<TestableObjectResult<int?>>();
-            mockedIntResult.Setup(x => x.GetEnumerator()).Returns(new List<int?> {1, 2, 3}.GetEnumerator());
-            memberContextMock.Setup(x => x.retrieveRentedCount(0)).Returns(mockIntResult);
-
-            return memberContextMock;
-        }
-
-        //TODO The way that MediaLibrary gets the count of rentals is
-        //TODO flawed and prevents testing being finished. REWORK
         /// <summary>
         ///     Tests that the Media Library is not null
         /// </summary>
@@ -63,59 +38,64 @@ namespace Capstone_Unit_Tests.web_members
 
             var controller = new HomeController(context.Object);
 
-            // Act
             var result = controller.MediaLibrary(null, null) as ViewResult;
 
-            // Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Model);
         }
 
-        /// <summary>
-        ///     Tests that the Media Library model is not null
-        /// </summary>
-        [TestMethod]
-        public void MediaLibrary_ModelIsNotNull()
-        {
-            // Arrange
-            var controller = new HomeController(getMemberContext().Object);
-
-            // Act
-            var result = controller.MediaLibrary(null, null) as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result?.Model);
-        }
-
-        //TODO -Will need further in depth testing, does not reach the ActionResult as
-        //TODO -it is triggered by a link, but uses the controllers properties
         /// <summary>
         ///     Tests that the ActionResult for OrderProduct is not null within the mock
         /// </summary>
         [TestMethod]
         public void OrderProduct_Action_IsNotNull()
         {
-            // Arrange
-            var controller = new HomeController(getMemberContext().Object);
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
 
-            // Act
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            var controller = new HomeController(context.Object);
+
             var result = controller.OrderProduct(1) as ViewResult;
 
-            // Assert
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        ///     Tests that the ActionResult for OrderProduct is not null within the mock
+        /// </summary>
         [TestMethod]
-        public void ReturnProduct_Action_IsNotNull()
+        public void OrderConfirmation_Action_IsNotNull()
         {
-            // Arrange
-            var controller = new HomeController(getMemberContext().Object);
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
 
-            // Act
-            var result = controller.OrderProduct(1) as ViewResult;
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
 
-            // Assert
+            var controller = new HomeController(context.Object);
+
+            var result = controller.OrderConfirmation(1, 1) as ViewResult;
+
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
         }
 
         private static Mock<DbSet<T>> createDbSetMock<T>(IEnumerable<T> elements) where T : class
