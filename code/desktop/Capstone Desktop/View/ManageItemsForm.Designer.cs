@@ -32,7 +32,7 @@
             this.companyLabel = new System.Windows.Forms.Label();
             this.manageItemsLabel = new System.Windows.Forms.Label();
             this.addButton = new System.Windows.Forms.Button();
-            this.submitChangesButton = new System.Windows.Forms.Button();
+            this.viewHistoryButton = new System.Windows.Forms.Button();
             this.managerButton = new System.Windows.Forms.Button();
             this.itemsGridView = new System.Windows.Forms.DataGridView();
             this.manageRentalsButton = new System.Windows.Forms.Button();
@@ -84,17 +84,16 @@
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
-            // submitChangesButton
+            // viewHistoryButton
             // 
-            this.submitChangesButton.Enabled = false;
-            this.submitChangesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.submitChangesButton.Location = new System.Drawing.Point(12, 578);
-            this.submitChangesButton.Name = "submitChangesButton";
-            this.submitChangesButton.Size = new System.Drawing.Size(141, 46);
-            this.submitChangesButton.TabIndex = 6;
-            this.submitChangesButton.Text = "Submit Changes";
-            this.submitChangesButton.UseVisualStyleBackColor = true;
-            this.submitChangesButton.Click += new System.EventHandler(this.SubmitChangesButton_Click);
+            this.viewHistoryButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.viewHistoryButton.Location = new System.Drawing.Point(12, 578);
+            this.viewHistoryButton.Name = "viewHistoryButton";
+            this.viewHistoryButton.Size = new System.Drawing.Size(141, 46);
+            this.viewHistoryButton.TabIndex = 6;
+            this.viewHistoryButton.Text = "View History";
+            this.viewHistoryButton.UseVisualStyleBackColor = true;
+            this.viewHistoryButton.Click += new System.EventHandler(this.viewHistoryButton_Click);
             // 
             // managerButton
             // 
@@ -137,7 +136,7 @@
             this.Controls.Add(this.manageRentalsButton);
             this.Controls.Add(this.itemsGridView);
             this.Controls.Add(this.managerButton);
-            this.Controls.Add(this.submitChangesButton);
+            this.Controls.Add(this.viewHistoryButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.manageItemsLabel);
             this.Controls.Add(this.logoutButton);
@@ -160,7 +159,7 @@
         private System.Windows.Forms.Label companyLabel;
         private System.Windows.Forms.Label manageItemsLabel;
         private System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.Button submitChangesButton;
+        private System.Windows.Forms.Button viewHistoryButton;
         private System.Windows.Forms.Button managerButton;
         private System.Windows.Forms.DataGridView itemsGridView;
         private System.Windows.Forms.Button manageRentalsButton;

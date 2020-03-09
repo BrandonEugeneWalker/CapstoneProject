@@ -34,7 +34,7 @@ namespace Capstone_Desktop.Controller
                     @"The given database context cannot be null!");
             }
 
-            capstoneDbContext.ItemRentals.Load();
+            capstoneDbContext.DetailedRentalViews.Load();
 
             var stockHistoryQueryable = capstoneDbContext
                                         .DetailedRentalViews.Local.ToBindingList().Where(rental =>

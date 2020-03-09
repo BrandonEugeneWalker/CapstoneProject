@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.companyLabel = new System.Windows.Forms.Label();
-            this.employeeLabel = new System.Windows.Forms.Label();
+            this.stockLabel = new System.Windows.Forms.Label();
             this.historyGridView = new System.Windows.Forms.DataGridView();
             this.backButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.historyGridView)).BeginInit();
@@ -38,24 +38,24 @@
             // companyLabel
             // 
             this.companyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.companyLabel.Location = new System.Drawing.Point(-7, 9);
+            this.companyLabel.Location = new System.Drawing.Point(-7, -9);
             this.companyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.companyLabel.Name = "companyLabel";
-            this.companyLabel.Size = new System.Drawing.Size(800, 85);
+            this.companyLabel.Size = new System.Drawing.Size(1280, 85);
             this.companyLabel.TabIndex = 2;
-            this.companyLabel.Text = "Employee History";
+            this.companyLabel.Text = "Item History";
             this.companyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // employeeLabel
+            // stockLabel
             // 
-            this.employeeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.employeeLabel.Location = new System.Drawing.Point(-7, 76);
-            this.employeeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.employeeLabel.Name = "employeeLabel";
-            this.employeeLabel.Size = new System.Drawing.Size(800, 40);
-            this.employeeLabel.TabIndex = 3;
-            this.employeeLabel.Text = "History for:";
-            this.employeeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.stockLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stockLabel.Location = new System.Drawing.Point(-7, 76);
+            this.stockLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.stockLabel.Name = "stockLabel";
+            this.stockLabel.Size = new System.Drawing.Size(1280, 40);
+            this.stockLabel.TabIndex = 3;
+            this.stockLabel.Text = "History for:";
+            this.stockLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // historyGridView
             // 
@@ -66,13 +66,13 @@
             this.historyGridView.MultiSelect = false;
             this.historyGridView.Name = "historyGridView";
             this.historyGridView.ReadOnly = true;
-            this.historyGridView.Size = new System.Drawing.Size(760, 657);
+            this.historyGridView.Size = new System.Drawing.Size(1240, 496);
             this.historyGridView.TabIndex = 4;
             // 
             // backButton
             // 
             this.backButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.backButton.Location = new System.Drawing.Point(621, 803);
+            this.backButton.Location = new System.Drawing.Point(1111, 623);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(141, 46);
             this.backButton.TabIndex = 5;
@@ -84,15 +84,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 861);
+            this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.historyGridView);
-            this.Controls.Add(this.employeeLabel);
+            this.Controls.Add(this.stockLabel);
             this.Controls.Add(this.companyLabel);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(800, 900);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 900);
             this.Name = "ItemHistoryForm";
             this.Text = "Item History";
             this.TopMost = true;
@@ -104,7 +102,7 @@
         #endregion
 
         private System.Windows.Forms.Label companyLabel;
-        private System.Windows.Forms.Label employeeLabel;
+        private System.Windows.Forms.Label stockLabel;
         private System.Windows.Forms.DataGridView historyGridView;
         private System.Windows.Forms.Button backButton;
     }

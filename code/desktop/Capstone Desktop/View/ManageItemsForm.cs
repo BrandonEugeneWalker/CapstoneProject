@@ -119,5 +119,27 @@ namespace Capstone_Desktop.View
         }
 
         #endregion
+
+        private void viewHistoryButton_Click(object sender, EventArgs e)
+        {
+            StockDetailView currentDetailStock = null;
+
+            if (this.itemsGridView.SelectedRows.Count != 0)
+            {
+                currentDetailStock = (StockDetailView) this.itemsGridView.SelectedRows[0].DataBoundItem;
+            }
+
+            if (currentDetailStock != null)
+            {
+                this.capstoneDatabaseContext.Stocks.Load();
+                Stock currentStock = this.capstoneDatabaseContext.Stocks.Find(currentDetailStock.stockId);
+                ItemHistoryForm itemHistoryForm = new ItemHistoryForm(currentStock);
+                itemHistoryForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(@"No stock item selected to view the history of.");
+            }
+        }
     }
 }

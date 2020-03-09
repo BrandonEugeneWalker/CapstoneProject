@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
 
 namespace Capstone_Desktop.View
 {
@@ -22,8 +23,10 @@ namespace Capstone_Desktop.View
     {
 
         private OnlineEntities capstoneDbContext;
+        private ItemHistoryController itemHistoryController;
 
         private Stock CurrentStock { get; set; }
+
 
         /// <summary>
         ///   <para>
@@ -41,12 +44,26 @@ namespace Capstone_Desktop.View
             }
             InitializeComponent();
             this.CurrentStock = stock;
+            this.itemHistoryController = new ItemHistoryController();
             this.capstoneDbContext = new OnlineEntities();
+            this.getData();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void getData()
+        {
+            this.historyGridView.DataSource =
+                this.itemHistoryController.GetStockHistory(this.CurrentStock, this.capstoneDbContext);
+        }
+
+        private void setStockDescription()
+        {
+            this.stockLabel.Text =
+                this.stockLabel.Text + this.itemHistoryController.BuildStockDescription(this.CurrentStock);
         }
     }
 }
