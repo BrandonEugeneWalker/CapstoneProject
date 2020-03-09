@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
@@ -13,49 +15,7 @@ namespace Capstone_Unit_Tests.web_members
     [TestClass]
     public class HomeControllerTest
     {
-
-        private static List<Product> getTestProducts()
-        {
-            var productA = new Product
-            {
-                productId = 1,
-                name = "The Hobbit",
-                description = "One small boi goes on an adventure",
-                type = "Book",
-                category = "Adventure"
-            };
-            var productB = new Product
-            {
-                productId = 2,
-                name = "Fellowship of the Ring",
-                description = "The first movie",
-                type = "Movie",
-                category = "Fantasy"
-            };
-
-            var testProducts = new List<Product> { productA, productB };
-
-            return testProducts;
-        }
-
-        private static List<Stock> getTestStocks()
-        {
-            var stockA = new Stock
-            {
-                stockId = 1,
-                productId = 1
-            };
-            var stockB = new Stock
-            {
-                stockId = 2,
-                productId = 2
-            };
-
-            var testStock = new List<Stock> { stockA, stockB };
-
-            return testStock;
-        }
-
+        //TODO REMOVE
         private static Mock<MemberContext> getMemberContext()
         {
             var memberContextMock = new Mock<MemberContext>();
@@ -141,6 +101,61 @@ namespace Capstone_Unit_Tests.web_members
 
             // Assert
             Assert.IsNotNull(result);
+        }
+
+        private static Mock<DbSet<T>> createDbSetMock<T>(IEnumerable<T> elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock<DbSet<T>>();
+
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+
+        private static List<Product> getTestProducts()
+        {
+            var productA = new Product
+            {
+                productId = 1,
+                name = "The Hobbit",
+                description = "One small boi goes on an adventure",
+                type = "Book",
+                category = "Adventure"
+            };
+            var productB = new Product
+            {
+                productId = 2,
+                name = "Fellowship of the Ring",
+                description = "The first movie",
+                type = "Movie",
+                category = "Fantasy"
+            };
+
+            var testProducts = new List<Product> { productA, productB };
+
+            return testProducts;
+        }
+
+        private static List<Stock> getTestStocks()
+        {
+            var stockA = new Stock
+            {
+                stockId = 1,
+                productId = 1
+            };
+            var stockB = new Stock
+            {
+                stockId = 2,
+                productId = 2
+            };
+
+            var testStock = new List<Stock> { stockA, stockB };
+
+            return testStock;
         }
     }
 }
