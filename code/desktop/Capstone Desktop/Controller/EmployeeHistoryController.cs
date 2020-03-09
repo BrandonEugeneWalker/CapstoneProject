@@ -64,8 +64,8 @@ namespace Capstone_Desktop.Controller
             }
 
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("Name: " + employee.name);
-            stringBuilder.AppendLine("ID: " + employee.employeeId);
+            stringBuilder.Append(" Name: " + employee.name);
+            stringBuilder.Append(" ID: " + employee.employeeId);
             return stringBuilder.ToString();
         }
 
