@@ -105,7 +105,7 @@
                         @Html.ActionLink("Edit", "Edit", "Addresses", new {id = address.addressId}, "")
                     </td>
                     <td>
-                        @Html.ActionLink("Remove", "Remove", "Addresses", new {id = address.addressId}, "")
+                        @Html.ActionLink("Remove", "Remove", "Addresses", new {id = address.addressId, Model.ProductModel.productId}, "")
                     </td>
                 </tr>
             }

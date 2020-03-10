@@ -18,6 +18,21 @@ namespace Capstone_Unit_Tests.web_members
         #region Methods
 
         /// <summary>
+        ///     Tests that the Index redirect is not null
+        /// </summary>
+        [TestMethod]
+        public void Index_IsNotNull()
+        {
+            var context = new Mock<OnlineEntities>();
+
+            var controller = new HomeController(context.Object);
+
+            var result = controller.Index() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        /// <summary>
         ///     Tests that the Media Library is not null
         /// </summary>
         [TestMethod]
@@ -48,7 +63,7 @@ namespace Capstone_Unit_Tests.web_members
         ///     Tests that the ActionResult for OrderProduct is not null within the mock
         /// </summary>
         [TestMethod]
-        public void OrderProduct_Action_IsNotNull()
+        public void OrderProduct_IsNotNull()
         {
             var context = new Mock<OnlineEntities>();
             var mockMembers = createDbSetMock(getTestMembers());
@@ -66,6 +81,33 @@ namespace Capstone_Unit_Tests.web_members
             var controller = new HomeController(context.Object);
 
             var result = controller.OrderProduct(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+        }
+
+        /// <summary>
+        ///     Tests that the ActionResult for OrderProduct is not null within the mock
+        /// </summary>
+        [TestMethod]
+        public void OrderProduct_Action_IsNotNull()
+        {
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            var controller = new HomeController(context.Object);
+
+            var result = controller.OrderProduct("1", "1") as ViewResult;
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Model);

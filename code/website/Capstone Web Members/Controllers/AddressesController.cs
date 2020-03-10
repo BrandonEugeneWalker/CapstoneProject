@@ -48,7 +48,6 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>The create page with form for adding an address</returns>
         public ActionResult Create()
         {
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username");
             return View();
         }
 
@@ -71,7 +70,6 @@ namespace Capstone_Web_Members.Controllers
                 return RedirectToAction("Details", "Members");
             }
 
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -93,7 +91,6 @@ namespace Capstone_Web_Members.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -115,7 +112,6 @@ namespace Capstone_Web_Members.Controllers
                 return RedirectToAction("Details", "Members");
             }
 
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -130,14 +126,23 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Removes the specified address.
+        /// Removes the specified address.
         /// </summary>
         /// <param name="id">The addressId.</param>
-        /// <returns>Member Profile view</returns>
-        public ActionResult Remove(int id)
+        /// <param name="productId">The product identifier.</param>
+        /// <returns>
+        /// Member Profile view
+        /// </returns>
+        public ActionResult Remove(int id, int? productId)
         {
             this.databaseContext.removeAddress(id);
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+
+            if (productId != null)
+            {
+                return RedirectToAction("OrderProduct", "Home", new {productId});
+            }
+
+            return RedirectToAction("Details", "Members");
         }
 
         #endregion
