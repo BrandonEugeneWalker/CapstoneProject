@@ -48,7 +48,11 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>The create page with form for adding an address</returns>
         public ActionResult Create()
         {
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username");
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             return View();
         }
 
@@ -63,6 +67,11 @@ namespace Capstone_Web_Members.Controllers
         public ActionResult Create([Bind(Include = "address1,address2,city,state,zip")]
             Address address)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             if (ModelState.IsValid)
             {
                 var memberId = int.Parse(Session["currentMemberId"].ToString());
@@ -71,7 +80,6 @@ namespace Capstone_Web_Members.Controllers
                 return RedirectToAction("Details", "Members");
             }
 
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -82,6 +90,11 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>The edit page with form for editing an address</returns>
         public ActionResult Edit(int? id)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -93,7 +106,6 @@ namespace Capstone_Web_Members.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -108,6 +120,11 @@ namespace Capstone_Web_Members.Controllers
         public ActionResult Edit([Bind(Include = "addressId,address1,address2,city,state,zip,memberId,removed")]
             Address address)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             if (ModelState.IsValid)
             {
                 this.databaseContext.editAddress(address.addressId, address.address1, address.address2, address.city,
@@ -115,7 +132,6 @@ namespace Capstone_Web_Members.Controllers
                 return RedirectToAction("Details", "Members");
             }
 
-            ViewBag.memberId = new SelectList(this.databaseContext.Members, "memberId", "username", address.memberId);
             return View(address);
         }
 
@@ -130,14 +146,28 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Removes the specified address.
+        /// Removes the specified address.
         /// </summary>
         /// <param name="id">The addressId.</param>
-        /// <returns>Member Profile view</returns>
-        public ActionResult Remove(int id)
+        /// <param name="productId">The product identifier.</param>
+        /// <returns>
+        /// Member Profile view
+        /// </returns>
+        public ActionResult Remove(int id, int? productId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             this.databaseContext.removeAddress(id);
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+
+            if (productId != null)
+            {
+                return RedirectToAction("OrderProduct", "Home", new {productId});
+            }
+
+            return RedirectToAction("Details", "Members");
         }
 
         #endregion

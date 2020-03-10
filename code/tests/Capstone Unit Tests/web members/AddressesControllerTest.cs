@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,16 +19,63 @@ namespace Capstone_Unit_Tests.web_members
     {
         #region Methods
 
-        public void Create_IsNotNull()
+        [TestMethod]
+        public void StandardConstructorIsValid()
         {
+            var addressesController = new AddressesController();
+
+            Assert.IsNotNull(addressesController);
         }
 
+        [TestMethod]
+        public void CreateViewIsNotNull()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var create = addressesController.Create() as ViewResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void CreateViewWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var create = addressesController.Create() as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
         public void CreatingNewAddressIsValid()
         {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var create = addressesController.Create(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
         }
 
+        [TestMethod]
         public void CreatingInvalidAddressReturnsToCreate()
         {
+            var addressesController = setupAddressesControllerWithSession();
+
+            addressesController.ModelState.AddModelError("", "");
+
+            var create = addressesController.Create(new Address()) as RedirectToRouteResult;
+            Assert.IsNull(create);
+        }
+
+        [TestMethod]
+        public void CreatingAddressWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var create = addressesController.Create(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
         }
 
         /// <summary>
@@ -34,12 +83,135 @@ namespace Capstone_Unit_Tests.web_members
         ///     the AddressesController
         /// </summary>
         [TestMethod]
-        public void EditAddressIdWithValidEdit()
+        public void EditAddressWithValidId()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(1) as ViewResult;
+
+            Assert.IsNotNull(edit);
+            Assert.IsNotNull(edit.Model);
+            Assert.IsInstanceOfType(edit.Model, typeof(Address));
+
+            var model = (Address) edit.Model;
+
+            Assert.AreEqual(1, model.addressId);
+        }
+
+        [TestMethod]
+        public void EditAddressWithInvalidId()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit((int?) null) as ViewResult;
+
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod]
+        public void EditAddressWithInvalidAddress()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(3) as ViewResult;
+
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod]
+        public void EditAddressWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var create = addressesController.Edit(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        /// <summary>
+        ///     Tests editing an addressId in the Address Table does not change the addressId and that the page is run correctly by
+        ///     the AddressesController
+        /// </summary>
+        [TestMethod]
+        public void EditPostAddressWithValidAddress()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(edit);
+        }
+
+        [TestMethod]
+        public void EditPostAddressWithInvalidAddress()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            addressesController.ModelState.AddModelError("","");
+
+            var edit = addressesController.Edit(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod]
+        public void EditPostAddressWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var create = addressesController.Edit(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void RemoveAddressFromProfileIsValid()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var remove = addressesController.Remove(1, null) as RedirectToRouteResult;
+
+            Assert.IsNotNull(remove);
+        }
+
+        [TestMethod]
+        public void RemoveAddressFromOrderIsValid()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var removeAtOrder = addressesController.Remove(1, 1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(removeAtOrder);
+        }
+
+        [TestMethod]
+        public void RemoveAddressWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var remove = addressesController.Remove(1, null) as RedirectToRouteResult;
+
+            Assert.IsNotNull(remove);
+        }
+
+        [TestMethod]
+        public void ControllerDisposesResourcesValid()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(1) as ViewResult;
+
+            addressesController.Dispose();
+
+            Assert.IsNotNull(edit);
+        }
+
+        private static AddressesController setupAddressesControllerWithoutSession()
         {
             var address1 = new Address
-                {addressId = 1, address1 = "1234 St", city = "Atlanta", state = "GA", zip = 12345, memberId = 1};
+                { addressId = 1, address1 = "1234 St", city = "Atlanta", state = "GA", zip = 12345, memberId = 1 };
             var address2 = new Address
-                {addressId = 2, address1 = "4321 Dr", city = "Atlanta", state = "GA", zip = 12345, memberId = 1};
+                { addressId = 2, address1 = "4321 Dr", city = "Atlanta", state = "GA", zip = 12345, memberId = 1 };
 
             IList<Address> addresses = new List<Address> {
                 address1, address2
@@ -50,17 +222,50 @@ namespace Capstone_Unit_Tests.web_members
 
             context.Setup(x => x.Addresses).Returns(mock.Object);
             context.Setup(x => x.Addresses.Find(1)).Returns(address1);
+            context.Setup(x => x.insertAddress(address1.address1, 1, address1.address2, address1.city, address1.state, address1.zip)).Returns(1);
+            context.Setup(x => x.removeAddress(1)).Returns(1);
+
             var addressesController = new AddressesController(context.Object);
-            var edit = addressesController.Edit(1) as ViewResult;
-            Assert.IsNotNull(edit);
-            Assert.IsNotNull(edit.Model);
-            Assert.IsInstanceOfType(edit.Model, typeof(Address));
-            var model = (Address) edit.Model;
-            Assert.AreEqual(1, model.addressId);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentMemberId"]).Returns(null);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            addressesController.ControllerContext = new ControllerContext(requestContext, addressesController);
+
+            return addressesController;
         }
 
-        public void EditingAddressToInvalidReturnsToEdit()
+        private static AddressesController setupAddressesControllerWithSession()
         {
+            var address1 = new Address
+                { addressId = 1, address1 = "1234 St", city = "Atlanta", state = "GA", zip = 12345, memberId = 1 };
+            var address2 = new Address
+                { addressId = 2, address1 = "4321 Dr", city = "Atlanta", state = "GA", zip = 12345, memberId = 1 };
+
+            IList<Address> addresses = new List<Address> {
+                address1, address2
+            };
+
+            var context = new Mock<OnlineEntities>();
+            var mock = createDbSetMock(addresses);
+
+            context.Setup(x => x.Addresses).Returns(mock.Object);
+            context.Setup(x => x.Addresses.Find(1)).Returns(address1);
+            context.Setup(x => x.insertAddress(address1.address1, 1, address1.address2, address1.city, address1.state, address1.zip)).Returns(1);
+            context.Setup(x => x.removeAddress(1)).Returns(1);
+
+            var addressesController = new AddressesController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentMemberId"]).Returns(1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            addressesController.ControllerContext = new ControllerContext(requestContext, addressesController);
+
+            return addressesController;
         }
 
         private static Mock<DbSet<T>> createDbSetMock<T>(IEnumerable<T> elements) where T : class
