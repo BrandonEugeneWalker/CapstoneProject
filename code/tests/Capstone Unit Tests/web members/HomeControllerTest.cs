@@ -75,7 +75,7 @@ namespace Capstone_Unit_Tests.web_members
         ///     Tests that the ActionResult for OrderProduct is not null within the mock
         /// </summary>
         [TestMethod]
-        public void OrderProduct_IsNotNull()
+        public void OrderProductPageWithValidProductIdIsNotNull()
         {
             var homeController = setupHomeControllerWithSession();
 
@@ -88,7 +88,7 @@ namespace Capstone_Unit_Tests.web_members
         ///     Tests that the ActionResult for OrderProduct is not null within the mock
         /// </summary>
         [TestMethod]
-        public void OrderProductWillRedirectWithoutSession()
+        public void OrderProductPageWillRedirectWithoutSession()
         {
             var homeController = setupHomeControllerWithoutSession();
 
@@ -101,7 +101,7 @@ namespace Capstone_Unit_Tests.web_members
         ///     Tests that the ActionResult for OrderProduct is not null within the mock
         /// </summary>
         [TestMethod]
-        public void OrderProductActionIsNotNull()
+        public void OrderProductActionWithValidIdsIsNotNull()
         {
             var homeController = setupHomeControllerWithSession();
 
@@ -127,7 +127,7 @@ namespace Capstone_Unit_Tests.web_members
         ///     Tests that the ActionResult for OrderProduct is not null within the mock
         /// </summary>
         [TestMethod]
-        public void OrderConfirmationIsNotNull()
+        public void OrderConfirmationWithValidIdsIsNotNull()
         {
             var homeController = setupHomeControllerWithSession();
 
