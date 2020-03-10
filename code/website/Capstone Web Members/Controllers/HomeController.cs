@@ -110,6 +110,11 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>The Order Product view detailing the selected product</returns>
         public ActionResult OrderProduct(int productId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             var product = this.DatabaseContext.Products.Find(productId);
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
@@ -149,6 +154,11 @@ namespace Capstone_Web_Members.Controllers
         /// <returns></returns>
         public ActionResult OrderConfirmation(int productId, int addressId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             var product = this.DatabaseContext.Products.Find(productId);
             var address = this.DatabaseContext.Addresses.Find(addressId);
             var orderConfirmationViewModel = new OrderConfirmationViewModel {ProductModel = product, AddressModel = address};
