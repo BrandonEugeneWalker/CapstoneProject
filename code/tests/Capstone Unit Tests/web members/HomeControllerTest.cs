@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -38,22 +40,9 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void MediaLibrary_IsNotNull()
         {
-            var context = new Mock<OnlineEntities>();
-            var mockMembers = createDbSetMock(getTestMembers());
-            var mockProducts = createDbSetMock(getTestProducts());
-            var mockStock = createDbSetMock(getTestStocks());
-            var mockAddresses = createDbSetMock(getTestAddresses());
-            var mockRentals = createDbSetMock(getTestItemRentals());
+            var homeController = setupHomeControllerWithSession();
 
-            context.Setup(x => x.Members).Returns(mockMembers.Object);
-            context.Setup(x => x.Products).Returns(mockProducts.Object);
-            context.Setup(x => x.Stocks).Returns(mockStock.Object);
-            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
-            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
-
-            var controller = new HomeController(context.Object);
-
-            var result = controller.MediaLibrary(null, null) as ViewResult;
+            var result = homeController.MediaLibrary(null, null) as ViewResult;
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Model);
@@ -140,6 +129,42 @@ namespace Capstone_Unit_Tests.web_members
             Assert.IsNotNull(result.Model);
         }
 
+        private static HomeController setupHomeControllerWithSession()
+        {
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+            var testCounts = new List<int?> {1,2,3};
+
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
+            mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x => x.retrieveAvailableProductsWithSearch("", "")).Returns(mockedProductObjectResult.Object);
+
+            var mockedIntObjectResult = new Mock<TestableObjectResult<int?>>();
+            mockedIntObjectResult.Setup(x => x.GetEnumerator()).Returns(testCounts.GetEnumerator());
+            context.Setup(x => x.retrieveRentedCount(1)).Returns(mockedIntObjectResult.Object);
+
+            var homeController = new HomeController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentMemberId"]).Returns(1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            homeController.ControllerContext = new ControllerContext(requestContext, homeController);
+
+            return homeController;
+        }
+
         private static Mock<DbSet<T>> createDbSetMock<T>(IEnumerable<T> elements) where T : class
         {
             var elementsAsQueryable = elements.AsQueryable();
@@ -153,7 +178,7 @@ namespace Capstone_Unit_Tests.web_members
             return dbSetMock;
         }
 
-        private static List<Product> getTestProducts()
+        private static IEnumerable<Product> getTestProducts()
         {
             var productA = new Product {
                 productId = 1,
