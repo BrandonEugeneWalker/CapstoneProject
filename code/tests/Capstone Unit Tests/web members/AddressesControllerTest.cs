@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.SessionState;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,8 +37,6 @@ namespace Capstone_Unit_Tests.web_members
             Assert.IsNotNull(create);
         }
 
-
-        //TODO NEED SESSION MOCK
         [TestMethod]
         public void CreatingNewAddressIsValid()
         {
@@ -52,7 +54,17 @@ namespace Capstone_Unit_Tests.web_members
 
             context.Setup(x => x.Addresses).Returns(mock.Object);
             context.Setup(x => x.Addresses.Find(1)).Returns(address1);
+            context.Setup(x => x.insertAddress(address1.address1, 1, address1.address2, address1.city, address1.state, address1.zip)).Returns(1);
+
             var addressesController = new AddressesController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentMemberId"]).Returns(1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            addressesController.ControllerContext = new ControllerContext(requestContext, addressesController);
+
             var create = addressesController.Create(address1) as RedirectToRouteResult;
             Assert.IsNotNull(create);
         }
