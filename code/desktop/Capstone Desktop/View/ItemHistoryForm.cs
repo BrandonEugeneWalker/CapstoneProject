@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -57,6 +58,7 @@ namespace Capstone_Desktop.View
 
         private void getData()
         {
+            this.capstoneDbContext.DetailedRentalViews.Load();
             this.historyGridView.DataSource =
                 this.itemHistoryController.GetStockHistory(this.CurrentStock, this.capstoneDbContext);
         }

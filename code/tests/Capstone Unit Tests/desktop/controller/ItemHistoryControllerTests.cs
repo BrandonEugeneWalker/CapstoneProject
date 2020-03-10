@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Entity;
+using System.Linq;
 using Capstone_Database.Model;
 using Capstone_Desktop.Controller;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,7 +38,7 @@ namespace Capstone_Unit_Tests.desktop.controller
         public void TestGetStockHistorySunnyDayEmpty()
         {
             var capstoneDbContextMock = new Mock<OnlineEntities>();
-            capstoneDbContextMock.Setup(x => x.DetailedRentalViews.Local.ToBindingList()).Returns(new BindingList<DetailedRentalView>());
+            capstoneDbContextMock.Setup(x => x.DetailedRentalViews.Local).Returns(new ObservableCollection<DetailedRentalView>());
 
             Stock testStock = new Stock {
                 itemCondition = "Good",
@@ -44,6 +47,8 @@ namespace Capstone_Unit_Tests.desktop.controller
                 Product = null,
                 stockId = 1
             };
+
+
 
             ItemHistoryController itemHistoryController = new ItemHistoryController();
             var results = itemHistoryController.GetStockHistory(testStock, capstoneDbContextMock.Object);
@@ -54,7 +59,7 @@ namespace Capstone_Unit_Tests.desktop.controller
         [TestMethod]
         public void TestGetStockHistorySunnyDayNotEmpty()
         {
-            BindingList<DetailedRentalView> testList = new BindingList<DetailedRentalView>();
+            IList<DetailedRentalView> testList = new List<DetailedRentalView>();
             DetailedRentalView testRentalView = new DetailedRentalView
             {
                 address1 = "",
@@ -76,9 +81,12 @@ namespace Capstone_Unit_Tests.desktop.controller
                 stockId = 1
             };
             testList.Add(testRentalView);
+            var queryableMock = createDbSetMock(testList);
+
 
             var capstoneDbContextMock = new Mock<OnlineEntities>();
-            capstoneDbContextMock.Setup(x => x.DetailedRentalViews.Local.ToBindingList()).Returns(testList);
+            capstoneDbContextMock.Setup(x => x.DetailedRentalViews).Returns(queryableMock.Object);
+
 
             Stock testStock = new Stock
             {
@@ -129,6 +137,19 @@ namespace Capstone_Unit_Tests.desktop.controller
 
             Assert.IsTrue(expectedString.Equals(givenString));
 
+        }
+
+        private static Mock<DbSet<T>> createDbSetMock<T>(IEnumerable<T> elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock<DbSet<T>>();
+
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
         }
     }
 }
