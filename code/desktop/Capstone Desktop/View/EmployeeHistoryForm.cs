@@ -61,11 +61,6 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
-            for (var i = 0; i < this.historyGridView.Columns.Count; i++)
-            {
-                this.historyGridView.Columns[i].MinimumWidth = 200;
-            }
-
             this.historyGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 

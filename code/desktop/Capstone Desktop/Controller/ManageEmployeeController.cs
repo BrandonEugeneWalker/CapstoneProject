@@ -59,6 +59,10 @@ namespace Capstone_Desktop.Controller
         /// <returns>A binding list of employees.</returns>
         public BindingList<Employee> GetEmployees(OnlineEntities capstoneDbContext)
         {
+            if (capstoneDbContext == null)
+            {
+                throw new ArgumentNullException(nameof(capstoneDbContext), @"The database to get from cannot be null!");
+            }
             capstoneDbContext.Employees.Load();
             return capstoneDbContext.Employees.Local.ToBindingList();
         }

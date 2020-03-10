@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
 using Capstone_Database.Model;
@@ -8,16 +9,19 @@ using Moq;
 
 namespace Capstone_Unit_Tests.desktop.controller
 {
+    /// <summary>Tests the functionality of the EmployeeHistoryController.</summary>
     [TestClass]
     public class EmployeeHistoryControllerTests
     {
+        #region Methods
+
         [TestMethod]
         public void TestGetEmployeeHistoryEmployeeNull()
         {
             var capstoneDbContextMock = new Mock<OnlineEntities>();
-            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
+            var employeeHistoryController = new EmployeeHistoryController();
 
-            Assert.ThrowsException<ArgumentException>(() =>
+            Assert.ThrowsException<ArgumentNullException>(() =>
                 employeeHistoryController.GetEmployeeHistory(null, capstoneDbContextMock.Object));
         }
 
@@ -25,78 +29,16 @@ namespace Capstone_Unit_Tests.desktop.controller
         public void TestGetEmployeeHistoryDbContextNull()
         {
             var employeeMock = new Mock<Employee>();
-            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
+            var employeeHistoryController = new EmployeeHistoryController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
                 employeeHistoryController.GetEmployeeHistory(employeeMock.Object, null));
         }
 
         [TestMethod]
-        public void TestGetEmployeeHistorySunnyDayEmpty()
-        {
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
-            capstoneDbContextMock.Setup(x => x.DetailedRentalViews.Local.ToBindingList()).Returns(new BindingList<DetailedRentalView>());
-            Employee testEmployee = new Employee
-            {
-                employeeId = 1,
-                isManager = false,
-                ItemRentals = null,
-                ItemRentals1 = null,
-                name = "name",
-                password = "password"
-            };
-            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
-            var results = employeeHistoryController.GetEmployeeHistory(testEmployee, capstoneDbContextMock.Object);
-
-            Assert.IsTrue(results.Count == 0);
-
-        }
-
-        [TestMethod]
-        public void TestGetEmployeeHistorySunnyDayNotEmpty()
-        {
-            BindingList<DetailedRentalView> testList = new BindingList<DetailedRentalView>();
-            DetailedRentalView testRentalView = new DetailedRentalView {
-                address1 = "",
-                address2 = "",
-                city = "",
-                itemName = "",
-                itemRentalId = 1,
-                memberId = 1,
-                memberName = "",
-                rentalDateTime = null,
-                returnCondition = "",
-                returnDateTime = null,
-                shipDateTime = null,
-                shipEmployeeId = 1,
-                returnEmployeeId = 2,
-                state = "",
-                zip = 2,
-                status = ""
-            };
-            testList.Add(testRentalView);
-
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
-            capstoneDbContextMock.Setup(x => x.DetailedRentalViews.Local.ToBindingList()).Returns(testList);
-            Employee testEmployee = new Employee
-            {
-                employeeId = 1,
-                isManager = false,
-                ItemRentals = null,
-                ItemRentals1 = null,
-                name = "name",
-                password = "password"
-            };
-            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
-            var results = employeeHistoryController.GetEmployeeHistory(testEmployee, capstoneDbContextMock.Object);
-
-            Assert.IsTrue(results.Count == 1);
-        }
-
-        [TestMethod]
         public void TestBuildEmployeeDescriptionNull()
         {
-            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
+            var employeeHistoryController = new EmployeeHistoryController();
             Assert.ThrowsException<ArgumentNullException>(
                 () => employeeHistoryController.BuildEmployeeDescription(null));
         }
@@ -104,20 +46,17 @@ namespace Capstone_Unit_Tests.desktop.controller
         [TestMethod]
         public void TestBuildEmployeeDescriptionSunnyDay()
         {
-            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
-            Employee testEmployee = new Employee
-            {
-                employeeId = 1234,
-                isManager = false,
-                ItemRentals = null,
-                ItemRentals1 = null,
+            Employee testEmployee = new Employee {
                 name = "Brandon Walker",
-                password = "password"
+                employeeId = 1234
             };
-            string expectedString = @" Name: Brandon Walker ID: 1234";
-            string givenString = employeeHistoryController.BuildEmployeeDescription(testEmployee);
+            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
+            var results = employeeHistoryController.BuildEmployeeDescription(testEmployee);
+            var expected = @" Name: Brandon Walker ID: 1234";
 
-            Assert.IsTrue(expectedString.Equals(givenString));
+            Assert.IsTrue(results.Equals(expected));
         }
+
+        #endregion
     }
 }

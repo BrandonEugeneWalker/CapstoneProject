@@ -80,6 +80,11 @@ namespace Capstone_Desktop.Controller
 
         public BindingList<DetailedRentalView> GetAllRentals(OnlineEntities capstoneDbContext)
         {
+            if (capstoneDbContext == null)
+            {
+                throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
+            }
+
             capstoneDbContext.DetailedRentalViews.Load();
 
             return capstoneDbContext.DetailedRentalViews.Local.ToBindingList();

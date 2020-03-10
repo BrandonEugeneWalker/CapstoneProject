@@ -38,10 +38,10 @@ namespace Capstone_Desktop.Controller
                     @"The given database context cannot be null!");
             }
 
-            return this.selectDetailedRentalsByEmployee(capstoneDbContext, employee);
+            return this.SelectDetailedRentalsByEmployee(capstoneDbContext, employee);
         }
 
-        private List<DetailedRentalView> selectDetailedRentalsByEmployee(OnlineEntities capstoneDbContext, Employee employee)
+        public List<DetailedRentalView> SelectDetailedRentalsByEmployee(OnlineEntities capstoneDbContext, Employee employee)
         {
             capstoneDbContext.DetailedRentalViews.Load();
 
