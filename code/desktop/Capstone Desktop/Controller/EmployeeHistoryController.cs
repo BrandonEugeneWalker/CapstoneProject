@@ -38,6 +38,13 @@ namespace Capstone_Desktop.Controller
                     @"The given database context cannot be null!");
             }
 
+            return this.selectDetailedRentalsByEmployee(capstoneDbContext, employee);
+        }
+
+        private List<DetailedRentalView> selectDetailedRentalsByEmployee(OnlineEntities capstoneDbContext, Employee employee)
+        {
+            capstoneDbContext.DetailedRentalViews.Load();
+
             var employeeHistoryQueryable = capstoneDbContext.DetailedRentalViews.Local.ToBindingList().Where(rental =>
                                                                 rental.shipEmployeeId.Equals(employee.employeeId) ||
                                                                 rental.returnEmployeeId.Equals(employee.employeeId))

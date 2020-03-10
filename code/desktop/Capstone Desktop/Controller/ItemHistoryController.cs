@@ -48,12 +48,21 @@ namespace Capstone_Desktop.Controller
                     @"The given database context cannot be null!");
             }
 
+            return this.selectDetailedRentalsFromDatabaseByStock(capstoneDbContext, stock);
+        }
+
+        private List<DetailedRentalView> selectDetailedRentalsFromDatabaseByStock(OnlineEntities capstoneDbContext,
+            Stock stock)
+        {
+            capstoneDbContext.DetailedRentalViews.Load();
+
             var stockHistoryQueryable = capstoneDbContext
                                         .DetailedRentalViews.Local.ToBindingList().Where(rental =>
                                             rental.stockId.Equals(stock.stockId));
 
             return stockHistoryQueryable.ToList();
         }
+
 
         /// <summary>
         ///     <para>

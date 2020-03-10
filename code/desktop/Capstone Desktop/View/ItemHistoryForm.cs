@@ -58,7 +58,6 @@ namespace Capstone_Desktop.View
 
         private void getData()
         {
-            this.capstoneDbContext.DetailedRentalViews.Load();
             this.historyGridView.DataSource =
                 this.itemHistoryController.GetStockHistory(this.CurrentStock, this.capstoneDbContext);
         }
