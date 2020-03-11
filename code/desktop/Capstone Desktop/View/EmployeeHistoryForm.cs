@@ -61,11 +61,6 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
-            for (var i = 0; i < this.historyGridView.Columns.Count; i++)
-            {
-                this.historyGridView.Columns[i].MinimumWidth = 200;
-            }
-
             this.historyGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 
@@ -73,7 +68,7 @@ namespace Capstone_Desktop.View
         {
             string employeeDescription = this.employeeHistoryController.BuildEmployeeDescription(this.CurrentEmployee);
             string baseString = this.employeeLabel.Text;
-            string updatedLabelValue = baseString + Environment.NewLine + employeeDescription;
+            string updatedLabelValue = baseString + employeeDescription;
             this.employeeLabel.Text = updatedLabelValue;
         }
     }

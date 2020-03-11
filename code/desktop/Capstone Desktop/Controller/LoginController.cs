@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Capstone_Database.Model;
@@ -54,8 +55,12 @@ namespace Capstone_Desktop.Controller
                     @"The database to get the employee from must not be null!");
             }
 
-            capstoneDbContext.Employees.Load();
+            return this.selectEmployeeUsingDbContext(capstoneDbContext, id, password);
+        }
 
+        private Employee selectEmployeeUsingDbContext(OnlineEntities capstoneDbContext, int id, string password)
+        {
+            capstoneDbContext.Employees.Load();
             return capstoneDbContext.selectEmployeeByIdAndPassword(id, password).First();
         }
 

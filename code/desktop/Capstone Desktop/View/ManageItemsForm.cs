@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Windows.Forms;
 using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
 using MySql.Data.MySqlClient;
 
 namespace Capstone_Desktop.View
@@ -24,6 +25,8 @@ namespace Capstone_Desktop.View
 
         private readonly OnlineEntities capstoneDatabaseContext;
 
+        private ManageItemsController manageItemsController;
+
         #endregion
 
         #region Properties
@@ -45,6 +48,7 @@ namespace Capstone_Desktop.View
         {
             this.InitializeComponent();
             this.capstoneDatabaseContext = new OnlineEntities();
+            this.manageItemsController = new ManageItemsController();
             this.CurrentEmployee = loggedInEmployee;
             if (this.CurrentEmployee.isManager == true)
             {
@@ -81,8 +85,7 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.capstoneDatabaseContext.StockDetailViews.Load();
-                this.itemListSource.DataSource = this.capstoneDatabaseContext.StockDetailViews.Local.ToBindingList();
+                this.itemListSource.DataSource = this.manageItemsController.GetAllStock(this.capstoneDatabaseContext);
 
                 this.refreshTable();
             }
@@ -94,11 +97,6 @@ namespace Capstone_Desktop.View
 
         private void refreshTable()
         {
-            for (var i = 0; i < this.itemsGridView.Columns.Count; i++)
-            {
-                this.itemsGridView.Columns[i].MinimumWidth = 200;
-            }
-
             this.itemsGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
         }
 

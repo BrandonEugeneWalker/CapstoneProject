@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using Capstone_Database.Model;
@@ -38,11 +39,13 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
             }
 
-            capstoneDbContext.DetailedRentalViews.Load();
+            return this.selectRentalsByWaitingShipment(capstoneDbContext);
+        }
 
-            var rentalsWaitingShipmentQueryable = capstoneDbContext
-                                                  .DetailedRentalViews.Local.ToBindingList().Where(rental =>
-                                                      rental.status.Equals("WaitingShipment"));
+        private List<DetailedRentalView> selectRentalsByWaitingShipment(OnlineEntities capstoneDbContext)
+        {
+            var rentalsWaitingShipmentQueryable = this.GetAllRentals(capstoneDbContext).Where(rental =>
+                                                           rental.status.Equals("WaitingShipment"));
 
             return rentalsWaitingShipmentQueryable.ToList();
         }
@@ -63,29 +66,43 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
             }
 
-            capstoneDbContext.DetailedRentalViews.Load();
+            return this.selectRentalsByWaitingReturn(capstoneDbContext);
+        }
 
-            var rentalsWaitingReturnQueryable = capstoneDbContext
-                                                .DetailedRentalViews.Local.ToBindingList().Where(rental =>
+        private List<DetailedRentalView> selectRentalsByWaitingReturn(OnlineEntities capstoneDbContext)
+        {
+
+            var rentalsWaitingReturnQueryable = this.GetAllRentals(capstoneDbContext).Where(rental =>
                                                     rental.status.Equals("WaitingReturn"));
 
             return rentalsWaitingReturnQueryable.ToList();
         }
 
+        public BindingList<DetailedRentalView> GetAllRentals(OnlineEntities capstoneDbContext)
+        {
+            if (capstoneDbContext == null)
+            {
+                throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
+            }
+
+            capstoneDbContext.DetailedRentalViews.Load();
+
+            return capstoneDbContext.DetailedRentalViews.Local.ToBindingList();
+        }
+
         /// <summary>
-        ///     <para>
-        ///         Marks the rental as waiting return.
-        ///     </para>
-        ///     <para>Throws an exception if the database or rental is null.</para>
+        ///   <para>
+        ///       Marks the rental as waiting return.
+        ///   </para>
+        ///   <para>Throws an exception if the database or rental is null.</para>
         /// </summary>
         /// <param name="detailedRentalView">The detailed rental view.</param>
         /// <param name="capstoneDbContext">The capstone database context.</param>
+        /// <param name="employee">The employee handing the action.</param>
         /// <returns>True if successful, false if not.</returns>
-        /// <exception cref="System.ArgumentNullException">
-        ///     capstoneDbContext
-        ///     or
-        ///     detailedRentalView
-        /// </exception>
+        /// <exception cref="System.ArgumentNullException">capstoneDbContext
+        ///   or
+        ///   detailedRentalView</exception>
         public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext,
             Employee employee)
         {
@@ -109,9 +126,17 @@ namespace Capstone_Desktop.Controller
                 return false;
             }
 
-            detailedRentalView.status = "WaitingReturn";
-            detailedRentalView.shipEmployeeId = employee.employeeId;
-            detailedRentalView.shipDateTime = DateTime.Now;
+            capstoneDbContext.ItemRentals.Load();
+            var currentRental = capstoneDbContext.ItemRentals.Find(detailedRentalView.stockId);
+
+            if (currentRental == null)
+            {
+                return false;
+            }
+
+            currentRental.status = "WaitingReturn";
+            currentRental.shipEmployeeId = employee.employeeId;
+            currentRental.shipDateTime = DateTime.Now;
             capstoneDbContext.SaveChanges();
             return true;
         }
@@ -152,9 +177,17 @@ namespace Capstone_Desktop.Controller
                 return false;
             }
 
-            detailedRentalView.status = "Returned";
-            detailedRentalView.returnEmployeeId = employee.employeeId;
-            detailedRentalView.returnDateTime = DateTime.Now;
+            capstoneDbContext.ItemRentals.Load();
+            var currentRental = capstoneDbContext.ItemRentals.Find(detailedRentalView.stockId);
+
+            if (currentRental == null)
+            {
+                return false;
+            }
+
+            currentRental.status = "Returned";
+            currentRental.shipEmployeeId = employee.employeeId;
+            currentRental.shipDateTime = DateTime.Now;
             capstoneDbContext.SaveChanges();
             return true;
         }

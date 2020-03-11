@@ -146,10 +146,13 @@ namespace Capstone_Desktop.View
 
                 var results = this.manageRentalsController.MarkRentalAsWaitingReturn(currentItem,
                     this.capstoneDatabaseContext, this.CurrentEmployee);
+
                 if (!results)
                 {
                     MessageBox.Show(@"That rental cannot be changed to that state.");
                 }
+
+                this.getData();
             }
         }
 
@@ -161,10 +164,13 @@ namespace Capstone_Desktop.View
 
                 var results = this.manageRentalsController.MarkRentalAsReturned(currentItem,
                     this.capstoneDatabaseContext, this.CurrentEmployee);
+
                 if (!results)
                 {
                     MessageBox.Show(@"That rental cannot be changed to that state.");
                 }
+
+                this.getData();
             }
         }
 
