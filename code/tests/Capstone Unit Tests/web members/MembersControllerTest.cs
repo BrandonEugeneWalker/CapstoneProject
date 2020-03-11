@@ -190,32 +190,11 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void ValidLoginRedirectsToHomeIndex()
-        {
-            var controller = setupMembersControllerWithSession();
-
-            var result = controller.Login(new Member{memberId = 1, username = "username", password = "password"}) as ViewResult;
-
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
-        public void InvalidLoginRedirectsToLogin()
-        {
-            var controller = setupMembersControllerWithSession();
-
-            var result = controller.Login(new Member()) as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
         public void LoggingOffClearsSession()
         {
             var controller = setupMembersControllerWithSession();
 
-            var result = controller.LogOff() as ViewResult;
+            var result = controller.LogOff() as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }
