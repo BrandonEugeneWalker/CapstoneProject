@@ -119,7 +119,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditAddressPageWillRedirectWithoutSession()
+        public void EditPageWillRedirectWithoutSession()
         {
             var addressesController = setupAddressesControllerWithoutSession();
 
@@ -143,7 +143,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditActionAddressWithInvalidAddressIsNull()
+        public void EditActionWithInvalidAddressIsNull()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -155,7 +155,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditPostAddressWillRedirectWithoutSession()
+        public void EditActionWillRedirectWithoutSession()
         {
             var addressesController = setupAddressesControllerWithoutSession();
 

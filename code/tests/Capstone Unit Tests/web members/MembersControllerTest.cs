@@ -136,11 +136,55 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void Login_IsNotNull()
+        public void EditMemberActionWithValidIdIsNotNull()
         {
             var controller = setupMembersControllerWithSession();
 
-            var result = controller.Login(null) as ViewResult;
+            var result = controller.Edit(new Member {memberId = 1, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0}) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void EditMemberActionWithInvalidIdIsNull()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            controller.ModelState.AddModelError("", "");
+
+            var result = controller.Edit(new Member { memberId = 2, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0 }) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void EditActionWillRedirectWithoutSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var create = controller.Edit(new Member { memberId = 2, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0 }) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void ControllerDisposesResourcesValid()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var edit = controller.Edit(1) as ViewResult;
+
+            controller.Dispose();
+
+            Assert.IsNotNull(edit);
+        }
+
+        [TestMethod]
+        public void LoginPageRedirectsIfCredentialsAreValid()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Login(new Member { memberId = 1, username = "username", password = "password" }) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }
@@ -150,7 +194,7 @@ namespace Capstone_Unit_Tests.web_members
         {
             var controller = setupMembersControllerWithSession();
 
-            var result = controller.Login(new Member()) as ViewResult;
+            var result = controller.Login(new Member{memberId = 1, username = "username", password = "password"}) as ViewResult;
 
             Assert.IsNotNull(result);
         }
@@ -227,7 +271,7 @@ namespace Capstone_Unit_Tests.web_members
             context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
             context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
 
-            context.Setup(x => x.Members.Find(1)).Returns(new Member {memberId = 1});
+            context.Setup(x => x.Members.Find(1)).Returns(new Member { memberId = 1, username = "username", password = "password" });
 
             var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
             mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
@@ -240,6 +284,16 @@ namespace Capstone_Unit_Tests.web_members
             var mockedAddressObjectResult = new Mock<TestableObjectResult<Address>>();
             mockedAddressObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestAddresses().GetEnumerator());
             context.Setup(x => x.retrieveMembersAddresses(1)).Returns(mockedAddressObjectResult.Object);
+
+            var mockedMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("username", "password"))
+                   .Returns(mockedMemberObjectResult.Object);
+
+            var mockedEmptyMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedEmptyMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("u53rN4m3", "wrongPassword"))
+                   .Returns(mockedEmptyMemberObjectResult.Object);
 
             var membersController = new MembersController(context.Object);
 

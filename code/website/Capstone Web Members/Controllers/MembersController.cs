@@ -180,11 +180,6 @@ namespace Capstone_Web_Members.Controllers
         [AllowAnonymous]
         public ActionResult Login(Member member)
         {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
             var matchingMembers = this.DatabaseContext.selectMemberByIdAndPassword(member.username, member.password)
                                       .ToList();
 
