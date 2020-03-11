@@ -263,7 +263,6 @@ namespace Capstone_Web_Warehouse.Controllers.Tests
             var mock = CreateDbSetMock(employees);
 
             context.Setup(x => x.Employees).Returns(mock.Object);
-            context.Setup(x => x.insertEmployee(1000,"P@ss12",1,"Bob")).Returns(1000);
             context.Setup(x => x.Employees.Remove(emp1)).Returns(emp1);
 
             var eController = new EmployeesController(context.Object);

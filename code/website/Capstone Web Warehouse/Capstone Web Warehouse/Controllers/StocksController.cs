@@ -16,6 +16,16 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private OnlineEntities db = new OnlineEntities();
 
+        public StocksController()
+        {
+            db = new OnlineEntities();
+        }
+
+        public StocksController(OnlineEntities entity)
+        {
+            db = entity;
+        }
+
         // GET: Stocks
         /// <summary>  List of stocks</summary>
         /// <returns>Index page</returns>
