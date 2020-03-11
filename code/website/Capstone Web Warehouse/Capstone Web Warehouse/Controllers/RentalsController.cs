@@ -57,36 +57,26 @@ namespace Capstone_Web_Warehouse.Controllers
 
             if (rental.status.Equals("WaitingShipment"))
             {
-                return shipped(rental, employee);
+                rental.status = "WaitingReturn";
+                rental.shipEmployeeId = employee.employeeId;
+                rental.shipDateTime = DateTime.Now;
+                database.SaveChanges();
+                return RedirectToAction("Index");
             }
 
             if (rental.status.Equals("WaitingReturn"))
             {
-                return returned(rental, employee);
+                rental.status = "Returned";
+                rental.returnEmployeeId = employee.employeeId;
+                rental.returnDateTime = DateTime.Now;
+                rental.returnCondition = "Good";
+                var stock = database.Stocks.Find(rental.stockId);
+                stock.itemCondition = rental.returnCondition;
+                database.SaveChanges();
+                return RedirectToAction("Index");
             }
 
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
-        }
-
-        private ActionResult shipped(ItemRental rental, Employee employee)
-        {
-            rental.status = "WaitingReturn";
-            rental.shipEmployeeId = employee.employeeId;
-            rental.shipDateTime = DateTime.Now;
-            database.SaveChanges();
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
-        }
-
-        private ActionResult returned(ItemRental rental, Employee employee)
-        {
-            rental.status = "Returned";
-            rental.returnEmployeeId = employee.employeeId;
-            rental.returnDateTime = DateTime.Now;
-            rental.returnCondition = "Good";
-            var stock = database.Stocks.Find(rental.stockId);
-            stock.itemCondition = rental.returnCondition;
-            database.SaveChanges();
-            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+            return RedirectToAction("Index");
         }
 
         /// <summary>Releases unmanaged resources and optionally releases managed resources.</summary>
