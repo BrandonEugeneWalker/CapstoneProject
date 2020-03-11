@@ -58,16 +58,6 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void CreatePageWillRedirectWithoutSession()
-        {
-            var controller = setupMembersControllerWithoutSession();
-
-            var result = controller.Create() as RedirectToRouteResult;
-
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
         public void CreateActionWithValidMemberIsValid()
         {
             var controller = setupMembersControllerWithSession();
@@ -85,16 +75,6 @@ namespace Capstone_Unit_Tests.web_members
             controller.ModelState.AddModelError("", "");
 
             var result = controller.Create(new Member()) as ViewResult;
-
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
-        public void CreateActionWillRedirectWithoutSession()
-        {
-            var controller = setupMembersControllerWithoutSession();
-
-            var result = controller.Create(new Member()) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }

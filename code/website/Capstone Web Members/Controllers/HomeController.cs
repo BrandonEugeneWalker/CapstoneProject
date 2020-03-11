@@ -49,17 +49,24 @@ namespace Capstone_Web_Members.Controllers
 
         #region Methods
 
+        /// <summary>
+        ///     Index of the Website, required for running of Website. Redirects to Media Library. Redirects to Login if no login
+        ///     session found.
+        /// </summary>
+        /// <returns>Media Library Page</returns>
         public ActionResult Index()
         {
             return RedirectToAction("MediaLibrary");
         }
 
-        //TODO work on observability of this page. After tests are mocking
         /// <summary>
-        ///     The Media Library page, showing all items available to order
+        ///     The Media Library page, showing all items available to order. If reloading after the Search form is submitted,
+        ///     sends filter information to the database to filter during stored procedure call. Checks if Member's active
+        ///     ItemRentals are 3 or higher.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
         /// </summary>
-        /// <param name="nameSearch">The name search.</param>
-        /// <param name="typeSearch">The type search.</param>
+        /// <param name="nameSearch">The name search field.</param>
+        /// <param name="typeSearch">The type search field.</param>
         /// <returns>
         ///     The media library page
         /// </returns>
@@ -92,15 +99,18 @@ namespace Capstone_Web_Members.Controllers
                 rentedCount = rentedCountResult[0];
             }
 
-            var mediaLibraryViewModel = new MediaLibraryViewModel {ProductsModel = this.AvailableProducts, RentedCountModel = rentedCount};
+            var mediaLibraryViewModel = new MediaLibraryViewModel
+                {ProductsModel = this.AvailableProducts, RentedCountModel = rentedCount};
 
             return View(mediaLibraryViewModel);
         }
 
         /// <summary>
-        ///     Navigates to the Order Product view to confirm order
+        ///     Navigates to the Order Product view to confirm order. Showcases the selected product and gives list of Addresses
+        ///     for member to select. If member has no address, they are prompted to create one.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
         /// </summary>
-        /// <param name="productId">The product identifier.</param>
+        /// <param name="productId">The product id, referencing Product being ordered.</param>
         /// <returns>The Order Product view detailing the selected product</returns>
         public ActionResult OrderProduct(int productId)
         {
@@ -112,15 +122,17 @@ namespace Capstone_Web_Members.Controllers
             var product = this.DatabaseContext.Products.Find(productId);
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
-            var orderProductViewModel = new OrderProductViewModel { ProductModel = product, AddressesModel = addresses };
+            var orderProductViewModel = new OrderProductViewModel {ProductModel = product, AddressesModel = addresses};
             return View(orderProductViewModel);
         }
 
         /// <summary>
-        ///     Orders the product following user confirmation.
+        ///     Orders the product following user confirmation, finds the available Stock object of the given product and creates
+        ///     an Item Rental of the item.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
         /// </summary>
-        /// <param name="productId">The product ID.</param>
-        /// <param name="addressId">The selected address.</param>
+        /// <param name="productId">The product ID, referencing Product being ordered.</param>
+        /// <param name="addressId">The address id, referencing the selected Address being ordered to</param>
         /// <returns>
         ///     The media library page after ordering selected product
         /// </returns>
@@ -137,14 +149,17 @@ namespace Capstone_Web_Members.Controllers
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             this.DatabaseContext.createMemberOrder(availableStockId, memberId, int.Parse(addressId));
 
-            return RedirectToAction("OrderConfirmation", new { productId = int.Parse(productId), addressId = int.Parse(addressId) });
+            return RedirectToAction("OrderConfirmation",
+                new {productId = int.Parse(productId), addressId = int.Parse(addressId)});
         }
 
         /// <summary>
-        /// Orders the confirmation.
+        ///     Shows Order Confirmation information for Product just ordered. Shows the info of the Product and the Address used
+        ///     to order. Links back to Media Library. Called from OrderProduct.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
         /// </summary>
-        /// <param name="productId">The product identifier.</param>
-        /// <param name="addressId">The address identifier.</param>
+        /// <param name="productId">The product id, referencing Product just ordered.</param>
+        /// <param name="addressId">The address id, referencing Address ordered to.</param>
         /// <returns></returns>
         public ActionResult OrderConfirmation(int productId, int addressId)
         {
@@ -155,7 +170,8 @@ namespace Capstone_Web_Members.Controllers
 
             var product = this.DatabaseContext.Products.Find(productId);
             var address = this.DatabaseContext.Addresses.Find(addressId);
-            var orderConfirmationViewModel = new OrderConfirmationViewModel {ProductModel = product, AddressModel = address};
+            var orderConfirmationViewModel = new OrderConfirmationViewModel
+                {ProductModel = product, AddressModel = address};
 
             return View(orderConfirmationViewModel);
         }

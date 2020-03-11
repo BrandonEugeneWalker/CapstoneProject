@@ -42,7 +42,9 @@ namespace Capstone_Web_Members.Controllers
         #region Methods
 
         /// <summary>
-        ///     Shows the details of the logged in member.
+        ///     Shows the details of the logged in member, showing their Member Profile info, their Addresses, and their Rental
+        ///     History. Addresses allows Creation, Editing, and Removal.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
         /// </summary>
         /// <returns>
         ///     Returns page showcasing details of the logged in member
@@ -65,37 +67,30 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Creates first instance of the Create / Registration page
+        ///     Page for the Create Member form.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        ///     Returns the create view page
+        /// </returns>
         public ActionResult Create()
         {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
             return View();
         }
 
         /// <summary>
-        ///     Creates the specified member from the Registration page.
+        ///     Creates the specified member from the Registration page after the Create form is submitted. Calls database to
+        ///     insert the new Member data. Redirects to Login if valid, reloads the Registration page if invalid.
         /// </summary>
-        /// <param name="member">The member.</param>
+        /// <param name="member">The member object created in the Create Form.</param>
         /// <returns>
-        ///     Navigates to the Member Web Homepage
-        ///     Creates / Registers the new member
+        ///     Returns to the Member Web Login
+        ///     Returns to the Create form if failed
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
             Member member)
         {
-            if (Session["currentMemberId"] == null)
-            {
-                return RedirectToAction("Login", "Members");
-            }
-
             if (ModelState.IsValid)
             {
                 this.DatabaseContext.insertMember(member.username, member.name, member.password, 0);
@@ -107,7 +102,9 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Edits the specified Member.
+        ///     Page for the Edit Member form, all fields except for password will default contain current information. Returns
+        ///     View of form. If the memberId parameter is null or the Member is not found, returns an error.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>
@@ -136,11 +133,14 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Edits the specified member.
+        ///     Edits Member after Edit form is submitted. Calls Database to edit the given member to the form's new information.
+        ///     Redirects to Member Profile if valid, Returns to Edit form if invalid.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
         /// </summary>
         /// <param name="member">The member.</param>
         /// <returns>
-        ///     Returns the edit view page for the selected Member
+        ///     Returns to the Member Profile
+        ///     Returns to the Edit form if failed
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -172,10 +172,11 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Logs in the user and returns to the previous URL
+        ///     Logs in the user and Returns to Media Library
+        ///     If login is invalid, returns to the Login Page
         /// </summary>
         /// <returns>
-        ///     Returns to the previous page after logging in
+        ///     Returns to Media Library
         /// </returns>
         [AllowAnonymous]
         public ActionResult Login(Member member)
