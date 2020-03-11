@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\LoginController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Data.Entity;
+using System.Linq;
+using Capstone_Database.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;This class handles interactions between the database and the LoginForm.&lt;/para&gt;
+    ///     &lt;para&gt;Primarily handles logging into the system using information given by the user.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class LoginController
+    {
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets the employee by identifier and password.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;
+        ///         &lt;font color=&quot;#333333&quot;&gt;
+        ///             id must be a positive integer, password cannot be null or empty, database cannot be null
+        ///             or empty.
+        ///         &lt;/font&gt;
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The employee&#39;s id.&lt;/param&gt;
+        /// &lt;param name=&quot;password&quot;&gt;The employee&#39;s password.&lt;/param&gt;
+        /// &lt;param name=&quot;capstoneDbContext&quot;&gt;The capstone database context.&lt;/param&gt;
+        /// &lt;returns&gt;Null if not found, the employee otherwise.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentOutOfRangeException&quot;&gt;id - The id must be a positive integer greater than zero.&lt;/exception&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     password - The password cannot be null or empty!
+        ///     or
+        ///     capstoneDbContext - The database to get the employee from must not be null!
+        /// &lt;/exception&gt;
+        public Employee GetEmployeeByIdAndPassword(int id, string password, OnlineEntities capstoneDbContext)
+        {
+            if (id &lt;= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(id),
+                    @&quot;The id must be a positive integer greater than zero.&quot;);
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password), @&quot;The password cannot be null or empty!&quot;);
+            }
+
+            if (capstoneDbContext == null)
+            {
+                throw new ArgumentNullException(nameof(capstoneDbContext),
+                    @&quot;The database to get the employee from must not be null!&quot;);
+            }
+
+            return this.selectEmployeeUsingDbContext(capstoneDbContext, id, password);
+        }
+
+        private Employee selectEmployeeUsingDbContext(OnlineEntities capstoneDbContext, int id, string password)
+        {
+            capstoneDbContext.Employees.Load();
+            return capstoneDbContext.selectEmployeeByIdAndPassword(id, password).First();
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[39,9,39,10,1],[40,13,40,25,1],[41,13,41,14,1],[42,17,43,78,1],[46,13,46,48,1],[47,13,47,14,1],[48,17,48,109,1],[51,13,51,43,1],[52,13,52,14,1],[53,17,54,81,1],[57,13,57,87,0],[58,9,58,10,0],[61,9,61,10,0],[62,13,62,48,0],[63,13,63,90,0],[64,9,64,10,0]]);
+    </script>
+  </body>
+</html>

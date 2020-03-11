@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse\Controllers\HomeController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Linq;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Warehouse.Controllers
+{
+    /// &lt;summary&gt;Controller for the home page and navigation bar items.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Web.Mvc.Controller&quot; /&gt;
+    public class HomeController : Controller
+    {
+        private readonly OnlineEntities data = new OnlineEntities();
+
+
+        /// &lt;summary&gt;
+        /// Initializes a new instance of the &lt;see cref=&quot;HomeController&quot;/&gt; class.
+        /// &lt;/summary&gt;
+        public HomeController()
+        {
+            data = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;
+        /// Initializes a new instance of the &lt;see cref=&quot;HomeController&quot;/&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;entity&quot;&gt;&lt;/param&gt;
+        public HomeController(OnlineEntities entity)
+        {
+            data = entity;
+        }
+
+        /// &lt;summary&gt;  Returns home page index page.&lt;/summary&gt;
+        /// &lt;returns&gt;Home index view.&lt;/returns&gt;
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        /// &lt;summary&gt;  Redirect to manage items index page.&lt;/summary&gt;
+        /// &lt;returns&gt;Manage items index view.&lt;/returns&gt;
+        public ActionResult ManageItems()
+        {
+            if (Session[&quot;Employee&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;);
+            }
+
+            return Redirect(&quot;~/Rentals/Index&quot;);
+        }
+
+        /// &lt;summary&gt;  Redirect to manage employee index page.&lt;/summary&gt;
+        /// &lt;returns&gt;The manage employee index view.&lt;/returns&gt;
+        public ActionResult ManageEmployees()
+        {
+            var employee = Session[&quot;Employee&quot;] as Employee;
+
+            if (employee == null || (bool) !employee.isManager)
+            {
+                return RedirectToAction(&quot;Login&quot;);
+            }
+
+            return Redirect(&quot;~/Employees/Index&quot;);
+        }
+
+        /// &lt;summary&gt;  Redirect to stocks index.&lt;/summary&gt;
+        /// &lt;returns&gt;stocks index page.&lt;/returns&gt;
+        public ActionResult ManageStock()
+        {
+            if (Session[&quot;Employee&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;);
+            }
+
+            return Redirect(&quot;~/Stocks/Index&quot;);
+        }
+
+
+        /*
+         * Validates login information from employee table.
+         */
+        /// &lt;summary&gt;Logins the employee&lt;/summary&gt;
+        /// &lt;param name=&quot;model&quot;&gt;The employee to login&lt;/param&gt;
+        /// &lt;returns&gt;Manage rentals page if good, same page if bad.&lt;/returns&gt;
+        public ActionResult Login(Employee model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var employee = data.selectEmployeeByIdAndPassword(model.employeeId, model.password).ToList();
+            if (employee.Count &gt; 0)
+            {
+                var currentEmp = employee[0];
+                Session[&quot;Employee&quot;] = currentEmp;
+                return RedirectToAction(&quot;ManageItems&quot;);
+            }
+
+            return View(model);
+        }
+
+        /*
+        * Clears current employee session and logs user off.
+        */
+        /// &lt;summary&gt;Logs the employee off.&lt;/summary&gt;
+        /// &lt;returns&gt;home page.&lt;/returns&gt;
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            Session.Abandon();
+            return RedirectToAction(&quot;Index&quot;);
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,9,12,69,1],[12,9,12,69,1],[18,9,18,32,1],[19,9,19,10,1],[20,13,20,41,1],[21,9,21,10,1],[27,9,27,53,1],[28,9,28,10,1],[29,13,29,27,1],[30,9,30,10,1],[35,9,35,10,1],[36,13,36,27,1],[37,9,37,10,1],[42,9,42,10,1],[43,13,43,45,1],[44,13,44,14,1],[45,17,45,50,1],[48,13,48,48,1],[49,9,49,10,1],[54,9,54,10,1],[55,13,55,60,1],[57,13,57,64,1],[58,13,58,14,1],[59,17,59,50,1],[62,13,62,50,1],[63,9,63,10,1],[68,9,68,10,1],[69,13,69,45,1],[70,13,70,14,1],[71,17,71,50,1],[74,13,74,47,1],[75,9,75,10,1],[85,9,85,10,1],[86,13,86,37,1],[86,38,86,57,1],[87,13,87,106,1],[88,13,88,36,1],[89,13,89,14,1],[90,17,90,46,1],[91,17,91,50,1],[92,17,92,56,1],[95,13,95,32,0],[96,9,96,10,1],[105,9,105,10,1],[106,13,106,31,1],[107,13,107,46,1],[108,9,108,10,1]]);
+    </script>
+  </body>
+</html>

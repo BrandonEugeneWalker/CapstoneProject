@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\database\Capstone Database\Model\Stock.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated from a template.
+//
+//     Manual changes to this file may cause unexpected behavior in your application.
+//     Manual changes to this file will be overwritten if the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+
+namespace Capstone_Database.Model
+{
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class Stock
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2214:DoNotCallOverridableMethodsInConstructors&quot;)]
+        public Stock()
+        {
+            this.ItemRentals = new HashSet&lt;ItemRental&gt;();
+        }
+    
+        public int stockId { get; set; }
+        public int productId { get; set; }
+        public string itemCondition { get; set; }
+    
+        public virtual Product Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemRental&gt; ItemRentals { get; set; }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[18,9,18,23,1],[19,9,19,10,1],[20,13,20,58,1],[21,9,21,10,1],[23,30,23,34,0],[23,35,23,39,1],[24,32,24,36,0],[24,37,24,41,1],[25,39,25,43,0],[25,44,25,48,1],[27,42,27,46,0],[27,47,27,51,0],[29,62,29,66,0],[29,67,29,71,1]]);
+    </script>
+  </body>
+</html>

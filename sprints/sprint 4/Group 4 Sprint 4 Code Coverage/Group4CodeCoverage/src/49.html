@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\database\Capstone Database\Model\Employee.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated from a template.
+//
+//     Manual changes to this file may cause unexpected behavior in your application.
+//     Manual changes to this file will be overwritten if the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+
+namespace Capstone_Database.Model
+{
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class Employee
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2214:DoNotCallOverridableMethodsInConstructors&quot;)]
+        public Employee()
+        {
+            this.ItemRentals = new HashSet&lt;ItemRental&gt;();
+            this.ItemRentals1 = new HashSet&lt;ItemRental&gt;();
+        }
+    
+        public int employeeId { get; set; }
+        public string password { get; set; }
+        public Nullable&lt;bool&gt; isManager { get; set; }
+        public string name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemRental&gt; ItemRentals { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(&quot;Microsoft.Usage&quot;, &quot;CA2227:CollectionPropertiesShouldBeReadOnly&quot;)]
+        public virtual ICollection&lt;ItemRental&gt; ItemRentals1 { get; set; }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[18,9,18,26,1],[19,9,19,10,1],[20,13,20,58,1],[21,13,21,59,1],[22,9,22,10,1],[24,33,24,37,1],[24,38,24,42,1],[25,34,25,38,1],[25,39,25,43,1],[26,43,26,47,1],[26,48,26,52,1],[27,30,27,34,1],[27,35,27,39,1],[30,62,30,66,0],[30,67,30,71,1],[32,63,32,67,0],[32,68,32,72,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\desktop\controller\ManageRentalsControllerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.desktop.controller
+{
+    /// &lt;summary&gt;Tests the functionality of the ManageRentalsController.&lt;/summary&gt;
+    [TestClass]
+    public class ManageRentalsControllerTests
+    {
+        #region Methods
+
+        [TestMethod]
+        public void TestGetRentalsWaitingShipmentNullDatabase()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.GetRentalsWaitingShipment(null));
+        }
+
+        [TestMethod]
+        public void TestGetRentalsWaitingReturnNullDatabase()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.GetRentalsWaitingReturn(null));
+        }
+
+        [TestMethod]
+        public void TestGetAllRentalsNullDatabase()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.GetAllRentals(null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullDatabase()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(), null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullRental()
+        {
+            var capstoneDbContextMock = new Mock&lt;OnlineEntities&gt;();
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsWaitingReturn(null, capstoneDbContextMock.Object, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullEmployee()
+        {
+            var capstoneDbContextMock = new Mock&lt;OnlineEntities&gt;();
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(),
+                    capstoneDbContextMock.Object, null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnIncorrectStatus()
+        {
+            var capstoneDbContextMock = new Mock&lt;OnlineEntities&gt;();
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView {
+                    status = &quot;Returned&quot;
+                }, null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullDatabase()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(), null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullRental()
+        {
+            var capstoneDbContextMock = new Mock&lt;OnlineEntities&gt;();
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsReturned(null, capstoneDbContextMock.Object, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullEmployee()
+        {
+            var capstoneDbContextMock = new Mock&lt;OnlineEntities&gt;();
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(), capstoneDbContextMock.Object,
+                    null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedIncorrectStatus()
+        {
+            var capstoneDbContextMock = new Mock&lt;OnlineEntities&gt;();
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView {
+                    status = &quot;Returned&quot;
+                }, null, new Employee()));
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,9,17,10,1],[18,13,18,73,1],[20,13,21,17,1],[21,17,21,72,1],[21,72,21,74,1],[20,13,21,74,1],[22,9,22,10,1],[26,9,26,10,1],[27,13,27,73,1],[29,13,30,17,1],[30,17,30,70,1],[30,70,30,72,1],[29,13,30,72,1],[31,9,31,10,1],[35,9,35,10,1],[36,13,36,73,1],[38,13,39,17,1],[39,17,39,60,1],[39,60,39,62,1],[38,13,39,62,1],[40,9,40,10,1],[44,9,44,10,1],[45,13,45,73,1],[47,13,48,17,1],[48,17,48,114,1],[48,114,48,116,1],[47,13,48,116,1],[49,9,49,10,1],[53,9,53,10,1],[54,13,54,68,1],[55,13,55,73,1],[57,13,58,17,1],[58,17,58,118,1],[58,118,58,120,1],[57,13,58,120,1],[59,9,59,10,1],[63,9,63,10,1],[64,13,64,68,1],[65,13,65,73,1],[67,13,68,17,1],[68,17,69,56,1],[69,56,69,58,1],[67,13,69,58,1],[70,9,70,10,1],[74,9,74,10,1],[75,13,75,68,1],[76,13,76,73,1],[78,13,79,17,1],[79,17,81,41,1],[81,41,81,43,1],[78,13,81,43,1],[82,9,82,10,1],[86,9,86,10,1],[87,13,87,73,1],[89,13,90,17,1],[90,17,90,109,1],[90,109,90,111,1],[89,13,90,111,1],[91,9,91,10,1],[95,9,95,10,1],[96,13,96,68,1],[97,13,97,73,1],[99,13,100,17,1],[100,17,100,113,1],[100,113,100,115,1],[99,13,100,115,1],[101,9,101,10,1],[105,9,105,10,1],[106,13,106,68,1],[107,13,107,73,1],[109,13,110,17,1],[110,17,111,26,1],[111,26,111,28,1],[109,13,111,28,1],[112,9,112,10,1],[116,9,116,10,1],[117,13,117,68,1],[118,13,118,73,1],[120,13,121,17,1],[121,17,123,41,1],[123,41,123,43,1],[120,13,123,43,1],[124,9,124,10,1]]);
+    </script>
+  </body>
+</html>

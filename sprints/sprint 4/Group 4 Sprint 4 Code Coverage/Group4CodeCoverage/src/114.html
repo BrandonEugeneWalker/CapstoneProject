@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\web members\MembersControllerTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Capstone_Database.Model;
+using Capstone_Web_Members.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.web_members
+{
+    /// &lt;summary&gt;
+    ///     Tests the MembersController behavior
+    /// &lt;/summary&gt;
+    [TestClass]
+    public class MembersControllerTest
+    {
+        #region Methods
+
+        [TestMethod]
+        public void StandardConstructorIsValid()
+        {
+            var controller = new MembersController();
+
+            Assert.IsNotNull(controller);
+        }
+
+        [TestMethod]
+        public void DetailsPageIsNotNull()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Details() as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageWillRedirectWithoutSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Details() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void CreatePageIsNotNull()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Create() as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void CreateActionWithValidMemberIsValid()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Create(new Member()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void CreateActionWithInvalidEmployeeReturnsToCreate()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            controller.ModelState.AddModelError(&quot;&quot;, &quot;&quot;);
+
+            var result = controller.Create(new Member()) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod] 
+        public void EditMemberPageWithValidIdIsValid()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Edit(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+            Assert.IsInstanceOfType(result.Model, typeof(Member));
+
+            var model = (Member) result.Model;
+
+            Assert.AreEqual(1, model.memberId);
+        }
+
+        [TestMethod]
+        public void EditMemberPageWithInvalidIdIsNull()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Edit((int?) null) as ViewResult;
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void EditMemberPageWithInvalidMemberIsNull()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Edit(3) as ViewResult;
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void EditMemberPageWillRedirectWithoutSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Edit(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void EditMemberActionWithValidIdIsNotNull()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Edit(new Member {memberId = 1, username = &quot;&quot;, name = &quot;&quot;, password = &quot;&quot;, isBanned = 0, isLibrarian = 0}) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void EditMemberActionWithInvalidIdIsNull()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            controller.ModelState.AddModelError(&quot;&quot;, &quot;&quot;);
+
+            var result = controller.Edit(new Member { memberId = 2, username = &quot;&quot;, name = &quot;&quot;, password = &quot;&quot;, isBanned = 0, isLibrarian = 0 }) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void EditActionWillRedirectWithoutSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var create = controller.Edit(new Member { memberId = 2, username = &quot;&quot;, name = &quot;&quot;, password = &quot;&quot;, isBanned = 0, isLibrarian = 0 }) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void ControllerDisposesResourcesValid()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var edit = controller.Edit(1) as ViewResult;
+
+            controller.Dispose();
+
+            Assert.IsNotNull(edit);
+        }
+
+        [TestMethod]
+        public void LoginPageRedirectsIfCredentialsAreValid()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.Login(new Member { memberId = 1, username = &quot;username&quot;, password = &quot;password&quot; }) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void LoggingOffClearsSession()
+        {
+            var controller = setupMembersControllerWithSession();
+
+            var result = controller.LogOff() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        private static MembersController setupMembersControllerWithoutSession()
+        {
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+            var testCounts = new List&lt;int?&gt; { 1, 2, 3 };
+
+            context.Setup(x =&gt; x.Members).Returns(mockMembers.Object);
+            context.Setup(x =&gt; x.Products).Returns(mockProducts.Object);
+            context.Setup(x =&gt; x.Stocks).Returns(mockStock.Object);
+            context.Setup(x =&gt; x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x =&gt; x.ItemRentals).Returns(mockRentals.Object);
+
+            var mockedProductObjectResult = new Mock&lt;TestableObjectResult&lt;Product&gt;&gt;();
+            mockedProductObjectResult.Setup(x =&gt; x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x =&gt; x.retrieveAvailableProductsWithSearch(&quot;&quot;, &quot;&quot;)).Returns(mockedProductObjectResult.Object);
+
+            var mockedIntObjectResult = new Mock&lt;TestableObjectResult&lt;int?&gt;&gt;();
+            mockedIntObjectResult.Setup(x =&gt; x.GetEnumerator()).Returns(testCounts.GetEnumerator());
+            context.Setup(x =&gt; x.retrieveRentedCount(1)).Returns(mockedIntObjectResult.Object);
+
+            var membersController = new MembersController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;currentMemberId&quot;]).Returns(null);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            membersController.ControllerContext = new ControllerContext(requestContext, membersController);
+
+            return membersController;
+        }
+
+        private static MembersController setupMembersControllerWithSession()
+        {
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+
+            context.Setup(x =&gt; x.Members).Returns(mockMembers.Object);
+            context.Setup(x =&gt; x.Products).Returns(mockProducts.Object);
+            context.Setup(x =&gt; x.Stocks).Returns(mockStock.Object);
+            context.Setup(x =&gt; x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x =&gt; x.ItemRentals).Returns(mockRentals.Object);
+
+            context.Setup(x =&gt; x.Members.Find(1)).Returns(new Member { memberId = 1, username = &quot;username&quot;, password = &quot;password&quot; });
+
+            var mockedProductObjectResult = new Mock&lt;TestableObjectResult&lt;Product&gt;&gt;();
+            mockedProductObjectResult.Setup(x =&gt; x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x =&gt; x.retrieveAvailableProductsWithSearch(&quot;&quot;, &quot;&quot;)).Returns(mockedProductObjectResult.Object);
+
+            var mockedRentalObjectResult = new Mock&lt;TestableObjectResult&lt;ItemRental&gt;&gt;();
+            mockedRentalObjectResult.Setup(x =&gt; x.GetEnumerator()).Returns(getTestItemRentals().GetEnumerator());
+            context.Setup(x =&gt; x.retrieveMembersRentals(1)).Returns(mockedRentalObjectResult.Object);
+
+            var mockedAddressObjectResult = new Mock&lt;TestableObjectResult&lt;Address&gt;&gt;();
+            mockedAddressObjectResult.Setup(x =&gt; x.GetEnumerator()).Returns(getTestAddresses().GetEnumerator());
+            context.Setup(x =&gt; x.retrieveMembersAddresses(1)).Returns(mockedAddressObjectResult.Object);
+
+            var mockedMemberObjectResult = new Mock&lt;TestableObjectResult&lt;Member&gt;&gt;();
+            mockedMemberObjectResult.Setup(x =&gt; x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x =&gt; x.selectMemberByIdAndPassword(&quot;username&quot;, &quot;password&quot;))
+                   .Returns(mockedMemberObjectResult.Object);
+
+            var mockedEmptyMemberObjectResult = new Mock&lt;TestableObjectResult&lt;Member&gt;&gt;();
+            mockedEmptyMemberObjectResult.Setup(x =&gt; x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x =&gt; x.selectMemberByIdAndPassword(&quot;u53rN4m3&quot;, &quot;wrongPassword&quot;))
+                   .Returns(mockedEmptyMemberObjectResult.Object);
+
+            var membersController = new MembersController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;currentMemberId&quot;]).Returns(1);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            membersController.ControllerContext = new ControllerContext(requestContext, membersController);
+
+            return membersController;
+        }
+
+        private static Mock&lt;DbSet&lt;T&gt;&gt; createDbSetMock&lt;T&gt;(IEnumerable&lt;T&gt; elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock&lt;DbSet&lt;T&gt;&gt;();
+
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+
+        private static IEnumerable&lt;Product&gt; getTestProducts()
+        {
+            var productA = new Product
+            {
+                productId = 1,
+                name = &quot;The Hobbit&quot;,
+                description = &quot;One small boi goes on an adventure&quot;,
+                type = &quot;Book&quot;,
+                category = &quot;Adventure&quot;
+            };
+            var productB = new Product
+            {
+                productId = 2,
+                name = &quot;Fellowship of the Ring&quot;,
+                description = &quot;The first movie&quot;,
+                type = &quot;Movie&quot;,
+                category = &quot;Fantasy&quot;
+            };
+
+            var testProducts = new List&lt;Product&gt; { productA, productB };
+
+            return testProducts;
+        }
+
+        private static List&lt;Stock&gt; getTestStocks()
+        {
+            var stockA = new Stock
+            {
+                stockId = 1,
+                productId = 1
+            };
+            var stockB = new Stock
+            {
+                stockId = 2,
+                productId = 2
+            };
+            var stockC = new Stock
+            {
+                stockId = 3,
+                productId = 1
+            };
+            var stockD = new Stock
+            {
+                stockId = 4,
+                productId = 2
+            };
+
+            var testStock = new List&lt;Stock&gt; { stockA, stockB, stockC, stockD };
+
+            return testStock;
+        }
+
+        private static List&lt;ItemRental&gt; getTestItemRentals()
+        {
+            var itemRentalA = new ItemRental
+            {
+                itemRentalId = 1,
+                stockId = 3,
+                memberId = 1,
+                addressId = 1,
+                status = &quot;Returned&quot;
+            };
+            var itemRentalB = new ItemRental
+            {
+                itemRentalId = 2,
+                stockId = 4,
+                memberId = 1,
+                addressId = 2,
+                status = &quot;WaitingReturn&quot;
+            };
+
+            var testRentals = new List&lt;ItemRental&gt; { itemRentalA, itemRentalB };
+
+            return testRentals;
+        }
+
+        private static List&lt;Address&gt; getTestAddresses()
+        {
+            var addressA = new Address
+            {
+                addressId = 1,
+                address1 = &quot;555 St&quot;,
+                city = &quot;Atlanta&quot;,
+                state = &quot;Georgia&quot;,
+                zip = 55555,
+                memberId = 1
+            };
+
+            var addressB = new Address
+            {
+                addressId = 2,
+                address1 = &quot;666 Dr&quot;,
+                city = &quot;Temple&quot;,
+                state = &quot;Georgia&quot;,
+                zip = 66666,
+                memberId = 1
+            };
+
+            var testAddresses = new List&lt;Address&gt; { addressA, addressB };
+
+            return testAddresses;
+        }
+
+        private static List&lt;Member&gt; getTestMembers()
+        {
+            var memberA = new Member
+            {
+                memberId = 1,
+                username = &quot;UserName1&quot;,
+                password = &quot;P@ss12&quot;
+            };
+            var memberB = new Member
+            {
+                memberId = 2,
+                username = &quot;UserName2&quot;,
+                password = &quot;P@ss12&quot;
+            };
+
+            var testMembers = new List&lt;Member&gt; { memberA, memberB };
+
+            return testMembers;
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[24,9,24,10,1],[25,13,25,54,1],[27,13,27,42,1],[28,9,28,10,1],[32,9,32,10,1],[33,13,33,66,1],[35,13,35,61,1],[37,13,37,38,1],[38,9,38,10,1],[42,9,42,10,1],[43,13,43,69,1],[45,13,45,72,1],[47,13,47,38,1],[48,9,48,10,1],[52,9,52,10,1],[53,13,53,66,1],[55,13,55,60,1],[57,13,57,38,1],[58,9,58,10,1],[62,9,62,10,1],[63,13,63,66,1],[65,13,65,83,1],[67,13,67,38,1],[68,9,68,10,1],[72,9,72,10,1],[73,13,73,66,1],[75,13,75,57,1],[77,13,77,72,1],[79,13,79,38,1],[80,9,80,10,1],[84,9,84,10,1],[85,13,85,66,1],[87,13,87,59,1],[89,13,89,38,1],[90,13,90,44,1],[91,13,91,67,1],[93,13,93,47,1],[95,13,95,48,1],[96,9,96,10,1],[100,9,100,10,1],[101,13,101,66,1],[103,13,103,69,1],[105,13,105,35,1],[106,9,106,10,1],[110,9,110,10,1],[111,13,111,66,1],[113,13,113,59,1],[115,13,115,35,1],[116,9,116,10,1],[120,9,120,10,1],[121,13,121,69,1],[123,13,123,70,1],[125,13,125,38,1],[126,9,126,10,1],[130,9,130,10,1],[131,13,131,66,1],[133,13,133,166,1],[135,13,135,38,1],[136,9,136,10,1],[140,9,140,10,1],[141,13,141,66,1],[143,13,143,57,1],[145,13,145,157,1],[147,13,147,38,1],[148,9,148,10,1],[152,9,152,10,1],[153,13,153,69,1],[155,13,155,168,1],[157,13,157,38,1],[158,9,158,10,1],[162,9,162,10,1],[163,13,163,66,1],[165,13,165,57,1],[167,13,167,34,1],[169,13,169,36,1],[170,9,170,10,1],[174,9,174,10,1],[175,13,175,66,1],[177,13,177,143,1],[179,13,179,38,1],[180,9,180,10,1],[184,9,184,10,1],[185,13,185,66,1],[187,13,187,71,1],[189,13,189,38,1],[190,9,190,10,1],[193,9,193,10,1],[194,13,194,54,1],[195,13,195,65,1],[196,13,196,67,1],[197,13,197,62,1],[198,13,198,69,1],[199,13,199,69,1],[200,13,200,57,1],[202,13,202,71,1],[203,13,203,73,1],[204,13,204,68,1],[205,13,205,75,1],[206,13,206,75,1],[208,13,208,87,1],[209,13,209,110,1],[210,13,210,121,1],[212,13,212,80,1],[213,13,213,101,1],[214,13,214,96,1],[216,13,216,75,1],[218,13,218,59,1],[219,13,219,60,1],[220,13,220,68,1],[221,13,221,71,1],[222,13,222,90,1],[223,13,223,108,1],[225,13,225,38,1],[226,9,226,10,1],[229,9,229,10,1],[230,13,230,54,1],[231,13,231,65,1],[232,13,232,67,1],[233,13,233,62,1],[234,13,234,69,1],[235,13,235,69,1],[237,13,237,71,1],[238,13,238,73,1],[239,13,239,68,1],[240,13,240,75,1],[241,13,241,75,1],[243,13,243,134,1],[245,13,245,87,1],[246,13,246,110,1],[247,13,247,121,1],[249,13,249,89,1],[250,13,250,114,1],[251,13,251,102,1],[253,13,253,87,1],[254,13,254,113,1],[255,13,255,105,1],[257,13,257,85,1],[258,13,258,110,1],[259,13,260,62,1],[262,13,262,90,1],[263,13,263,115,1],[264,13,265,67,1],[267,13,267,75,1],[269,13,269,59,1],[270,13,270,60,1],[271,13,271,65,1],[272,13,272,71,1],[273,13,273,90,1],[274,13,274,108,1],[276,13,276,38,1],[277,9,277,10,1],[280,9,280,10,1],[281,13,281,62,1],[282,13,282,50,1],[284,13,284,104,1],[285,13,285,108,1],[286,13,286,110,1],[287,13,287,118,1],[289,13,289,30,1],[290,9,290,10,1],[293,9,293,10,1],[294,13,301,15,1],[302,13,309,15,1],[311,13,311,73,1],[313,13,313,33,1],[314,9,314,10,1],[317,9,317,10,1],[318,13,322,15,1],[323,13,327,15,1],[328,13,332,15,1],[333,13,337,15,1],[339,13,339,80,1],[341,13,341,30,1],[342,9,342,10,1],[345,9,345,10,1],[346,13,353,15,1],[354,13,361,15,1],[363,13,363,81,1],[365,13,365,32,1],[366,9,366,10,1],[369,9,369,10,1],[370,13,378,15,1],[380,13,388,15,1],[390,13,390,74,1],[392,13,392,34,1],[393,9,393,10,1],[396,9,396,10,1],[397,13,402,15,1],[403,13,408,15,1],[410,13,410,69,1],[412,13,412,32,1],[413,9,413,10,1]]);
+    </script>
+  </body>
+</html>

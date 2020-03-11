@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Members\ViewModels\MediaLibraryViewModel.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Members.ViewModels
+{
+    /// &lt;summary&gt;
+    ///     ViewModel for storing the available Products to rent and the count of active rentals a Member has via multiple
+    ///     models to display on the MediaLibrary View
+    /// &lt;/summary&gt;
+    public class MediaLibraryViewModel
+    {
+        #region Properties
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the products model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     The products model, storing a List of Products available to rent
+        /// &lt;/value&gt;
+        public List&lt;Product&gt; ProductsModel { get; set; }
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the rented count model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     The rented count model, storing the amount of active rentals the current Member has
+        /// &lt;/value&gt;
+        public int? RentedCountModel { get; set; }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,46,20,50,0],[20,51,20,55,1],[28,40,28,44,0],[28,45,28,49,1]]);
+    </script>
+  </body>
+</html>

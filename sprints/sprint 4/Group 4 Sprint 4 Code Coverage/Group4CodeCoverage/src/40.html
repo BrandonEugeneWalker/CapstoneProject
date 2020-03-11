@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Members\App_Start\RouteConfig.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace Capstone_Web_Members
+{
+    public class RouteConfig
+    {
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute(&quot;{resource}.axd/{*pathInfo}&quot;);
+
+            routes.MapRoute(
+                &quot;Default&quot;,
+                &quot;{controller}/{action}/{id}&quot;,
+                new {controller = &quot;Home&quot;, action = &quot;Index&quot;, id = UrlParameter.Optional}
+            );
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[9,9,9,10,0],[10,13,10,62,0],[12,13,16,15,0],[17,9,17,10,0]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\ManageEmployeeController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.ComponentModel;
+using System.Data.Entity;
+using Capstone_Database.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;Handles communications between the view and the database.&lt;/para&gt;
+    ///     &lt;para&gt;Has methods for getting and removing employees.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class ManageEmployeeController
+    {
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Removes the employee from database.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;The employee and the database cannot be null.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to remove.&lt;/param&gt;
+        /// &lt;param name=&quot;capstoneDbContext&quot;&gt;The capstone database context.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     employee - The employee to remove cannot be null!
+        ///     or
+        ///     capstoneDbContext - The database to remove the employee from cannot be null!
+        /// &lt;/exception&gt;
+        public void RemoveEmployeeFromDatabase(Employee employee, OnlineEntities capstoneDbContext)
+        {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), @&quot;The employee to remove cannot be null!&quot;);
+            }
+
+            if (capstoneDbContext == null)
+            {
+                throw new ArgumentNullException(nameof(capstoneDbContext),
+                    @&quot;The database to remove the employee from cannot be null!&quot;);
+            }
+
+            this.deleteGivenEmployeeFromDatabase(capstoneDbContext, employee);
+        }
+
+        private void deleteGivenEmployeeFromDatabase(OnlineEntities capstoneDbContext, Employee employee)
+        {
+            capstoneDbContext.Employees.Load();
+            capstoneDbContext.Employees.Remove(employee);
+            capstoneDbContext.SaveChanges();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets and returns the employees in the database.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Uses the DbContext in order to do this.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDbContext&quot;&gt;The capstone database context.&lt;/param&gt;
+        /// &lt;returns&gt;A binding list of employees.&lt;/returns&gt;
+        public BindingList&lt;Employee&gt; GetEmployees(OnlineEntities capstoneDbContext)
+        {
+            if (capstoneDbContext == null)
+            {
+                throw new ArgumentNullException(nameof(capstoneDbContext), @&quot;The database to get from cannot be null!&quot;);
+            }
+
+            capstoneDbContext.Employees.Load();
+            return capstoneDbContext.Employees.Local.ToBindingList();
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[30,9,30,10,1],[31,13,31,34,1],[32,13,32,14,1],[33,17,33,110,1],[36,13,36,43,1],[37,13,37,14,1],[38,17,39,82,1],[42,13,42,79,0],[43,9,43,10,0],[46,9,46,10,0],[47,13,47,48,0],[48,13,48,58,0],[49,13,49,45,0],[50,9,50,10,0],[61,9,61,10,1],[62,13,62,43,1],[63,13,63,14,1],[64,17,64,121,1],[67,13,67,48,0],[68,13,68,70,0],[69,9,69,10,0]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse.Tests\Controllers\EmployeesControllerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Capstone_Database.Model;
+using Capstone_Web_Warehouse.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Web_Warehouse.Tests.Controllers
+{
+    [TestClass()]
+    public class EmployeesControllerTests
+    {
+
+        [TestMethod()]
+        public void ControllerTest()
+        {
+            var controller = new EmployeesController();
+            Assert.IsNotNull(controller);
+        }
+
+        [TestMethod]
+        public void ControllerDisposesResourcesValid()
+        {
+            var controller = setupControllerWithSession();
+
+            var index = controller.Index() as ViewResult;
+            controller.Dispose();
+
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void IndexViewManagerTest()
+        {
+            var controller = setupControllerWithSession();
+            var index = controller.Index() as ViewResult;
+            Assert.IsNotNull(index);
+            Assert.IsNotNull(index.Model);
+            Assert.IsInstanceOfType(index.Model, typeof(IEnumerable&lt;Employee&gt;));
+            var model = (IEnumerable&lt;Employee&gt;)index.Model;
+            Assert.AreEqual(2, model.Count());
+        }
+
+        [TestMethod()]
+        public void IndexViewEmployeeTest()
+        {
+            var controller = setupControllerNotManagerSession();
+            var index = controller.Index() as RedirectResult;
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void IndexViewNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var index = controller.Index() as RedirectResult;
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void CreateViewNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var index = controller.Create() as RedirectToRouteResult;
+            Assert.IsNotNull(index);
+        }
+        [TestMethod()]
+        public void CreateManagerLoginTest()
+        {
+            var controller = setupControllerWithSession();
+            var index = controller.Create() as ViewResult;
+            Assert.IsNotNull(index);
+        }
+        [TestMethod()]
+        public void CreateEmployeeLoginTest()
+        {
+            var controller = setupControllerNotManagerSession();
+            var create = controller.Create() as RedirectToRouteResult;
+            Assert.IsNotNull(create);
+        }
+        [TestMethod()]
+        public void CreateEmployeeClickTest()
+        {
+            var controller = setupControllerWithSession();
+            var create = controller.Create(new Employee()) as RedirectToRouteResult;
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod()]
+        public void CreateManagerClickTest()
+        {
+            var controller = setupControllerWithSession();
+            var emp1 = new Employee() { employeeId = 3000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true };
+            var create = controller.Create(emp1) as RedirectToRouteResult;
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod()]
+        public void DetailsGoodIdTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var detail = ec.Details(1000) as ViewResult;
+            Assert.IsNotNull(detail);
+            Assert.IsNotNull(detail.Model);
+            Assert.IsInstanceOfType(detail.Model, typeof(Employee));
+            var model = (Employee)detail.Model;
+            Assert.AreEqual(1000, model.employeeId);
+        }
+
+        [TestMethod()]
+        public void DetailsIdNullTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            int? bad = null;
+            var detail = ec.Details(bad) as HttpStatusCodeResult;
+            Assert.IsNotNull(detail);
+        }
+
+        [TestMethod()]
+        public void DetailsIdNotFoundTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var detail = ec.Details(3000) as HttpNotFoundResult;
+            Assert.IsNotNull(detail);
+        }
+
+        [TestMethod()]
+        public void DeleteTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var delete = ec.Delete(1000) as ViewResult;
+            Assert.IsNotNull(delete);
+            Assert.IsNotNull(delete.Model);
+            Assert.IsInstanceOfType(delete.Model, typeof(Employee));
+            var model = (Employee)delete.Model;
+            Assert.AreEqual(1000, model.employeeId);
+        }
+        [TestMethod()]
+        public void DeleteNotFoundTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var delete = ec.Delete(3000) as HttpNotFoundResult;
+            Assert.IsNotNull(delete);
+        }
+        [TestMethod()]
+        public void DeleteNullIdTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var delete = ec.Delete(null) as HttpStatusCodeResult;
+            Assert.IsNotNull(delete);
+        }
+        [TestMethod()]
+        public void DeleteConfirmedTest()
+        {
+            var controller = setupControllerWithSession();
+            var confirm = controller.DeleteConfirmed(1000) as RedirectToRouteResult;
+            Assert.IsNotNull(confirm);
+
+        }
+        private static Mock&lt;DbSet&lt;T&gt;&gt; CreateDbSetMock&lt;T&gt;(IEnumerable&lt;T&gt; elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock&lt;DbSet&lt;T&gt;&gt;();
+
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+
+        private static EmployeesController setupControllerWithSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true};
+            var emp2 = new Employee() { employeeId = 2000, name = &quot;Bill&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = false };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Remove(emp1)).Returns(emp1);
+
+            var eController = new EmployeesController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;Employee&quot;]).Returns(emp1);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+        private static EmployeesController setupControllerWithoutSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = &quot;Bill&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = false };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+
+            var eController = new EmployeesController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;Employee&quot;]).Returns(null);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+        private static EmployeesController setupControllerNotManagerSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = &quot;Bill&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = false };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+
+            var eController = new EmployeesController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;Employee&quot;]).Returns(emp2);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,9,20,10,1],[21,13,21,56,1],[22,13,22,42,1],[23,9,23,10,1],[27,9,27,10,1],[28,13,28,59,1],[30,13,30,58,1],[31,13,31,34,1],[33,13,33,37,1],[34,9,34,10,1],[38,9,38,10,1],[39,13,39,59,1],[40,13,40,58,1],[41,13,41,37,1],[42,13,42,43,1],[43,13,43,81,1],[44,13,44,60,1],[45,13,45,47,1],[46,9,46,10,1],[50,9,50,10,1],[51,13,51,65,1],[52,13,52,62,1],[53,13,53,37,1],[54,9,54,10,1],[58,9,58,10,1],[59,13,59,62,1],[60,13,60,62,1],[61,13,61,37,1],[62,9,62,10,1],[66,9,66,10,1],[67,13,67,62,1],[68,13,68,70,1],[69,13,69,37,1],[70,9,70,10,1],[73,9,73,10,1],[74,13,74,59,1],[75,13,75,59,1],[76,13,76,37,1],[77,9,77,10,1],[80,9,80,10,1],[81,13,81,65,1],[82,13,82,71,1],[83,13,83,38,1],[84,9,84,10,1],[87,9,87,10,1],[88,13,88,59,1],[89,13,89,85,1],[90,13,90,38,1],[91,9,91,10,1],[95,9,95,10,1],[96,13,96,59,1],[97,13,97,121,1],[98,13,98,75,1],[99,13,99,38,1],[100,9,100,10,1],[104,9,104,10,1],[105,13,105,61,1],[106,13,106,61,1],[107,13,111,15,1],[113,13,113,54,1],[114,13,114,51,1],[115,13,115,66,1],[116,13,116,70,1],[117,13,117,62,1],[118,13,118,57,1],[119,13,119,38,1],[120,13,120,44,1],[121,13,121,69,1],[122,13,122,48,1],[123,13,123,53,1],[124,9,124,10,1],[128,9,128,10,1],[129,13,129,61,1],[130,13,130,61,1],[131,13,135,15,1],[137,13,137,54,1],[138,13,138,51,1],[139,13,139,66,1],[140,13,140,70,1],[141,13,141,62,1],[142,13,142,29,1],[143,13,143,66,1],[144,13,144,38,1],[145,9,145,10,1],[149,9,149,10,1],[150,13,150,61,1],[151,13,151,61,1],[152,13,156,15,1],[158,13,158,54,1],[159,13,159,51,1],[160,13,160,66,1],[161,13,161,70,1],[162,13,162,62,1],[163,13,163,65,1],[164,13,164,38,1],[165,9,165,10,1],[169,9,169,10,1],[170,13,170,61,1],[171,13,171,61,1],[172,13,176,15,1],[178,13,178,54,1],[179,13,179,51,1],[180,13,180,66,1],[181,13,181,70,1],[182,13,182,62,1],[183,13,183,56,1],[184,13,184,38,1],[185,13,185,44,1],[186,13,186,69,1],[187,13,187,48,1],[188,13,188,53,1],[189,9,189,10,1],[192,9,192,10,1],[193,13,193,61,1],[194,13,194,61,1],[195,13,199,15,1],[201,13,201,54,1],[202,13,202,51,1],[203,13,203,66,1],[204,13,204,70,1],[205,13,205,62,1],[206,13,206,64,1],[207,13,207,38,1],[208,9,208,10,1],[211,9,211,10,1],[212,13,212,61,1],[213,13,213,61,1],[214,13,218,15,1],[220,13,220,54,1],[221,13,221,51,1],[222,13,222,66,1],[223,13,223,70,1],[224,13,224,62,1],[225,13,225,66,1],[226,13,226,38,1],[227,9,227,10,1],[230,9,230,10,1],[231,13,231,59,1],[232,13,232,85,1],[233,13,233,39,1],[235,9,235,10,1],[237,9,237,10,1],[238,13,238,62,1],[239,13,239,50,1],[241,13,241,104,1],[242,13,242,108,1],[243,13,243,110,1],[244,13,244,118,1],[246,13,246,30,1],[247,9,247,10,1],[250,9,250,10,1],[251,13,251,120,1],[252,13,252,123,1],[253,13,257,15,1],[259,13,259,54,1],[260,13,260,51,1],[262,13,262,66,1],[263,13,263,72,1],[265,13,265,71,1],[267,13,267,59,1],[268,13,268,60,1],[269,13,269,61,1],[270,13,270,71,1],[271,13,271,90,1],[272,13,272,96,1],[274,13,274,32,1],[275,9,275,10,1],[278,9,278,10,1],[279,13,279,121,1],[280,13,280,123,1],[281,13,285,15,1],[287,13,287,54,1],[288,13,288,51,1],[290,13,290,66,1],[291,13,291,70,1],[293,13,293,71,1],[295,13,295,59,1],[296,13,296,60,1],[297,13,297,61,1],[298,13,298,71,1],[299,13,299,90,1],[300,13,300,96,1],[302,13,302,32,1],[303,9,303,10,1],[306,9,306,10,1],[307,13,307,121,1],[308,13,308,123,1],[309,13,313,15,1],[315,13,315,54,1],[316,13,316,51,1],[318,13,318,66,1],[319,13,319,70,1],[321,13,321,71,1],[323,13,323,59,1],[324,13,324,60,1],[325,13,325,61,1],[326,13,326,71,1],[327,13,327,90,1],[328,13,328,96,1],[330,13,330,32,1],[331,9,331,10,1]]);
+    </script>
+  </body>
+</html>

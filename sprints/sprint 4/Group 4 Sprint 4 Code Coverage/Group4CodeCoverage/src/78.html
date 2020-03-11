@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\LoginForm.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Windows.Forms;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using Capstone_Desktop.View;
+
+namespace Capstone_Desktop
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;The login page of the application.&lt;/para&gt;
+    ///     &lt;para&gt;The LoginForm is the form that will greet a user upon starting the program.&lt;/para&gt;
+    ///     &lt;para&gt;
+    ///         The LoginForm allows a user to verify their status as an employee in order to access other parts of the
+    ///         system.
+    ///     &lt;/para&gt;
+    ///     &lt;para&gt;
+    ///         The LoginForm is able to tell the difference between a regular employee and a manager, sending them to
+    ///         different places depending on their status.
+    ///     &lt;/para&gt;
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Windows.Forms.Form&quot; /&gt;
+    public partial class LoginForm : Form
+    {
+        #region Data members
+
+        private Employee currentEmployee;
+
+        private readonly OnlineEntities capstoneDatabaseContext = new OnlineEntities();
+
+        private readonly LoginController loginController;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;Initializes a new instance of the &lt;see cref=&quot;LoginForm&quot; /&gt; class.&lt;/para&gt;
+        ///     &lt;para&gt;The LoginForm exits to the operating system.&lt;/para&gt;
+        ///     &lt;para&gt;The LoginForm will open the ManageItemsForm or ManageEmployeesForm depending on the login status.&lt;/para&gt;
+        ///     &lt;para&gt;The LoginForm will provide feedback on user input.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        public LoginForm()
+        {
+            this.InitializeComponent();
+            this.loginController = new LoginController();
+            this.capstoneDatabaseContext = new OnlineEntities();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void LoginButton_Click(object sender, EventArgs e)
+        {
+            var id = int.Parse(this.usernameTextbox.Text);
+            var password = this.passwordTextbox.Text;
+
+            var results = this.tryToLogin(id, password);
+            if (results)
+            {
+                var manageEmployeeForm = new ManageEmployeeForm(this.currentEmployee);
+                Hide();
+                manageEmployeeForm.ShowDialog();
+                this.emptyTextBoxes();
+                Show();
+            }
+            else if (this.currentEmployee != null)
+            {
+                var manageItemsForm = new ManageItemsForm(this.currentEmployee);
+                Hide();
+                manageItemsForm.ShowDialog();
+                this.emptyTextBoxes();
+                Show();
+            }
+            else
+            {
+                this.showLoginError();
+            }
+        }
+
+        private void emptyTextBoxes()
+        {
+            this.usernameTextbox.Text = &quot;&quot;;
+            this.passwordTextbox.Text = &quot;&quot;;
+        }
+
+        private void showLoginError()
+        {
+            MessageBox.Show(@&quot;Was unable to login.&quot;);
+            this.emptyTextBoxes();
+        }
+
+        private bool tryToLogin(int id, string password)
+        {
+            try
+            {
+                this.currentEmployee =
+                    this.loginController.GetEmployeeByIdAndPassword(id, password, this.capstoneDatabaseContext);
+
+                return this.currentEmployee.isManager == true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[28,9,28,88,0],[42,9,42,27,0],[43,9,43,10,0],[44,13,44,40,0],[45,13,45,58,0],[46,13,46,65,0],[47,9,47,10,0],[54,9,54,10,0],[55,13,55,59,0],[56,13,56,54,0],[58,13,58,57,0],[59,13,59,25,0],[60,13,60,14,0],[61,17,61,87,0],[62,17,62,24,0],[63,17,63,49,0],[64,17,64,39,0],[65,17,65,24,0],[66,13,66,14,0],[67,18,67,51,0],[68,13,68,14,0],[69,17,69,81,0],[70,17,70,24,0],[71,17,71,46,0],[72,17,72,39,0],[73,17,73,24,0],[74,13,74,14,0],[76,13,76,14,0],[77,17,77,39,0],[78,13,78,14,0],[79,9,79,10,0],[82,9,82,10,0],[83,13,83,44,0],[84,13,84,44,0],[85,9,85,10,0],[88,9,88,10,0],[89,13,89,54,0],[90,13,90,35,0],[91,9,91,10,0],[94,9,94,10,0],[96,13,96,14,0],[97,17,98,113,0],[100,17,100,63,0],[102,13,102,30,0],[103,13,103,14,0],[104,17,104,30,0],[106,9,106,10,0]]);
+    </script>
+  </body>
+</html>

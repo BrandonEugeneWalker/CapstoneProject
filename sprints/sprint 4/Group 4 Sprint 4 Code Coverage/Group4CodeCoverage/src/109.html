@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Members\Controllers\MembersController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+using Capstone_Web_Members.ViewModels;
+
+namespace Capstone_Web_Members.Controllers
+{
+    /// &lt;summary&gt;
+    ///     Controller class for Member Management pages
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Web.Mvc.Controller&quot; /&gt;
+    public class MembersController : Controller
+    {
+        #region Data members
+
+        public OnlineEntities DatabaseContext;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;MembersController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        public MembersController()
+        {
+            this.DatabaseContext = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;MembersController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;databaseContext&quot;&gt;The database context.&lt;/param&gt;
+        public MembersController(OnlineEntities databaseContext)
+        {
+            this.DatabaseContext = databaseContext;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     Shows the details of the logged in member, showing their Member Profile info, their Addresses, and their Rental
+        ///     History. Addresses allows Creation, Editing, and Removal.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;
+        ///     Returns page showcasing details of the logged in member
+        /// &lt;/returns&gt;
+        public ActionResult Details()
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+            var member = this.DatabaseContext.Members.Find(memberId);
+            var rentedItems = this.DatabaseContext.retrieveMembersRentals(memberId).ToList();
+            var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
+            var memberProfileViewModel = new MemberProfileViewModel
+                {MemberModel = member, ItemRentalsModel = rentedItems, AddressesModel = addresses};
+
+            return View(memberProfileViewModel);
+        }
+
+        /// &lt;summary&gt;
+        ///     Page for the Create Member form.
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;
+        ///     Returns the create view page
+        /// &lt;/returns&gt;
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        /// &lt;summary&gt;
+        ///     Creates the specified member from the Registration page after the Create form is submitted. Calls database to
+        ///     insert the new Member data. Redirects to Login if valid, reloads the Registration page if invalid.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;member&quot;&gt;The member object created in the Create Form.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     Returns to the Member Web Login
+        ///     Returns to the Create form if failed
+        /// &lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = &quot;memberId,username,name,password,isLibrarian,isBanned&quot;)]
+            Member member)
+        {
+            if (ModelState.IsValid)
+            {
+                this.DatabaseContext.insertMember(member.username, member.name, member.password, 0);
+
+                return RedirectToAction(&quot;Login&quot;);
+            }
+
+            return View(member);
+        }
+
+        /// &lt;summary&gt;
+        ///     Page for the Edit Member form, all fields except for password will default contain current information. Returns
+        ///     View of form. If the memberId parameter is null or the Member is not found, returns an error.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The identifier.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     Returns the edit view page for the selected Member
+        /// &lt;/returns&gt;
+        public ActionResult Edit(int? id)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var member = this.DatabaseContext.Members.Find(id);
+            if (member == null)
+            {
+                return HttpNotFound();
+            }
+
+            member.password = string.Empty;
+            return View(member);
+        }
+
+        /// &lt;summary&gt;
+        ///     Edits Member after Edit form is submitted. Calls Database to edit the given member to the form&#39;s new information.
+        ///     Redirects to Member Profile if valid, Returns to Edit form if invalid.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;member&quot;&gt;The member.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     Returns to the Member Profile
+        ///     Returns to the Edit form if failed
+        /// &lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = &quot;memberId,username,name,password,isLibrarian,isBanned&quot;)]
+            Member member)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            if (ModelState.IsValid)
+            {
+                this.DatabaseContext.editMember(member.username, member.name, member.password, member.memberId);
+                return RedirectToAction(&quot;Details&quot;);
+            }
+
+            return View(member);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.DatabaseContext.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
+        /// &lt;summary&gt;
+        ///     Logs in the user and Returns to Media Library
+        ///     If login is invalid, returns to the Login Page
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;
+        ///     Returns to Media Library
+        /// &lt;/returns&gt;
+        [AllowAnonymous]
+        public ActionResult Login(Member member)
+        {
+            var matchingMembers = this.DatabaseContext.selectMemberByIdAndPassword(member.username, member.password)
+                                      .ToList();
+
+            if (matchingMembers.Count &gt; 0)
+            {
+                var loggedInMemberId = matchingMembers[0].memberId;
+                Session[&quot;currentMemberId&quot;] = loggedInMemberId;
+                return RedirectToAction(&quot;MediaLibrary&quot;, &quot;Home&quot;);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            Session.Abandon();
+            return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[26,9,26,35,1],[27,9,27,10,1],[28,13,28,57,1],[29,9,29,10,1],[35,9,35,65,1],[36,9,36,10,1],[37,13,37,52,1],[38,9,38,10,1],[53,9,53,10,1],[54,13,54,52,1],[55,13,55,14,1],[56,17,56,61,1],[59,13,59,77,1],[60,13,60,70,1],[61,13,61,94,1],[62,13,62,94,1],[63,13,64,100,1],[66,13,66,49,1],[67,9,67,10,1],[76,9,76,10,1],[77,13,77,27,1],[78,9,78,10,1],[93,9,93,10,1],[94,13,94,36,1],[95,13,95,14,1],[96,17,96,101,1],[98,17,98,50,1],[101,13,101,33,1],[102,9,102,10,1],[114,9,114,10,1],[115,13,115,52,1],[116,13,116,14,1],[117,17,117,61,1],[120,13,120,28,1],[121,13,121,14,1],[122,17,122,76,1],[125,13,125,64,1],[126,13,126,32,1],[127,13,127,14,1],[128,17,128,39,1],[131,13,131,44,1],[132,13,132,33,1],[133,9,133,10,1],[149,9,149,10,1],[150,13,150,52,1],[151,13,151,14,1],[152,17,152,61,1],[155,13,155,36,1],[156,13,156,14,1],[157,17,157,113,1],[158,17,158,52,1],[161,13,161,33,1],[162,9,162,10,1],[165,9,165,10,1],[166,13,166,27,1],[167,13,167,14,1],[168,17,168,48,1],[169,13,169,14,1],[171,13,171,37,1],[172,9,172,10,1],[183,9,183,10,1],[184,13,185,49,1],[187,13,187,43,1],[188,13,188,14,1],[189,17,189,68,1],[190,17,190,63,1],[191,17,191,65,1],[194,13,194,27,0],[195,9,195,10,1],[200,9,200,10,1],[201,13,201,31,1],[202,13,202,57,1],[203,9,203,10,1]]);
+    </script>
+  </body>
+</html>

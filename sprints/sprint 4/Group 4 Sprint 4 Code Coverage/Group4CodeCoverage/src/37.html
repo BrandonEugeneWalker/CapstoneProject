@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Members\ViewModels\MemberProfileViewModel.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Members.ViewModels
+{
+    /// &lt;summary&gt;
+    ///     ViewModel for storing the current Member, their ItemRental history, and Addresses via multiple models to display on
+    ///     the Member Profile View
+    /// &lt;/summary&gt;
+    public class MemberProfileViewModel
+    {
+        #region Properties
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the member model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     The member model, storing a Member object from the MembersController for the Member Profile View to display.
+        /// &lt;/value&gt;
+        public Member MemberModel { get; set; }
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the item rentals model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     The item rentals model, storing a List of ItemRental objects from the MembersController for the Member Profile View
+        ///     to display.
+        /// &lt;/value&gt;
+        public List&lt;ItemRental&gt; ItemRentalsModel { get; set; }
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the addresses model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     The addresses model, storing a List of Address objects from the MembersController for the Member Profile View to
+        ///     display.
+        /// &lt;/value&gt;
+        public List&lt;Address&gt; AddressesModel { get; set; }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,37,20,41,0],[20,42,20,46,1],[29,52,29,56,0],[29,57,29,61,1],[38,47,38,51,0],[38,52,38,56,1]]);
+    </script>
+  </body>
+</html>
