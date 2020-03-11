@@ -35,8 +35,8 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 return Redirect("~/Home/Login");
             }
-            var stocks = db.Stocks.Include(s => s.Product);
-            return View(stocks.ToList());
+            //var stocks = db.Stocks.Include(s => s.Product);
+            return View(db.Stocks.ToList());
         }
 
         // GET: Stocks/Details/5
