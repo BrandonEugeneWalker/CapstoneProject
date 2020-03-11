@@ -38,10 +38,10 @@
             // companyLabel
             // 
             this.companyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.companyLabel.Location = new System.Drawing.Point(-7, -9);
+            this.companyLabel.Location = new System.Drawing.Point(-7, -1);
             this.companyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.companyLabel.Name = "companyLabel";
-            this.companyLabel.Size = new System.Drawing.Size(1277, 85);
+            this.companyLabel.Size = new System.Drawing.Size(1277, 50);
             this.companyLabel.TabIndex = 2;
             this.companyLabel.Text = "Employee History";
             this.companyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -49,7 +49,7 @@
             // employeeLabel
             // 
             this.employeeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.employeeLabel.Location = new System.Drawing.Point(-7, 76);
+            this.employeeLabel.Location = new System.Drawing.Point(-7, 49);
             this.employeeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.employeeLabel.Name = "employeeLabel";
             this.employeeLabel.Size = new System.Drawing.Size(1277, 40);

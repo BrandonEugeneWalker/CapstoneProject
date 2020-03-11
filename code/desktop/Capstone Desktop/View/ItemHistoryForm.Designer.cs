@@ -38,10 +38,10 @@
             // companyLabel
             // 
             this.companyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.companyLabel.Location = new System.Drawing.Point(-7, -9);
+            this.companyLabel.Location = new System.Drawing.Point(-7, 0);
             this.companyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.companyLabel.Name = "companyLabel";
-            this.companyLabel.Size = new System.Drawing.Size(1280, 85);
+            this.companyLabel.Size = new System.Drawing.Size(1280, 54);
             this.companyLabel.TabIndex = 2;
             this.companyLabel.Text = "Item History";
             this.companyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -49,7 +49,7 @@
             // stockLabel
             // 
             this.stockLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stockLabel.Location = new System.Drawing.Point(-7, 76);
+            this.stockLabel.Location = new System.Drawing.Point(-7, 54);
             this.stockLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.stockLabel.Name = "stockLabel";
             this.stockLabel.Size = new System.Drawing.Size(1280, 40);

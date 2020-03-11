@@ -68,7 +68,7 @@ namespace Capstone_Desktop.View
         {
             string employeeDescription = this.employeeHistoryController.BuildEmployeeDescription(this.CurrentEmployee);
             string baseString = this.employeeLabel.Text;
-            string updatedLabelValue = baseString + Environment.NewLine + employeeDescription;
+            string updatedLabelValue = baseString + employeeDescription;
             this.employeeLabel.Text = updatedLabelValue;
         }
     }

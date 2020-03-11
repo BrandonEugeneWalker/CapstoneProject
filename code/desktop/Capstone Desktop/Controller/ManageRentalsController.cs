@@ -126,9 +126,17 @@ namespace Capstone_Desktop.Controller
                 return false;
             }
 
-            detailedRentalView.status = "WaitingReturn";
-            detailedRentalView.shipEmployeeId = employee.employeeId;
-            detailedRentalView.shipDateTime = DateTime.Now;
+            capstoneDbContext.ItemRentals.Load();
+            var currentRental = capstoneDbContext.ItemRentals.Find(detailedRentalView.stockId);
+
+            if (currentRental == null)
+            {
+                return false;
+            }
+
+            currentRental.status = "WaitingReturn";
+            currentRental.shipEmployeeId = employee.employeeId;
+            currentRental.shipDateTime = DateTime.Now;
             capstoneDbContext.SaveChanges();
             return true;
         }
@@ -169,9 +177,17 @@ namespace Capstone_Desktop.Controller
                 return false;
             }
 
-            detailedRentalView.status = "Returned";
-            detailedRentalView.returnEmployeeId = employee.employeeId;
-            detailedRentalView.returnDateTime = DateTime.Now;
+            capstoneDbContext.ItemRentals.Load();
+            var currentRental = capstoneDbContext.ItemRentals.Find(detailedRentalView.stockId);
+
+            if (currentRental == null)
+            {
+                return false;
+            }
+
+            currentRental.status = "Returned";
+            currentRental.shipEmployeeId = employee.employeeId;
+            currentRental.shipDateTime = DateTime.Now;
             capstoneDbContext.SaveChanges();
             return true;
         }
