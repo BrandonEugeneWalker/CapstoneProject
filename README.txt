@@ -26,10 +26,9 @@ Our employee system allows WGEL to keep our product pages up to date and tidy.
   
   **Passwords**
   User: TheJeselnik
-  Password: P@ss123
-  
-  User: test
   Password: P@ss12
+  or
+  Registering New User
   
 *Running Web for Warehouse*
   Select Capstone Web Warehouse in the run list and then run it.
