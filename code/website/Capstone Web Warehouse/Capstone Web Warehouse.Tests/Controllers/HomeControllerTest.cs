@@ -42,6 +42,13 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
             var log = controller.Login(null) as ViewResult;
             Assert.IsNotNull(log);
         }
+        [TestMethod]
+        public void LoginTest()
+        {
+            var controller = setupControllerWithSession();
+            var log = controller.Login(new Employee() { employeeId = 1000, name = "Bob", password = "P@ss12", isManager = true }) as RedirectToRouteResult;
+            Assert.IsNotNull(log);
+        }
 
         [TestMethod]
         public void ManageStockNullTest()
@@ -129,10 +136,12 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
                 emp1,
                 emp2
             };
-
+            var mock = new Mock<TestableObjectResult<Employee>>();
+            var mock2 = CreateDbSetMock(employees);
+            mock.Setup(x => x.GetEnumerator()).Returns(employees.GetEnumerator());
             var context = new Mock<OnlineEntities>();
-            var mock = CreateDbSetMock(employees);
-            context.Setup(x => x.Employees).Returns(mock.Object);
+            context.Setup(x => x.selectEmployeeByIdAndPassword(1000, "P@ss12")).Returns(mock.Object);
+            context.Setup(x => x.Employees).Returns(mock2.Object);
             context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
 
             var eController = new HomeController(context.Object);
@@ -158,6 +167,15 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
             dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
 
             return dbSetMock;
+        }
+        /// <summary>
+        ///     Overriding class for testing with ObjectResults, as its constructor is protected
+        ///     Used in mocking Stored Procedure returns, setting to an object type or list of objects
+        /// </summary>
+        /// <typeparam name="T">Mocked Object Result Type</typeparam>
+        /// <seealso cref="ObjectResult{T}" />
+        public class TestableObjectResult<T> : ObjectResult<T>
+        {
         }
     }
 }

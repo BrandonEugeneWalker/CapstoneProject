@@ -34,7 +34,6 @@ namespace Capstone_Web_Warehouse.Controllers
 
             if (employee == null) return Redirect("~/Home/Login");
 
-            //var itemRentals = database.ItemRentals.Include(i => i.Member).Include(i => i.Stock).Where(i => i.status.Equals("WaitingReturn") || i.status.Equals("WaitingShipment"));
             return View(database.ItemRentals.Where(i => i.status.Equals("WaitingReturn") || i.status.Equals("WaitingShipment")));
         }
 
@@ -58,18 +57,18 @@ namespace Capstone_Web_Warehouse.Controllers
 
             if (rental.status.Equals("WaitingShipment"))
             {
-                return RedirectResult(rental, employee);
+                return shipped(rental, employee);
             }
 
             if (rental.status.Equals("WaitingReturn"))
             {
-                return ActionResult(rental, employee);
+                return returned(rental, employee);
             }
 
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
 
-        private ActionResult RedirectResult(ItemRental rental, Employee employee)
+        private ActionResult shipped(ItemRental rental, Employee employee)
         {
             rental.status = "WaitingReturn";
             rental.shipEmployeeId = employee.employeeId;
@@ -78,7 +77,7 @@ namespace Capstone_Web_Warehouse.Controllers
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
 
-        private ActionResult ActionResult(ItemRental rental, Employee employee)
+        private ActionResult returned(ItemRental rental, Employee employee)
         {
             rental.status = "Returned";
             rental.returnEmployeeId = employee.employeeId;

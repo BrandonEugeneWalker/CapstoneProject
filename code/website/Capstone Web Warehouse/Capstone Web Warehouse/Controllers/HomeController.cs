@@ -89,8 +89,6 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 var currentEmp = employee[0];
                 Session["Employee"] = currentEmp;
-                Session["Name"] = currentEmp.name;
-                Session["ID"] = currentEmp.employeeId;
                 return RedirectToAction("ManageItems");
             }
 
