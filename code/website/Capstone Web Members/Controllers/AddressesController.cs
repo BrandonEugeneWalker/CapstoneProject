@@ -45,13 +45,17 @@ namespace Capstone_Web_Members.Controllers
         /// <summary>
         ///     Starts the View for creating an address.
         /// </summary>
+        /// <param name="productId">The product identifier.</param>
         /// <returns>The create page with form for adding an address</returns>
-        public ActionResult Create()
+        public ActionResult Create(int? productId)
         {
             if (Session["currentMemberId"] == null)
             {
                 return RedirectToAction("Login", "Members");
             }
+
+            Session["productId"] = null;
+            Session["productId"] = productId;
 
             return View();
         }
@@ -77,6 +81,13 @@ namespace Capstone_Web_Members.Controllers
                 var memberId = int.Parse(Session["currentMemberId"].ToString());
                 this.databaseContext.insertAddress(address.address1, memberId, address.address2, address.city,
                     address.state, address.zip);
+
+                if (Session["productId"] != null)
+                {
+                    var productId = int.Parse(Session["productId"].ToString());
+                    return RedirectToAction("OrderProduct", "Home", new {productId});
+                }
+
                 return RedirectToAction("Details", "Members");
             }
 
@@ -87,13 +98,17 @@ namespace Capstone_Web_Members.Controllers
         ///     Starts the View for editing a specified address.
         /// </summary>
         /// <param name="id">The addressId.</param>
+        /// <param name="productId">The product identifier.</param>
         /// <returns>The edit page with form for editing an address</returns>
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id, int? productId)
         {
             if (Session["currentMemberId"] == null)
             {
                 return RedirectToAction("Login", "Members");
             }
+
+            Session["productId"] = null;
+            Session["productId"] = productId;
 
             if (id == null)
             {
@@ -129,6 +144,13 @@ namespace Capstone_Web_Members.Controllers
             {
                 this.databaseContext.editAddress(address.addressId, address.address1, address.address2, address.city,
                     address.state, address.zip);
+
+                if (Session["productId"] != null)
+                {
+                    var productId = int.Parse(Session["productId"].ToString());
+                    return RedirectToAction("OrderProduct", "Home", new { productId });
+                }
+
                 return RedirectToAction("Details", "Members");
             }
 
