@@ -28,7 +28,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void CreateViewIsNotNull()
+        public void CreatePageIsNotNull()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -38,7 +38,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void CreateViewWillRedirectWithoutSession()
+        public void CreatePageWillRedirectWithoutSession()
         {
             var addressesController = setupAddressesControllerWithoutSession();
 
@@ -48,7 +48,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void CreatingNewAddressIsValid()
+        public void CreateActionWithValidAddressIsNotNull()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -58,7 +58,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void CreatingInvalidAddressReturnsToCreate()
+        public void CreateActionWithInvalidAddressReturnsToCreate()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -83,7 +83,7 @@ namespace Capstone_Unit_Tests.web_members
         ///     the AddressesController
         /// </summary>
         [TestMethod]
-        public void EditAddressWithValidId()
+        public void EditPageWithValidIdIsValid()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -99,7 +99,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditAddressWithInvalidId()
+        public void EditPageWithInvalidIdIsNull()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -109,7 +109,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditAddressWithInvalidAddress()
+        public void EditPageWithInvalidAddressIsNull()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -119,7 +119,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditAddressWillRedirectWithoutSession()
+        public void EditPageWillRedirectWithoutSession()
         {
             var addressesController = setupAddressesControllerWithoutSession();
 
@@ -133,7 +133,7 @@ namespace Capstone_Unit_Tests.web_members
         ///     the AddressesController
         /// </summary>
         [TestMethod]
-        public void EditPostAddressWithValidAddress()
+        public void EditActionWithValidAddressIsNotNull()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -143,7 +143,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditPostAddressWithInvalidAddress()
+        public void EditActionWithInvalidAddressIsNull()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -155,7 +155,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void EditPostAddressWillRedirectWithoutSession()
+        public void EditActionWillRedirectWithoutSession()
         {
             var addressesController = setupAddressesControllerWithoutSession();
 
@@ -165,7 +165,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void RemoveAddressFromProfileIsValid()
+        public void RemoveActionWithoutProductIdRedirectsToProfile()
         {
             var addressesController = setupAddressesControllerWithSession();
 
@@ -175,7 +175,7 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void RemoveAddressFromOrderIsValid()
+        public void RemoveActionWithProductIdRedirectsToOrderProduct()
         {
             var addressesController = setupAddressesControllerWithSession();
 

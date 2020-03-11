@@ -35,7 +35,6 @@ namespace Capstone_Web_Members.Controllers
         public MembersController(OnlineEntities databaseContext)
         {
             this.DatabaseContext = databaseContext;
-            //Session["currentMemberId"] = 1;
         }
 
         #endregion
@@ -71,6 +70,11 @@ namespace Capstone_Web_Members.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             return View();
         }
 
@@ -87,6 +91,11 @@ namespace Capstone_Web_Members.Controllers
         public ActionResult Create([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
             Member member)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             if (ModelState.IsValid)
             {
                 this.DatabaseContext.insertMember(member.username, member.name, member.password, 0);

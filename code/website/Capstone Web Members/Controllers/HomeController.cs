@@ -75,7 +75,6 @@ namespace Capstone_Web_Members.Controllers
                 nameSearch = string.Empty;
             }
 
-
             if (typeSearch == null)
             {
                 typeSearch = string.Empty;
@@ -83,7 +82,6 @@ namespace Capstone_Web_Members.Controllers
 
             ViewBag.NameSearch = nameSearch;
             ViewBag.TypeSearch = typeSearch;
-
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
                                          .ToList();
             var memberId = int.Parse(Session["currentMemberId"].ToString());
@@ -94,13 +92,9 @@ namespace Capstone_Web_Members.Controllers
                 rentedCount = rentedCountResult[0];
             }
 
-            ViewBag.HasThreeOrders = false;
-            if (rentedCount >= 3)
-            {
-                ViewBag.HasThreeOrders = true;
-            }
+            var mediaLibraryViewModel = new MediaLibraryViewModel {ProductsModel = this.AvailableProducts, RentedCountModel = rentedCount};
 
-            return View(this.AvailableProducts);
+            return View(mediaLibraryViewModel);
         }
 
         /// <summary>
@@ -110,6 +104,11 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>The Order Product view detailing the selected product</returns>
         public ActionResult OrderProduct(int productId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             var product = this.DatabaseContext.Products.Find(productId);
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
@@ -149,6 +148,11 @@ namespace Capstone_Web_Members.Controllers
         /// <returns></returns>
         public ActionResult OrderConfirmation(int productId, int addressId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                return RedirectToAction("Login", "Members");
+            }
+
             var product = this.DatabaseContext.Products.Find(productId);
             var address = this.DatabaseContext.Addresses.Find(addressId);
             var orderConfirmationViewModel = new OrderConfirmationViewModel {ProductModel = product, AddressModel = address};

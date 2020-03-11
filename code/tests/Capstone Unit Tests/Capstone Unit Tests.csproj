@@ -146,7 +146,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="web members\AddressesControllerTest.cs" />
     <Compile Include="web members\HomeControllerTest.cs" />
-    <Compile Include="web members\MemberContext.cs" />
     <Compile Include="web members\MembersControllerTest.cs" />
     <Compile Include="web members\TestableObjectResult.cs" />
   </ItemGroup>
