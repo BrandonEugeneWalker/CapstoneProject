@@ -47,16 +47,16 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(stock);
         }
 
-        // GET: Stocks/Create
+/*        // GET: Stocks/Create
         /// <summary>Creates stock</summary>
         /// <returns>stock creation page.</returns>
         public ActionResult Create()
         {
             ViewBag.productId = new SelectList(db.Products, "productId", "name");
             return View();
-        }
+        }*/
 
-        // POST: Stocks/Create
+/*        // POST: Stocks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>Creates the specified stock.</summary>
@@ -76,8 +76,8 @@ namespace Capstone_Web_Warehouse.Controllers
             ViewBag.productId = new SelectList(db.Products, "productId", "name", stock.productId);
             return View(stock);
         }
-
-        // GET: Stocks/Delete/5
+*/
+/*        // GET: Stocks/Delete/5
         /// <summary>Deletes the specified stock.</summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Delete confirmaton page.</returns>
@@ -93,8 +93,8 @@ namespace Capstone_Web_Warehouse.Controllers
                 return HttpNotFound();
             }
             return View(stock);
-        }
-
+        }*/
+/*
         // POST: Stocks/Delete/5
         /// <summary>Deletes the confirmed.</summary>
         /// <param name="id">The identifier.</param>
@@ -107,7 +107,7 @@ namespace Capstone_Web_Warehouse.Controllers
             db.Stocks.Remove(stock);
             db.SaveChanges();
             return RedirectToAction("Index");
-        }
+        }*/
 
         protected override void Dispose(bool disposing)
         {
