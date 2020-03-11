@@ -21,8 +21,12 @@ namespace Capstone_Desktop.Controller
 
         #region Methods
 
-        /// <summary>Gets the employee history of a given employee.</summary>
-        /// <param name="employee">The employee.</param>
+        /// <summary>
+        ///     <para>Gets the employee history of a given employee and returns it as a list</para>
+        ///     <para>The list contains detailed rentals.</para>
+        ///     <para>Requires a valid dbcontext object and employee.</para>
+        /// </summary>
+        /// <param name="employee">The employee to get the history for.</param>
         /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>Returns a list of all rentals a employee has managed.</returns>
         public List<DetailedRentalView> GetEmployeeHistory(Employee employee, OnlineEntities capstoneDbContext)
@@ -41,7 +45,8 @@ namespace Capstone_Desktop.Controller
             return this.SelectDetailedRentalsByEmployee(capstoneDbContext, employee);
         }
 
-        public List<DetailedRentalView> SelectDetailedRentalsByEmployee(OnlineEntities capstoneDbContext, Employee employee)
+        private List<DetailedRentalView> SelectDetailedRentalsByEmployee(OnlineEntities capstoneDbContext,
+            Employee employee)
         {
             capstoneDbContext.DetailedRentalViews.Load();
 

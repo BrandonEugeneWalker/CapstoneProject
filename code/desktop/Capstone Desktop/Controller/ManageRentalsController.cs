@@ -45,7 +45,7 @@ namespace Capstone_Desktop.Controller
         private List<DetailedRentalView> selectRentalsByWaitingShipment(OnlineEntities capstoneDbContext)
         {
             var rentalsWaitingShipmentQueryable = this.GetAllRentals(capstoneDbContext).Where(rental =>
-                                                           rental.status.Equals("WaitingShipment"));
+                rental.status.Equals("WaitingShipment"));
 
             return rentalsWaitingShipmentQueryable.ToList();
         }
@@ -71,13 +71,22 @@ namespace Capstone_Desktop.Controller
 
         private List<DetailedRentalView> selectRentalsByWaitingReturn(OnlineEntities capstoneDbContext)
         {
-
             var rentalsWaitingReturnQueryable = this.GetAllRentals(capstoneDbContext).Where(rental =>
-                                                    rental.status.Equals("WaitingReturn"));
+                rental.status.Equals("WaitingReturn"));
 
             return rentalsWaitingReturnQueryable.ToList();
         }
 
+        /// <summary>
+        ///     <para>
+        ///         Gets all the detailed rental information from the database and returns it as a bound list.
+        ///     </para>
+        ///     <para>Loads the items from the database then returns them as the appropriate list.</para>
+        ///     <para>This method requires a valid database object.</para>
+        /// </summary>
+        /// <param name="capstoneDbContext">The capstone database context.</param>
+        /// <returns>The list of detailed rentals in the database.</returns>
+        /// <exception cref="ArgumentNullException">capstoneDbContext</exception>
         public BindingList<DetailedRentalView> GetAllRentals(OnlineEntities capstoneDbContext)
         {
             if (capstoneDbContext == null)
@@ -91,18 +100,20 @@ namespace Capstone_Desktop.Controller
         }
 
         /// <summary>
-        ///   <para>
-        ///       Marks the rental as waiting return.
-        ///   </para>
-        ///   <para>Throws an exception if the database or rental is null.</para>
+        ///     <para>
+        ///         Marks the rental as waiting return.
+        ///     </para>
+        ///     <para>Throws an exception if the database or rental is null.</para>
         /// </summary>
         /// <param name="detailedRentalView">The detailed rental view.</param>
         /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <param name="employee">The employee handing the action.</param>
         /// <returns>True if successful, false if not.</returns>
-        /// <exception cref="System.ArgumentNullException">capstoneDbContext
-        ///   or
-        ///   detailedRentalView</exception>
+        /// <exception cref="System.ArgumentNullException">
+        ///     capstoneDbContext
+        ///     or
+        ///     detailedRentalView
+        /// </exception>
         public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext,
             Employee employee)
         {
@@ -142,18 +153,20 @@ namespace Capstone_Desktop.Controller
         }
 
         /// <summary>
-        ///   <para>
-        ///       Marks the rental as returned.
-        ///   </para>
-        ///   <para>Throws an exception if either the database or rental are null.</para>
+        ///     <para>
+        ///         Marks the rental as returned.
+        ///     </para>
+        ///     <para>Throws an exception if either the database or rental are null.</para>
         /// </summary>
         /// <param name="detailedRentalView">The detailed rental view.</param>
         /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <param name="employee">The employee marking the rental as returned.</param>
         /// <returns>True if successful, false if not.</returns>
-        /// <exception cref="System.ArgumentNullException">capstoneDbContext
-        ///   or
-        ///   detailedRentalView</exception>
+        /// <exception cref="System.ArgumentNullException">
+        ///     capstoneDbContext
+        ///     or
+        ///     detailedRentalView
+        /// </exception>
         public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext,
             Employee employee)
         {

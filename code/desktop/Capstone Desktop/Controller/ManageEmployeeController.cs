@@ -63,6 +63,7 @@ namespace Capstone_Desktop.Controller
             {
                 throw new ArgumentNullException(nameof(capstoneDbContext), @"The database to get from cannot be null!");
             }
+
             capstoneDbContext.Employees.Load();
             return capstoneDbContext.Employees.Local.ToBindingList();
         }
