@@ -38,6 +38,16 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
+        public void DetailsPageWillRedirectWithoutSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Details() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public void CreatePageIsNotNull()
         {
             var controller = setupMembersControllerWithSession();
