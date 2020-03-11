@@ -59,17 +59,7 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
         {
             var controller = setupControllerWithSession();
 
-            var update = controller.UpdateStatus(1);
-
-            Assert.IsNotNull(update);
-        }
-
-        [TestMethod]
-        public void UpdateStatusShipTest()
-        {
-            var controller = setupControllerWithSession();
-
-            var update = controller.UpdateStatus(2);
+            var update = controller.UpdateStatus(1) as RedirectToRouteResult;
 
             Assert.IsNotNull(update);
         }
@@ -79,7 +69,17 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
         {
             var controller = setupControllerWithSession();
 
-            var update = controller.UpdateStatus(3);
+            var update = controller.UpdateStatus(2) as RedirectToRouteResult; 
+
+            Assert.IsNotNull(update);
+        }
+
+        [TestMethod]
+        public void UpdateStatusWaitShipTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var update = controller.UpdateStatus(3) as RedirectToRouteResult;
 
             Assert.IsNotNull(update);
         }
@@ -120,9 +120,9 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
         {
             var emp1 = new Employee() { employeeId = 1000, name = "Bob", password = "whm3GC0X8np.c", isManager = true };
             var emp2 = new Employee() { employeeId = 2000, name = "Bill", password = "whm3GC0X8np.c", isManager = false };
-
+            var stock = new Stock() { stockId=1,productId=1,itemCondition="Good"};
             var rent1 = new ItemRental(){itemRentalId = 1, stockId = 1, memberId = 1, status = "Returned", rentalDateTime = DateTime.Now};
-            var rent2 = new ItemRental() { itemRentalId = 2, stockId = 1, memberId = 1, status = "WaitingReturn", rentalDateTime = DateTime.Now };
+            var rent2 = new ItemRental() { itemRentalId = 2, stockId = 1, memberId = 1, status = "WaitingReturn", rentalDateTime = DateTime.Now, returnCondition = "Good" };
             var rent3 = new ItemRental() { itemRentalId = 3, stockId = 1, memberId = 1, status = "WaitingShipment", rentalDateTime = DateTime.Now };
             IList<ItemRental> rentals = new List<ItemRental>()
             {
@@ -134,9 +134,10 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
             var mock = CreateDbSetMock(rentals);
 
             context.Setup(x => x.ItemRentals).Returns(mock.Object);
-            context.Setup(x => x.ItemRentals.Find(rent1)).Returns(rent1);
-            context.Setup(x => x.ItemRentals.Find(rent2)).Returns(rent3);
-            context.Setup(x => x.ItemRentals.Find(rent2)).Returns(rent3);
+            context.Setup(x => x.ItemRentals.Find(1)).Returns(rent1);
+            context.Setup(x => x.ItemRentals.Find(2)).Returns(rent2);
+            context.Setup(x => x.ItemRentals.Find(3)).Returns(rent3);
+            context.Setup(x => x.Stocks.Find(1)).Returns(stock);
 
             var eController = new RentalsController(context.Object);
 
