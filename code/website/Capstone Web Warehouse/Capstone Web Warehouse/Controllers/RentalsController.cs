@@ -13,11 +13,14 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities database = new OnlineEntities();
 
+        /// <summary>Initializes a new instance of the <see cref="RentalsController"/> class.</summary>
         public RentalsController()
         {
             database = new OnlineEntities();
         }
 
+        /// <summary>Initializes a new instance of the <see cref="RentalsController"/> class.</summary>
+        /// <param name="entity">The entity.</param>
         public RentalsController(OnlineEntities entity)
         {
             database = entity;
@@ -31,8 +34,8 @@ namespace Capstone_Web_Warehouse.Controllers
 
             if (employee == null) return Redirect("~/Home/Login");
 
-            var itemRentals = database.ItemRentals.Include(i => i.Member).Include(i => i.Stock).Where(i => i.status.Equals("WaitingReturn") || i.status.Equals("WaitingShipment"));
-            return View(itemRentals.ToList());
+            //var itemRentals = database.ItemRentals.Include(i => i.Member).Include(i => i.Stock).Where(i => i.status.Equals("WaitingReturn") || i.status.Equals("WaitingShipment"));
+            return View(database.ItemRentals.Where(i => i.status.Equals("WaitingReturn") || i.status.Equals("WaitingShipment")));
         }
 
         /// <summary>Updates the status of rental item.</summary>
@@ -55,25 +58,35 @@ namespace Capstone_Web_Warehouse.Controllers
 
             if (rental.status.Equals("WaitingShipment"))
             {
-                rental.status = "WaitingReturn";
-                rental.shipEmployeeId = employee.employeeId;
-                rental.shipDateTime = DateTime.Now;
-                database.SaveChanges();
-                return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+                return RedirectResult(rental, employee);
             }
 
             if (rental.status.Equals("WaitingReturn"))
             {
-                rental.status = "Returned";
-                rental.returnEmployeeId = employee.employeeId;
-                rental.returnDateTime = DateTime.Now;
-                rental.returnCondition = "Good";
-                var stock = database.Stocks.Find(rental.stockId);
-                stock.itemCondition = rental.returnCondition;
-                database.SaveChanges();
-                return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+                return ActionResult(rental, employee);
             }
 
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+        }
+
+        private ActionResult RedirectResult(ItemRental rental, Employee employee)
+        {
+            rental.status = "WaitingReturn";
+            rental.shipEmployeeId = employee.employeeId;
+            rental.shipDateTime = DateTime.Now;
+            database.SaveChanges();
+            return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
+        }
+
+        private ActionResult ActionResult(ItemRental rental, Employee employee)
+        {
+            rental.status = "Returned";
+            rental.returnEmployeeId = employee.employeeId;
+            rental.returnDateTime = DateTime.Now;
+            rental.returnCondition = "Good";
+            var stock = database.Stocks.Find(rental.stockId);
+            stock.itemCondition = rental.returnCondition;
+            database.SaveChanges();
             return Redirect(HttpContext.Request.UrlReferrer?.AbsoluteUri);
         }
 
