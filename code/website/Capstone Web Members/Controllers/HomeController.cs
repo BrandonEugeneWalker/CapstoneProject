@@ -56,6 +56,10 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>Media Library Page</returns>
         public ActionResult Index()
         {
+            if (Session["currentLibrarianId"] != null)
+            {
+                return RedirectToAction("Index", "Members");
+            }
             return RedirectToAction("MediaLibrary");
         }
 
@@ -72,8 +76,9 @@ namespace Capstone_Web_Members.Controllers
         /// </returns>
         public ActionResult MediaLibrary(string nameSearch, string typeSearch)
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -91,12 +96,17 @@ namespace Capstone_Web_Members.Controllers
             ViewBag.TypeSearch = typeSearch;
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
                                          .ToList();
-            var memberId = int.Parse(Session["currentMemberId"].ToString());
-            var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+
             int? rentedCount = 0;
-            if (rentedCountResult.Count > 0)
+            if (Session["currentMemberId"] != null)
             {
-                rentedCount = rentedCountResult[0];
+                var memberId = int.Parse(Session["currentMemberId"].ToString());
+                var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+                if (rentedCountResult.Count > 0)
+                {
+                    rentedCount = rentedCountResult[0];
+                }
+
             }
 
             var mediaLibraryViewModel = new MediaLibraryViewModel
@@ -116,6 +126,7 @@ namespace Capstone_Web_Members.Controllers
         {
             if (Session["currentMemberId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -141,6 +152,7 @@ namespace Capstone_Web_Members.Controllers
         {
             if (Session["currentMemberId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -165,6 +177,7 @@ namespace Capstone_Web_Members.Controllers
         {
             if (Session["currentMemberId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 

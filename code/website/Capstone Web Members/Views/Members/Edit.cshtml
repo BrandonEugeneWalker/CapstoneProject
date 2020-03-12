@@ -49,7 +49,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to Profile", "Details")
+    @Html.ActionLink("Back to Profile", "Details", new {memberId = Model.memberId})
 </div>
 
 @section Scripts {

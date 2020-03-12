@@ -42,6 +42,20 @@ namespace Capstone_Web_Members.Controllers
         #region Methods
 
         /// <summary>
+        ///     Index of the Website, required for running of Website. Redirects to Media Library. Redirects to Login if no login
+        ///     session found.
+        /// </summary>
+        /// <returns>Media Library Page</returns>
+        public ActionResult Index()
+        {
+            if (Session["currentLibrarianId"] != null)
+            {
+                return View(this.DatabaseContext.Members.ToList());
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
         ///     Shows the details of the logged in member, showing their Member Profile info, their Addresses, and their Rental
         ///     History. Addresses allows Creation, Editing, and Removal.
         ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
@@ -49,14 +63,19 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>
         ///     Returns page showcasing details of the logged in member
         /// </returns>
-        public ActionResult Details()
+        public ActionResult Details(int? memberId)
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
-            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            if (memberId == null)
+            {
+                memberId = int.Parse(Session["currentMemberId"].ToString());
+            }
+
             var member = this.DatabaseContext.Members.Find(memberId);
             var rentedItems = this.DatabaseContext.retrieveMembersRentals(memberId).ToList();
             var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
@@ -112,8 +131,9 @@ namespace Capstone_Web_Members.Controllers
         /// </returns>
         public ActionResult Edit(int? id)
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -147,8 +167,9 @@ namespace Capstone_Web_Members.Controllers
         public ActionResult Edit([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
             Member member)
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -183,6 +204,13 @@ namespace Capstone_Web_Members.Controllers
         {
             var matchingMembers = this.DatabaseContext.selectMemberByIdAndPassword(member.username, member.password)
                                       .ToList();
+
+            if (matchingMembers.Count > 0 && matchingMembers[0].isLibrarian.Equals(1))
+            {
+                var loggedInMemberId = matchingMembers[0].memberId;
+                Session["currentLibrarianId"] = loggedInMemberId;
+                return RedirectToAction("Index", "Home");
+            }
 
             if (matchingMembers.Count > 0)
             {

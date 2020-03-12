@@ -5,9 +5,21 @@
         @Html.AntiForgeryToken()
 
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("My Profile", "Details", "Members", null, new { memberId = Session["currentMemberId"] })</li>
+        <li>@Html.ActionLink("My Profile", "Details", "Members")</li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
+    }
+} 
+else if(Session["currentLibrarianId"] != null)
+{
+    using (Html.BeginForm("LogOff", "Members", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("My Profile", "Details", "Members", new { memberId = Session["currentLibrarianId"] }, "")</li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
     }
 }
 else

@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<Capstone_Database.Model.Member>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "All Members";
 }
 
-<h2>Index</h2>
+<h2>All Members</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -47,8 +44,8 @@
             @Html.DisplayFor(modelItem => item.isBanned)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.memberId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.memberId })
+            @Html.ActionLink("View Profile", "Details", new { memberId = item.memberId }) |
+            @Html.ActionLink("Edit", "Edit", new { memberId = item.memberId })
         </td>
     </tr>
 }
