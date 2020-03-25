@@ -26,12 +26,18 @@
 </div>
 
 <p>
-    @Html.ActionLink("Edit Information", "Edit", new {id = Model.MemberModel.memberId})
+    @if (!Model.LibrarianLoggedIn || Model.LibrariansProfile)
+    {
+        @Html.ActionLink("Edit Information", "Edit", new {id = Model.MemberModel.memberId})
+    }
 </p>
 
 <h2>Addresses</h2>
 <p>
-    @Html.ActionLink("Create New", "Create", "Addresses")
+    @if (!Model.LibrarianLoggedIn || Model.LibrariansProfile)
+    {
+        @Html.ActionLink("Create New", "Create", "Addresses")
+    }
 </p>
 <div>
     <table class="table">
@@ -51,7 +57,6 @@
             <th>
                 Zip
             </th>
-            <th></th>
             <th></th>
         </tr>
         @foreach (var address in Model.AddressesModel)
@@ -76,10 +81,12 @@
                     @Html.DisplayFor(modelRental => address.zip)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", "Addresses", new { id = address.addressId }, "")
-                </td>
-                <td>
-                    @Html.ActionLink("Remove", "Remove", "Addresses", new { id = address.addressId }, "")
+                    @if (!Model.LibrarianLoggedIn || Model.LibrariansProfile)
+                    {
+                        @Html.ActionLink("Edit", "Edit", "Addresses", new { id = address.addressId }, "")
+                        <b> | </b>
+                        @Html.ActionLink("Remove", "Remove", "Addresses", new { id = address.addressId }, "")
+                    }
                 </td>
             </tr>
         }

@@ -45,14 +45,6 @@ namespace Capstone_Web_Members.Controllers
         #region Methods
 
         /// <summary>
-        ///     Orders the product following user confirmation, creating an ItemRental entry
-        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
-        ///     <Postcondition>ItemRentals table entry created</Postcondition>
-        /// </summary>
-        /// <param name="productId">productId of product ordered</param>
-        /// <param name="addressId">addressId of address selected</param>
-        /// <returns>OrderConfirmation ActionResult</returns>
-        /// <summary>
         ///     Lists index list of all members
         ///     <Precondition>Session["currentLibrarianId"] != null</Precondition>
         ///     <Postcondition>None</Postcondition>
@@ -93,6 +85,15 @@ namespace Capstone_Web_Members.Controllers
             var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
             var memberProfileViewModel = new MemberProfileViewModel
                 {MemberModel = member, ItemRentalsModel = rentedItems, AddressesModel = addresses};
+
+            if (Session["currentLibrarianId"] != null)
+            {
+                memberProfileViewModel.LibrarianLoggedIn = true;
+                if (int.Parse(Session["currentLibrarianId"].ToString()) == memberId)
+                {
+                    memberProfileViewModel.LibrariansProfile = true;
+                }
+            }
 
             return View(memberProfileViewModel);
         }
