@@ -14,6 +14,9 @@ namespace Capstone_Web_Members.Controllers
     {
         #region Data members
 
+        /// <summary>
+        ///     The database context
+        /// </summary>
         public OnlineEntities DatabaseContext;
 
         #endregion
@@ -42,27 +45,36 @@ namespace Capstone_Web_Members.Controllers
         #region Methods
 
         /// <summary>
-        ///     Index of the Website, required for running of Website. Redirects to Media Library. Redirects to Login if no login
-        ///     session found.
+        ///     Orders the product following user confirmation, creating an ItemRental entry
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>ItemRentals table entry created</Postcondition>
         /// </summary>
-        /// <returns>Media Library Page</returns>
+        /// <param name="productId">productId of product ordered</param>
+        /// <param name="addressId">addressId of address selected</param>
+        /// <returns>OrderConfirmation ActionResult</returns>
+        /// <summary>
+        ///     Lists index list of all members
+        ///     <Precondition>Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
+        /// </summary>
+        /// <returns>Members Index page</returns>
         public ActionResult Index()
         {
             if (Session["currentLibrarianId"] != null)
             {
                 return View(this.DatabaseContext.Members.ToList());
             }
+
             return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
-        ///     Shows the details of the logged in member, showing their Member Profile info, their Addresses, and their Rental
-        ///     History. Addresses allows Creation, Editing, and Removal.
-        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        ///     Shows the details of the logged in member including their profile, current Addresses, and ItemRental history
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <returns>
-        ///     Returns page showcasing details of the logged in member
-        /// </returns>
+        /// <param name="memberId">memberId of given Member</param>
+        /// <returns>Member's profile page</returns>
         public ActionResult Details(int? memberId)
         {
             if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
@@ -86,25 +98,23 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Page for the Create Member form.
+        ///     Form for registering/creating a Member.
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <returns>
-        ///     Returns the create view page
-        /// </returns>
+        /// <returns>Create Member page</returns>
         public ActionResult Create()
         {
             return View();
         }
 
         /// <summary>
-        ///     Creates the specified member from the Registration page after the Create form is submitted. Calls database to
-        ///     insert the new Member data. Redirects to Login if valid, reloads the Registration page if invalid.
+        ///     Creates the specified member from the Registration page
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>Member object inserted to Members table</Postcondition>
         /// </summary>
         /// <param name="member">The member object created in the Create Form.</param>
-        /// <returns>
-        ///     Returns to the Member Web Login
-        ///     Returns to the Create form if failed
-        /// </returns>
+        /// <returns>The login page if successful, Create page is unsuccessful</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
@@ -121,14 +131,12 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Page for the Edit Member form, all fields except for password will default contain current information. Returns
-        ///     View of form. If the memberId parameter is null or the Member is not found, returns an error.
-        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        ///     Form for editing a Member
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <returns>
-        ///     Returns the edit view page for the selected Member
-        /// </returns>
+        /// <returns>Returns the edit page for the selected Member</returns>
         public ActionResult Edit(int? id)
         {
             if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
@@ -153,15 +161,12 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Edits Member after Edit form is submitted. Calls Database to edit the given member to the form's new information.
-        ///     Redirects to Member Profile if valid, Returns to Edit form if invalid.
-        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        ///     Edits Member after Edit form is submitted
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>Updates Member object in Members table</Postcondition>
         /// </summary>
-        /// <param name="member">The member.</param>
-        /// <returns>
-        ///     Returns to the Member Profile
-        ///     Returns to the Edit form if failed
-        /// </returns>
+        /// <param name="member">The member object edited in the Edit Form</param>
+        /// <returns>Member's profile if successful, edit form if unsuccessful</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
@@ -193,12 +198,12 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Logs in the user and Returns to Media Library
-        ///     If login is invalid, returns to the Login Page
+        ///     Logs in the user and returns to HomeController Index
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <returns>
-        ///     Returns to Media Library
-        /// </returns>
+        /// <param name="member">The member object that is logging in</param>
+        /// <returns>HomeController Index if true, login form if false</returns>
         [AllowAnonymous]
         public ActionResult Login(Member member)
         {
@@ -222,6 +227,12 @@ namespace Capstone_Web_Members.Controllers
             return View();
         }
 
+        /// <summary>
+        ///     Logs current Member out
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>None</Postcondition>
+        /// </summary>
+        /// <returns>Login page</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()

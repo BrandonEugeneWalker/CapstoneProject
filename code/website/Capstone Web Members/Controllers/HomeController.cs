@@ -50,30 +50,29 @@ namespace Capstone_Web_Members.Controllers
         #region Methods
 
         /// <summary>
-        ///     Index of the Website, required for running of Website. Redirects to Media Library. Redirects to Login if no login
-        ///     session found.
+        ///     Index of the Website, required for running of Website
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <returns>Media Library Page</returns>
+        /// <returns>The Media Library Page or Member Index</returns>
         public ActionResult Index()
         {
             if (Session["currentLibrarianId"] != null)
             {
                 return RedirectToAction("Index", "Members");
             }
+
             return RedirectToAction("MediaLibrary");
         }
 
         /// <summary>
-        ///     The Media Library page, showing all items available to order. If reloading after the Search form is submitted,
-        ///     sends filter information to the database to filter during stored procedure call. Checks if Member's active
-        ///     ItemRentals are 3 or higher.
-        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        ///     The Media Library page, showing all items available to order with filters
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="nameSearch">The name search field.</param>
         /// <param name="typeSearch">The type search field.</param>
-        /// <returns>
-        ///     The media library page
-        /// </returns>
+        /// <returns>The MediaLibrary page</returns>
         public ActionResult MediaLibrary(string nameSearch, string typeSearch)
         {
             if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
@@ -106,7 +105,6 @@ namespace Capstone_Web_Members.Controllers
                 {
                     rentedCount = rentedCountResult[0];
                 }
-
             }
 
             var mediaLibraryViewModel = new MediaLibraryViewModel
@@ -116,11 +114,12 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Navigates to the Order Product view to confirm order. Showcases the selected product and gives list of Addresses
-        ///     for member to select. If member has no address, they are prompted to create one.
-        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        ///     Navigates to the Order Product view to confirm order.
+        ///     Showcases the selected product and gives list of Addresses
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <param name="productId">The product id, referencing Product being ordered.</param>
+        /// <param name="productId">productId of product ordered</param>
         /// <returns>The Order Product view detailing the selected product</returns>
         public ActionResult OrderProduct(int productId)
         {
@@ -138,15 +137,13 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Orders the product following user confirmation, finds the available Stock object of the given product and creates
-        ///     an Item Rental of the item.
-        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        ///     Orders the product following user confirmation, creating an ItemRental entry
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>ItemRentals table entry created</Postcondition>
         /// </summary>
-        /// <param name="productId">The product ID, referencing Product being ordered.</param>
-        /// <param name="addressId">The address id, referencing the selected Address being ordered to</param>
-        /// <returns>
-        ///     The media library page after ordering selected product
-        /// </returns>
+        /// <param name="productId">productId of product ordered</param>
+        /// <param name="addressId">addressId of address selected</param>
+        /// <returns>OrderConfirmation ActionResult</returns>
         [HttpPost]
         public ActionResult OrderProduct(string productId, string addressId)
         {
@@ -166,13 +163,13 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Shows Order Confirmation information for Product just ordered. Shows the info of the Product and the Address used
-        ///     to order. Links back to Media Library. Called from OrderProduct.
-        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        ///     Shows Order Confirmation information for Product just ordered
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <param name="productId">The product id, referencing Product just ordered.</param>
-        /// <param name="addressId">The address id, referencing Address ordered to.</param>
-        /// <returns></returns>
+        /// <param name="productId">productId of product ordered</param>
+        /// <param name="addressId">addressId of address selected</param>
+        /// <returns>Page detailing ItemRental and order info</returns>
         public ActionResult OrderConfirmation(int productId, int addressId)
         {
             if (Session["currentMemberId"] == null)
