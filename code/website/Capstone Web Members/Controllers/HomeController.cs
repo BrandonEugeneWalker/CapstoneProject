@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using Capstone_Web_Members.Settings;
 using Capstone_Web_Members.ViewModels;
 
 namespace Capstone_Web_Members.Controllers
@@ -67,7 +68,7 @@ namespace Capstone_Web_Members.Controllers
 
         /// <summary>
         ///     The Media Library page, showing all items available to order with filters
-        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
         ///     <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="nameSearch">The name search field.</param>
@@ -96,19 +97,27 @@ namespace Capstone_Web_Members.Controllers
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
                                          .ToList();
 
-            int? rentedCount = 0;
+            var atMaxRentals = false;
             if (Session["currentMemberId"] != null)
             {
                 var memberId = int.Parse(Session["currentMemberId"].ToString());
                 var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
                 if (rentedCountResult.Count > 0)
                 {
-                    rentedCount = rentedCountResult[0];
+                    if (rentedCountResult[0] >= RentalSettings.MaxCurrentRentals)
+                    {
+                        atMaxRentals = true;
+                    }
                 }
             }
 
             var mediaLibraryViewModel = new MediaLibraryViewModel
-                {ProductsModel = this.AvailableProducts, RentedCountModel = rentedCount};
+                {ProductsModel = this.AvailableProducts, AtMaxRentals = atMaxRentals };
+
+            if (Session["currentLibrarianId"] != null)
+            {
+                mediaLibraryViewModel.IsLibrarian = true;
+            }
 
             return View(mediaLibraryViewModel);
         }

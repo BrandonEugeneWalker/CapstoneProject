@@ -20,12 +20,20 @@ namespace Capstone_Web_Members.ViewModels
         public List<Product> ProductsModel { get; set; }
 
         /// <summary>
-        ///     Gets or sets the rented count model.
+        /// Gets or sets a value indicating whether [at maximum rentals].
         /// </summary>
         /// <value>
-        ///     The rented count model, storing the amount of active rentals the current Member has
+        ///   <c>true</c> if [at maximum rentals]; otherwise, <c>false</c>.
         /// </value>
-        public int? RentedCountModel { get; set; }
+        public bool AtMaxRentals { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is librarian.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is librarian; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLibrarian { get; set; }
 
         #endregion
     }

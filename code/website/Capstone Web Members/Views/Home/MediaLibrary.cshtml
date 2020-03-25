@@ -72,11 +72,11 @@
                     @Html.DisplayFor(modelItem => item.type)
                 </td>
                 <td>
-                    @if (Model.RentedCountModel >= 3)
+                    @if (Model.AtMaxRentals)
                     {
                         <b>You currently have the max amount of allowed Rentals</b>
                     }
-                    else
+                    else if (!Model.IsLibrarian)
                     {
                         @Html.ActionLink("Order", "OrderProduct", new { item.productId })
                     }
