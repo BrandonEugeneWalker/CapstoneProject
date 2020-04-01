@@ -104,6 +104,7 @@
     <Compile Include="Controller\ManageEmployeeController.cs" />
     <Compile Include="Controller\ManageItemsController.cs" />
     <Compile Include="Controller\ManageRentalsController.cs" />
+    <Compile Include="Model\CapstoneDbContextHandler.cs" />
     <Compile Include="Model\IDbContextHandler.cs" />
     <Compile Include="View\AddEmployeeForm.cs">
       <SubType>Form</SubType>

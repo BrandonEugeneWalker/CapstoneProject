@@ -5,11 +5,13 @@ using Capstone_Database.Model;
 namespace Capstone_Desktop.Model
 {
     /// <summary>
-    ///   <para>The IDbContextHandler defines a contract for interfacing with a Database.</para>
-    ///   <para>This allows for us to more easily mock and test interactions with the database.</para>
+    ///     <para>The IDbContextHandler defines a contract for interfacing with a Database.</para>
+    ///     <para>This allows for us to more easily mock and test interactions with the database.</para>
     /// </summary>
     public interface IDbContextHandler
     {
+        #region Methods
+
         //Getters
 
         List<DetailedRentalView> GetDetailedEmployeeHistory(Employee employee);
@@ -20,7 +22,7 @@ namespace Capstone_Desktop.Model
 
         BindingList<Employee> GetAllEmployees();
 
-        List<StockDetailView> GetAllDetailedStock();
+        BindingList<StockDetailView> GetAllDetailedStock();
 
         List<DetailedRentalView> GetDetailedRentalsWaitingShipment();
 
@@ -30,7 +32,9 @@ namespace Capstone_Desktop.Model
 
         ItemRental GetItemRentalById(int id);
 
-        ItemRental GetStockById(int id);
+        Stock GetStockById(int id);
+
+        List<DetailedRentalView> GetStockHistoryByStock(Stock stock);
 
         //Removals
 
@@ -46,9 +50,10 @@ namespace Capstone_Desktop.Model
 
         //Modifications
 
-        bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView);
+        bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, Employee employee);
 
-        bool MarkRentalAsReturned(DetailedRentalView detailedRentalView);
+        bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, Employee employee);
 
+        #endregion
     }
 }
