@@ -26,7 +26,7 @@
 </div>
 
 <p>
-    @if (!Model.LibrarianLoggedIn || Model.LibrariansProfile)
+    @if (!Model.LibrarianLoggedIn)
     {
         @Html.ActionLink("Edit Information", "Edit", new {id = Model.MemberModel.memberId})
     }
@@ -34,7 +34,7 @@
 
 <h2>Addresses</h2>
 <p>
-    @if (!Model.LibrarianLoggedIn || Model.LibrariansProfile)
+    @if (!Model.LibrarianLoggedIn)
     {
         @Html.ActionLink("Create New", "Create", "Addresses")
     }
@@ -81,7 +81,7 @@
                     @Html.DisplayFor(modelRental => address.zip)
                 </td>
                 <td>
-                    @if (!Model.LibrarianLoggedIn || Model.LibrariansProfile)
+                    @if (!Model.LibrarianLoggedIn)
                     {
                         @Html.ActionLink("Edit", "Edit", "Addresses", new { id = address.addressId }, "")
                         <b> | </b>

@@ -45,14 +45,6 @@ namespace Capstone_Web_Members.ViewModels
         /// </value>
         public bool LibrarianLoggedIn { get; set; } = false;
 
-        /// <summary>
-        ///     Gets or sets a value indicating whether [librarians profile].
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if [librarians profile]; otherwise, <c>false</c>.
-        /// </value>
-        public bool LibrariansProfile { get; set; } = false;
-
         #endregion
     }
 }

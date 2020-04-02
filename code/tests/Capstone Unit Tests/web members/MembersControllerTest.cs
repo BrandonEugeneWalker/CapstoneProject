@@ -28,21 +28,81 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void DetailsPageIsNotNull()
+        public void IndexPageWithLibrarianIsNotNull()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithLibrarianSession();
 
-            var result = controller.Details() as ViewResult;
+            var result = controller.Index() as ViewResult;
 
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void DetailsPageWillRedirectWithoutSession()
+        public void IndexPageMemberWillRedirectToHomeIndex()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var result = controller.Index() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void IndexPageWithoutSessionRedirectToHomeIndex()
         {
             var controller = setupMembersControllerWithoutSession();
 
-            var result = controller.Details() as RedirectToRouteResult;
+            var result = controller.Index() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageIsNotNull()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var result = controller.Details(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageWithNullMemberIdIsNotNull()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var result = controller.Details(null) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageAsLibrarianIsNotNull()
+        {
+            var controller = setupMembersControllerWithLibrarianSession();
+
+            var result = controller.Details(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageWillRedirectWithoutMemberSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Details(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageWillRedirectWithoutLibrarianSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Details(1) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }
@@ -50,7 +110,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void CreatePageIsNotNull()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Create() as ViewResult;
 
@@ -60,7 +120,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void CreateActionWithValidMemberIsValid()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Create(new Member()) as RedirectToRouteResult;
 
@@ -70,7 +130,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void CreateActionWithInvalidEmployeeReturnsToCreate()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             controller.ModelState.AddModelError("", "");
 
@@ -82,7 +142,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod] 
         public void EditMemberPageWithValidIdIsValid()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Edit(1) as ViewResult;
 
@@ -98,7 +158,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void EditMemberPageWithInvalidIdIsNull()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Edit((int?) null) as ViewResult;
 
@@ -108,7 +168,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void EditMemberPageWithInvalidMemberIsNull()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Edit(3) as ViewResult;
 
@@ -128,7 +188,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void EditMemberActionWithValidIdIsNotNull()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Edit(new Member {memberId = 1, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0}) as RedirectToRouteResult;
 
@@ -138,7 +198,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void EditMemberActionWithInvalidIdIsNull()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             controller.ModelState.AddModelError("", "");
 
@@ -160,7 +220,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void ControllerDisposesResourcesValid()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var edit = controller.Edit(1) as ViewResult;
 
@@ -170,9 +230,9 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void LoginPageRedirectsIfCredentialsAreValid()
+        public void LoginPageValidMemberLoginRedirects()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Login(new Member { memberId = 1, username = "username", password = "password" }) as RedirectToRouteResult;
 
@@ -180,9 +240,19 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
+        public void LoginPageValidLibrarianLoginRedirects()
+        {
+            var controller = setupMembersControllerWithLibrarianSession();
+
+            var result = controller.Login(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1}) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public void LoggingOffClearsSession()
         {
-            var controller = setupMembersControllerWithSession();
+            var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.LogOff() as RedirectToRouteResult;
 
@@ -218,6 +288,7 @@ namespace Capstone_Unit_Tests.web_members
             var httpContext = new Mock<HttpContextBase>();
             var session = new Mock<HttpSessionStateBase>();
             session.Setup(s => s["currentMemberId"]).Returns(null);
+            session.Setup(s => s["currentLibrarianId"]).Returns(null);
             httpContext.Setup(x => x.Session).Returns(session.Object);
             var requestContext = new RequestContext(httpContext.Object, new RouteData());
             membersController.ControllerContext = new ControllerContext(requestContext, membersController);
@@ -225,7 +296,58 @@ namespace Capstone_Unit_Tests.web_members
             return membersController;
         }
 
-        private static MembersController setupMembersControllerWithSession()
+        private static MembersController setupMembersControllerWithLibrarianSession()
+        {
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            context.Setup(x => x.Members.Find(1)).Returns(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1});
+
+            var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
+            mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x => x.retrieveAvailableProductsWithSearch("", "")).Returns(mockedProductObjectResult.Object);
+
+            var mockedRentalObjectResult = new Mock<TestableObjectResult<ItemRental>>();
+            mockedRentalObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestItemRentals().GetEnumerator());
+            context.Setup(x => x.retrieveMembersRentals(1)).Returns(mockedRentalObjectResult.Object);
+
+            var mockedAddressObjectResult = new Mock<TestableObjectResult<Address>>();
+            mockedAddressObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestAddresses().GetEnumerator());
+            context.Setup(x => x.retrieveMembersAddresses(1)).Returns(mockedAddressObjectResult.Object);
+
+            var mockedMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestLibrarians().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("username", "password"))
+                   .Returns(mockedMemberObjectResult.Object);
+
+            var mockedEmptyMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedEmptyMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("u53rN4m3", "wrongPassword"))
+                   .Returns(mockedEmptyMemberObjectResult.Object);
+
+            var membersController = new MembersController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentLibrarianId"]).Returns(1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            membersController.ControllerContext = new ControllerContext(requestContext, membersController);
+
+            return membersController;
+        }
+
+        private static MembersController setupMembersControllerWithMemberSession()
         {
             var context = new Mock<OnlineEntities>();
             var mockMembers = createDbSetMock(getTestMembers());
@@ -404,7 +526,30 @@ namespace Capstone_Unit_Tests.web_members
             {
                 memberId = 2,
                 username = "UserName2",
-                password = "P@ss12"
+                password = "P@ss12",
+                isLibrarian = 1
+            };
+
+            var testMembers = new List<Member> { memberA, memberB };
+
+            return testMembers;
+        }
+
+        private static List<Member> getTestLibrarians()
+        {
+            var memberA = new Member
+            {
+                memberId = 1,
+                username = "UserName1",
+                password = "P@ss12",
+                isLibrarian = 1
+            };
+            var memberB = new Member
+            {
+                memberId = 2,
+                username = "UserName2",
+                password = "P@ss12",
+                isLibrarian = 1
             };
 
             var testMembers = new List<Member> { memberA, memberB };

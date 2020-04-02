@@ -31,13 +31,24 @@ namespace Capstone_Unit_Tests.web_members
         ///     Tests that the Index redirect is not null
         /// </summary>
         [TestMethod]
-        public void Index_IsNotNull()
+        public void IndexIsNotNull()
         {
-            var context = new Mock<OnlineEntities>();
+            var homeController = setupHomeControllerWithMemberSession();
 
-            var controller = new HomeController(context.Object);
+            var result = homeController.Index() as RedirectToRouteResult;
 
-            var result = controller.Index() as RedirectToRouteResult;
+            Assert.IsNotNull(result);
+        }
+
+        /// <summary>
+        ///     Tests that the Index redirect is not null
+        /// </summary>
+        [TestMethod]
+        public void IndexRedirectsLibrariansToMemberIndex()
+        {
+            var homeController = setupHomeControllerWithLibrarianSession();
+
+            var result = homeController.Index() as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }
@@ -46,9 +57,9 @@ namespace Capstone_Unit_Tests.web_members
         ///     Tests that the Media Library is not null
         /// </summary>
         [TestMethod]
-        public void MediaLibrary_IsNotNull()
+        public void MediaLibraryIsNotNull()
         {
-            var homeController = setupHomeControllerWithSession();
+            var homeController = setupHomeControllerWithMemberSession();
 
             var result = homeController.MediaLibrary(null, null) as ViewResult;
 
@@ -56,7 +67,19 @@ namespace Capstone_Unit_Tests.web_members
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        ///     Tests that the Media Library will set IsLibrarian to true if a Librarian is logged in
+        /// </summary>
+        [TestMethod]
+        public void MediaLibraryLibrariansFlagged()
+        {
+            var homeController = setupHomeControllerWithLibrarianSession();
 
+            var result = homeController.MediaLibrary(null, null) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+        }
 
         /// <summary>
         ///     Tests that the Media Library is not null
@@ -77,7 +100,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void OrderProductPageWithValidProductIdIsNotNull()
         {
-            var homeController = setupHomeControllerWithSession();
+            var homeController = setupHomeControllerWithMemberSession();
 
             var result = homeController.OrderProduct(1) as ViewResult;
 
@@ -103,7 +126,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void OrderProductActionWithValidIdsIsNotNull()
         {
-            var homeController = setupHomeControllerWithSession();
+            var homeController = setupHomeControllerWithMemberSession();
 
             var result = homeController.OrderProduct("1", "1") as RedirectToRouteResult;
 
@@ -129,7 +152,7 @@ namespace Capstone_Unit_Tests.web_members
         [TestMethod]
         public void OrderConfirmationWithValidIdsIsNotNull()
         {
-            var homeController = setupHomeControllerWithSession();
+            var homeController = setupHomeControllerWithMemberSession();
 
             var result = homeController.OrderConfirmation(1, 1) as ViewResult;
 
@@ -178,6 +201,7 @@ namespace Capstone_Unit_Tests.web_members
             var httpContext = new Mock<HttpContextBase>();
             var session = new Mock<HttpSessionStateBase>();
             session.Setup(s => s["currentMemberId"]).Returns(null);
+            session.Setup(s => s["currentLibrarianId"]).Returns(null);
             httpContext.Setup(x => x.Session).Returns(session.Object);
             var requestContext = new RequestContext(httpContext.Object, new RouteData());
             homeController.ControllerContext = new ControllerContext(requestContext, homeController);
@@ -185,7 +209,49 @@ namespace Capstone_Unit_Tests.web_members
             return homeController;
         }
 
-        private static HomeController setupHomeControllerWithSession()
+        private static HomeController setupHomeControllerWithLibrarianSession()
+        {
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+            var testCounts = new List<int?> { 1, 2, 3 };
+
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
+            mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x => x.retrieveAvailableProductsWithSearch("", "")).Returns(mockedProductObjectResult.Object);
+
+            var mockedIntObjectResult = new Mock<TestableObjectResult<int?>>();
+            mockedIntObjectResult.Setup(x => x.GetEnumerator()).Returns(testCounts.GetEnumerator());
+            context.Setup(x => x.retrieveRentedCount(1)).Returns(mockedIntObjectResult.Object);
+            context.Setup(x => x.findAvailableStockOfProduct(1)).Returns(mockedIntObjectResult.Object);
+
+            var mockedAddressObjectResult = new Mock<TestableObjectResult<Address>>();
+            mockedAddressObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestAddresses().GetEnumerator());
+            context.Setup(x => x.retrieveMembersAddresses(1)).Returns(mockedAddressObjectResult.Object);
+
+
+            var homeController = new HomeController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentLibrarianId"]).Returns(1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            homeController.ControllerContext = new ControllerContext(requestContext, homeController);
+
+            return homeController;
+        }
+
+        private static HomeController setupHomeControllerWithMemberSession()
         {
             var context = new Mock<OnlineEntities>();
             var mockMembers = createDbSetMock(getTestMembers());
@@ -310,8 +376,16 @@ namespace Capstone_Unit_Tests.web_members
                 addressId = 2,
                 status = "WaitingReturn"
             };
+            var itemRentalC = new ItemRental
+            {
+                itemRentalId = 3,
+                stockId = 5,
+                memberId = 1,
+                addressId = 2,
+                status = "WaitingReturn"
+            };
 
-            var testRentals = new List<ItemRental> { itemRentalA, itemRentalB };
+            var testRentals = new List<ItemRental> { itemRentalA, itemRentalB, itemRentalC };
 
             return testRentals;
         }

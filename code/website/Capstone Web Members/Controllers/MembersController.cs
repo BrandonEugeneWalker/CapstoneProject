@@ -89,10 +89,6 @@ namespace Capstone_Web_Members.Controllers
             if (Session["currentLibrarianId"] != null)
             {
                 memberProfileViewModel.LibrarianLoggedIn = true;
-                if (int.Parse(Session["currentLibrarianId"].ToString()) == memberId)
-                {
-                    memberProfileViewModel.LibrariansProfile = true;
-                }
             }
 
             return View(memberProfileViewModel);
