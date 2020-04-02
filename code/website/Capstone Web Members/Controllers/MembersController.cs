@@ -54,7 +54,7 @@ namespace Capstone_Web_Members.Controllers
         {
             if (Session["currentLibrarianId"] != null)
             {
-                return View(this.DatabaseContext.Members.ToList());
+                return View(this.DatabaseContext.retrieveNonlibrarians());
             }
 
             return RedirectToAction("Index", "Home");

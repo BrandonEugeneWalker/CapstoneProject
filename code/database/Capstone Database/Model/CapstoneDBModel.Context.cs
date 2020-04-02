@@ -446,5 +446,15 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Product>("retrieveProductById", mergeOption, selectedProductIdParameter);
         }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrarians()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrarians");
+        }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrarians(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrarians", mergeOption);
+        }
     }
 }
