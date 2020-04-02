@@ -232,7 +232,7 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("findAvailableStockOfProduct", selectedProductIdParameter);
         }
     
-        public virtual int insertMember(string newUsername, string newName, string newPassword, Nullable<sbyte> isLibrarian)
+        public virtual int insertMember(string newUsername, string newName, string newPassword)
         {
             var newUsernameParameter = newUsername != null ?
                 new ObjectParameter("newUsername", newUsername) :
@@ -246,11 +246,7 @@ namespace Capstone_Database.Model
                 new ObjectParameter("newPassword", newPassword) :
                 new ObjectParameter("newPassword", typeof(string));
     
-            var isLibrarianParameter = isLibrarian.HasValue ?
-                new ObjectParameter("isLibrarian", isLibrarian) :
-                new ObjectParameter("isLibrarian", typeof(sbyte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMember", newUsernameParameter, newNameParameter, newPasswordParameter, isLibrarianParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertMember", newUsernameParameter, newNameParameter, newPasswordParameter);
         }
     
         public virtual ObjectResult<Member> selectMemberByIdAndPassword(string username, string password)

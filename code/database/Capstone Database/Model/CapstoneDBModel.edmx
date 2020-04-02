@@ -48,7 +48,7 @@
             <PropertyRef Name="memberId" />
           </Key>
           <Property Name="memberId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="username" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="isLibrarian" Type="tinyint" Nullable="false" />
@@ -263,7 +263,6 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
           <Parameter Name="newUsername" Type="varchar" Mode="In" />
           <Parameter Name="newName" Type="varchar" Mode="In" />
           <Parameter Name="newPassword" Type="varchar" Mode="In" />
-          <Parameter Name="isLibrarian" Type="tinyint" Mode="In" />
         </Function>
         <Function Name="removeAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="currentAddressId" Type="int" Mode="In" />
@@ -507,7 +506,6 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
             <Parameter Name="newUsername" Mode="In" Type="String" />
             <Parameter Name="newName" Mode="In" Type="String" />
             <Parameter Name="newPassword" Mode="In" Type="String" />
-            <Parameter Name="isLibrarian" Mode="In" Type="SByte" />
           </FunctionImport>
           <FunctionImport Name="selectMemberByIdAndPassword" EntitySet="Members" ReturnType="Collection(Model.Member)">
             <Parameter Name="username" Mode="In" Type="String" />

@@ -9,14 +9,12 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.username)
+            Username
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.name)
+            Name
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isBanned)
-        </th>
+        <th></th>
         <th></th>
     </tr>
 
@@ -29,7 +27,14 @@
             @Html.DisplayFor(modelItem => item.name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.isBanned)
+            @if (item.isBanned.Equals(1))
+            {
+                <b>Banned</b>
+            }
+            else
+            {
+                <p>Not Banned</p>
+            }
         </td>
         <td>
             @Html.ActionLink("View Profile", "Details", new { memberId = item.memberId })

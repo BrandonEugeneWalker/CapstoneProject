@@ -118,12 +118,12 @@ namespace Capstone_Web_Members.Controllers
         /// <returns>The login page if successful, Create page is unsuccessful</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
+        public ActionResult Create([Bind(Include = "memberId,username,name,password")]
             Member member)
         {
             if (ModelState.IsValid)
             {
-                this.DatabaseContext.insertMember(member.username, member.name, member.password, 0);
+                this.DatabaseContext.insertMember(member.username, member.name, member.password);
 
                 return RedirectToAction("Login");
             }
