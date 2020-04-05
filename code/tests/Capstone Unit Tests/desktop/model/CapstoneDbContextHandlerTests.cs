@@ -107,5 +107,55 @@ namespace Capstone_Unit_Tests.desktop.model
                 Assert.IsTrue(results.Count > 0);
             }
         }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordZeroId()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                testHandler.GetEmployeeByIdAndPassword(0, "password"));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordNegativeId()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                testHandler.GetEmployeeByIdAndPassword(-1, "password"));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordEmptyPassword()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                testHandler.GetEmployeeByIdAndPassword(1234, ""));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordNullPassword()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                testHandler.GetEmployeeByIdAndPassword(1234, null));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetEmployeeByIdAndPassword(1234, "not correct");
+            Assert.IsNull(results);
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetEmployeeByIdAndPassword(1234, "password");
+            Assert.IsNotNull(results);
+            Assert.AreEqual(results.employeeId, 1234);
+            Assert.AreEqual(results.name, "Brandon");
+        }
     }
 }

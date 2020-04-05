@@ -150,7 +150,14 @@ namespace Capstone_Desktop.Model
 
             this.CapstoneDbContext.Employees.Load();
 
-            return this.CapstoneDbContext.selectEmployeeByIdAndPassword(id, password).First();
+            try
+            {
+                return this.CapstoneDbContext.selectEmployeeByIdAndPassword(id, password).First();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>Gets all employees from the database and returns it as a bound list.</summary>
