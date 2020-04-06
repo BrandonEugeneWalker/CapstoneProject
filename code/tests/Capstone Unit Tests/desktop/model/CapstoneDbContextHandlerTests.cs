@@ -259,5 +259,225 @@ namespace Capstone_Unit_Tests.desktop.model
             var testHandler = new CapstoneDbContextHandler();
             Assert.ThrowsException<ArgumentNullException>(() => testHandler.GetStockHistoryByStock(null));
         }
+
+        [TestMethod]
+        public void TestGetStockHistoryNoHistory()
+        {
+            Stock testStock = new Stock {
+                stockId = -1
+            };
+
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetStockHistoryByStock(testStock);
+
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List<DetailedRentalView>);
+            Assert.IsTrue(results.Count == 0);
+        }
+
+        [TestMethod]
+        public void TestGetStockHistoryWithHistory()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Stock testStock = testHandler.GetStockById(1);
+            var results = testHandler.GetStockHistoryByStock(testStock);
+
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List<DetailedRentalView>);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestRemoveEmployeeNullEmployee()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() => testHandler.RemoveEmployee(null));
+        }
+
+        [TestMethod]
+        public void TestRemoveEmployeeSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var employeeToRemove = testHandler.GetEmployeeByIdAndPassword(1234, "password");
+                testHandler.RemoveEmployee(employeeToRemove);
+                var employeeRemoved = testHandler.GetEmployeeByIdAndPassword(1234, "password");
+
+                Assert.IsNull(employeeRemoved);
+            }
+        }
+
+        [TestMethod]
+        public void TestRemoveStockNullStock()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() => testHandler.RemoveStock(null));
+        }
+
+        [TestMethod]
+        public void TestRemoveStockSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var stockToRemove = testHandler.GetStockById(1);
+                testHandler.RemoveStock(stockToRemove);
+                var stockRemoved = testHandler.GetStockById(1);
+
+                Assert.IsNull(stockRemoved);
+            }
+        }
+
+        [TestMethod]
+        public void TestAddStockNull()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() => testHandler.AddStock(null));
+        }
+
+        [TestMethod]
+        public void TestAddStockSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                testHandler.CapstoneDbContext.Products.Load();
+                var testProduct = testHandler.CapstoneDbContext.Products.Find(1);
+                Stock testStock = new Stock {
+                    productId = 1,
+                    itemCondition = "Good",
+                    Product = testProduct
+                };
+                testHandler.AddStock(testStock);
+                var highestId = testHandler.CapstoneDbContext.Stocks.Max(s => s.stockId);
+                var addedStock = testHandler.GetStockById(highestId);
+                Assert.IsNotNull(addedStock);
+                Assert.IsTrue(addedStock.stockId == highestId);
+                Assert.IsTrue(addedStock.itemCondition.Equals("Good"));
+                Assert.IsTrue(addedStock.productId == 1);
+                Assert.IsTrue(addedStock is Stock);
+            }
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeNull()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() => testHandler.AddEmployee(null));
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                Employee testEmployee = new Employee {
+                    employeeId = -1,
+                    password = "password",
+                    isManager = false,
+                    name = "Test Employee"
+                };
+                testHandler.AddEmployee(testEmployee);
+                testHandler.CapstoneDbContext.Employees.Load();
+                var highestId = testHandler.CapstoneDbContext.Employees.Max(e => e.employeeId);
+                var addedEmployee = testHandler.GetEmployeeByIdAndPassword(highestId, "password");
+                Assert.IsNotNull(addedEmployee);
+                Assert.IsTrue(addedEmployee is Employee);
+                Assert.IsTrue(addedEmployee.employeeId == highestId);
+                Assert.IsTrue(addedEmployee.password.Equals("whJbRiU7ws9zI"));
+                Assert.IsTrue(addedEmployee.isManager == false);
+                Assert.IsTrue(addedEmployee.name.Equals("Test Employee"));
+            }
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullDetailedRental()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                testHandler.MarkRentalAsWaitingReturn(null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullEmployee()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                testHandler.MarkRentalAsWaitingReturn(new DetailedRentalView(), null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnRentalNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var testDetailedRental = new DetailedRentalView {
+                itemRentalId = -1
+            };
+            var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, new Employee());
+            Assert.IsFalse(results);
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnInvalidRentalStatus()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testItemRental = new ItemRental {
+                    itemRentalId = -1,
+                    stockId = 1,
+                    memberId = 1,
+                    addressId = 1,
+                    status = "WaitingReturn",
+                    rentalDateTime = DateTime.Now,
+                    shipEmployeeId = 1234,
+                    shipDateTime = DateTime.Now
+                };
+
+                testHandler.CapstoneDbContext.ItemRentals.Add(testItemRental);
+                //var highestId = testHandler.CapstoneDbContext.ItemRentals.Max(i => i.itemRentalId);
+
+                var testDetailedRental = new DetailedRentalView
+                {
+                    itemRentalId = -1
+                };
+
+                var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, "password");
+                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating);
+                Assert.IsFalse(results);
+            }
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testItemRental = new ItemRental
+                {
+                    itemRentalId = -1,
+                    stockId = 1,
+                    memberId = 1,
+                    addressId = 1,
+                    status = "WaitingShipment",
+                    rentalDateTime = DateTime.Now
+                };
+
+                testHandler.CapstoneDbContext.ItemRentals.Add(testItemRental);
+
+                var testDetailedRental = new DetailedRentalView
+                {
+                    itemRentalId = -1
+                };
+
+                var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, "password");
+                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating);
+                Assert.IsTrue(results);
+                Assert.IsTrue(testItemRental.status.Equals("WaitingReturn"));
+            }
+        }
     }
 }

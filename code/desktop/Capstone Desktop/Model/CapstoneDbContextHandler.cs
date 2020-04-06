@@ -324,8 +324,9 @@ namespace Capstone_Desktop.Model
                 throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
             }
 
-            this.CapstoneDbContext.Employees.Load();
-            this.CapstoneDbContext.Employees.Add(employee);
+            sbyte isManager = Convert.ToSByte(employee.isManager);
+            this.CapstoneDbContext.insertEmployee(null, employee.password, isManager,
+                employee.name);
             this.CapstoneDbContext.SaveChanges();
         }
 
@@ -359,6 +360,11 @@ namespace Capstone_Desktop.Model
             var currentRental = this.GetItemRentalById(detailedRentalView.itemRentalId);
 
             if (currentRental == null)
+            {
+                return false;
+            }
+
+            if (!currentRental.status.Equals("WaitingShipment"))
             {
                 return false;
             }
