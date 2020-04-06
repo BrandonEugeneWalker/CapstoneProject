@@ -410,6 +410,11 @@ namespace Capstone_Desktop.Model
                 return false;
             }
 
+            if (!currentRental.status.Equals("WaitingReturn"))
+            {
+                return false;
+            }
+
             currentRental.status = "Returned";
             currentRental.shipEmployeeId = employee.employeeId;
             currentRental.shipDateTime = DateTime.Now;
