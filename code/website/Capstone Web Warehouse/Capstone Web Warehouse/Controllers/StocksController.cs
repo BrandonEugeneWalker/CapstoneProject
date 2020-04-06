@@ -27,6 +27,7 @@ namespace Capstone_Web_Warehouse.Controllers
         }
 
         // GET: Stocks
+
         /// <summary>  List of stocks</summary>
         /// <returns>Index page</returns>
         public ActionResult Index()
@@ -35,11 +36,14 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 return Redirect("~/Home/Login");
             }
+
             //var stocks = db.Stocks.Include(s => s.Product);
+
             return View(db.Stocks.ToList());
         }
 
         // GET: Stocks/Details/5
+
         /// <summary>Detail of stock info</summary>
         /// <param name="id">The identifier.</param>
         /// <returns>stock detail page.</returns>
@@ -57,25 +61,34 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(stock);
         }
 
-/*        // GET: Stocks/Create
+        // GET: Stocks/Create
+
         /// <summary>Creates stock</summary>
         /// <returns>stock creation page.</returns>
         public ActionResult Create()
         {
             ViewBag.productId = new SelectList(db.Products, "productId", "name");
             return View();
-        }*/
+        }
 
-/*        // POST: Stocks/Create
+        // POST: Stocks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        /// <summary>Creates the specified stock.</summary>
+
+        /// <summary>Creates the specified stock.
+        /// <Precondition>Session["Employee"] != null && ModelState != Invalid</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="stock">The stock.</param>
         /// <returns>index if good, same page if bad.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "stockId,productId,itemCondition")] Stock stock)
         {
+            var employee = Session["Employee"] as Employee;
+
+            if (employee == null || (bool)!employee.isManager) return Redirect("~/Home/Login");
+
             if (ModelState.IsValid)
             {
                 db.Stocks.Add(stock);
@@ -86,26 +99,28 @@ namespace Capstone_Web_Warehouse.Controllers
             ViewBag.productId = new SelectList(db.Products, "productId", "name", stock.productId);
             return View(stock);
         }
-*/
-/*        // GET: Stocks/Delete/5
+
+        // GET: Stocks/Delete/5
+
         /// <summary>Deletes the specified stock.</summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Delete confirmaton page.</returns>
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            var employee = Session["Employee"] as Employee;
+
+            if (employee == null || (bool)!employee.isManager) return Redirect("~/Home/Login");
+
             Stock stock = db.Stocks.Find(id);
             if (stock == null)
             {
                 return HttpNotFound();
             }
             return View(stock);
-        }*/
-/*
+        }
+
         // POST: Stocks/Delete/5
+
         /// <summary>Deletes the confirmed.</summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Index page</returns>
@@ -117,7 +132,7 @@ namespace Capstone_Web_Warehouse.Controllers
             db.Stocks.Remove(stock);
             db.SaveChanges();
             return RedirectToAction("Index");
-        }*/
+        }
 
         protected override void Dispose(bool disposing)
         {
