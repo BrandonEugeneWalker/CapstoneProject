@@ -1,11 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
+using System.Linq;
 using Capstone_Database.Model;
 using Capstone_Desktop.Model;
+using Castle.Core.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capstone_Unit_Tests.desktop.model
 {
+    /// <summary>
+    ///   <para>Tests the CapstoneDbContextHandler, which is an object that handles interactions with the database.</para>
+    ///   <para>Because of this the system MUST be able to connect to the database (using the VPN if needed.)</para>
+    /// </summary>
+    /// <Precondition> It must be possible to connect to the database! </Precondition>
     [TestClass]
     public class CapstoneDbContextHandlerTests
     {
@@ -105,6 +114,7 @@ namespace Capstone_Unit_Tests.desktop.model
                 var results = testHandler.GetDetailedStockHistory(testStock);
 
                 Assert.IsTrue(results.Count > 0);
+                Assert.IsTrue(results is List<DetailedRentalView>);
             }
         }
 
@@ -156,6 +166,98 @@ namespace Capstone_Unit_Tests.desktop.model
             Assert.IsNotNull(results);
             Assert.AreEqual(results.employeeId, 1234);
             Assert.AreEqual(results.name, "Brandon");
+        }
+
+        [TestMethod]
+        public void TestGetAllEmployeesSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllEmployees();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList<Employee>);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestGetAllDetailedStockSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllDetailedStock();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList<StockDetailView>);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestGetDetailedRentalsWaitingShipmentSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetDetailedRentalsWaitingShipment();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List<DetailedRentalView>);
+
+        }
+
+        [TestMethod]
+        public void TestGetDetailedRentalsWaitingReturnSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetDetailedRentalsWaitingReturn();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List<DetailedRentalView>);
+        }
+
+        [TestMethod]
+        public void TestGetAllDetailedRentalsSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllDetailedRentals();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList<DetailedRentalView>);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestGetItemRentalsByIdNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetItemRentalById(-1);
+            Assert.IsNull(results);
+        }
+
+        [TestMethod]
+        public void TestGetItemRentalsByIdFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetItemRentalById(1);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is ItemRental);
+            Assert.IsTrue(results.itemRentalId == 1);
+        }
+
+        [TestMethod]
+        public void TestGetStockByIdNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetStockById(-1);
+            Assert.IsNull(results);
+        }
+
+        [TestMethod]
+        public void TestGetStocksByIdFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetStockById(1);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.stockId == 1);
+            Assert.IsTrue(results is Stock);
+        }
+
+        [TestMethod]
+        public void TestGetStockHistoryByStockNullStock()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() => testHandler.GetStockHistoryByStock(null));
         }
     }
 }
