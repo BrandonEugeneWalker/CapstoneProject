@@ -63,7 +63,6 @@ namespace Capstone_Desktop.Controller
             return stockHistoryQueryable.ToList();
         }
 
-
         /// <summary>
         ///     <para>
         ///         Builds the string representation of a stock object needed for the UI.

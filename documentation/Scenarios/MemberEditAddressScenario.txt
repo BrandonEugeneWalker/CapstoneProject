@@ -1,0 +1,11 @@
+Member Edit Address:
+1.	A member loads library website.
+2.	A member logs in to website.
+3.	A member clicks profile page.
+4.	A member clicks Create New under addresses section.
+5.	A member enters information.
+6.	A member clicks Edit on a listed address.
+7.	A member has edited an address.
+8.	A member logs out.
+Alternate:
+2a: Member no log in) The profile button only appears when logged in.

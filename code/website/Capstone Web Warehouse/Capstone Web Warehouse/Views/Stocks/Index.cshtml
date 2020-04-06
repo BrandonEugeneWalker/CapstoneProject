@@ -6,6 +6,10 @@
 
 <h2>Stock Items</h2>
 
+<p>
+    @Html.ActionLink("Add New", "Create")
+</p>
+
 <table class="table">
     <tr>
         <th>
@@ -34,8 +38,8 @@
         </td>
 
         <td>
-            @Html.ActionLink("Details", "Details", new {id = item.stockId}) |
-            @Html.ActionLink("Delete", "Delete", new {id = item.stockId})
+            @Html.ActionLink("Details", "Details", new { id = item.stockId }) | 
+            @Html.ActionLink("Remove", "Delete", new { id = item.stockId })
         </td>
     </tr>
 }

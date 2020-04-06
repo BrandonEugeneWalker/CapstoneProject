@@ -14,6 +14,9 @@ namespace Capstone_Web_Members.Controllers
     {
         #region Data members
 
+        /// <summary>
+        ///     The database context
+        /// </summary>
         public OnlineEntities DatabaseContext;
 
         #endregion
@@ -35,7 +38,6 @@ namespace Capstone_Web_Members.Controllers
         public MembersController(OnlineEntities databaseContext)
         {
             this.DatabaseContext = databaseContext;
-            //Session["currentMemberId"] = 1;
         }
 
         #endregion
@@ -43,53 +45,81 @@ namespace Capstone_Web_Members.Controllers
         #region Methods
 
         /// <summary>
-        ///     Shows the details of the logged in member.
+        ///     Lists index list of all members
+        ///     <Precondition>Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <returns>
-        ///     Returns page showcasing details of the logged in member
-        /// </returns>
-        public ActionResult Details()
+        /// <returns>Members Index page</returns>
+        public ActionResult Index()
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentLibrarianId"] != null)
             {
+                return View(this.DatabaseContext.retrieveNonlibrarians());
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        ///     Shows the details of the logged in member including their profile, current Addresses, and ItemRental history
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
+        /// </summary>
+        /// <param name="memberId">memberId of given Member</param>
+        /// <returns>Member's profile page</returns>
+        public ActionResult Details(int? memberId)
+        {
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
+            {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
-            var memberId = int.Parse(Session["currentMemberId"].ToString());
+            if (memberId == null)
+            {
+                memberId = int.Parse(Session["currentMemberId"].ToString());
+            }
+
             var member = this.DatabaseContext.Members.Find(memberId);
             var rentedItems = this.DatabaseContext.retrieveMembersRentals(memberId).ToList();
             var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
             var memberProfileViewModel = new MemberProfileViewModel
                 {MemberModel = member, ItemRentalsModel = rentedItems, AddressesModel = addresses};
 
+            if (Session["currentLibrarianId"] != null)
+            {
+                memberProfileViewModel.LibrarianLoggedIn = true;
+            }
+
             return View(memberProfileViewModel);
         }
 
         /// <summary>
-        ///     Creates first instance of the Create / Registration page
+        ///     Form for registering/creating a Member.
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Create Member page</returns>
         public ActionResult Create()
         {
             return View();
         }
 
         /// <summary>
-        ///     Creates the specified member from the Registration page.
+        ///     Creates the specified member from the Registration page
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>Member object inserted to Members table</Postcondition>
         /// </summary>
-        /// <param name="member">The member.</param>
-        /// <returns>
-        ///     Navigates to the Member Web Homepage
-        ///     Creates / Registers the new member
-        /// </returns>
+        /// <param name="member">The member object created in the Create Form.</param>
+        /// <returns>The login page if successful, Create page is unsuccessful</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
+        public ActionResult Create([Bind(Include = "memberId,username,name,password")]
             Member member)
         {
             if (ModelState.IsValid)
             {
-                this.DatabaseContext.insertMember(member.username, member.name, member.password, 0);
+                this.DatabaseContext.insertMember(member.username, member.name, member.password);
 
                 return RedirectToAction("Login");
             }
@@ -98,16 +128,17 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Edits the specified Member.
+        ///     Form for editing a Member
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <returns>
-        ///     Returns the edit view page for the selected Member
-        /// </returns>
+        /// <returns>Returns the edit page for the selected Member</returns>
         public ActionResult Edit(int? id)
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -127,19 +158,20 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Edits the specified member.
+        ///     Edits Member after Edit form is submitted
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>Updates Member object in Members table</Postcondition>
         /// </summary>
-        /// <param name="member">The member.</param>
-        /// <returns>
-        ///     Returns the edit view page for the selected Member
-        /// </returns>
+        /// <param name="member">The member object edited in the Edit Form</param>
+        /// <returns>Member's profile if successful, edit form if unsuccessful</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "memberId,username,name,password,isLibrarian,isBanned")]
             Member member)
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -163,16 +195,24 @@ namespace Capstone_Web_Members.Controllers
         }
 
         /// <summary>
-        ///     Logs in the user and returns to the previous URL
+        ///     Logs in the user and returns to HomeController Index
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <returns>
-        ///     Returns to the previous page after logging in
-        /// </returns>
+        /// <param name="member">The member object that is logging in</param>
+        /// <returns>HomeController Index if true, login form if false</returns>
         [AllowAnonymous]
         public ActionResult Login(Member member)
         {
             var matchingMembers = this.DatabaseContext.selectMemberByIdAndPassword(member.username, member.password)
                                       .ToList();
+
+            if (matchingMembers.Count > 0 && matchingMembers[0].isLibrarian.Equals(1))
+            {
+                var loggedInMemberId = matchingMembers[0].memberId;
+                Session["currentLibrarianId"] = loggedInMemberId;
+                return RedirectToAction("Index", "Home");
+            }
 
             if (matchingMembers.Count > 0)
             {
@@ -184,6 +224,12 @@ namespace Capstone_Web_Members.Controllers
             return View();
         }
 
+        /// <summary>
+        ///     Logs current Member out
+        ///     <Precondition>None</Precondition>
+        ///     <Postcondition>None</Postcondition>
+        /// </summary>
+        /// <returns>Login page</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()

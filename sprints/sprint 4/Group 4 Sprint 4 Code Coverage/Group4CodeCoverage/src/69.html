@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\AddEmployeeFormController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     This class acts as a controller for the AddEmployeeForm. Because of this the class contains methods related to
+    ///     handling data given by the user in its parent form.
+    /// &lt;/summary&gt;
+    public class AddEmployeeFormController
+    {
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;Determines whether [is valid password] [the specified password]. &lt;/para&gt;
+        ///     &lt;para&gt;Password requirements are as follows:&lt;/para&gt;
+        ///     &lt;para&gt;* Contains at least one lowercase letter.&lt;/para&gt;
+        ///     &lt;para&gt;* Contains at least one uppercase letter.&lt;/para&gt;
+        ///     &lt;para&gt;* Contains at least one symbol.&lt;/para&gt;
+        ///     &lt;para&gt;* Must be a minimum of 6 characters long.&lt;/para&gt;
+        ///     &lt;para&gt;* Cannot be longer than 16 characters.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;password&quot;&gt;The password to validate.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     &lt;c&gt;true&lt;/c&gt; if [is valid password] [the specified password]; otherwise, &lt;c&gt;false&lt;/c&gt;.
+        /// &lt;/returns&gt;
+        public bool IsValidPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                return false;
+            }
+
+            var lowerCases = 0;
+            var upperCases = 0;
+            var numbers = 0;
+            var specialChars = 0;
+
+            foreach (var currentChar in password)
+            {
+                if (char.IsNumber(currentChar))
+                {
+                    numbers++;
+                }
+
+                if (char.IsLower(currentChar))
+                {
+                    lowerCases++;
+                }
+
+                if (char.IsUpper(currentChar))
+                {
+                    upperCases++;
+                }
+
+                if (char.IsPunctuation(currentChar) | char.IsSymbol(currentChar))
+                {
+                    specialChars++;
+                }
+            }
+
+            var hasLowerCase = lowerCases &gt; 0;
+            var hasUpperCase = upperCases &gt; 0;
+            var hasNumbers = numbers &gt; 0;
+            var hasSpecialChars = specialChars &gt; 0;
+            var isMinimumLength = password.Length &gt;= 6;
+            var isNotPastMaximumLength = password.Length &lt;= 16;
+
+            var isValid = hasLowerCase &amp;&amp; hasUpperCase &amp;&amp; hasNumbers &amp;&amp; hasSpecialChars &amp;&amp; isMinimumLength &amp;&amp;
+                          isNotPastMaximumLength;
+
+            return isValid;
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[25,9,25,10,1],[26,13,26,48,1],[27,13,27,14,1],[28,17,28,30,1],[31,13,31,32,1],[32,13,32,32,1],[33,13,33,29,1],[34,13,34,34,1],[36,13,36,20,1],[36,22,36,37,1],[36,38,36,40,1],[36,41,36,49,1],[37,13,37,14,1],[38,17,38,48,1],[39,17,39,18,1],[40,21,40,31,1],[41,17,41,18,1],[43,17,43,47,1],[44,17,44,18,1],[45,21,45,34,1],[46,17,46,18,1],[48,17,48,47,1],[49,17,49,18,1],[50,21,50,34,1],[51,17,51,18,1],[53,17,53,82,1],[54,17,54,18,1],[55,21,55,36,1],[56,17,56,18,1],[57,13,57,14,1],[59,13,59,47,1],[60,13,60,47,1],[61,13,61,42,1],[62,13,62,52,1],[63,13,63,56,1],[64,13,64,64,1],[66,13,67,50,1],[69,13,69,28,1],[70,9,70,10,1]]);
+    </script>
+  </body>
+</html>

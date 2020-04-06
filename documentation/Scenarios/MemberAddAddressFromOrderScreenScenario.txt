@@ -1,0 +1,13 @@
+Member Add Address From Order Screen:
+1.	A member loads library website.
+2.	A member logs in to website.
+3.	A member loads the Media Library page.
+4.	A member clicks Order from the product table.
+5.	A member loads the Order Product page.
+6.	A member clicks Add Address.
+7.	A member has created an address.
+8.	A member is redirected back to the Order Product page
+9.	A member finishes their order.
+10.	A member logs out.
+Alternate:
+2a: Member no log in) The profile button only appears when logged in.

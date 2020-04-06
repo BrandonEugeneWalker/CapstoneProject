@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Members\Controllers\HomeController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+using Capstone_Web_Members.ViewModels;
+
+namespace Capstone_Web_Members.Controllers
+{
+    /// &lt;summary&gt;
+    ///     Controller managing the main sites of the Member side of the West GA Electronic Library
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;Controller&quot; /&gt;
+    public class HomeController : Controller
+    {
+        #region Data members
+
+        /// &lt;summary&gt;
+        ///     The database context
+        /// &lt;/summary&gt;
+        public OnlineEntities DatabaseContext;
+
+        /// &lt;summary&gt;
+        ///     The available products
+        /// &lt;/summary&gt;
+        public List&lt;Product&gt; AvailableProducts;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;HomeController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        public HomeController()
+        {
+            this.DatabaseContext = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;HomeController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;databaseContext&quot;&gt;The database context.&lt;/param&gt;
+        public HomeController(OnlineEntities databaseContext)
+        {
+            this.DatabaseContext = databaseContext;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     Index of the Website, required for running of Website. Redirects to Media Library. Redirects to Login if no login
+        ///     session found.
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;Media Library Page&lt;/returns&gt;
+        public ActionResult Index()
+        {
+            return RedirectToAction(&quot;MediaLibrary&quot;);
+        }
+
+        /// &lt;summary&gt;
+        ///     The Media Library page, showing all items available to order. If reloading after the Search form is submitted,
+        ///     sends filter information to the database to filter during stored procedure call. Checks if Member&#39;s active
+        ///     ItemRentals are 3 or higher.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;nameSearch&quot;&gt;The name search field.&lt;/param&gt;
+        /// &lt;param name=&quot;typeSearch&quot;&gt;The type search field.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     The media library page
+        /// &lt;/returns&gt;
+        public ActionResult MediaLibrary(string nameSearch, string typeSearch)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            if (nameSearch == null)
+            {
+                nameSearch = string.Empty;
+            }
+
+            if (typeSearch == null)
+            {
+                typeSearch = string.Empty;
+            }
+
+            ViewBag.NameSearch = nameSearch;
+            ViewBag.TypeSearch = typeSearch;
+            this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
+                                         .ToList();
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+            var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+            int? rentedCount = 0;
+            if (rentedCountResult.Count &gt; 0)
+            {
+                rentedCount = rentedCountResult[0];
+            }
+
+            var mediaLibraryViewModel = new MediaLibraryViewModel
+                {ProductsModel = this.AvailableProducts, RentedCountModel = rentedCount};
+
+            return View(mediaLibraryViewModel);
+        }
+
+        /// &lt;summary&gt;
+        ///     Navigates to the Order Product view to confirm order. Showcases the selected product and gives list of Addresses
+        ///     for member to select. If member has no address, they are prompted to create one.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;The product id, referencing Product being ordered.&lt;/param&gt;
+        /// &lt;returns&gt;The Order Product view detailing the selected product&lt;/returns&gt;
+        public ActionResult OrderProduct(int productId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var product = this.DatabaseContext.Products.Find(productId);
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+            var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
+            var orderProductViewModel = new OrderProductViewModel {ProductModel = product, AddressesModel = addresses};
+            return View(orderProductViewModel);
+        }
+
+        /// &lt;summary&gt;
+        ///     Orders the product following user confirmation, finds the available Stock object of the given product and creates
+        ///     an Item Rental of the item.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;The product ID, referencing Product being ordered.&lt;/param&gt;
+        /// &lt;param name=&quot;addressId&quot;&gt;The address id, referencing the selected Address being ordered to&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     The media library page after ordering selected product
+        /// &lt;/returns&gt;
+        [HttpPost]
+        public ActionResult OrderProduct(string productId, string addressId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var results = this.DatabaseContext.findAvailableStockOfProduct(int.Parse(productId)).ToList();
+            var availableStockId = results[0];
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId, int.Parse(addressId));
+
+            return RedirectToAction(&quot;OrderConfirmation&quot;,
+                new {productId = int.Parse(productId), addressId = int.Parse(addressId)});
+        }
+
+        /// &lt;summary&gt;
+        ///     Shows Order Confirmation information for Product just ordered. Shows the info of the Product and the Address used
+        ///     to order. Links back to Media Library. Called from OrderProduct.
+        ///     Redirects to Login if Login is invalid (prevents accessing while logged out / unauthorized)
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;The product id, referencing Product just ordered.&lt;/param&gt;
+        /// &lt;param name=&quot;addressId&quot;&gt;The address id, referencing Address ordered to.&lt;/param&gt;
+        /// &lt;returns&gt;&lt;/returns&gt;
+        public ActionResult OrderConfirmation(int productId, int addressId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var product = this.DatabaseContext.Products.Find(productId);
+            var address = this.DatabaseContext.Addresses.Find(addressId);
+            var orderConfirmationViewModel = new OrderConfirmationViewModel
+                {ProductModel = product, AddressModel = address};
+
+            return View(orderConfirmationViewModel);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[34,9,34,32,1],[35,9,35,10,1],[36,13,36,57,1],[37,9,37,10,1],[43,9,43,62,1],[44,9,44,10,1],[45,13,45,52,1],[46,9,46,10,1],[58,9,58,10,1],[59,13,59,53,1],[60,9,60,10,1],[74,9,74,10,1],[75,13,75,52,1],[76,13,76,14,1],[77,17,77,61,1],[80,13,80,36,1],[81,13,81,14,1],[82,17,82,43,1],[83,13,83,14,1],[85,13,85,36,1],[86,13,86,14,1],[87,17,87,43,1],[88,13,88,14,1],[90,13,90,45,1],[91,13,91,45,1],[92,13,93,52,1],[94,13,94,77,1],[95,13,95,97,1],[96,13,96,34,1],[97,13,97,45,1],[98,13,98,14,1],[99,17,99,52,1],[100,13,100,14,1],[102,13,103,90,1],[105,13,105,48,1],[106,9,106,10,1],[116,9,116,10,1],[117,13,117,52,1],[118,13,118,14,1],[119,17,119,61,1],[122,13,122,73,1],[123,13,123,77,1],[124,13,124,94,1],[125,13,125,120,1],[126,13,126,48,1],[127,9,127,10,1],[141,9,141,10,1],[142,13,142,52,1],[143,13,143,14,1],[144,17,144,61,1],[147,13,147,107,1],[148,13,148,47,1],[149,13,149,77,1],[150,13,150,102,1],[152,13,153,91,1],[154,9,154,10,1],[165,9,165,10,1],[166,13,166,52,1],[167,13,167,14,1],[168,17,168,61,1],[171,13,171,73,1],[172,13,172,74,1],[173,13,174,66,1],[176,13,176,53,1],[177,9,177,10,1]]);
+    </script>
+  </body>
+</html>

@@ -48,7 +48,7 @@
             <PropertyRef Name="memberId" />
           </Key>
           <Property Name="memberId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="username" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="isLibrarian" Type="tinyint" Nullable="false" />
@@ -263,7 +263,6 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
           <Parameter Name="newUsername" Type="varchar" Mode="In" />
           <Parameter Name="newName" Type="varchar" Mode="In" />
           <Parameter Name="newPassword" Type="varchar" Mode="In" />
-          <Parameter Name="isLibrarian" Type="tinyint" Mode="In" />
         </Function>
         <Function Name="removeAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="currentAddressId" Type="int" Mode="In" />
@@ -283,6 +282,7 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
         <Function Name="retrieveMembersRentals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
+        <Function Name="retrieveNonlibrarians" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveProductById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedProductId" Type="int" Mode="In" />
         </Function>
@@ -506,7 +506,6 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
             <Parameter Name="newUsername" Mode="In" Type="String" />
             <Parameter Name="newName" Mode="In" Type="String" />
             <Parameter Name="newPassword" Mode="In" Type="String" />
-            <Parameter Name="isLibrarian" Mode="In" Type="SByte" />
           </FunctionImport>
           <FunctionImport Name="selectMemberByIdAndPassword" EntitySet="Members" ReturnType="Collection(Model.Member)">
             <Parameter Name="username" Mode="In" Type="String" />
@@ -578,6 +577,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           </AssociationSet>
           <EntitySet Name="DetailedRentalViews" EntityType="Model.DetailedRentalView" />
           <EntitySet Name="StockDetailViews" EntityType="Model.StockDetailView" />
+          <FunctionImport Name="retrieveNonlibrarians" EntitySet="Members" ReturnType="Collection(Model.Member)" />
           </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -762,6 +762,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <Property Name="productCategory" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="retrieveNonlibrarians_Result" />
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -919,6 +920,8 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrarians" FunctionName="Model.Store.retrieveNonlibrarians">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

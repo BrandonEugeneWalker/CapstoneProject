@@ -1,103 +1,102 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Capstone_Web_Warehouse.Controllers;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Capstone_Database.Model;
+using Capstone_Web_Warehouse.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Capstone_Web_Warehouse.Controllers.Tests
+namespace Capstone_Web_Warehouse.Tests.Controllers
 {
     [TestClass()]
     public class EmployeesControllerTests
     {
-        [TestMethod()]
-        public void EditViewGoodIDTest()
-        {
-            var emp1 = new Employee() { employeeId = 1000 };
-            var emp2 = new Employee() { employeeId = 2000 };
-            IList<Employee> employees = new List<Employee>()
-            {
-                emp1,
-                emp2
-            };
 
-            var context = new Mock<OnlineEntities>();
-            var mock = CreateDbSetMock(employees);
-            context.Setup(x => x.Employees).Returns(mock.Object);
-            context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
-            var ec = new EmployeesController(context.Object);
-            var edit = ec.Edit(1000) as ViewResult;
-            Assert.IsNotNull(edit);
-            Assert.IsNotNull(edit.Model);
-            Assert.IsInstanceOfType(edit.Model, typeof(Employee));
-            var model = (Employee) edit.Model;
-            Assert.AreEqual(1000,model.employeeId);
+        [TestMethod()]
+        public void ControllerTest()
+        {
+            var controller = new EmployeesController();
+            Assert.IsNotNull(controller);
+        }
+
+        [TestMethod]
+        public void ControllerDisposesResourcesValid()
+        {
+            var controller = setupControllerWithSession();
+
+            var index = controller.Index() as ViewResult;
+            controller.Dispose();
+
+            Assert.IsNotNull(index);
         }
 
         [TestMethod()]
-        public void EditNullIdTest()
+        public void IndexViewManagerTest()
         {
-            var emp1 = new Employee() { employeeId = 1000, name = "Bob"};
-            var emp2 = new Employee() { employeeId = 2000 };
-            IList<Employee> employees = new List<Employee>()
-            {
-                emp1,
-                emp2
-            };
-
-            var context = new Mock<OnlineEntities>();
-            var mock = CreateDbSetMock(employees);
-            context.Setup(x => x.Employees).Returns(mock.Object);
-            context.Setup(x => x.Employees.Find(1000)).Returns(emp2);
-            var ec = new EmployeesController(context.Object);
-            int? bad = null;
-            var edit = ec.Edit(bad) as ViewResult;
-            Assert.IsNull(edit);
+            var controller = setupControllerWithSession();
+            var index = controller.Index() as ViewResult;
+            Assert.IsNotNull(index);
+            Assert.IsNotNull(index.Model);
+            Assert.IsInstanceOfType(index.Model, typeof(IEnumerable<Employee>));
+            var model = (IEnumerable<Employee>)index.Model;
+            Assert.AreEqual(2, model.Count());
         }
 
         [TestMethod()]
-        public void EditIdNotFoundTest()
+        public void IndexViewEmployeeTest()
         {
-            var emp1 = new Employee() { employeeId = 1000, name = "Bob" };
-            var emp2 = new Employee() { employeeId = 2000 };
-            IList<Employee> employees = new List<Employee>()
-            {
-                emp1,
-                emp2
-            };
-
-            var context = new Mock<OnlineEntities>();
-            var mock = CreateDbSetMock(employees);
-            context.Setup(x => x.Employees).Returns(mock.Object);
-            context.Setup(x => x.Employees.Find(1000)).Returns(emp2);
-            var ec = new EmployeesController(context.Object);
-            var edit = ec.Edit(3) as ViewResult;
-            Assert.IsNull(edit);
+            var controller = setupControllerNotManagerSession();
+            var index = controller.Index() as RedirectResult;
+            Assert.IsNotNull(index);
         }
 
         [TestMethod()]
-        public void EditIdMismatchTest()
+        public void IndexViewNoLoginTest()
         {
-            var emp1 = new Employee() { employeeId = 1000, name = "Bob" };
-            var emp2 = new Employee() { employeeId = 2000 };
-            IList<Employee> employees = new List<Employee>()
-            {
-                emp1,
-                emp2
-            };
+            var controller = setupControllerWithoutSession();
+            var index = controller.Index() as RedirectResult;
+            Assert.IsNotNull(index);
+        }
 
-            var context = new Mock<OnlineEntities>();
-            var mock = CreateDbSetMock(employees);
-            context.Setup(x => x.Employees).Returns(mock.Object);
-            context.Setup(x => x.Employees.Find(1000)).Returns(emp2);
-            var ec = new EmployeesController(context.Object);
-            var edit = ec.Edit(2000) as ViewResult;
-            Assert.IsNull(edit);
+        [TestMethod()]
+        public void CreateViewNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var index = controller.Create() as RedirectToRouteResult;
+            Assert.IsNotNull(index);
+        }
+        [TestMethod()]
+        public void CreateManagerLoginTest()
+        {
+            var controller = setupControllerWithSession();
+            var index = controller.Create() as ViewResult;
+            Assert.IsNotNull(index);
+        }
+        [TestMethod()]
+        public void CreateEmployeeLoginTest()
+        {
+            var controller = setupControllerNotManagerSession();
+            var create = controller.Create() as RedirectToRouteResult;
+            Assert.IsNotNull(create);
+        }
+        [TestMethod()]
+        public void CreateEmployeeClickTest()
+        {
+            var controller = setupControllerWithSession();
+            var create = controller.Create(new Employee()) as RedirectToRouteResult;
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod()]
+        public void CreateManagerClickTest()
+        {
+            var controller = setupControllerWithSession();
+            var emp1 = new Employee() { employeeId = 3000, name = "Bob", password = "whm3GC0X8np.c", isManager = true };
+            var create = controller.Create(emp1) as RedirectToRouteResult;
+            Assert.IsNotNull(create);
         }
 
         [TestMethod()]
@@ -141,8 +140,8 @@ namespace Capstone_Web_Warehouse.Controllers.Tests
             context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
             var ec = new EmployeesController(context.Object);
             int? bad = null;
-            var detail = ec.Details(bad) as ViewResult;
-            Assert.IsNull(detail);
+            var detail = ec.Details(bad) as HttpStatusCodeResult;
+            Assert.IsNotNull(detail);
         }
 
         [TestMethod()]
@@ -161,8 +160,8 @@ namespace Capstone_Web_Warehouse.Controllers.Tests
             context.Setup(x => x.Employees).Returns(mock.Object);
             context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
             var ec = new EmployeesController(context.Object);
-            var detail = ec.Details(3000) as ViewResult;
-            Assert.IsNull(detail);
+            var detail = ec.Details(3000) as HttpNotFoundResult;
+            Assert.IsNotNull(detail);
         }
 
         [TestMethod()]
@@ -188,7 +187,52 @@ namespace Capstone_Web_Warehouse.Controllers.Tests
             var model = (Employee)delete.Model;
             Assert.AreEqual(1000, model.employeeId);
         }
+        [TestMethod()]
+        public void DeleteNotFoundTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList<Employee> employees = new List<Employee>()
+            {
+                emp1,
+                emp2
+            };
 
+            var context = new Mock<OnlineEntities>();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x => x.Employees).Returns(mock.Object);
+            context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var delete = ec.Delete(3000) as HttpNotFoundResult;
+            Assert.IsNotNull(delete);
+        }
+        [TestMethod()]
+        public void DeleteNullIdTest()
+        {
+            var emp1 = new Employee() { employeeId = 1000 };
+            var emp2 = new Employee() { employeeId = 2000 };
+            IList<Employee> employees = new List<Employee>()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock<OnlineEntities>();
+            var mock = CreateDbSetMock(employees);
+            context.Setup(x => x.Employees).Returns(mock.Object);
+            context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
+            var ec = new EmployeesController(context.Object);
+            var delete = ec.Delete(null) as HttpStatusCodeResult;
+            Assert.IsNotNull(delete);
+        }
+        [TestMethod()]
+        public void DeleteConfirmedTest()
+        {
+            var controller = setupControllerWithSession();
+            var confirm = controller.DeleteConfirmed(1000) as RedirectToRouteResult;
+            Assert.IsNotNull(confirm);
+
+        }
         private static Mock<DbSet<T>> CreateDbSetMock<T>(IEnumerable<T> elements) where T : class
         {
             var elementsAsQueryable = elements.AsQueryable();
@@ -200,6 +244,90 @@ namespace Capstone_Web_Warehouse.Controllers.Tests
             dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
 
             return dbSetMock;
+        }
+
+        private static EmployeesController setupControllerWithSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = "Bob", password = "whm3GC0X8np.c", isManager = true};
+            var emp2 = new Employee() { employeeId = 2000, name = "Bill", password = "whm3GC0X8np.c", isManager = false };
+            IList<Employee> employees = new List<Employee>()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock<OnlineEntities>();
+            var mock = CreateDbSetMock(employees);
+
+            context.Setup(x => x.Employees).Returns(mock.Object);
+            context.Setup(x => x.Employees.Remove(emp1)).Returns(emp1);
+
+            var eController = new EmployeesController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["Employee"]).Returns(emp1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+        private static EmployeesController setupControllerWithoutSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = "Bob", password = "whm3GC0X8np.c", isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = "Bill", password = "whm3GC0X8np.c", isManager = false };
+            IList<Employee> employees = new List<Employee>()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock<OnlineEntities>();
+            var mock = CreateDbSetMock(employees);
+
+            context.Setup(x => x.Employees).Returns(mock.Object);
+            context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
+
+            var eController = new EmployeesController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["Employee"]).Returns(null);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+        private static EmployeesController setupControllerNotManagerSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = "Bob", password = "whm3GC0X8np.c", isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = "Bill", password = "whm3GC0X8np.c", isManager = false };
+            IList<Employee> employees = new List<Employee>()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock<OnlineEntities>();
+            var mock = CreateDbSetMock(employees);
+
+            context.Setup(x => x.Employees).Returns(mock.Object);
+            context.Setup(x => x.Employees.Find(1000)).Returns(emp1);
+
+            var eController = new EmployeesController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["Employee"]).Returns(emp2);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
         }
 
     }

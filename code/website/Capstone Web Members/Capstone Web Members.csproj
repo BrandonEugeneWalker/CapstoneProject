@@ -225,7 +225,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\AccountSettings.cs" />
+    <Compile Include="Settings\RentalSettings.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\MediaLibraryViewModel.cs" />
     <Compile Include="ViewModels\MemberProfileViewModel.cs" />
     <Compile Include="ViewModels\OrderConfirmationViewModel.cs" />
     <Compile Include="ViewModels\OrderProductViewModel.cs" />

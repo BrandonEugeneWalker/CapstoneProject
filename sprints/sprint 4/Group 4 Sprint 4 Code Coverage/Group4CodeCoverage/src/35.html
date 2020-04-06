@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Members\ViewModels\OrderProductViewModel.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Members.ViewModels
+{
+    /// &lt;summary&gt;
+    /// ViewModel for storing the product being ordered and the member&#39;s Addresses via multiple models to display on the Order Product page
+    /// &lt;/summary&gt;
+    public class OrderProductViewModel
+    {
+        /// &lt;summary&gt;
+        /// Gets or sets the product model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        /// The product model, storing the product to be ordered for the OrderProduct view
+        /// &lt;/value&gt;
+        public Product ProductModel { get; set; }
+
+        /// &lt;summary&gt;
+        /// Gets or sets the addresses model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        /// The addresses model, storing the selected address to be used for the order
+        /// &lt;/value&gt;
+        public List&lt;Address&gt; AddressesModel { get; set; }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,39,17,43,0],[17,44,17,48,1],[25,47,25,51,0],[25,52,25,56,1]]);
+    </script>
+  </body>
+</html>

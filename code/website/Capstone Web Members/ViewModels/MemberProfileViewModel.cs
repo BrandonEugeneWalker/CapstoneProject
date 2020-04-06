@@ -37,6 +37,14 @@ namespace Capstone_Web_Members.ViewModels
         /// </value>
         public List<Address> AddressesModel { get; set; }
 
+        /// <summary>
+        ///     Gets or sets a value indicating whether [librarian logged in].
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if [librarian logged in]; otherwise, <c>false</c>.
+        /// </value>
+        public bool LibrarianLoggedIn { get; set; } = false;
+
         #endregion
     }
 }

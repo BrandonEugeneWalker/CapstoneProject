@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse.Tests\Controllers\RentalsControllerTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Capstone_Database.Model;
+using Capstone_Web_Warehouse.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Web_Warehouse.Tests.Controllers
+{
+    /// &lt;summary&gt;
+    /// Summary description for RentalsControllerTest
+    /// &lt;/summary&gt;
+    [TestClass]
+    public class RentalsControllerTest
+    {
+        [TestMethod]
+        public void ControllerTest()
+        {
+            var controller = new RentalsController();
+            Assert.IsNotNull(controller);
+        }
+
+        [TestMethod()]
+        public void IndexNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+
+            var index = controller.Index() as RedirectResult;
+            controller.Dispose();
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void IndexLoginTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var index = controller.Index() as ViewResult;
+
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod]
+        public void UpdateStatusNotFoundTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var update = controller.UpdateStatus(4) as HttpStatusCodeResult;
+
+            Assert.IsNotNull(update);
+        }
+        [TestMethod]
+        public void UpdateStatusReturnedTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var update = controller.UpdateStatus(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(update);
+        }
+
+        [TestMethod]
+        public void UpdateStatusWaitReturnTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var update = controller.UpdateStatus(2) as RedirectToRouteResult; 
+
+            Assert.IsNotNull(update);
+        }
+
+        [TestMethod]
+        public void UpdateStatusWaitShipTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var update = controller.UpdateStatus(3) as RedirectToRouteResult;
+
+            Assert.IsNotNull(update);
+        }
+
+        [TestMethod]
+        public void UpdateStatusNullIDTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var update = controller.UpdateStatus(null) as HttpStatusCodeResult;
+
+            Assert.IsNotNull(update);
+        }
+
+        [TestMethod]
+        public void UpdateStatusNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+
+            var update = controller.UpdateStatus(null) as HttpStatusCodeResult;
+
+            Assert.IsNotNull(update);
+        }
+        private static Mock&lt;DbSet&lt;T&gt;&gt; CreateDbSetMock&lt;T&gt;(IEnumerable&lt;T&gt; elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock&lt;DbSet&lt;T&gt;&gt;();
+
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+
+        private static RentalsController setupControllerWithSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = &quot;Bill&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = false };
+            var stock = new Stock() { stockId=1,productId=1,itemCondition=&quot;Good&quot;};
+            var rent1 = new ItemRental(){itemRentalId = 1, stockId = 1, memberId = 1, status = &quot;Returned&quot;, rentalDateTime = DateTime.Now};
+            var rent2 = new ItemRental() { itemRentalId = 2, stockId = 1, memberId = 1, status = &quot;WaitingReturn&quot;, rentalDateTime = DateTime.Now, returnCondition = &quot;Good&quot; };
+            var rent3 = new ItemRental() { itemRentalId = 3, stockId = 1, memberId = 1, status = &quot;WaitingShipment&quot;, rentalDateTime = DateTime.Now };
+            IList&lt;ItemRental&gt; rentals = new List&lt;ItemRental&gt;()
+            {
+                rent1,
+                rent2,
+                rent3
+            };
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(rentals);
+
+            context.Setup(x =&gt; x.ItemRentals).Returns(mock.Object);
+            context.Setup(x =&gt; x.ItemRentals.Find(1)).Returns(rent1);
+            context.Setup(x =&gt; x.ItemRentals.Find(2)).Returns(rent2);
+            context.Setup(x =&gt; x.ItemRentals.Find(3)).Returns(rent3);
+            context.Setup(x =&gt; x.Stocks.Find(1)).Returns(stock);
+
+            var eController = new RentalsController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;Employee&quot;]).Returns(emp1);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+        private static RentalsController setupControllerWithoutSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = &quot;Bill&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = false };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+            var rent1 = new ItemRental() { itemRentalId = 1, stockId = 1, memberId = 1, status = &quot;WaitingShipment&quot;, rentalDateTime = DateTime.Now };
+            var rent2 = new ItemRental() { itemRentalId = 2, stockId = 1, memberId = 1, status = &quot;WaitingShipment&quot;, rentalDateTime = DateTime.Now };
+            var rent3 = new ItemRental() { itemRentalId = 3, stockId = 1, memberId = 1, status = &quot;WaitingShipment&quot;, rentalDateTime = DateTime.Now };
+            IList&lt;ItemRental&gt; rentals = new List&lt;ItemRental&gt;()
+            {
+                rent1,
+                rent2,
+                rent3
+            };
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+            var mock2 = CreateDbSetMock(rentals);
+
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.ItemRentals).Returns(mock2.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+
+            var eController = new RentalsController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;Employee&quot;]).Returns(null);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[23,9,23,10,1],[24,13,24,54,1],[25,13,25,42,1],[26,9,26,10,1],[30,9,30,10,1],[31,13,31,62,1],[33,13,33,62,1],[34,13,34,34,1],[35,13,35,37,1],[36,9,36,10,1],[40,9,40,10,1],[41,13,41,59,1],[43,13,43,58,1],[45,13,45,37,1],[46,9,46,10,1],[50,9,50,10,1],[51,13,51,59,1],[53,13,53,77,1],[55,13,55,38,1],[56,9,56,10,1],[59,9,59,10,1],[60,13,60,59,1],[62,13,62,78,1],[64,13,64,38,1],[65,9,65,10,1],[69,9,69,10,1],[70,13,70,59,1],[72,13,72,78,1],[74,13,74,38,1],[75,9,75,10,1],[79,9,79,10,1],[80,13,80,59,1],[82,13,82,78,1],[84,13,84,38,1],[85,9,85,10,1],[89,9,89,10,1],[90,13,90,59,1],[92,13,92,80,1],[94,13,94,38,1],[95,9,95,10,1],[99,9,99,10,1],[100,13,100,62,1],[102,13,102,80,1],[104,13,104,38,1],[105,9,105,10,1],[107,9,107,10,1],[108,13,108,62,1],[109,13,109,50,1],[111,13,111,104,1],[112,13,112,108,1],[113,13,113,110,1],[114,13,114,118,1],[116,13,116,30,1],[117,9,117,10,1],[120,9,120,10,1],[121,13,121,121,1],[122,13,122,123,1],[123,13,123,83,1],[124,13,124,139,1],[125,13,125,173,1],[126,13,126,149,1],[127,13,132,15,1],[133,13,133,54,1],[134,13,134,49,1],[136,13,136,68,1],[137,13,137,70,1],[138,13,138,70,1],[139,13,139,70,1],[140,13,140,65,1],[142,13,142,69,1],[144,13,144,59,1],[145,13,145,60,1],[146,13,146,61,1],[147,13,147,71,1],[148,13,148,90,1],[149,13,149,96,1],[151,13,151,32,1],[152,9,152,10,1],[155,9,155,10,1],[156,13,156,121,1],[157,13,157,123,1],[158,13,162,15,1],[163,13,163,149,1],[164,13,164,149,1],[165,13,165,149,1],[166,13,171,15,1],[172,13,172,54,1],[173,13,173,51,1],[174,13,174,50,1],[176,13,176,66,1],[177,13,177,69,1],[178,13,178,70,1],[180,13,180,69,1],[182,13,182,59,1],[183,13,183,60,1],[184,13,184,61,1],[185,13,185,71,1],[186,13,186,90,1],[187,13,187,96,1],[189,13,189,32,1],[190,9,190,10,1]]);
+    </script>
+  </body>
+</html>

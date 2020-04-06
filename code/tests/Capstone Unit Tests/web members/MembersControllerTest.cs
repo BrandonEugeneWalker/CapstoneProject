@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Capstone_Database.Model;
 using Capstone_Web_Members.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,187 +19,383 @@ namespace Capstone_Unit_Tests.web_members
     {
         #region Methods
 
-        //TODO REMOVE
-        private static Mock<MemberContext> getMemberContext()
+        [TestMethod]
+        public void StandardConstructorIsValid()
         {
-            var memberContextMock = new Mock<MemberContext>();
+            var controller = new MembersController();
 
-            //TODO mock login session
-            //var mockSession = new Mock<HttpContextBase>();
-            //var session = new Mock<HttpSessionStateBase>();
-
-            //mockSession.Setup(ctx => ctx.Session).Returns(session.Object);
-            //memberContextMock.Setup(ctx => ctx.).Returns(mockSession.Object);
-
-            var members = getTestMembers().AsQueryable();
-            var membersMock = new Mock<DbSet<Member>>();
-            membersMock.As<IQueryable<Member>>().Setup(m => m.Provider).Returns(members.Provider);
-            membersMock.As<IQueryable<Member>>().Setup(m => m.Expression).Returns(members.Expression);
-            membersMock.As<IQueryable<Member>>().Setup(m => m.ElementType).Returns(members.ElementType);
-            membersMock.As<IQueryable<Member>>().Setup(m => m.GetEnumerator()).Returns(members.GetEnumerator());
-            memberContextMock.Setup(x => x.Members).Returns(membersMock.Object);
-
-            return memberContextMock;
+            Assert.IsNotNull(controller);
         }
 
         [TestMethod]
-        public void Create_IsNotNull()
+        public void IndexPageWithLibrarianIsNotNull()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
+            var controller = setupMembersControllerWithLibrarianSession();
 
-            // Act
+            var result = controller.Index() as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void IndexPageMemberWillRedirectToHomeIndex()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var result = controller.Index() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void IndexPageWithoutSessionRedirectToHomeIndex()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Index() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageIsNotNull()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var result = controller.Details(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageWithNullMemberIdIsNotNull()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var result = controller.Details(null) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageAsLibrarianIsNotNull()
+        {
+            var controller = setupMembersControllerWithLibrarianSession();
+
+            var result = controller.Details(1) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageWillRedirectWithoutMemberSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Details(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DetailsPageWillRedirectWithoutLibrarianSession()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.Details(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void CreatePageIsNotNull()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
             var result = controller.Create() as ViewResult;
 
-            // Assert
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void CreatingNewEmployeeIsValid()
+        public void CreateActionWithValidMemberIsValid()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
-            var newMember = new Member
-                {memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
+            var controller = setupMembersControllerWithMemberSession();
 
-            // Act
-            var result = controller.Create(newMember) as ViewResult;
+            var result = controller.Create(new Member()) as RedirectToRouteResult;
 
-            // Assert
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void CreatingInvalidEmployeeReturnsToCreate()
+        public void CreateActionWithInvalidEmployeeReturnsToCreate()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
-            var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = ""};
+            var controller = setupMembersControllerWithMemberSession();
 
-            // Act
-            var result = controller.Create(newMember) as ViewResult;
+            controller.ModelState.AddModelError("", "");
 
-            // Assert
+            var result = controller.Create(new Member()) as ViewResult;
+
             Assert.IsNotNull(result);
         }
 
-        //TODO will require session mocking
-        [TestMethod]
-        public void Details_IsNotNull()
-        {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
-
-            // Act
-            var result = controller.Details() as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        //TODO will require session mocking
         [TestMethod] 
-        public void Edit_IsNotNull()
+        public void EditMemberPageWithValidIdIsValid()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
+            var controller = setupMembersControllerWithMemberSession();
 
-            // Act
             var result = controller.Edit(1) as ViewResult;
 
-            // Assert
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+            Assert.IsInstanceOfType(result.Model, typeof(Member));
+
+            var model = (Member) result.Model;
+
+            Assert.AreEqual(1, model.memberId);
         }
 
-        //TODO will require session mocking
         [TestMethod]
-        public void Edit_IsValid()
+        public void EditMemberPageWithInvalidIdIsNull()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
-            var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
+            var controller = setupMembersControllerWithMemberSession();
 
-            // Act
+            var result = controller.Edit((int?) null) as ViewResult;
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void EditMemberPageWithInvalidMemberIsNull()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
             var result = controller.Edit(3) as ViewResult;
 
-            // Assert
-            Assert.IsNotNull(result);
+            Assert.IsNull(result);
         }
 
-        //TODO will require session mocking
         [TestMethod]
-        public void EditingMemberIncorrectlyReturnsToEdit()
+        public void EditMemberPageWillRedirectWithoutSession()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
-            var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = ""};
+            var controller = setupMembersControllerWithoutSession();
 
-            // Act
-            var result = controller.Edit(3) as ViewResult;
+            var result = controller.Edit(1) as RedirectToRouteResult;
 
-            // Assert
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void Login_IsNotNull()
+        public void EditMemberActionWithValidIdIsNotNull()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
+            var controller = setupMembersControllerWithMemberSession();
 
-            // Act
-            var result = controller.Login(null) as ViewResult;
+            var result = controller.Edit(new Member {memberId = 1, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0}) as RedirectToRouteResult;
 
-            // Assert
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void ValidLoginRedirectsToHomeIndex()
+        public void EditMemberActionWithInvalidIdIsNull()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
-            var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
+            var controller = setupMembersControllerWithMemberSession();
 
-            // Act
-            var result = controller.Login(newMember) as ViewResult;
+            controller.ModelState.AddModelError("", "");
 
-            // Assert
+            var result = controller.Edit(new Member { memberId = 2, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0 }) as ViewResult;
+
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
-        public void InvalidLoginRedirectsToLogin()
+        public void EditActionWillRedirectWithoutSession()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
-            var newMember = new Member
-                { memberId = 3, username = "newMember", name = "New Member", password = "P@ss12"};
+            var controller = setupMembersControllerWithoutSession();
 
-            // Act
-            var result = controller.Login(newMember) as ViewResult;
+            var create = controller.Edit(new Member { memberId = 2, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0 }) as RedirectToRouteResult;
 
-            // Assert
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void ControllerDisposesResourcesValid()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var edit = controller.Edit(1) as ViewResult;
+
+            controller.Dispose();
+
+            Assert.IsNotNull(edit);
+        }
+
+        [TestMethod]
+        public void LoginPageValidMemberLoginRedirects()
+        {
+            var controller = setupMembersControllerWithMemberSession();
+
+            var result = controller.Login(new Member { memberId = 1, username = "username", password = "password" }) as RedirectToRouteResult;
+
             Assert.IsNotNull(result);
         }
 
-        //TODO requires Session mock
+        [TestMethod]
+        public void LoginPageValidLibrarianLoginRedirects()
+        {
+            var controller = setupMembersControllerWithLibrarianSession();
+
+            var result = controller.Login(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1}) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
         [TestMethod]
         public void LoggingOffClearsSession()
         {
-            // Arrange
-            var controller = new MembersController(getMemberContext().Object);
+            var controller = setupMembersControllerWithMemberSession();
 
-            // Act
-            var result = controller.LogOff() as ViewResult;
+            var result = controller.LogOff() as RedirectToRouteResult;
 
-            // Assert
             Assert.IsNotNull(result);
+        }
+
+        private static MembersController setupMembersControllerWithoutSession()
+        {
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+            var testCounts = new List<int?> { 1, 2, 3 };
+
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
+            mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x => x.retrieveAvailableProductsWithSearch("", "")).Returns(mockedProductObjectResult.Object);
+
+            var mockedIntObjectResult = new Mock<TestableObjectResult<int?>>();
+            mockedIntObjectResult.Setup(x => x.GetEnumerator()).Returns(testCounts.GetEnumerator());
+            context.Setup(x => x.retrieveRentedCount(1)).Returns(mockedIntObjectResult.Object);
+
+            var membersController = new MembersController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentMemberId"]).Returns(null);
+            session.Setup(s => s["currentLibrarianId"]).Returns(null);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            membersController.ControllerContext = new ControllerContext(requestContext, membersController);
+
+            return membersController;
+        }
+
+        private static MembersController setupMembersControllerWithLibrarianSession()
+        {
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            context.Setup(x => x.Members.Find(1)).Returns(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1});
+
+            var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
+            mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x => x.retrieveAvailableProductsWithSearch("", "")).Returns(mockedProductObjectResult.Object);
+
+            var mockedRentalObjectResult = new Mock<TestableObjectResult<ItemRental>>();
+            mockedRentalObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestItemRentals().GetEnumerator());
+            context.Setup(x => x.retrieveMembersRentals(1)).Returns(mockedRentalObjectResult.Object);
+
+            var mockedAddressObjectResult = new Mock<TestableObjectResult<Address>>();
+            mockedAddressObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestAddresses().GetEnumerator());
+            context.Setup(x => x.retrieveMembersAddresses(1)).Returns(mockedAddressObjectResult.Object);
+
+            var mockedMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestLibrarians().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("username", "password"))
+                   .Returns(mockedMemberObjectResult.Object);
+
+            var mockedEmptyMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedEmptyMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("u53rN4m3", "wrongPassword"))
+                   .Returns(mockedEmptyMemberObjectResult.Object);
+
+            var membersController = new MembersController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentLibrarianId"]).Returns(1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            membersController.ControllerContext = new ControllerContext(requestContext, membersController);
+
+            return membersController;
+        }
+
+        private static MembersController setupMembersControllerWithMemberSession()
+        {
+            var context = new Mock<OnlineEntities>();
+            var mockMembers = createDbSetMock(getTestMembers());
+            var mockProducts = createDbSetMock(getTestProducts());
+            var mockStock = createDbSetMock(getTestStocks());
+            var mockAddresses = createDbSetMock(getTestAddresses());
+            var mockRentals = createDbSetMock(getTestItemRentals());
+
+            context.Setup(x => x.Members).Returns(mockMembers.Object);
+            context.Setup(x => x.Products).Returns(mockProducts.Object);
+            context.Setup(x => x.Stocks).Returns(mockStock.Object);
+            context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
+            context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
+
+            context.Setup(x => x.Members.Find(1)).Returns(new Member { memberId = 1, username = "username", password = "password" });
+
+            var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
+            mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
+            context.Setup(x => x.retrieveAvailableProductsWithSearch("", "")).Returns(mockedProductObjectResult.Object);
+
+            var mockedRentalObjectResult = new Mock<TestableObjectResult<ItemRental>>();
+            mockedRentalObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestItemRentals().GetEnumerator());
+            context.Setup(x => x.retrieveMembersRentals(1)).Returns(mockedRentalObjectResult.Object);
+
+            var mockedAddressObjectResult = new Mock<TestableObjectResult<Address>>();
+            mockedAddressObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestAddresses().GetEnumerator());
+            context.Setup(x => x.retrieveMembersAddresses(1)).Returns(mockedAddressObjectResult.Object);
+
+            var mockedMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("username", "password"))
+                   .Returns(mockedMemberObjectResult.Object);
+
+            var mockedEmptyMemberObjectResult = new Mock<TestableObjectResult<Member>>();
+            mockedEmptyMemberObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestMembers().GetEnumerator());
+            context.Setup(x => x.selectMemberByIdAndPassword("u53rN4m3", "wrongPassword"))
+                   .Returns(mockedEmptyMemberObjectResult.Object);
+
+            var membersController = new MembersController(context.Object);
+
+            var httpContext = new Mock<HttpContextBase>();
+            var session = new Mock<HttpSessionStateBase>();
+            session.Setup(s => s["currentMemberId"]).Returns(1);
+            httpContext.Setup(x => x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            membersController.ControllerContext = new ControllerContext(requestContext, membersController);
+
+            return membersController;
         }
 
         private static Mock<DbSet<T>> createDbSetMock<T>(IEnumerable<T> elements) where T : class
@@ -213,37 +411,148 @@ namespace Capstone_Unit_Tests.web_members
             return dbSetMock;
         }
 
-        private static IEnumerable<Member> getTestMembers()
+        private static IEnumerable<Product> getTestProducts()
+        {
+            var productA = new Product
+            {
+                productId = 1,
+                name = "The Hobbit",
+                description = "One small boi goes on an adventure",
+                type = "Book",
+                category = "Adventure"
+            };
+            var productB = new Product
+            {
+                productId = 2,
+                name = "Fellowship of the Ring",
+                description = "The first movie",
+                type = "Movie",
+                category = "Fantasy"
+            };
+
+            var testProducts = new List<Product> { productA, productB };
+
+            return testProducts;
+        }
+
+        private static List<Stock> getTestStocks()
+        {
+            var stockA = new Stock
+            {
+                stockId = 1,
+                productId = 1
+            };
+            var stockB = new Stock
+            {
+                stockId = 2,
+                productId = 2
+            };
+            var stockC = new Stock
+            {
+                stockId = 3,
+                productId = 1
+            };
+            var stockD = new Stock
+            {
+                stockId = 4,
+                productId = 2
+            };
+
+            var testStock = new List<Stock> { stockA, stockB, stockC, stockD };
+
+            return testStock;
+        }
+
+        private static List<ItemRental> getTestItemRentals()
+        {
+            var itemRentalA = new ItemRental
+            {
+                itemRentalId = 1,
+                stockId = 3,
+                memberId = 1,
+                addressId = 1,
+                status = "Returned"
+            };
+            var itemRentalB = new ItemRental
+            {
+                itemRentalId = 2,
+                stockId = 4,
+                memberId = 1,
+                addressId = 2,
+                status = "WaitingReturn"
+            };
+
+            var testRentals = new List<ItemRental> { itemRentalA, itemRentalB };
+
+            return testRentals;
+        }
+
+        private static List<Address> getTestAddresses()
+        {
+            var addressA = new Address
+            {
+                addressId = 1,
+                address1 = "555 St",
+                city = "Atlanta",
+                state = "Georgia",
+                zip = 55555,
+                memberId = 1
+            };
+
+            var addressB = new Address
+            {
+                addressId = 2,
+                address1 = "666 Dr",
+                city = "Temple",
+                state = "Georgia",
+                zip = 66666,
+                memberId = 1
+            };
+
+            var testAddresses = new List<Address> { addressA, addressB };
+
+            return testAddresses;
+        }
+
+        private static List<Member> getTestMembers()
         {
             var memberA = new Member
             {
                 memberId = 1,
-                username = "memberA",
-                name = "mem A",
-                password = "p@ssw0rd",
-                isLibrarian = 0,
-                isBanned = 0
+                username = "UserName1",
+                password = "P@ss12"
             };
             var memberB = new Member
             {
                 memberId = 2,
-                username = "memberB",
-                name = "mem B",
-                password = "hunter2",
-                isLibrarian = 0,
-                isBanned = 0
-            };
-            var memberC = new Member
-            {
-                memberId = 3,
-                username = "memberB",
-                name = "mem C",
-                password = "Hunter2!",
-                isLibrarian = 0,
-                isBanned = 0
+                username = "UserName2",
+                password = "P@ss12",
+                isLibrarian = 1
             };
 
-            var testMembers = new List<Member> { memberA, memberB, memberC };
+            var testMembers = new List<Member> { memberA, memberB };
+
+            return testMembers;
+        }
+
+        private static List<Member> getTestLibrarians()
+        {
+            var memberA = new Member
+            {
+                memberId = 1,
+                username = "UserName1",
+                password = "P@ss12",
+                isLibrarian = 1
+            };
+            var memberB = new Member
+            {
+                memberId = 2,
+                username = "UserName2",
+                password = "P@ss12",
+                isLibrarian = 1
+            };
+
+            var testMembers = new List<Member> { memberA, memberB };
 
             return testMembers;
         }

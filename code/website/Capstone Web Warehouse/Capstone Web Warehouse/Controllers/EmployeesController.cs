@@ -90,47 +90,6 @@ namespace Capstone_Web_Warehouse.Controllers
         }
 
         /// <summary>
-        ///     Returns employee edit page view.
-        ///     <precondition>employee ID can not be null && employee with ID must exist in database.</precondition>
-        /// </summary>
-        /// <param name="id">  The employee ID.</param>
-        /// <returns>Employee edit view for selected ID.</returns>
-        public ActionResult Edit(int? id)
-        {
-            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            var employee = database.Employees.Find(id);
-            if (employee == null) return HttpNotFound();
-
-            return View(employee);
-        }
-
-        /// <summary>
-        ///     <para>
-        ///         Edits the specified employee.
-        ///         For the employee edit button.
-        ///     </para>
-        ///     <postcondition>Employee is edited in the database.</postcondition>
-        /// </summary>
-        /// <param name="employee">The employee to be edited.</param>
-        /// <returns>The employee management index if valid. || Employee edit page with entered data.</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "employeeId,password,isManager,name")]
-            Employee employee)
-        {
-            if (ModelState.IsValid)
-            {
-                database.Entry(employee).State = EntityState.Modified;
-                database.Entry(employee).Property("password").IsModified = false;
-                database.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(employee);
-        }
-
-        /// <summary>
         ///     <para>
         ///         Returns employee deletions page view.
         ///     </para>

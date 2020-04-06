@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
 
@@ -88,8 +89,6 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 var currentEmp = employee[0];
                 Session["Employee"] = currentEmp;
-                Session["Name"] = currentEmp.name;
-                Session["ID"] = currentEmp.employeeId;
                 return RedirectToAction("ManageItems");
             }
 

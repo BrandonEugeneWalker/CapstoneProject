@@ -18,6 +18,10 @@
                 <span class="icon-bar"></span>
             </button>
             @Html.ActionLink("West Georgia Library", "MediaLibrary", "Home", new {area = ""}, new {@class = "navbar-brand"})
+            @if (Session["currentLibrarianId"] != null)
+            {
+                @Html.ActionLink("View Members", "Index", "Members", new {area = ""}, new {@class = "navbar-brand"})
+            }
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">

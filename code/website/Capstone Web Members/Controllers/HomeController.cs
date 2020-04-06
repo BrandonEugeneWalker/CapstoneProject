@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Capstone_Database.Model;
+using Capstone_Web_Members.Settings;
 using Capstone_Web_Members.ViewModels;
 
 namespace Capstone_Web_Members.Controllers
@@ -49,24 +50,35 @@ namespace Capstone_Web_Members.Controllers
 
         #region Methods
 
+        /// <summary>
+        ///     Index of the Website, required for running of Website
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
+        /// </summary>
+        /// <returns>The Media Library Page or Member Index</returns>
         public ActionResult Index()
         {
+            if (Session["currentLibrarianId"] != null)
+            {
+                return RedirectToAction("Index", "Members");
+            }
+
             return RedirectToAction("MediaLibrary");
         }
 
-        //TODO work on observability of this page. After tests are mocking
         /// <summary>
-        ///     The Media Library page, showing all items available to order
+        ///     The Media Library page, showing all items available to order with filters
+        ///     <Precondition>Session["currentMemberId"] != null OR Session["currentLibrarianId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <param name="nameSearch">The name search.</param>
-        /// <param name="typeSearch">The type search.</param>
-        /// <returns>
-        ///     The media library page
-        /// </returns>
+        /// <param name="nameSearch">The name search field.</param>
+        /// <param name="typeSearch">The type search field.</param>
+        /// <returns>The MediaLibrary page</returns>
         public ActionResult MediaLibrary(string nameSearch, string typeSearch)
         {
-            if (Session["currentMemberId"] == null)
+            if (Session["currentMemberId"] == null && Session["currentLibrarianId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -75,7 +87,6 @@ namespace Capstone_Web_Members.Controllers
                 nameSearch = string.Empty;
             }
 
-
             if (typeSearch == null)
             {
                 typeSearch = string.Empty;
@@ -83,53 +94,71 @@ namespace Capstone_Web_Members.Controllers
 
             ViewBag.NameSearch = nameSearch;
             ViewBag.TypeSearch = typeSearch;
-
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
                                          .ToList();
-            var memberId = int.Parse(Session["currentMemberId"].ToString());
-            var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
-            int? rentedCount = 0;
-            if (rentedCountResult.Count > 0)
+
+            var atMaxRentals = false;
+            if (Session["currentMemberId"] != null)
             {
-                rentedCount = rentedCountResult[0];
+                var memberId = int.Parse(Session["currentMemberId"].ToString());
+                var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+                if (rentedCountResult.Count > 0)
+                {
+                    if (rentedCountResult[0] >= RentalSettings.MaxCurrentRentals)
+                    {
+                        atMaxRentals = true;
+                    }
+                }
             }
 
-            ViewBag.HasThreeOrders = false;
-            if (rentedCount >= 3)
+            var mediaLibraryViewModel = new MediaLibraryViewModel
+                {ProductsModel = this.AvailableProducts, AtMaxRentals = atMaxRentals };
+
+            if (Session["currentLibrarianId"] != null)
             {
-                ViewBag.HasThreeOrders = true;
+                mediaLibraryViewModel.IsLibrarian = true;
             }
 
-            return View(this.AvailableProducts);
+            return View(mediaLibraryViewModel);
         }
 
         /// <summary>
-        ///     Navigates to the Order Product view to confirm order
+        ///     Navigates to the Order Product view to confirm order.
+        ///     Showcases the selected product and gives list of Addresses
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <param name="productId">The product identifier.</param>
+        /// <param name="productId">productId of product ordered</param>
         /// <returns>The Order Product view detailing the selected product</returns>
         public ActionResult OrderProduct(int productId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                Session.Abandon();
+                return RedirectToAction("Login", "Members");
+            }
+
             var product = this.DatabaseContext.Products.Find(productId);
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
-            var orderProductViewModel = new OrderProductViewModel { ProductModel = product, AddressesModel = addresses };
+            var orderProductViewModel = new OrderProductViewModel {ProductModel = product, AddressesModel = addresses};
             return View(orderProductViewModel);
         }
 
         /// <summary>
-        ///     Orders the product following user confirmation.
+        ///     Orders the product following user confirmation, creating an ItemRental entry
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>ItemRentals table entry created</Postcondition>
         /// </summary>
-        /// <param name="productId">The product ID.</param>
-        /// <param name="addressId">The selected address.</param>
-        /// <returns>
-        ///     The media library page after ordering selected product
-        /// </returns>
+        /// <param name="productId">productId of product ordered</param>
+        /// <param name="addressId">addressId of address selected</param>
+        /// <returns>OrderConfirmation ActionResult</returns>
         [HttpPost]
         public ActionResult OrderProduct(string productId, string addressId)
         {
             if (Session["currentMemberId"] == null)
             {
+                Session.Abandon();
                 return RedirectToAction("Login", "Members");
             }
 
@@ -138,20 +167,30 @@ namespace Capstone_Web_Members.Controllers
             var memberId = int.Parse(Session["currentMemberId"].ToString());
             this.DatabaseContext.createMemberOrder(availableStockId, memberId, int.Parse(addressId));
 
-            return RedirectToAction("OrderConfirmation", new { productId = int.Parse(productId), addressId = int.Parse(addressId) });
+            return RedirectToAction("OrderConfirmation",
+                new {productId = int.Parse(productId), addressId = int.Parse(addressId)});
         }
 
         /// <summary>
-        /// Orders the confirmation.
+        ///     Shows Order Confirmation information for Product just ordered
+        ///     <Precondition>Session["currentMemberId"] != null</Precondition>
+        ///     <Postcondition>None</Postcondition>
         /// </summary>
-        /// <param name="productId">The product identifier.</param>
-        /// <param name="addressId">The address identifier.</param>
-        /// <returns></returns>
+        /// <param name="productId">productId of product ordered</param>
+        /// <param name="addressId">addressId of address selected</param>
+        /// <returns>Page detailing ItemRental and order info</returns>
         public ActionResult OrderConfirmation(int productId, int addressId)
         {
+            if (Session["currentMemberId"] == null)
+            {
+                Session.Abandon();
+                return RedirectToAction("Login", "Members");
+            }
+
             var product = this.DatabaseContext.Products.Find(productId);
             var address = this.DatabaseContext.Addresses.Find(addressId);
-            var orderConfirmationViewModel = new OrderConfirmationViewModel {ProductModel = product, AddressModel = address};
+            var orderConfirmationViewModel = new OrderConfirmationViewModel
+                {ProductModel = product, AddressModel = address};
 
             return View(orderConfirmationViewModel);
         }

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\ManageRentalsForm.Designer.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+namespace Capstone_Desktop.View
+{
+    partial class ManageRentalsForm
+    {
+        /// &lt;summary&gt;
+        /// Required designer variable.
+        /// &lt;/summary&gt;
+        private System.ComponentModel.IContainer components = null;
+
+        /// &lt;summary&gt;
+        /// Clean up any resources being used.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing &amp;&amp; (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// &lt;summary&gt;
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// &lt;/summary&gt;
+        private void InitializeComponent()
+        {
+            this.logoutButton = new System.Windows.Forms.Button();
+            this.companyLabel = new System.Windows.Forms.Label();
+            this.manageItemsLabel = new System.Windows.Forms.Label();
+            this.returnButton = new System.Windows.Forms.Button();
+            this.managerButton = new System.Windows.Forms.Button();
+            this.rentalGridView = new System.Windows.Forms.DataGridView();
+            this.manageItemsButton = new System.Windows.Forms.Button();
+            this.rentedButton = new System.Windows.Forms.Button();
+            this.rentalStatusComboBox = new System.Windows.Forms.ComboBox();
+            this.rentalStatusLabel = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.rentalGridView)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // logoutButton
+            // 
+            this.logoutButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logoutButton.Location = new System.Drawing.Point(1105, 12);
+            this.logoutButton.Name = &quot;logoutButton&quot;;
+            this.logoutButton.Size = new System.Drawing.Size(141, 46);
+            this.logoutButton.TabIndex = 0;
+            this.logoutButton.Text = &quot;Logout&quot;;
+            this.logoutButton.UseVisualStyleBackColor = true;
+            this.logoutButton.Click += new System.EventHandler(this.LogoutButton_Click);
+            // 
+            // companyLabel
+            // 
+            this.companyLabel.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.companyLabel.Location = new System.Drawing.Point(1, 9);
+            this.companyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.companyLabel.Name = &quot;companyLabel&quot;;
+            this.companyLabel.Size = new System.Drawing.Size(1257, 85);
+            this.companyLabel.TabIndex = 1;
+            this.companyLabel.Text = &quot;West Georgia Entertainment Library&quot;;
+            this.companyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // manageItemsLabel
+            // 
+            this.manageItemsLabel.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manageItemsLabel.Location = new System.Drawing.Point(2, 76);
+            this.manageItemsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.manageItemsLabel.Name = &quot;manageItemsLabel&quot;;
+            this.manageItemsLabel.Size = new System.Drawing.Size(1256, 85);
+            this.manageItemsLabel.TabIndex = 2;
+            this.manageItemsLabel.Text = &quot;View and Manage Rentals&quot;;
+            this.manageItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // returnButton
+            // 
+            this.returnButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.returnButton.Location = new System.Drawing.Point(1105, 578);
+            this.returnButton.Name = &quot;returnButton&quot;;
+            this.returnButton.Size = new System.Drawing.Size(141, 46);
+            this.returnButton.TabIndex = 5;
+            this.returnButton.Text = &quot;Mark Returned&quot;;
+            this.returnButton.UseVisualStyleBackColor = true;
+            this.returnButton.Click += new System.EventHandler(this.returnButton_Click);
+            // 
+            // managerButton
+            // 
+            this.managerButton.Enabled = false;
+            this.managerButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.managerButton.Location = new System.Drawing.Point(958, 64);
+            this.managerButton.Name = &quot;managerButton&quot;;
+            this.managerButton.Size = new System.Drawing.Size(141, 46);
+            this.managerButton.TabIndex = 8;
+            this.managerButton.Text = &quot;Manager Portal&quot;;
+            this.managerButton.UseVisualStyleBackColor = true;
+            this.managerButton.Click += new System.EventHandler(this.managerButton_Click);
+            // 
+            // rentalGridView
+            // 
+            this.rentalGridView.AllowUserToAddRows = false;
+            this.rentalGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.rentalGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.rentalGridView.Location = new System.Drawing.Point(12, 164);
+            this.rentalGridView.Name = &quot;rentalGridView&quot;;
+            this.rentalGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.rentalGridView.Size = new System.Drawing.Size(1240, 384);
+            this.rentalGridView.TabIndex = 9;
+            // 
+            // manageItemsButton
+            // 
+            this.manageItemsButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manageItemsButton.Location = new System.Drawing.Point(1105, 64);
+            this.manageItemsButton.Name = &quot;manageItemsButton&quot;;
+            this.manageItemsButton.Size = new System.Drawing.Size(141, 46);
+            this.manageItemsButton.TabIndex = 10;
+            this.manageItemsButton.Text = &quot;Manage Items&quot;;
+            this.manageItemsButton.UseVisualStyleBackColor = true;
+            this.manageItemsButton.Click += new System.EventHandler(this.manageItemsButton_Click);
+            // 
+            // rentedButton
+            // 
+            this.rentedButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rentedButton.Location = new System.Drawing.Point(958, 578);
+            this.rentedButton.Name = &quot;rentedButton&quot;;
+            this.rentedButton.Size = new System.Drawing.Size(141, 46);
+            this.rentedButton.TabIndex = 11;
+            this.rentedButton.Text = &quot;Mark Rented&quot;;
+            this.rentedButton.UseVisualStyleBackColor = true;
+            this.rentedButton.Click += new System.EventHandler(this.rentedButton_Click);
+            // 
+            // rentalStatusComboBox
+            // 
+            this.rentalStatusComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.rentalStatusComboBox.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rentalStatusComboBox.FormattingEnabled = true;
+            this.rentalStatusComboBox.Items.AddRange(new object[] {
+            &quot;All&quot;,
+            &quot;WaitingShipment&quot;,
+            &quot;WaitingReturn&quot;});
+            this.rentalStatusComboBox.Location = new System.Drawing.Point(125, 560);
+            this.rentalStatusComboBox.Name = &quot;rentalStatusComboBox&quot;;
+            this.rentalStatusComboBox.Size = new System.Drawing.Size(141, 28);
+            this.rentalStatusComboBox.TabIndex = 12;
+            this.rentalStatusComboBox.SelectedIndexChanged += new System.EventHandler(this.rentalStatusComboBox_SelectedIndexChanged);
+            // 
+            // rentalStatusLabel
+            // 
+            this.rentalStatusLabel.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F);
+            this.rentalStatusLabel.Location = new System.Drawing.Point(8, 563);
+            this.rentalStatusLabel.Name = &quot;rentalStatusLabel&quot;;
+            this.rentalStatusLabel.Size = new System.Drawing.Size(111, 27);
+            this.rentalStatusLabel.TabIndex = 13;
+            this.rentalStatusLabel.Text = &quot;Rental Status:&quot;;
+            // 
+            // ManageRentalsForm
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.rentalStatusLabel);
+            this.Controls.Add(this.rentalStatusComboBox);
+            this.Controls.Add(this.rentedButton);
+            this.Controls.Add(this.manageItemsButton);
+            this.Controls.Add(this.rentalGridView);
+            this.Controls.Add(this.managerButton);
+            this.Controls.Add(this.returnButton);
+            this.Controls.Add(this.manageItemsLabel);
+            this.Controls.Add(this.logoutButton);
+            this.Controls.Add(this.companyLabel);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1280, 720);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1280, 720);
+            this.Name = &quot;ManageRentalsForm&quot;;
+            this.Text = &quot;Rentals&quot;;
+            this.Load += new System.EventHandler(this.ManageRentalsForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.rentalGridView)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button logoutButton;
+        private System.Windows.Forms.Label companyLabel;
+        private System.Windows.Forms.Label manageItemsLabel;
+        private System.Windows.Forms.Button returnButton;
+        private System.Windows.Forms.Button managerButton;
+        private System.Windows.Forms.DataGridView rentalGridView;
+        private System.Windows.Forms.Button manageItemsButton;
+        private System.Windows.Forms.Button rentedButton;
+        private System.Windows.Forms.ComboBox rentalStatusComboBox;
+        private System.Windows.Forms.Label rentalStatusLabel;
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[8,9,8,68,0],[15,9,15,10,0],[16,13,16,51,0],[17,13,17,14,0],[18,17,18,38,0],[19,13,19,14,0],[20,13,20,37,0],[21,9,21,10,0],[30,9,30,10,0],[31,13,31,67,0],[32,13,32,66,0],[33,13,33,70,0],[34,13,34,67,0],[35,13,35,68,0],[36,13,36,75,0],[37,13,37,72,0],[38,13,38,67,0],[39,13,39,77,0],[40,13,40,71,0],[41,13,41,91,0],[42,13,42,34,0],[46,13,46,173,0],[47,13,47,77,0],[48,13,48,53,0],[49,13,49,71,0],[50,13,50,44,0],[51,13,51,47,0],[52,13,52,62,0],[53,13,53,89,0],[57,13,57,170,0],[58,13,58,73,0],[59,13,59,85,0],[60,13,60,53,0],[61,13,61,72,0],[62,13,62,44,0],[63,13,63,75,0],[64,13,64,88,0],[68,13,68,177,0],[69,13,69,78,0],[70,13,70,89,0],[71,13,71,61,0],[72,13,72,76,0],[73,13,73,48,0],[74,13,74,68,0],[75,13,75,92,0],[79,13,79,173,0],[80,13,80,78,0],[81,13,81,53,0],[82,13,82,71,0],[83,13,83,44,0],[84,13,84,54,0],[85,13,85,62,0],[86,13,86,89,0],[90,13,90,48,0],[91,13,91,174,0],[92,13,92,77,0],[93,13,93,55,0],[94,13,94,72,0],[95,13,95,45,0],[96,13,96,56,0],[97,13,97,63,0],[98,13,98,91,0],[102,13,102,60,0],[103,13,103,113,0],[104,13,104,133,0],[105,13,105,78,0],[106,13,106,57,0],[107,13,107,87,0],[108,13,108,75,0],[109,13,109,46,0],[113,13,113,178,0],[114,13,114,82,0],[115,13,115,63,0],[116,13,116,76,0],[117,13,117,50,0],[118,13,118,58,0],[119,13,119,67,0],[120,13,120,99,0],[124,13,124,173,0],[125,13,125,77,0],[126,13,126,53,0],[127,13,127,71,0],[128,13,128,45,0],[129,13,129,52,0],[130,13,130,62,0],[131,13,131,89,0],[135,13,135,89,0],[136,13,136,181,0],[137,13,137,64,0],[138,13,141,31,0],[142,13,142,85,0],[143,13,143,69,0],[144,13,144,79,0],[145,13,145,53,0],[146,13,146,135,0],[150,13,150,96,0],[151,13,151,80,0],[152,13,152,63,0],[153,13,153,76,0],[154,13,154,50,0],[155,13,155,60,0],[159,13,159,74,0],[160,13,160,66,0],[161,13,161,55,0],[162,13,162,58,0],[163,13,163,50,0],[164,13,164,55,0],[165,13,165,52,0],[166,13,166,51,0],[167,13,167,50,0],[168,13,168,54,0],[169,13,169,50,0],[170,13,170,50,0],[171,13,171,38,0],[172,13,172,67,0],[173,13,173,38,0],[174,13,174,67,0],[175,13,175,45,0],[176,13,176,35,0],[177,13,177,79,0],[178,13,178,89,0],[179,13,179,38,0],[181,9,181,10,0]]);
+    </script>
+  </body>
+</html>

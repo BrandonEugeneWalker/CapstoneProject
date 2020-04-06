@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\danny\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\desktop\controller\EmployeeHistoryControllerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.desktop.controller
+{
+    /// &lt;summary&gt;Tests the functionality of the EmployeeHistoryController.&lt;/summary&gt;
+    [TestClass]
+    public class EmployeeHistoryControllerTests
+    {
+        #region Methods
+
+        [TestMethod]
+        public void TestGetEmployeeHistoryEmployeeNull()
+        {
+            var capstoneDbContextMock = new Mock&lt;OnlineEntities&gt;();
+            var employeeHistoryController = new EmployeeHistoryController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                employeeHistoryController.GetEmployeeHistory(null, capstoneDbContextMock.Object));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeHistoryDbContextNull()
+        {
+            var employeeMock = new Mock&lt;Employee&gt;();
+            var employeeHistoryController = new EmployeeHistoryController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                employeeHistoryController.GetEmployeeHistory(employeeMock.Object, null));
+        }
+
+        [TestMethod]
+        public void TestBuildEmployeeDescriptionNull()
+        {
+            var employeeHistoryController = new EmployeeHistoryController();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(
+                () =&gt; employeeHistoryController.BuildEmployeeDescription(null));
+        }
+
+        [TestMethod]
+        public void TestBuildEmployeeDescriptionSunnyDay()
+        {
+            Employee testEmployee = new Employee {
+                name = &quot;Brandon Walker&quot;,
+                employeeId = 1234
+            };
+            EmployeeHistoryController employeeHistoryController = new EmployeeHistoryController();
+            var results = employeeHistoryController.BuildEmployeeDescription(testEmployee);
+            var expected = @&quot; Name: Brandon Walker ID: 1234&quot;;
+
+            Assert.IsTrue(results.Equals(expected));
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,9,20,10,1],[21,13,21,68,1],[22,13,22,77,1],[24,13,25,17,1],[25,17,25,97,1],[25,97,25,99,1],[24,13,25,99,1],[26,9,26,10,1],[30,9,30,10,1],[31,13,31,53,1],[32,13,32,77,1],[34,13,35,17,1],[35,17,35,88,1],[35,88,35,90,1],[34,13,35,90,1],[36,9,36,10,1],[40,9,40,10,1],[41,13,41,77,1],[42,13,43,23,1],[43,23,43,79,1],[43,79,43,81,1],[42,13,43,81,1],[44,9,44,10,1],[48,9,48,10,1],[49,13,52,15,1],[53,13,53,99,1],[54,13,54,92,1],[55,13,55,62,1],[57,13,57,53,1],[58,9,58,10,1]]);
+    </script>
+  </body>
+</html>

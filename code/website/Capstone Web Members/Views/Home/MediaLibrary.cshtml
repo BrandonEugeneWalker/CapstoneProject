@@ -1,4 +1,4 @@
-﻿@model List<Capstone_Database.Model.Product>
+﻿@model Capstone_Web_Members.ViewModels.MediaLibraryViewModel
 
 @{
     ViewBag.Title = "Media Library";
@@ -59,7 +59,7 @@
 
             </th>
         </tr>
-        @foreach (var item in Model)
+        @foreach (var item in Model.ProductsModel)
         {
             <tr>
                 <td>
@@ -72,11 +72,11 @@
                     @Html.DisplayFor(modelItem => item.type)
                 </td>
                 <td>
-                    @if (ViewBag.HasThreeOrders)
+                    @if (Model.AtMaxRentals)
                     {
                         <b>You currently have the max amount of allowed Rentals</b>
                     }
-                    else
+                    else if (!Model.IsLibrarian)
                     {
                         @Html.ActionLink("Order", "OrderProduct", new { item.productId })
                     }
