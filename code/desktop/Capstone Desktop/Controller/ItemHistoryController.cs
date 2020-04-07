@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Text;
 using Capstone_Database.Model;
+using Capstone_Desktop.Model;
 
 namespace Capstone_Desktop.Controller
 {
@@ -17,6 +16,42 @@ namespace Capstone_Desktop.Controller
 
         private const string StockNullError = @"The Stock to view the history for cannot be null!";
 
+        public IDbContextHandler CapstoneDatabaseHandler;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="ItemHistoryController" /> class.
+        ///     </para>
+        ///     <para>Separates the view and database logic.</para>
+        /// </summary>
+        /// <Precondition> None </Precondition>
+        /// <Postcondition> A new instance is created. </Postcondition>
+        public ItemHistoryController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="ItemHistoryController" /> class.
+        ///     </para>
+        ///     <para>Separates the view and database logic.</para>
+        /// </summary>
+        /// <param name="capstoneDatabaseHandler">The capstone database handler.</param>
+        /// <exception cref="ArgumentNullException">capstoneDatabaseHandler - The database handler cannot be null!</exception>
+        /// <Precondition> None </Precondition>
+        /// <Postcondition> A new instance is created. </Postcondition>
+        public ItemHistoryController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @"The database handler cannot be null!");
+        }
+
         #endregion
 
         #region Methods
@@ -28,39 +63,20 @@ namespace Capstone_Desktop.Controller
         ///     <para>The given stock and database cannot be null.</para>
         /// </summary>
         /// <param name="stock">The stock to get the history of.</param>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>A list of rentals that stock is involved in.</returns>
         /// <exception cref="ArgumentNullException">
         ///     stock
         ///     or
         ///     capstoneDbContext - The given database context cannot be null!
         /// </exception>
-        public List<DetailedRentalView> GetStockHistory(Stock stock, OnlineEntities capstoneDbContext)
+        public List<DetailedRentalView> GetStockHistory(Stock stock)
         {
             if (stock == null)
             {
                 throw new ArgumentNullException(nameof(stock), StockNullError);
             }
 
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext),
-                    @"The given database context cannot be null!");
-            }
-
-            return this.selectDetailedRentalsFromDatabaseByStock(capstoneDbContext, stock);
-        }
-
-        private List<DetailedRentalView> selectDetailedRentalsFromDatabaseByStock(OnlineEntities capstoneDbContext,
-            Stock stock)
-        {
-            capstoneDbContext.DetailedRentalViews.Load();
-
-            var stockHistoryQueryable = capstoneDbContext
-                                        .DetailedRentalViews.Local.ToBindingList().Where(rental =>
-                                            rental.stockId.Equals(stock.stockId));
-
-            return stockHistoryQueryable.ToList();
+            return this.CapstoneDatabaseHandler.GetDetailedStockHistory(stock);
         }
 
         /// <summary>
