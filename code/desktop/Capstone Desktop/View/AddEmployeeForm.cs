@@ -8,12 +8,15 @@ using MySql.Data.MySqlClient;
 namespace Capstone_Desktop.View
 {
     /// <summary>
-    ///   <para>This form is used to add employees to the database.</para>
-    ///   <para></para>
-    ///   <para>The form contains text box controls for user input and wil provide feedback over user input such as passwords.</para>
-    ///   <para>This form will return to the ManageEmployees view upon closing.</para>
+    ///     <para>This form is used to add employees to the database.</para>
+    ///     <para></para>
+    ///     <para>
+    ///         The form contains text box controls for user input and wil provide feedback over user input such as
+    ///         passwords.
+    ///     </para>
+    ///     <para>This form will return to the ManageEmployees view upon closing.</para>
     /// </summary>
-    /// <seealso cref="System.Windows.Forms.Form"/>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class AddEmployeeForm : Form
     {
         #region Data members
@@ -27,8 +30,6 @@ namespace Capstone_Desktop.View
             "\n * Special Character " +
             "\n Passwords have a maximum length of 16 characters.";
 
-        private readonly OnlineEntities capstoneDatabaseContext;
-
         #endregion
 
         #region Properties
@@ -40,8 +41,8 @@ namespace Capstone_Desktop.View
         #region Constructors
 
         /// <summary>
-        ///   <para>Initializes a new instance of the <see cref="AddEmployeeForm"/> class.</para>
-        ///   <para>The AddEmployeeForm is responsible for the user interactions related to adding an employee.</para>
+        ///     <para>Initializes a new instance of the <see cref="AddEmployeeForm" /> class.</para>
+        ///     <para>The AddEmployeeForm is responsible for the user interactions related to adding an employee.</para>
         /// </summary>
         public AddEmployeeForm()
         {
@@ -61,18 +62,13 @@ namespace Capstone_Desktop.View
         private void submitButton_Click(object sender, EventArgs e)
         {
             var password = this.passwordTextBox.Text;
-            var isManager = Convert.ToSByte(this.isManagerCheckBox.Checked);
+            var isManager = this.isManagerCheckBox.Checked;
             var name = this.nameTextBox.Text;
 
             try
             {
-                this.capstoneDatabaseContext.insertEmployee(null, password, isManager, name);
-                this.capstoneDatabaseContext.SaveChanges();
+                this.EmployeeController.AddEmployee(password, isManager, name);
                 Close();
-            }
-            catch (ArgumentOutOfRangeException argumentOutOfRangeException)
-            {
-                MessageBox.Show(argumentOutOfRangeException.Message);
             }
             catch (ArgumentNullException argumentNullException)
             {
