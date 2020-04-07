@@ -20,8 +20,6 @@ namespace Capstone_Desktop.View
 
         private readonly BindingSource employeeListSource = new BindingSource();
 
-        private readonly OnlineEntities capstoneDatabaseContext;
-
         private readonly ManageEmployeeController manageEmployeeController;
 
         #endregion
@@ -45,7 +43,6 @@ namespace Capstone_Desktop.View
         {
             this.InitializeComponent();
             this.CurrentEmployee = loggedInEmployee;
-            this.capstoneDatabaseContext = new OnlineEntities();
             this.manageEmployeeController = new ManageEmployeeController();
         }
 
@@ -73,7 +70,7 @@ namespace Capstone_Desktop.View
             switch (dialogResult)
             {
                 case DialogResult.Yes:
-                    this.manageEmployeeController.RemoveEmployeeFromDatabase(employee, this.capstoneDatabaseContext);
+                    this.manageEmployeeController.RemoveEmployeeFromDatabase(employee);
                     this.getData();
                     break;
                 case DialogResult.Abort:
@@ -100,7 +97,7 @@ namespace Capstone_Desktop.View
             try
             {
                 this.employeeListSource.DataSource =
-                    this.manageEmployeeController.GetEmployees(this.capstoneDatabaseContext);
+                    this.manageEmployeeController.GetEmployees();
 
                 for (var i = 0; i < this.employeeGridView.Columns.Count; i++)
                 {

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data.Entity;
 using Capstone_Database.Model;
+using Capstone_Desktop.Model;
 
 namespace Capstone_Desktop.Controller
 {
@@ -11,61 +12,75 @@ namespace Capstone_Desktop.Controller
     /// </summary>
     public class ManageEmployeeController
     {
+
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        /// <summary>
+        ///   <para>
+        ///  Initializes a new instance of the <see cref="ManageEmployeeController"/> class.
+        /// </para>
+        ///   <para>Acts as a intermediary between the view and database handler.</para>
+        /// </summary>
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>A new instance is created.</Postcondition>
+        public ManageEmployeeController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// <summary>
+        ///   <para>
+        ///  Initializes a new instance of the <see cref="ManageEmployeeController"/> class.
+        /// </para>
+        ///   <para>Acts as an intermediary between the view and database handler.</para>
+        /// </summary>
+        /// <param name="capstoneDatabaseHandler">The capstone database handler.</param>
+        /// <exception cref="ArgumentNullException">capstoneDatabaseHandler - The database handler cannot be null!</exception>
+        /// <Precondition>The database handler cannot be null!</Precondition>
+        /// <Postcondition>A new instance is created.</Postcondition>
+        public ManageEmployeeController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @"The database handler cannot be null!");
+        }
+
+
         #region Methods
 
         /// <summary>
         ///     <para>
         ///         Removes the employee from database.
         ///     </para>
-        ///     <para>The employee and the database cannot be null.</para>
         /// </summary>
         /// <param name="employee">The employee to remove.</param>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <exception cref="ArgumentNullException">
         ///     employee - The employee to remove cannot be null!
         ///     or
         ///     capstoneDbContext - The database to remove the employee from cannot be null!
         /// </exception>
-        public void RemoveEmployeeFromDatabase(Employee employee, OnlineEntities capstoneDbContext)
+        /// <Precondition>The employee cannot be null!</Precondition>
+        /// <Postcondition>The employee is removed from the database.</Postcondition>
+        public void RemoveEmployeeFromDatabase(Employee employee)
         {
             if (employee == null)
             {
                 throw new ArgumentNullException(nameof(employee), @"The employee to remove cannot be null!");
             }
 
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext),
-                    @"The database to remove the employee from cannot be null!");
-            }
-
-            this.deleteGivenEmployeeFromDatabase(capstoneDbContext, employee);
-        }
-
-        private void deleteGivenEmployeeFromDatabase(OnlineEntities capstoneDbContext, Employee employee)
-        {
-            capstoneDbContext.Employees.Load();
-            capstoneDbContext.Employees.Remove(employee);
-            capstoneDbContext.SaveChanges();
+            this.CapstoneDatabaseHandler.RemoveEmployee(employee);
         }
 
         /// <summary>
         ///     <para>
         ///         Gets and returns the employees in the database.
         ///     </para>
-        ///     <para>Uses the DbContext in order to do this.</para>
         /// </summary>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>A binding list of employees.</returns>
-        public BindingList<Employee> GetEmployees(OnlineEntities capstoneDbContext)
+        /// <Precondition>None </Precondition>
+        public BindingList<Employee> GetEmployees()
         {
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext), @"The database to get from cannot be null!");
-            }
-
-            capstoneDbContext.Employees.Load();
-            return capstoneDbContext.Employees.Local.ToBindingList();
+            return this.CapstoneDatabaseHandler.GetAllEmployees();
         }
 
         #endregion
