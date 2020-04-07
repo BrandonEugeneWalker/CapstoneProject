@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Linq;
 using Capstone_Database.Model;
+using Capstone_Desktop.Model;
 
 namespace Capstone_Desktop.Controller
 {
@@ -11,6 +10,52 @@ namespace Capstone_Desktop.Controller
     /// </summary>
     public class LoginController
     {
+        #region Properties
+
+        /// <summary>
+        ///   <para>
+        ///  Gets or sets the capstone database handler.
+        /// Handles interactions with the database.</para>
+        /// </summary>
+        /// <value>The capstone database handler.</value>
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="LoginController" /> class.
+        ///     </para>
+        ///     <para>Handles interactions with the database, acting as an intermediary.</para>
+        /// </summary>
+        /// <Precondition> None </Precondition>
+        /// <Postcondition> A new instance is created. </Postcondition>
+        public LoginController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="LoginController" /> class.
+        ///     </para>
+        ///     <para>Handles interactions with the database handler, acting as an intermediary.</para>
+        /// </summary>
+        /// <param name="capstoneDatabaseHandler">The capstone database handler.</param>
+        /// <exception cref="ArgumentNullException">capstoneDatabaseHandler - The database handler cannot be null!</exception>
+        /// <Precondition> The database handler cannot be null! </Precondition>
+        /// <Postcondition> A new instance is created. </Postcondition>
+        public LoginController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @"The database handler cannot be null!");
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -27,7 +72,6 @@ namespace Capstone_Desktop.Controller
         /// </summary>
         /// <param name="id">The employee's id.</param>
         /// <param name="password">The employee's password.</param>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>Null if not found, the employee otherwise.</returns>
         /// <exception cref="ArgumentOutOfRangeException">id - The id must be a positive integer greater than zero.</exception>
         /// <exception cref="ArgumentNullException">
@@ -35,7 +79,9 @@ namespace Capstone_Desktop.Controller
         ///     or
         ///     capstoneDbContext - The database to get the employee from must not be null!
         /// </exception>
-        public Employee GetEmployeeByIdAndPassword(int id, string password, OnlineEntities capstoneDbContext)
+        /// <Precondition> Id must be a positive integer, password cannot be null or empty. </Precondition>
+        /// <Postcondition> Returns an employee if found, null if not. </Postcondition>
+        public Employee GetEmployeeByIdAndPassword(int id, string password)
         {
             if (id <= 0)
             {
@@ -48,19 +94,7 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(password), @"The password cannot be null or empty!");
             }
 
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext),
-                    @"The database to get the employee from must not be null!");
-            }
-
-            return this.selectEmployeeUsingDbContext(capstoneDbContext, id, password);
-        }
-
-        private Employee selectEmployeeUsingDbContext(OnlineEntities capstoneDbContext, int id, string password)
-        {
-            capstoneDbContext.Employees.Load();
-            return capstoneDbContext.selectEmployeeByIdAndPassword(id, password).First();
+            return this.CapstoneDatabaseHandler.GetEmployeeByIdAndPassword(id, password);
         }
 
         #endregion

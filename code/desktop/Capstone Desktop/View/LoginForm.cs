@@ -25,8 +25,6 @@ namespace Capstone_Desktop
 
         private Employee currentEmployee;
 
-        private readonly OnlineEntities capstoneDatabaseContext = new OnlineEntities();
-
         private readonly LoginController loginController;
 
         #endregion
@@ -43,7 +41,6 @@ namespace Capstone_Desktop
         {
             this.InitializeComponent();
             this.loginController = new LoginController();
-            this.capstoneDatabaseContext = new OnlineEntities();
         }
 
         #endregion
@@ -95,7 +92,7 @@ namespace Capstone_Desktop
             try
             {
                 this.currentEmployee =
-                    this.loginController.GetEmployeeByIdAndPassword(id, password, this.capstoneDatabaseContext);
+                    this.loginController.GetEmployeeByIdAndPassword(id, password);
 
                 return this.currentEmployee.isManager == true;
             }
