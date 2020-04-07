@@ -52,7 +52,6 @@ namespace Capstone_Desktop.View
             this.passwordRequirementsLabel.Text = PASSWORD_REQUIREMENTS;
             this.isValidLabel.ForeColor = Color.Red;
 
-            this.capstoneDatabaseContext = new OnlineEntities();
         }
 
         #endregion

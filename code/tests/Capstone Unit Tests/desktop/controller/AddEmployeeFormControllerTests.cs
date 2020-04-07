@@ -1,5 +1,8 @@
-﻿using Capstone_Desktop.Controller;
+﻿using System;
+using Capstone_Desktop.Controller;
+using Capstone_Desktop.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Capstone_Unit_Tests.desktop.controller
 {
@@ -128,6 +131,42 @@ namespace Capstone_Unit_Tests.desktop.controller
             var testController = new AddEmployeeFormController();
             var results = testController.IsValidPassword("P@!ss W0rd98");
             Assert.IsTrue(results);
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeNullPassword()
+        {
+            var testController = new AddEmployeeFormController();
+            Assert.ThrowsException<ArgumentNullException>(() => testController.AddEmployee(null, true, "name"));
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeEmptyPassword()
+        {
+            var testController = new AddEmployeeFormController();
+            Assert.ThrowsException<ArgumentNullException>(() => testController.AddEmployee("", true, "name"));
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeNullName()
+        {
+            var testController = new AddEmployeeFormController();
+            Assert.ThrowsException<ArgumentNullException>(() => testController.AddEmployee("password", true, null));
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeEmptyName()
+        {
+            var testController = new AddEmployeeFormController();
+            Assert.ThrowsException<ArgumentNullException>(() => testController.AddEmployee("password", true, ""));
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeSunnyDay()
+        {
+            var mockedContext = new Mock<IDbContextHandler>();
+            var testController = new AddEmployeeFormController(mockedContext.Object);
+            testController.AddEmployee("password", true, "Test Employee");
         }
 
         #endregion
