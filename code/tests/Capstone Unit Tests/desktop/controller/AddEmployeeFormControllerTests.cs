@@ -13,6 +13,27 @@ namespace Capstone_Unit_Tests.desktop.controller
         #region Methods
 
         [TestMethod]
+        public void TestOverloadedConstructorNull()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => new AddEmployeeFormController(null));
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorSunnyDay()
+        {
+            var contextHandlerMock = new Mock<IDbContextHandler>();
+            var testController = new AddEmployeeFormController(contextHandlerMock.Object);
+            Assert.IsNotNull(testController);
+        }
+
+        [TestMethod]
+        public void TestDefaultConstructorSunnyDay()
+        {
+            var testController = new AddEmployeeFormController();
+            Assert.IsNotNull(testController);
+        }
+
+        [TestMethod]
         public void TestPasswordValiditySunnyDay()
         {
             var testController = new AddEmployeeFormController();

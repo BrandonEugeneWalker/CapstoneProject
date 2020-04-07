@@ -52,7 +52,7 @@ namespace Capstone_Desktop.View
         private void populateHistoryView()
         {
             var employeeHistory =
-                this.employeeHistoryController.GetEmployeeHistory(this.CurrentEmployee, this.capstoneDbContext);
+                this.employeeHistoryController.GetEmployeeHistory(this.CurrentEmployee);
 
             this.historyGridView.DataSource = employeeHistory;
 
