@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Windows.Forms;
 using Capstone_Database.Model;
 using Capstone_Desktop.Controller;
@@ -23,9 +22,7 @@ namespace Capstone_Desktop.View
 
         private readonly BindingSource itemListSource = new BindingSource();
 
-        private readonly OnlineEntities capstoneDatabaseContext;
-
-        private ManageItemsController manageItemsController;
+        private readonly ManageItemsController manageItemsController;
 
         #endregion
 
@@ -47,7 +44,6 @@ namespace Capstone_Desktop.View
         public ManageItemsForm(Employee loggedInEmployee)
         {
             this.InitializeComponent();
-            this.capstoneDatabaseContext = new OnlineEntities();
             this.manageItemsController = new ManageItemsController();
             this.CurrentEmployee = loggedInEmployee;
             if (this.CurrentEmployee.isManager == true)
@@ -85,7 +81,7 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.itemListSource.DataSource = this.manageItemsController.GetAllStock(this.capstoneDatabaseContext);
+                this.itemListSource.DataSource = this.manageItemsController.GetAllStock();
 
                 this.refreshTable();
             }
@@ -130,8 +126,7 @@ namespace Capstone_Desktop.View
 
             if (currentDetailStock != null)
             {
-                this.capstoneDatabaseContext.Stocks.Load();
-                var currentStock = this.capstoneDatabaseContext.Stocks.Find(currentDetailStock.stockId);
+                var currentStock = this.manageItemsController.GetStockByDetailedStock(currentDetailStock);
                 var itemHistoryForm = new ItemHistoryForm(currentStock);
                 itemHistoryForm.ShowDialog();
             }

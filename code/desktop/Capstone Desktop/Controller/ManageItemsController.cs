@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+using System.ComponentModel;
 using Capstone_Database.Model;
+using Capstone_Desktop.Model;
 
 namespace Capstone_Desktop.Controller
 {
@@ -12,6 +11,51 @@ namespace Capstone_Desktop.Controller
     /// </summary>
     public class ManageItemsController
     {
+        #region Properties
+
+        /// <summary>
+        ///     Gets or sets the capstone database handler.
+        ///     Which acts as the intermediary between the controller and raw database.
+        /// </summary>
+        /// <value>The capstone database handler.</value>
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="ManageItemsController" /> class.
+        ///     </para>
+        ///     <para>Acts as an intermediary between the view and database handler.</para>
+        /// </summary>
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>A new instance is created.</Postcondition>
+        public ManageItemsController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Initializes a new instance of the <see cref="ManageItemsController" /> class.
+        ///     </para>
+        ///     <para>Acts as an intermediary between the view and database handler.</para>
+        /// </summary>
+        /// <param name="capstoneDatabaseHandler">The capstone database handler.</param>
+        /// <exception cref="ArgumentNullException">capstoneDatabaseHandler - The database handler cannot be null!</exception>
+        /// <Precondition>The database handler cannot be null!</Precondition>
+        /// <Postcondition>A new instance is created.</Postcondition>
+        public ManageItemsController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @"The database handler cannot be null!");
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -20,24 +64,27 @@ namespace Capstone_Desktop.Controller
         ///     </para>
         ///     <para>The database to get them from cannot be null.</para>
         /// </summary>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>The list of stock objects in the database.</returns>
-        /// <exception cref="ArgumentNullException">capstoneDbContext - The database to get stock from cannot be null!</exception>
-        public List<StockDetailView> GetAllStock(OnlineEntities capstoneDbContext)
+        /// <Precondition>None</Precondition>
+        public BindingList<StockDetailView> GetAllStock()
         {
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext),
-                    @"The database to get stock from cannot be null!");
-            }
-
-            return this.selectAllStockFromDatabase(capstoneDbContext);
+            return this.CapstoneDatabaseHandler.GetAllDetailedStock();
         }
 
-        private List<StockDetailView> selectAllStockFromDatabase(OnlineEntities capstoneDbContext)
+        /// <summary>
+        ///     Gets the stock by detailed stock and returns it.
+        /// </summary>
+        /// <param name="stockDetailView">The stock detail view.</param>
+        /// <returns>The stock if found, null if not.</returns>
+        /// <Precondition> the detailed stock cannot be null!</Precondition>
+        public Stock GetStockByDetailedStock(StockDetailView stockDetailView)
         {
-            capstoneDbContext.StockDetailViews.Load();
-            return capstoneDbContext.StockDetailViews.Local.ToBindingList().ToList();
+            if (stockDetailView == null)
+            {
+                throw new ArgumentNullException(nameof(stockDetailView), @"The detailed stock cannot be null!");
+            }
+
+            return this.CapstoneDatabaseHandler.GetStockById(stockDetailView.stockId);
         }
 
         #endregion

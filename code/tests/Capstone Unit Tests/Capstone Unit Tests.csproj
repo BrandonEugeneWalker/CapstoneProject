@@ -145,6 +145,7 @@
     <Compile Include="desktop\controller\ItemHistoryControllerTests.cs" />
     <Compile Include="desktop\controller\LoginControllerTests.cs" />
     <Compile Include="desktop\controller\ManageEmployeesControllerTests.cs" />
+    <Compile Include="desktop\controller\ManageItemsControllerTests.cs" />
     <Compile Include="desktop\controller\ManageRentalsControllerTests.cs" />
     <Compile Include="desktop\model\CapstoneDbContextHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
