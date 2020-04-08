@@ -1,0 +1,12 @@
+Warehouse Add Stock:
+1.	An employee load warehouse page.
+2.	An employee login.
+3.	An employee clicks stock page.
+4.	An employee clicks remove.
+5.	An employee confirms deletion.
+6.	An employee removes stock.
+7.	An employee logs out.
+Alternate:
+2a: No login) An employee clicks manage items page.
+	.3: An employee is redirected to login page.
+	.4: An employee not access manage items page without logging in.
