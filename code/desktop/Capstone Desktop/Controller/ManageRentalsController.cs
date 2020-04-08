@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Entity;
-using System.Linq;
 using Capstone_Database.Model;
+using Capstone_Desktop.Model;
 
 namespace Capstone_Desktop.Controller
 {
@@ -15,11 +14,42 @@ namespace Capstone_Desktop.Controller
     {
         #region Data members
 
-        private const string DbContextNullError = @"The database to get the data from cannot be null!";
         private const string RentalNullError = @"The rental to edit cannot be null!";
         private const string EmployeeNullError = @"The employee to update a rental with cannot be null!";
 
         #endregion
+
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        /// <summary>
+        ///   <para>
+        ///  Initializes a new instance of the <see cref="ManageRentalsController"/> class.
+        /// </para>
+        ///   <para>Acts as a intermediary between the view and database handler.</para>
+        /// </summary>
+        /// <Precondition> None </Precondition>
+        /// <Postcondition> A new instance is created. </Postcondition>
+        public ManageRentalsController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// <summary>
+        ///   <para>
+        ///  Initializes a new instance of the <see cref="ManageRentalsController"/> class.
+        /// </para>
+        ///   <para>Acts as a intermediary between the view and database handler.</para>
+        /// </summary>
+        /// <param name="capstoneDatabaseHandler">The capstone database handler.</param>
+        /// <exception cref="ArgumentNullException">capstoneDatabaseHandler - The database handler cannot be null!</exception>
+        /// <Precondition> The database handler cannot be null! </Precondition>
+        /// <Postcondition> A new instance is created. </Postcondition>
+        public ManageRentalsController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @"The database handler cannot be null!");
+        }
 
         #region Methods
 
@@ -29,25 +59,12 @@ namespace Capstone_Desktop.Controller
         ///     </para>
         ///     <para>The list should be a binding list so any changes should reflect on the database.</para>
         /// </summary>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>A list of rentals waiting shipment.</returns>
         /// <exception cref="System.ArgumentNullException">capstoneDbContext</exception>
-        public List<DetailedRentalView> GetRentalsWaitingShipment(OnlineEntities capstoneDbContext)
+        /// <Precondition> None </Precondition>
+        public List<DetailedRentalView> GetRentalsWaitingShipment()
         {
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
-            }
-
-            return this.selectRentalsByWaitingShipment(capstoneDbContext);
-        }
-
-        private List<DetailedRentalView> selectRentalsByWaitingShipment(OnlineEntities capstoneDbContext)
-        {
-            var rentalsWaitingShipmentQueryable = this.GetAllRentals(capstoneDbContext).Where(rental =>
-                rental.status.Equals("WaitingShipment"));
-
-            return rentalsWaitingShipmentQueryable.ToList();
+            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingShipment();
         }
 
         /// <summary>
@@ -56,47 +73,25 @@ namespace Capstone_Desktop.Controller
         ///     </para>
         ///     <para>List should have binding with the database, so changes will reflect in the database.</para>
         /// </summary>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>A list of rentals waiting to be returned.</returns>
         /// <exception cref="System.ArgumentNullException">capstoneDbContext</exception>
-        public List<DetailedRentalView> GetRentalsWaitingReturn(OnlineEntities capstoneDbContext)
+        /// <Precondition> None </Precondition>
+        public List<DetailedRentalView> GetRentalsWaitingReturn()
         {
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
-            }
-
-            return this.selectRentalsByWaitingReturn(capstoneDbContext);
-        }
-
-        private List<DetailedRentalView> selectRentalsByWaitingReturn(OnlineEntities capstoneDbContext)
-        {
-            var rentalsWaitingReturnQueryable = this.GetAllRentals(capstoneDbContext).Where(rental =>
-                rental.status.Equals("WaitingReturn"));
-
-            return rentalsWaitingReturnQueryable.ToList();
+            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingReturn();
         }
 
         /// <summary>
         ///     <para>
         ///         Gets all the detailed rental information from the database and returns it as a bound list.
         ///     </para>
-        ///     <para>Loads the items from the database then returns them as the appropriate list.</para>
-        ///     <para>This method requires a valid database object.</para>
         /// </summary>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <returns>The list of detailed rentals in the database.</returns>
         /// <exception cref="ArgumentNullException">capstoneDbContext</exception>
-        public BindingList<DetailedRentalView> GetAllRentals(OnlineEntities capstoneDbContext)
+        /// <Precondition> None </Precondition>
+        public BindingList<DetailedRentalView> GetAllRentals()
         {
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
-            }
-
-            capstoneDbContext.DetailedRentalViews.Load();
-
-            return capstoneDbContext.DetailedRentalViews.Local.ToBindingList();
+            return this.CapstoneDatabaseHandler.GetAllDetailedRentals();
         }
 
         /// <summary>
@@ -106,22 +101,17 @@ namespace Capstone_Desktop.Controller
         ///     <para>Throws an exception if the database or rental is null.</para>
         /// </summary>
         /// <param name="detailedRentalView">The detailed rental view.</param>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <param name="employee">The employee handing the action.</param>
         /// <returns>True if successful, false if not.</returns>
         /// <exception cref="System.ArgumentNullException">
-        ///     capstoneDbContext
+        ///     employee
         ///     or
         ///     detailedRentalView
         /// </exception>
-        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext,
+        /// <Precondition> detailedRentalView and employee cannot be null! </Precondition>
+        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView,
             Employee employee)
         {
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
-            }
-
             if (detailedRentalView == null)
             {
                 throw new ArgumentNullException(nameof(detailedRentalView), RentalNullError);
@@ -132,24 +122,7 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(employee), EmployeeNullError);
             }
 
-            if (!detailedRentalView.status.Equals("WaitingShipment"))
-            {
-                return false;
-            }
-
-            capstoneDbContext.ItemRentals.Load();
-            var currentRental = capstoneDbContext.ItemRentals.Find(detailedRentalView.stockId);
-
-            if (currentRental == null)
-            {
-                return false;
-            }
-
-            currentRental.status = "WaitingReturn";
-            currentRental.shipEmployeeId = employee.employeeId;
-            currentRental.shipDateTime = DateTime.Now;
-            capstoneDbContext.SaveChanges();
-            return true;
+            return this.CapstoneDatabaseHandler.MarkRentalAsWaitingReturn(detailedRentalView, employee);
         }
 
         /// <summary>
@@ -159,22 +132,17 @@ namespace Capstone_Desktop.Controller
         ///     <para>Throws an exception if either the database or rental are null.</para>
         /// </summary>
         /// <param name="detailedRentalView">The detailed rental view.</param>
-        /// <param name="capstoneDbContext">The capstone database context.</param>
         /// <param name="employee">The employee marking the rental as returned.</param>
         /// <returns>True if successful, false if not.</returns>
         /// <exception cref="System.ArgumentNullException">
-        ///     capstoneDbContext
+        ///     employee
         ///     or
         ///     detailedRentalView
         /// </exception>
-        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, OnlineEntities capstoneDbContext,
+        /// <Precondition> detailedRentalView and employee cannot be null! </Precondition>
+        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView,
             Employee employee)
         {
-            if (capstoneDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(capstoneDbContext), DbContextNullError);
-            }
-
             if (detailedRentalView == null)
             {
                 throw new ArgumentNullException(nameof(detailedRentalView), RentalNullError);
@@ -185,25 +153,9 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(employee), EmployeeNullError);
             }
 
-            if (!detailedRentalView.status.Equals("WaitingReturn"))
-            {
-                return false;
-            }
-
-            capstoneDbContext.ItemRentals.Load();
-            var currentRental = capstoneDbContext.ItemRentals.Find(detailedRentalView.stockId);
-
-            if (currentRental == null)
-            {
-                return false;
-            }
-
-            currentRental.status = "Returned";
-            currentRental.shipEmployeeId = employee.employeeId;
-            currentRental.shipDateTime = DateTime.Now;
-            capstoneDbContext.SaveChanges();
-            return true;
+            return this.CapstoneDatabaseHandler.MarkRentalAsReturned(detailedRentalView, employee);
         }
+
 
         #endregion
     }

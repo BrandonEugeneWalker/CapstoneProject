@@ -19,8 +19,6 @@ namespace Capstone_Desktop.View
 
         private readonly BindingSource rentalListSource = new BindingSource();
 
-        private readonly OnlineEntities capstoneDatabaseContext;
-
         private readonly ManageRentalsController manageRentalsController;
 
         #endregion
@@ -45,7 +43,6 @@ namespace Capstone_Desktop.View
             this.InitializeComponent();
             this.manageRentalsController = new ManageRentalsController();
             this.CurrentEmployee = loggedInEmployee;
-            this.capstoneDatabaseContext = new OnlineEntities();
             if (this.CurrentEmployee.isManager == true)
             {
                 this.managerButton.Enabled = true;
@@ -72,9 +69,8 @@ namespace Capstone_Desktop.View
         {
             try
             {
-                this.capstoneDatabaseContext.DetailedRentalViews.Load();
                 this.rentalListSource.DataSource =
-                    this.capstoneDatabaseContext.DetailedRentalViews.Local.ToBindingList();
+                    this.manageRentalsController.GetAllRentals();
 
                 this.refreshTable();
             }
@@ -89,7 +85,7 @@ namespace Capstone_Desktop.View
             try
             {
                 this.rentalListSource.DataSource =
-                    this.manageRentalsController.GetRentalsWaitingShipment(this.capstoneDatabaseContext);
+                    this.manageRentalsController.GetRentalsWaitingShipment();
 
                 this.refreshTable();
             }
@@ -104,7 +100,7 @@ namespace Capstone_Desktop.View
             try
             {
                 this.rentalListSource.DataSource =
-                    this.manageRentalsController.GetRentalsWaitingReturn(this.capstoneDatabaseContext);
+                    this.manageRentalsController.GetRentalsWaitingReturn();
 
                 this.refreshTable();
             }
@@ -144,8 +140,7 @@ namespace Capstone_Desktop.View
             {
                 var currentItem = (DetailedRentalView) currentRow.DataBoundItem;
 
-                var results = this.manageRentalsController.MarkRentalAsWaitingReturn(currentItem,
-                    this.capstoneDatabaseContext, this.CurrentEmployee);
+                var results = this.manageRentalsController.MarkRentalAsWaitingReturn(currentItem, this.CurrentEmployee);
 
                 if (!results)
                 {
@@ -162,8 +157,7 @@ namespace Capstone_Desktop.View
             {
                 var currentItem = (DetailedRentalView) currentRow.DataBoundItem;
 
-                var results = this.manageRentalsController.MarkRentalAsReturned(currentItem,
-                    this.capstoneDatabaseContext, this.CurrentEmployee);
+                var results = this.manageRentalsController.MarkRentalAsReturned(currentItem, this.CurrentEmployee);
 
                 if (!results)
                 {

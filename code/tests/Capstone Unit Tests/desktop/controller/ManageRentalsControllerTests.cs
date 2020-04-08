@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using Capstone_Database.Model;
 using Capstone_Desktop.Controller;
+using Capstone_Desktop.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -13,114 +16,117 @@ namespace Capstone_Unit_Tests.desktop.controller
         #region Methods
 
         [TestMethod]
-        public void TestGetRentalsWaitingShipmentNullDatabase()
+        public void TestDefaultConstructorSunnyDay()
         {
-            var manageRentalsController = new ManageRentalsController();
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.GetRentalsWaitingShipment(null));
+            var testConstructor = new ManageRentalsController();
+            Assert.IsNotNull(testConstructor);
         }
 
         [TestMethod]
-        public void TestGetRentalsWaitingReturnNullDatabase()
+        public void TestOverloadedConstructorNull()
         {
-            var manageRentalsController = new ManageRentalsController();
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.GetRentalsWaitingReturn(null));
+            Assert.ThrowsException<ArgumentNullException>(() => new ManageRentalsController(null));
         }
 
         [TestMethod]
-        public void TestGetAllRentalsNullDatabase()
+        public void TestOverloadedConstructorSunnyDay()
         {
-            var manageRentalsController = new ManageRentalsController();
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.GetAllRentals(null));
+            var testConstructor = new ManageRentalsController(new CapstoneDbContextHandler());
+            Assert.IsNotNull(testConstructor);
         }
 
         [TestMethod]
-        public void TestMarkRentalAsWaitingReturnNullDatabase()
+        public void TestGetRentalsWaitingShipmentSunnyDay()
         {
-            var manageRentalsController = new ManageRentalsController();
+            var contextMock = new Mock<IDbContextHandler>();
+            contextMock.Setup(x => x.GetDetailedRentalsWaitingShipment()).Returns(new List<DetailedRentalView>());
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.GetRentalsWaitingShipment();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List<DetailedRentalView>);
+        }
 
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(), null, new Employee()));
+        [TestMethod]
+        public void TestGetRentalsWaitingReturnSunnyDay()
+        {
+            var contextMock = new Mock<IDbContextHandler>();
+            contextMock.Setup(x => x.GetDetailedRentalsWaitingReturn()).Returns(new List<DetailedRentalView>());
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.GetRentalsWaitingReturn();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List<DetailedRentalView>);
+        }
+
+        [TestMethod]
+        public void TestGettingAllRentalsSunnyDay()
+        {
+            var contextMock = new Mock<IDbContextHandler>();
+            contextMock.Setup(x => x.GetAllDetailedRentals()).Returns(new BindingList<DetailedRentalView>());
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.GetAllRentals();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList<DetailedRentalView>);
         }
 
         [TestMethod]
         public void TestMarkRentalAsWaitingReturnNullRental()
         {
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
             var manageRentalsController = new ManageRentalsController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsWaitingReturn(null, capstoneDbContextMock.Object, new Employee()));
+                manageRentalsController.MarkRentalAsWaitingReturn(null, new Employee()));
         }
 
         [TestMethod]
         public void TestMarkRentalAsWaitingReturnNullEmployee()
         {
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
             var manageRentalsController = new ManageRentalsController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(),
-                    capstoneDbContextMock.Object, null));
+                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(), null));
         }
 
         [TestMethod]
-        public void TestMarkRentalAsWaitingReturnIncorrectStatus()
+        public void TestMarkRentalAsWaitingReturnSunnyDay()
         {
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
-            var manageRentalsController = new ManageRentalsController();
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView {
-                    status = "Returned"
-                }, null, new Employee()));
-        }
-
-        [TestMethod]
-        public void TestMarkRentalAsReturnedNullDatabase()
-        {
-            var manageRentalsController = new ManageRentalsController();
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(), null, new Employee()));
+            var employee = new Employee();
+            var detailedRental = new DetailedRentalView();
+            var contextMock = new Mock<IDbContextHandler>();
+            contextMock.Setup(x => x.MarkRentalAsWaitingReturn(detailedRental, employee)).Returns(true);
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.MarkRentalAsWaitingReturn(detailedRental, employee);
+            Assert.IsTrue(results);
         }
 
         [TestMethod]
         public void TestMarkRentalAsReturnedNullRental()
         {
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
             var manageRentalsController = new ManageRentalsController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsReturned(null, capstoneDbContextMock.Object, new Employee()));
+                manageRentalsController.MarkRentalAsReturned(null, new Employee()));
         }
 
         [TestMethod]
         public void TestMarkRentalAsReturnedNullEmployee()
         {
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
             var manageRentalsController = new ManageRentalsController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(), capstoneDbContextMock.Object,
+                manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(),
                     null));
         }
 
         [TestMethod]
-        public void TestMarkRentalAsReturnedIncorrectStatus()
+        public void TestMarkRentalsAsReturnedSunnyDay()
         {
-            var capstoneDbContextMock = new Mock<OnlineEntities>();
-            var manageRentalsController = new ManageRentalsController();
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView {
-                    status = "Returned"
-                }, null, new Employee()));
+            var employee = new Employee();
+            var detailedRental = new DetailedRentalView();
+            var contextMock = new Mock<IDbContextHandler>();
+            contextMock.Setup(x => x.MarkRentalAsReturned(detailedRental, employee)).Returns(true);
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.MarkRentalAsReturned(detailedRental, employee);
+            Assert.IsTrue(results);
         }
 
         #endregion
