@@ -40,17 +40,17 @@ Our employee system allows WGEL to keep our product pages up to date and tidy.
   
   **Passwords**
   User: 1234
-  Password: password
+  Password: P@ss12
   
-  User: 9962
-  Password: P@ssw0rd
+  User: 9982
+  Password: P@ss12
   
 *Running Desktop*
   Select Capstone Desktop in the run list and run it.
   
   **Passwords**
   User: 1234
-  Password: password
+  Password: P@ss12
   
-  User: 9962
-  Password: P@ssw0rd
+  User: 9982
+  Password: P@ss12

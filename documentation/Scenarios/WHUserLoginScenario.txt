@@ -1,0 +1,10 @@
+User Login: 
+1.	A user loads website home page.
+2.	A user clicks log in in several places.
+3.	A user enters their login information
+4.	A user logs in.
+5.	A user logs out.
+Alternate:
+3a: User wrong information) A member enter either wrong username or password or both.
+	.4: A user is informed they not logged in.
+	.5: A user is not logged in.

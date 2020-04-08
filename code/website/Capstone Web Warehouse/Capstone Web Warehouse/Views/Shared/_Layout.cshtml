@@ -22,9 +22,12 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("Manage Rentals", "ManageItems", "Home")</li>
-                <li>@Html.ActionLink("Manage Employees", "ManageEmployees", "Home")</li>
-                <li>@Html.ActionLink("Manage Stock", "ManageStock", "Home")</li>
+                @if (Session["Employee"] != null)
+                {
+                    <li>@Html.ActionLink("Manage Rentals", "ManageItems", "Home")</li>
+                    <li>@Html.ActionLink("Manage Employees", "ManageEmployees", "Home")</li>
+                    <li>@Html.ActionLink("Manage Stock", "ManageStock", "Home")</li>
+                }
             </ul>
             @Html.Partial("_LoginPartial")
         </div>
