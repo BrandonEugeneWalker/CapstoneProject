@@ -56,6 +56,8 @@ namespace Capstone_Desktop.View
 
             this.historyGridView.DataSource = employeeHistory;
 
+            this.historyGridView.Columns[10].DisplayIndex = 0;
+
             this.refreshTable();
         }
 
