@@ -64,6 +64,22 @@ namespace Capstone_Unit_Tests.desktop.controller
             Assert.IsTrue(results is Stock);
         }
 
+        [TestMethod]
+        public void TestRemoveStockFromDatabaseNull()
+        {
+            var testController = new ManageItemsController();
+            Assert.ThrowsException<ArgumentNullException>(() => testController.RemoveStockFromDatabase(null));
+        }
+
+        [TestMethod]
+        public void TestRemoveStockFromDatabaseSunnyDay()
+        {
+            var testStock = new Stock();
+            var contextHandlerMock = new Mock<IDbContextHandler>();
+            var testController = new ManageItemsController(contextHandlerMock.Object);
+            testController.RemoveStockFromDatabase(testStock);
+        }
+
         #endregion
     }
 }

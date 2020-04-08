@@ -63,7 +63,9 @@ namespace Capstone_Desktop.View
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            //TODO
+            AddStockForm addStockForm = new AddStockForm();
+            addStockForm.ShowDialog();
+            this.getData();
         }
 
         private void SubmitChangesButton_Click(object sender, EventArgs e)
@@ -133,6 +135,32 @@ namespace Capstone_Desktop.View
             else
             {
                 MessageBox.Show(@"No stock item selected to view the history of.");
+            }
+        }
+
+        private void removeButton_Click(object sender, EventArgs e)
+        {
+            var selectedStock = (StockDetailView) this.itemsGridView.SelectedRows[0].DataBoundItem;
+            this.attemptToRemoveStock(selectedStock);
+            MessageBox.Show(@"Successfully removed the stock item.");
+        }
+
+        private void attemptToRemoveStock(StockDetailView stock)
+        {
+            var stockDescription = stock.productName + " ID: " + stock.stockId;
+            var confirmationForm = new RemoveConfirmationForm(stockDescription);
+            var dialogResult = confirmationForm.ShowDialog();
+            var currentStock = this.manageItemsController.GetStockByDetailedStock(stock);
+
+            switch (dialogResult)
+            {
+                case DialogResult.Yes:
+                    this.manageItemsController.RemoveStockFromDatabase(currentStock);
+                    this.getData();
+                    break;
+                case DialogResult.Abort:
+                    MessageBox.Show(@"No stock was selected.");
+                    break;
             }
         }
 

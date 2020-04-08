@@ -253,6 +253,15 @@ namespace Capstone_Desktop.Model
             return stockHistoryQueryable.ToList();
         }
 
+        /// <summary>Gets all products prom the database.</summary>
+        /// <returns>A binding list containing all of the products.</returns>
+        /// <Precondition> None </Precondition>
+        public BindingList<Product> GetAllProducts()
+        {
+            this.CapstoneDbContext.Products.Load();
+            return this.CapstoneDbContext.Products.Local.ToBindingList();
+        }
+
         /// <summary>  Removes the given employee from the database if it exists.</summary>
         /// <param name="employee">The employee to remove from the database.</param>
         /// <exception cref="ArgumentNullException">
@@ -324,7 +333,7 @@ namespace Capstone_Desktop.Model
                 throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
             }
 
-            sbyte isManager = Convert.ToSByte(employee.isManager);
+            var isManager = Convert.ToSByte(employee.isManager);
             this.CapstoneDbContext.insertEmployee(null, employee.password, isManager,
                 employee.name);
             this.CapstoneDbContext.SaveChanges();

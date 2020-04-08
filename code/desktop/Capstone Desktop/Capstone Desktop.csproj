@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\AddEmployeeFormController.cs" />
+    <Compile Include="Controller\AddStockFormController.cs" />
     <Compile Include="Controller\EmployeeHistoryController.cs" />
     <Compile Include="Controller\ItemHistoryController.cs" />
     <Compile Include="Controller\LoginController.cs" />
@@ -111,6 +112,12 @@
     </Compile>
     <Compile Include="View\AddEmployeeForm.Designer.cs">
       <DependentUpon>AddEmployeeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddStockForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AddStockForm.Designer.cs">
+      <DependentUpon>AddStockForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\EmployeeHistoryForm.cs">
       <SubType>Form</SubType>
@@ -167,6 +174,9 @@
     </Compile>
     <EmbeddedResource Include="View\AddEmployeeForm.resx">
       <DependentUpon>AddEmployeeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\AddStockForm.resx">
+      <DependentUpon>AddStockForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\EmployeeHistoryForm.resx">
       <DependentUpon>EmployeeHistoryForm.cs</DependentUpon>

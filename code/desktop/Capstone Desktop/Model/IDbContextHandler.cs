@@ -36,6 +36,8 @@ namespace Capstone_Desktop.Model
 
         List<DetailedRentalView> GetStockHistoryByStock(Stock stock);
 
+        BindingList<Product> GetAllProducts();
+
         //Removals
 
         void RemoveEmployee(Employee employee);

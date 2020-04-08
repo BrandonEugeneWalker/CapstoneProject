@@ -22,17 +22,17 @@ namespace Capstone_Desktop.View
         ///         employee from the database.
         ///     </para>
         /// </summary>
-        /// <param name="employee">The employee to ask about.</param>
-        public RemoveConfirmationForm(Employee employee)
+        /// <param name="item">The item to ask about.</param>
+        public RemoveConfirmationForm(String item)
         {
             this.InitializeComponent();
-            if (employee == null)
+            if (item == null)
             {
                 DialogResult = DialogResult.Abort;
                 Close();
             }
 
-            this.employeeNameLabel.Text = employee.name;
+            this.employeeNameLabel.Text = item;
         }
 
         #endregion

@@ -87,6 +87,20 @@ namespace Capstone_Desktop.Controller
             return this.CapstoneDatabaseHandler.GetStockById(stockDetailView.stockId);
         }
 
+        /// <summary>Removes the stock from database.</summary>
+        /// <param name="stock">The stock to remove.</param>
+        /// <exception cref="System.ArgumentNullException">stock - The stock to remove cannot be null!</exception>
+        /// <Precondition> The stock cannot be null! </Precondition>
+        public void RemoveStockFromDatabase(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), @"The stock to remove cannot be null!");
+            }
+
+            this.CapstoneDatabaseHandler.RemoveStock(stock);
+        }
+
         #endregion
     }
 }

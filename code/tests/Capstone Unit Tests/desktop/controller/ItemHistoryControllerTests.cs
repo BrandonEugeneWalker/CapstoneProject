@@ -57,6 +57,37 @@ namespace Capstone_Unit_Tests.desktop.controller
             Assert.IsTrue(results is List<DetailedRentalView>);
         }
 
+        [TestMethod]
+        public void TestGetStockDescriptionNull()
+        {
+            var testController = new ItemHistoryController();
+            Assert.ThrowsException<ArgumentNullException>(() => testController.BuildStockDescription(null));
+        }
+
+        [TestMethod]
+        public void TestGetStockDescriptionSunnyDay()
+        {
+            var testProduct = new Product {
+                productId = -1,
+                name = "Test Product",
+                description = "",
+                type = "Book",
+                category = "Adventure"
+            };
+            var testStock = new Stock {
+                stockId = -1,
+                productId = -1,
+                itemCondition = "Good",
+                Product = testProduct
+            };
+            var testController = new ItemHistoryController();
+            var results = testController.BuildStockDescription(testStock);
+            var expected = " Item Name: Test Product Stock ID: -1 Condition: Good";
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.Equals(expected));
+
+        }
+
         #endregion
     }
 }

@@ -287,6 +287,15 @@ namespace Capstone_Unit_Tests.desktop.model
         }
 
         [TestMethod]
+        public void TestGetAllProductsSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllProducts();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList<Product>);
+        }
+
+        [TestMethod]
         public void TestRemoveEmployeeNullEmployee()
         {
             var testHandler = new CapstoneDbContextHandler();

@@ -40,7 +40,7 @@
             this.dialogLabel.Name = "dialogLabel";
             this.dialogLabel.Size = new System.Drawing.Size(432, 42);
             this.dialogLabel.TabIndex = 0;
-            this.dialogLabel.Text = "Are you sure you would like to remove employee:";
+            this.dialogLabel.Text = "Are you sure you would like to remove this item:";
             this.dialogLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // employeeNameLabel

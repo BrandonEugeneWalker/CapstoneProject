@@ -64,7 +64,7 @@ namespace Capstone_Desktop.View
 
         private void attemptToRemoveEmployee(Employee employee)
         {
-            var confirmationForm = new RemoveConfirmationForm(employee);
+            var confirmationForm = new RemoveConfirmationForm(employee.name);
             var dialogResult = confirmationForm.ShowDialog();
 
             switch (dialogResult)

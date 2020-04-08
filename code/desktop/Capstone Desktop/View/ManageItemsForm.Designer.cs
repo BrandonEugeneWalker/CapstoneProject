@@ -36,6 +36,7 @@
             this.managerButton = new System.Windows.Forms.Button();
             this.itemsGridView = new System.Windows.Forms.DataGridView();
             this.manageRentalsButton = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,7 +75,6 @@
             // 
             // addButton
             // 
-            this.addButton.Enabled = false;
             this.addButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addButton.Location = new System.Drawing.Point(1105, 578);
             this.addButton.Name = "addButton";
@@ -129,10 +129,22 @@
             this.manageRentalsButton.UseVisualStyleBackColor = true;
             this.manageRentalsButton.Click += new System.EventHandler(this.manageRentalsButton_Click);
             // 
+            // removeButton
+            // 
+            this.removeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.removeButton.Location = new System.Drawing.Point(958, 578);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(141, 46);
+            this.removeButton.TabIndex = 11;
+            this.removeButton.Text = "Remove Item";
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
+            // 
             // ManageItemsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.removeButton);
             this.Controls.Add(this.manageRentalsButton);
             this.Controls.Add(this.itemsGridView);
             this.Controls.Add(this.managerButton);
@@ -163,5 +175,6 @@
         private System.Windows.Forms.Button managerButton;
         private System.Windows.Forms.DataGridView itemsGridView;
         private System.Windows.Forms.Button manageRentalsButton;
+        private System.Windows.Forms.Button removeButton;
     }
 }
