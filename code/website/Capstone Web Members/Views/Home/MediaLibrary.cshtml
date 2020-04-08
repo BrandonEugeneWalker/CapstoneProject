@@ -76,7 +76,7 @@
                     @Html.DisplayFor(modelItem => item.type)
                 </td>
                 <td>
-                    @if (Model.AtMaxRentals && !Model.IsLibrarian)
+                    @if (Model.RentalCount >= 3 && !Model.IsLibrarian)
                     {
                         <b>You currently have the max amount of allowed Rentals</b>
                     }

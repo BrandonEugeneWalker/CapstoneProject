@@ -20,18 +20,18 @@ namespace Capstone_Web_Members.ViewModels
         public List<Product> ProductsModel { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [at maximum rentals].
+        ///     Gets or sets the rental count.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [at maximum rentals]; otherwise, <c>false</c>.
+        ///     The rental count, storing number of non-returned rentals a Member has.
         /// </value>
-        public bool AtMaxRentals { get; set; }
+        public int? RentalCount { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is librarian.
+        ///     Gets or sets a value indicating whether this instance is librarian.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if this instance is librarian; otherwise, <c>false</c>.
+        ///     <c>true</c> if this instance is librarian; otherwise, <c>false</c>.
         /// </value>
         public bool IsLibrarian { get; set; }
 
