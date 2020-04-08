@@ -12,20 +12,29 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities database = new OnlineEntities();
 
-        /// <summary>Initializes a new instance of the <see cref="EmployeesController" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="EmployeesController" /> class.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         public EmployeesController()
         {
             database = new OnlineEntities();
         }
 
-        /// <summary>Initializes a new instance of the <see cref="EmployeesController" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="EmployeesController" /> class.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="entity">The entity.</param>
         public EmployeesController(OnlineEntities entity)
         {
             database = entity;
         }
 
-        /// <summary>  Index/Home page for employee management.</summary>
+        /// <summary>  Index/Home page for employee management.
+        /// <Precondition>Employee != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>employee management index page with list of all employees.</returns>
         public ActionResult Index()
         {
@@ -36,9 +45,11 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(database.Employees.ToList());
         }
 
+
         /// <summary>
         ///     Detail view of the selected employee.
-        ///     <precondtion>the selected employeeID != null && employee with ID must exist in database.</precondtion>
+        /// <Precondition>ID != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="id">The employee ID.</param>
         /// <returns>view of the employee details for selected ID.</returns>
@@ -50,7 +61,10 @@ namespace Capstone_Web_Warehouse.Controllers
             return employee == null ? (ActionResult) HttpNotFound() : View(employee);
         }
 
-        /// <summary>  Returns employee creation page view.</summary>
+        /// <summary>  Returns employee creation page view.
+        /// <Precondition>Employee != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>The employee creation view.</returns>
         public ActionResult Create()
         {
@@ -106,7 +120,10 @@ namespace Capstone_Web_Warehouse.Controllers
         }
 
 
-        /// <summary>  Returns delete confirmation message.</summary>
+        /// <summary>  Returns delete confirmation message.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="id">  the employee id to be deleted.</param>
         /// <returns>Employee management index page.</returns>
         [HttpPost]
@@ -120,6 +137,7 @@ namespace Capstone_Web_Warehouse.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             if (disposing) database.Dispose();

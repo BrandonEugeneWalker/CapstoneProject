@@ -16,11 +16,21 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private OnlineEntities db = new OnlineEntities();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StocksController"/> class.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         public StocksController()
         {
             db = new OnlineEntities();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StocksController"/> class.  List of stocks
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         public StocksController(OnlineEntities entity)
         {
             db = entity;
@@ -28,7 +38,10 @@ namespace Capstone_Web_Warehouse.Controllers
 
         // GET: Stocks
 
-        /// <summary>  List of stocks</summary>
+        /// <summary>  List of stocks
+        /// <Precondition>Session["Employee"] != null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>Index page</returns>
         public ActionResult Index()
         {
@@ -44,7 +57,10 @@ namespace Capstone_Web_Warehouse.Controllers
 
         // GET: Stocks/Details/5
 
-        /// <summary>Detail of stock info</summary>
+        /// <summary>Detail of stock info
+        /// <Precondition>Stock != null && ID != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>stock detail page.</returns>
         public ActionResult Details(int? id)
@@ -63,10 +79,16 @@ namespace Capstone_Web_Warehouse.Controllers
 
         // GET: Stocks/Create
 
-        /// <summary>Creates stock</summary>
+        /// <summary>Creates stock
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>stock creation page.</returns>
         public ActionResult Create()
         {
+            var employee = Session["Employee"] as Employee;
+
+            if (employee == null || (bool)!employee.isManager) return Redirect("~/Home/Login");
             ViewBag.productId = new SelectList(db.Products, "productId", "name");
             return View();
         }
@@ -93,16 +115,19 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 db.Stocks.Add(stock);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
             }
-
-            ViewBag.productId = new SelectList(db.Products, "productId", "name", stock.productId);
-            return View(stock);
+            return RedirectToAction("Index");
+            //ViewBag.productId = new SelectList(db.Products, "productId", "name", stock.productId);
+            //return View(stock);
         }
 
         // GET: Stocks/Delete/5
 
-        /// <summary>Deletes the specified stock.</summary>
+        /// <summary>Deletes the specified stock.
+        /// <Precondition>Session["Employee"] != null && ID != Invalid</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Delete confirmaton page.</returns>
         public ActionResult Delete(int? id)
@@ -121,7 +146,10 @@ namespace Capstone_Web_Warehouse.Controllers
 
         // POST: Stocks/Delete/5
 
-        /// <summary>Deletes the confirmed.</summary>
+        /// <summary>Deletes the confirmed.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Index page</returns>
         [HttpPost, ActionName("Delete")]
@@ -134,6 +162,7 @@ namespace Capstone_Web_Warehouse.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

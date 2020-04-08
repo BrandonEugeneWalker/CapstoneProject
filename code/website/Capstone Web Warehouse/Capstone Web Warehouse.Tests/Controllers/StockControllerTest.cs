@@ -60,7 +60,6 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
 
             Assert.IsNotNull(index);
         }
-
         [TestMethod()]
         public void TestDetailsNotFound()
         {
@@ -68,6 +67,65 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
             var index = controller.Details(6) as HttpNotFoundResult;
 
             Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void CreateStockClickTest()
+        {
+            var controller = setupControllerWithSession();
+
+            var index = controller.Create(new Stock() { stockId = 5, itemCondition = "Excellent", productId = 1}) as RedirectToRouteResult;
+            Assert.IsNotNull(index);
+        }
+
+
+
+        [TestMethod()]
+        public void CreateStockNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+
+            var index = controller.Create() as RedirectResult;
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void CreateStockClickNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var index = controller.Create(new Stock()) as RedirectResult;
+            Assert.IsNotNull(index);
+        }
+        [TestMethod()]
+        public void DeleteStockTest()
+        {
+            var controller = setupControllerWithSession();
+            var index = controller.Delete(1) as ViewResult;
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void DeleteStockNoLoginTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var index = controller.Delete(1) as RedirectResult;
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void DeleteStockNullTest()
+        {
+            var controller = setupControllerWithSession();
+            var index = controller.Delete(null) as HttpNotFoundResult;
+            Assert.IsNotNull(index);
+        }
+
+        [TestMethod()]
+        public void DeleteConfirmedTest()
+        {
+            var controller = setupControllerWithSession();
+            var confirm = controller.DeleteConfirmed(1) as RedirectToRouteResult;
+            Assert.IsNotNull(confirm);
         }
         private static StocksController setupControllerWithoutSession()
         {
@@ -91,6 +149,7 @@ namespace Capstone_Web_Warehouse.Tests.Controllers
             httpContext.Setup(x => x.Session).Returns(session.Object);
             var requestContext = new RequestContext(httpContext.Object, new RouteData());
             eController.ControllerContext = new ControllerContext(requestContext, eController);
+            eController.ViewBag.productId = 1;
 
             return eController;
         }

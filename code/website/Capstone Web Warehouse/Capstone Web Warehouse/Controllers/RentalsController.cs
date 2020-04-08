@@ -13,20 +13,29 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities database = new OnlineEntities();
 
-        /// <summary>Initializes a new instance of the <see cref="RentalsController"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="RentalsController"/> class.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         public RentalsController()
         {
             database = new OnlineEntities();
         }
 
-        /// <summary>Initializes a new instance of the <see cref="RentalsController"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="RentalsController"/> class.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="entity">The entity.</param>
         public RentalsController(OnlineEntities entity)
         {
             database = entity;
         }
 
-        /// <summary>  Returns manage rentals index page.</summary>
+        /// <summary>  Returns manage rentals index page.
+        /// <Precondition>Employee != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>Returns manage rentals index page with list of rentals.</returns>
         public ActionResult Index()
         {
@@ -37,7 +46,10 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(database.ItemRentals.Where(i => i.status.Equals("WaitingReturn") || i.status.Equals("WaitingShipment")));
         }
 
-        /// <summary>Updates the status of rental item.</summary>
+        /// <summary>Updates the status of rental item.
+        /// <Precondition>Employee != Null && ID != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="id">The id of the rental item.</param>
         /// <returns>The index page refreshed if found || error page if bad id.</returns>
         public ActionResult UpdateStatus(int? id)

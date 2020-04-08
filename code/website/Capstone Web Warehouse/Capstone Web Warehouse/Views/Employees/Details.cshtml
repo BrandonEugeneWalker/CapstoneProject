@@ -41,6 +41,9 @@
     <table class="table">
         <tr>
             <th>
+                Condition
+            </th>
+            <th>
                 Product Name
             </th>
             <th>
@@ -56,9 +59,6 @@
                 Date
             </th>
             <th>
-                Condition
-            </th>
-            <th>
                 Member Name
             </th>
             <th>
@@ -67,62 +67,63 @@
         </tr>
         @foreach (var item in Model.ItemRentals.OrderByDescending(s => s.returnDateTime))
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stock.Product.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.itemRentalId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.stockId)
-                </td>
-                <td>
-                    Returned
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.returnDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.returnCondition)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.name)
-                </td>
-                <td>
-                    Shipped to warehouse
-                </td>
-            </tr>
+    <tr>
+
+        <td>
+            Returned
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stock.Product.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.itemRentalId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stockId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.returnDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.returnCondition)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Member.name)
+        </td>
+        <td>
+            Shipped to warehouse
+        </td>
+    </tr>
         }
         @foreach (var item in Model.ItemRentals1.OrderByDescending(s => s.shipDateTime))
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stock.Product.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.itemRentalId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.stockId)
-                </td>
-                <td>
-                    Shipped
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.shipDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stock.itemCondition)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address.address1)
-                    <p>@Html.DisplayFor(modelItem => item.Address.city), @Html.DisplayFor(modelItem => item.Address.state) @Html.DisplayFor(modelItem => item.Address.zip)</p>
-                </td>
-            </tr>
+    <tr>
+        <td>
+            Shipped
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stock.Product.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.itemRentalId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stockId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.shipDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stock.itemCondition)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Member.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address.address1)
+            <p>@Html.DisplayFor(modelItem => item.Address.city), @Html.DisplayFor(modelItem => item.Address.state) @Html.DisplayFor(modelItem => item.Address.zip)</p>
+        </td>
+    </tr>
         }
     </table>
 </div>

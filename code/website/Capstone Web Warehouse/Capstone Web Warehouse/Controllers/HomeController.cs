@@ -14,6 +14,8 @@ namespace Capstone_Web_Warehouse.Controllers
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
         /// </summary>
         public HomeController()
         {
@@ -22,6 +24,8 @@ namespace Capstone_Web_Warehouse.Controllers
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="entity"></param>
         public HomeController(OnlineEntities entity)
@@ -29,7 +33,10 @@ namespace Capstone_Web_Warehouse.Controllers
             data = entity;
         }
 
-        /// <summary>  Returns home page index page.</summary>
+        /// <summary>  Returns home page index page.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>Home index view.</returns>
         public ActionResult Index()
         {
@@ -48,7 +55,10 @@ namespace Capstone_Web_Warehouse.Controllers
             return Redirect("~/Rentals/Index");
         }
 
-        /// <summary>  Redirect to manage employee index page.</summary>
+        /// <summary>  Redirect to manage employee index page.
+        /// <Precondition>Employee != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>The manage employee index view.</returns>
         public ActionResult ManageEmployees()
         {
@@ -62,7 +72,10 @@ namespace Capstone_Web_Warehouse.Controllers
             return Redirect("~/Employees/Index");
         }
 
-        /// <summary>  Redirect to stocks index.</summary>
+        /// <summary>  Redirect to stocks index.
+        /// <Precondition>Employee != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>stocks index page.</returns>
         public ActionResult ManageStock()
         {
@@ -75,10 +88,10 @@ namespace Capstone_Web_Warehouse.Controllers
         }
 
 
-        /*
-         * Validates login information from employee table.
-         */
-        /// <summary>Logins the employee</summary>
+        /// <summary>Logins the employee
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <param name="model">The employee to login</param>
         /// <returns>Manage rentals page if good, same page if bad.</returns>
         public ActionResult Login(Employee model)
@@ -95,10 +108,10 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(model);
         }
 
-        /*
-        * Clears current employee session and logs user off.
-        */
-        /// <summary>Logs the employee off.</summary>
+        /// <summary>Logs the employee off.
+        /// <Precondition>None</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
         /// <returns>home page.</returns>
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
