@@ -97,22 +97,19 @@ namespace Capstone_Web_Members.Controllers
             this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
                                          .ToList();
 
-            var atMaxRentals = false;
+            int? rentalCount = 0;
             if (Session["currentMemberId"] != null)
             {
                 var memberId = int.Parse(Session["currentMemberId"].ToString());
                 var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
                 if (rentedCountResult.Count > 0)
                 {
-                    if (rentedCountResult[0] >= RentalSettings.MaxCurrentRentals)
-                    {
-                        atMaxRentals = true;
-                    }
+                    rentalCount = rentedCountResult[0];
                 }
             }
 
             var mediaLibraryViewModel = new MediaLibraryViewModel
-                {ProductsModel = this.AvailableProducts, AtMaxRentals = atMaxRentals };
+                {ProductsModel = this.AvailableProducts, RentalCount = rentalCount};
 
             if (Session["currentLibrarianId"] != null)
             {

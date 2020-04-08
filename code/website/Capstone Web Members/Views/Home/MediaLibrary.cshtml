@@ -53,11 +53,12 @@
                 Description
             </th>
             <th>
-                Type
+                Category
             </th>
             <th>
-
+                Type
             </th>
+            <th></th>
         </tr>
         @foreach (var item in Model.ProductsModel)
         {
@@ -69,10 +70,13 @@
                     @Html.DisplayFor(modelItem => item.description)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.category)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.type)
                 </td>
                 <td>
-                    @if (Model.AtMaxRentals)
+                    @if (Model.RentalCount >= 3 && !Model.IsLibrarian)
                     {
                         <b>You currently have the max amount of allowed Rentals</b>
                     }
