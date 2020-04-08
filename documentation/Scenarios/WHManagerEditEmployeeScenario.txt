@@ -1,0 +1,18 @@
+Manager Edit Employee:
+1.	A manager loads warehouse page.
+2.	A manager login.
+3.	A manager clicks manage employees page.
+4.	A manager clicks edit on employee row.
+5.	A manager enters employee data.
+6.	A manager edits employees.
+7.	A manager logs out.
+
+Alternate:
+2a: Manager skip login) A manager click manage employees page.
+	.3: A manager is redirected to login page.
+	.4: A manager not access manage employee page without logging in.
+5a: Bad employee information) A manager enters either bad employee name that is not all letters.
+	.6: A manager is informed of what information is bad.
+	.7: A manager fixes bad information.
+	.8: A manager edits employee.
+	.9: A manager logs out.

@@ -1,0 +1,14 @@
+Warehouse View Rentals:
+1.	An employee load warehouse page.
+2.	An employee logs in.
+3.	An employee clicks manage items page.
+5.	An employee views the list of rentals.
+6.	An employee logs out.
+
+Alternate:
+2a: No login) An employee clicks manage items page.
+	.3: An employee is redirected to login page.
+	.4: An employee not access manage items page without logging in.
+4a: Filter type) An employee selects a filter type.
+	.3: An employee views rentals based on filter selection.
+	.4: An employee logs out.

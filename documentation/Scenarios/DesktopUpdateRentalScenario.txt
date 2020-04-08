@@ -1,8 +1,0 @@
-Warehouse Update Rental Status:
-1.	An employee loads warehouse application.
-2.	An employee logs in.
-3.	An employee clicks manage rentals.
-4.	An employee selects the rental they wish to update.
-5.	An employee clicks either mark rented or mark returned.
-6.	An employee has updated the rental status.
-7.	A manager logs out.
