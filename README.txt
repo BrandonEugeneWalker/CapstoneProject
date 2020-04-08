@@ -25,10 +25,15 @@ Our employee system allows WGEL to keep our product pages up to date and tidy.
   Select Capstone Web Member in the run list and then run.
   
   **Passwords**
+  Librarian Account:
   User: TheJeselnik
   Password: P@ss12
-  or
-  Registering New User
+  
+  Member:
+  User: PokemonMaster
+  Password: P@ss12
+ 
+  or Registering New User
   
 *Running Web for Warehouse*
   Select Capstone Web Warehouse in the run list and then run it.
