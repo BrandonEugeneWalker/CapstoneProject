@@ -77,9 +77,9 @@
             // returnButton
             // 
             this.returnButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.returnButton.Location = new System.Drawing.Point(1105, 578);
+            this.returnButton.Location = new System.Drawing.Point(1063, 615);
             this.returnButton.Name = "returnButton";
-            this.returnButton.Size = new System.Drawing.Size(141, 46);
+            this.returnButton.Size = new System.Drawing.Size(183, 46);
             this.returnButton.TabIndex = 5;
             this.returnButton.Text = "Mark Returned";
             this.returnButton.UseVisualStyleBackColor = true;
@@ -122,11 +122,11 @@
             // rentedButton
             // 
             this.rentedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rentedButton.Location = new System.Drawing.Point(958, 578);
+            this.rentedButton.Location = new System.Drawing.Point(1063, 563);
             this.rentedButton.Name = "rentedButton";
-            this.rentedButton.Size = new System.Drawing.Size(141, 46);
+            this.rentedButton.Size = new System.Drawing.Size(183, 46);
             this.rentedButton.TabIndex = 11;
-            this.rentedButton.Text = "Mark Rented";
+            this.rentedButton.Text = "Mark WaitingReturn";
             this.rentedButton.UseVisualStyleBackColor = true;
             this.rentedButton.Click += new System.EventHandler(this.rentedButton_Click);
             // 
