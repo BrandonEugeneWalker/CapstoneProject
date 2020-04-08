@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\LoginForm.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Windows.Forms;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using Capstone_Desktop.View;
+
+namespace Capstone_Desktop
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;The login page of the application.&lt;/para&gt;
+    ///     &lt;para&gt;The LoginForm is the form that will greet a user upon starting the program.&lt;/para&gt;
+    ///     &lt;para&gt;
+    ///         The LoginForm allows a user to verify their status as an employee in order to access other parts of the
+    ///         system.
+    ///     &lt;/para&gt;
+    ///     &lt;para&gt;
+    ///         The LoginForm is able to tell the difference between a regular employee and a manager, sending them to
+    ///         different places depending on their status.
+    ///     &lt;/para&gt;
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Windows.Forms.Form&quot; /&gt;
+    public partial class LoginForm : Form
+    {
+        #region Data members
+
+        private Employee currentEmployee;
+
+        private readonly LoginController loginController;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;Initializes a new instance of the &lt;see cref=&quot;LoginForm&quot; /&gt; class.&lt;/para&gt;
+        ///     &lt;para&gt;The LoginForm exits to the operating system.&lt;/para&gt;
+        ///     &lt;para&gt;The LoginForm will open the ManageItemsForm or ManageEmployeesForm depending on the login status.&lt;/para&gt;
+        ///     &lt;para&gt;The LoginForm will provide feedback on user input.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        public LoginForm()
+        {
+            this.InitializeComponent();
+            this.loginController = new LoginController();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void LoginButton_Click(object sender, EventArgs e)
+        {
+            var id = int.Parse(this.usernameTextbox.Text);
+            var password = this.passwordTextbox.Text;
+
+            var results = this.tryToLogin(id, password);
+            if (results)
+            {
+                var manageEmployeeForm = new ManageEmployeeForm(this.currentEmployee);
+                Hide();
+                manageEmployeeForm.ShowDialog();
+                this.emptyTextBoxes();
+                Show();
+            }
+            else if (this.currentEmployee != null)
+            {
+                var manageItemsForm = new ManageItemsForm(this.currentEmployee);
+                Hide();
+                manageItemsForm.ShowDialog();
+                this.emptyTextBoxes();
+                Show();
+            }
+            else
+            {
+                this.showLoginError();
+            }
+        }
+
+        private void emptyTextBoxes()
+        {
+            this.usernameTextbox.Text = &quot;&quot;;
+            this.passwordTextbox.Text = &quot;&quot;;
+        }
+
+        private void showLoginError()
+        {
+            MessageBox.Show(@&quot;Was unable to login.&quot;);
+            this.emptyTextBoxes();
+        }
+
+        private bool tryToLogin(int id, string password)
+        {
+            try
+            {
+                this.currentEmployee =
+                    this.loginController.GetEmployeeByIdAndPassword(id, password);
+
+                return this.currentEmployee.isManager == true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[40,9,40,27,0],[41,9,41,10,0],[42,13,42,40,0],[43,13,43,58,0],[44,9,44,10,0],[51,9,51,10,0],[52,13,52,59,0],[53,13,53,54,0],[55,13,55,57,0],[56,13,56,25,0],[57,13,57,14,0],[58,17,58,87,0],[59,17,59,24,0],[60,17,60,49,0],[61,17,61,39,0],[62,17,62,24,0],[63,13,63,14,0],[64,18,64,51,0],[65,13,65,14,0],[66,17,66,81,0],[67,17,67,24,0],[68,17,68,46,0],[69,17,69,39,0],[70,17,70,24,0],[71,13,71,14,0],[73,13,73,14,0],[74,17,74,39,0],[75,13,75,14,0],[76,9,76,10,0],[79,9,79,10,0],[80,13,80,44,0],[81,13,81,44,0],[82,9,82,10,0],[85,9,85,10,0],[86,13,86,54,0],[87,13,87,35,0],[88,9,88,10,0],[91,9,91,10,0],[93,13,93,14,0],[94,17,95,83,0],[97,17,97,63,0],[99,13,99,30,0],[100,13,100,14,0],[101,17,101,30,0],[103,9,103,10,0]]);
+    </script>
+  </body>
+</html>

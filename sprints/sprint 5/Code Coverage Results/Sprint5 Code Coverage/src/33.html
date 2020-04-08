@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\ItemHistoryController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;This class handles interactions between the database and the ItemHistoryForm.&lt;/para&gt;
+    ///     &lt;para&gt;Methods will require a valid stock item.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class ItemHistoryController
+    {
+        #region Data members
+
+        private const string StockNullError = @&quot;The Stock to view the history for cannot be null!&quot;;
+
+        public IDbContextHandler CapstoneDatabaseHandler;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;ItemHistoryController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Separates the view and database logic.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public ItemHistoryController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;ItemHistoryController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Separates the view and database logic.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDatabaseHandler&quot;&gt;The capstone database handler.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDatabaseHandler - The database handler cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public ItemHistoryController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @&quot;The database handler cannot be null!&quot;);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets and returns the rental history of a stock item.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;The given stock and database cannot be null.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;stock&quot;&gt;The stock to get the history of.&lt;/param&gt;
+        /// &lt;returns&gt;A list of rentals that stock is involved in.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     stock
+        ///     or
+        ///     capstoneDbContext - The given database context cannot be null!
+        /// &lt;/exception&gt;
+        public List&lt;DetailedRentalView&gt; GetStockHistory(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), StockNullError);
+            }
+
+            return this.CapstoneDatabaseHandler.GetDetailedStockHistory(stock);
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Builds the string representation of a stock object needed for the UI.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;If the stock is null an error is thrown.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;stock&quot;&gt;The stock to describe.&lt;/param&gt;
+        /// &lt;returns&gt;A string representation of the stock.&lt;/returns&gt;
+        public string BuildStockDescription(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), StockNullError);
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(&quot; Item Name: &quot; + stock.Product.name);
+            stringBuilder.Append(&quot; Stock ID: &quot; + stock.stockId);
+            stringBuilder.Append(&quot; Condition: &quot; + stock.itemCondition);
+            return stringBuilder.ToString();
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[33,9,33,39,1],[34,9,34,10,1],[35,13,35,75,1],[36,9,36,10,1],[48,9,48,80,1],[49,9,49,10,1],[50,13,52,89,1],[53,9,53,10,1],[73,9,73,10,1],[74,13,74,31,1],[75,13,75,14,1],[76,17,76,80,1],[79,13,79,80,1],[80,9,80,10,1],[91,9,91,10,1],[92,13,92,31,1],[93,13,93,14,1],[94,17,94,80,1],[97,13,97,53,1],[98,13,98,71,1],[99,13,99,65,1],[100,13,100,72,1],[101,13,101,45,1],[102,9,102,10,1]]);
+    </script>
+  </body>
+</html>

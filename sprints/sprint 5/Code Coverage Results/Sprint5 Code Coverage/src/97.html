@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\web members\AddressesControllerTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Capstone_Database.Model;
+using Capstone_Web_Members.Controllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.web_members
+{
+    /// &lt;summary&gt;
+    ///     Tests the AddressesController behavior
+    /// &lt;/summary&gt;
+    [TestClass]
+    public class AddressesControllerTest
+    {
+        #region Methods
+
+        [TestMethod]
+        public void StandardConstructorIsValid()
+        {
+            var addressesController = new AddressesController();
+
+            Assert.IsNotNull(addressesController);
+        }
+
+        [TestMethod]
+        public void CreatePageIsNotNull()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var create = addressesController.Create(null as int?) as ViewResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void CreatePageWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var create = addressesController.Create(null as int?) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void CreateActionWithValidAddressIsNotNull()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var address1 = new Address
+                { addressId = 1, address1 = &quot;1234 St&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+            var create = addressesController.Create(address1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void CreateActionWithValidAddressAndProductIdRedirects()
+        {
+            var addressesController = setupAddressesControllerWithSessionMemberIdAndProductId();
+
+            var address1 = new Address
+                { addressId = 1, address1 = &quot;1234 St&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+            var create = addressesController.Create(address1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void CreateActionWithInvalidAddressReturnsToCreate()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            addressesController.ModelState.AddModelError(&quot;&quot;, &quot;&quot;);
+
+            var address1 = new Address
+                { addressId = 1, address1 = &quot;1234 St&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+            var create = addressesController.Create(address1) as RedirectToRouteResult;
+
+            Assert.IsNull(create);
+        }
+
+        [TestMethod]
+        public void CreatingAddressWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var address1 = new Address
+                { addressId = 1, address1 = &quot;1234 St&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+            var create = addressesController.Create(address1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void EditPageWithValidIdIsValid()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(1, null) as ViewResult;
+
+            Assert.IsNotNull(edit);
+            Assert.IsNotNull(edit.Model);
+            Assert.IsInstanceOfType(edit.Model, typeof(Address));
+
+            var model = (Address) edit.Model;
+
+            Assert.AreEqual(1, model.addressId);
+        }
+
+        [TestMethod]
+        public void EditPageWithInvalidIdIsNull()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(null, null) as ViewResult;
+
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod]
+        public void EditPageWithInvalidAddressIsNull()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(3, null) as ViewResult;
+
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod]
+        public void EditPageWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var create = addressesController.Edit(1, null) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void EditActionWithValidAddressIsNotNull()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(edit);
+        }
+
+        [TestMethod]
+        public void EditActionWithValidAddressAndProductIdRedirects()
+        {
+            var addressesController = setupAddressesControllerWithSessionMemberIdAndProductId();
+
+            var edit = addressesController.Edit(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(edit);
+        }
+
+        [TestMethod]
+        public void EditActionWithInvalidAddressIsNull()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            addressesController.ModelState.AddModelError(&quot;&quot;,&quot;&quot;);
+
+            var edit = addressesController.Edit(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNull(edit);
+        }
+
+        [TestMethod]
+        public void EditActionWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var create = addressesController.Edit(new Address()) as RedirectToRouteResult;
+
+            Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void RemoveActionWithoutProductIdRedirectsToProfile()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var remove = addressesController.Remove(1, null) as RedirectToRouteResult;
+
+            Assert.IsNotNull(remove);
+        }
+
+        [TestMethod]
+        public void RemoveActionWithProductIdRedirectsToOrderProduct()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var removeAtOrder = addressesController.Remove(1, 1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(removeAtOrder);
+        }
+
+        [TestMethod]
+        public void RemoveAddressWillRedirectWithoutSession()
+        {
+            var addressesController = setupAddressesControllerWithoutSession();
+
+            var remove = addressesController.Remove(1, null) as RedirectToRouteResult;
+
+            Assert.IsNotNull(remove);
+        }
+
+        [TestMethod]
+        public void ControllerDisposesResourcesValid()
+        {
+            var addressesController = setupAddressesControllerWithSession();
+
+            var edit = addressesController.Edit(1, null) as ViewResult;
+
+            addressesController.Dispose();
+
+            Assert.IsNotNull(edit);
+        }
+
+        private static AddressesController setupAddressesControllerWithoutSession()
+        {
+            var address1 = new Address
+                { addressId = 1, address1 = &quot;1234 St&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+            var address2 = new Address
+                { addressId = 2, address1 = &quot;4321 Dr&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+
+            IList&lt;Address&gt; addresses = new List&lt;Address&gt; {
+                address1, address2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = createDbSetMock(addresses);
+
+            context.Setup(x =&gt; x.Addresses).Returns(mock.Object);
+            context.Setup(x =&gt; x.Addresses.Find(1)).Returns(address1);
+            context.Setup(x =&gt; x.insertAddress(address1.address1, 1, address1.address2, address1.city, address1.state, address1.zip)).Returns(1);
+            context.Setup(x =&gt; x.removeAddress(1)).Returns(1);
+
+            var addressesController = new AddressesController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;currentMemberId&quot;]).Returns(null);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            addressesController.ControllerContext = new ControllerContext(requestContext, addressesController);
+
+            return addressesController;
+        }
+
+        private static AddressesController setupAddressesControllerWithSessionMemberIdAndProductId()
+        {
+            var address1 = new Address
+                { addressId = 1, address1 = &quot;1234 St&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+            var address2 = new Address
+                { addressId = 2, address1 = &quot;4321 Dr&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+
+            IList&lt;Address&gt; addresses = new List&lt;Address&gt; {
+                address1, address2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = createDbSetMock(addresses);
+
+            context.Setup(x =&gt; x.Addresses).Returns(mock.Object);
+            context.Setup(x =&gt; x.Addresses.Find(1)).Returns(address1);
+            context.Setup(x =&gt; x.insertAddress(address1.address1, 1, address1.address2, address1.city, address1.state, address1.zip)).Returns(1);
+            context.Setup(x =&gt; x.removeAddress(1)).Returns(1);
+
+            var addressesController = new AddressesController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;currentMemberId&quot;]).Returns(1);
+            session.Setup(s =&gt; s[&quot;productId&quot;]).Returns(1);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            addressesController.ControllerContext = new ControllerContext(requestContext, addressesController);
+
+            return addressesController;
+        }
+
+        private static AddressesController setupAddressesControllerWithSession()
+        {
+            var address1 = new Address
+                { addressId = 1, address1 = &quot;1234 St&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+            var address2 = new Address
+                { addressId = 2, address1 = &quot;4321 Dr&quot;, city = &quot;Atlanta&quot;, state = &quot;GA&quot;, zip = 12345, memberId = 1 };
+
+            IList&lt;Address&gt; addresses = new List&lt;Address&gt; {
+                address1, address2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = createDbSetMock(addresses);
+
+            context.Setup(x =&gt; x.Addresses).Returns(mock.Object);
+            context.Setup(x =&gt; x.Addresses.Find(1)).Returns(address1);
+            context.Setup(x =&gt; x.insertAddress(address1.address1, 1, address1.address2, address1.city, address1.state, address1.zip)).Returns(1);
+            context.Setup(x =&gt; x.removeAddress(1)).Returns(1);
+
+            var addressesController = new AddressesController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;currentMemberId&quot;]).Returns(1);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            addressesController.ControllerContext = new ControllerContext(requestContext, addressesController);
+
+            return addressesController;
+        }
+
+        private static Mock&lt;DbSet&lt;T&gt;&gt; createDbSetMock&lt;T&gt;(IEnumerable&lt;T&gt; elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock&lt;DbSet&lt;T&gt;&gt;();
+
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[24,9,24,10,1],[25,13,25,65,1],[27,13,27,51,1],[28,9,28,10,1],[32,9,32,10,1],[33,13,33,77,1],[35,13,35,81,1],[37,13,37,38,1],[38,9,38,10,1],[42,9,42,10,1],[43,13,43,80,1],[45,13,45,92,1],[47,13,47,38,1],[48,9,48,10,1],[52,9,52,10,1],[53,13,53,77,1],[55,13,56,116,1],[57,13,57,88,1],[59,13,59,38,1],[60,9,60,10,1],[64,9,64,10,1],[65,13,65,97,1],[67,13,68,116,1],[69,13,69,88,1],[71,13,71,38,1],[72,9,72,10,1],[76,9,76,10,1],[77,13,77,77,1],[79,13,79,66,1],[81,13,82,116,1],[83,13,83,88,1],[85,13,85,35,1],[86,9,86,10,1],[90,9,90,10,1],[91,13,91,80,1],[93,13,94,116,1],[95,13,95,88,1],[97,13,97,38,1],[98,9,98,10,1],[102,9,102,10,1],[103,13,103,77,1],[105,13,105,72,1],[107,13,107,36,1],[108,13,108,42,1],[109,13,109,66,1],[111,13,111,46,1],[113,13,113,49,1],[114,9,114,10,1],[118,9,118,10,1],[119,13,119,77,1],[121,13,121,75,1],[123,13,123,33,1],[124,9,124,10,1],[128,9,128,10,1],[129,13,129,77,1],[131,13,131,72,1],[133,13,133,33,1],[134,9,134,10,1],[138,9,138,10,1],[139,13,139,80,1],[141,13,141,85,1],[143,13,143,38,1],[144,9,144,10,1],[148,9,148,10,1],[149,13,149,77,1],[151,13,151,89,1],[153,13,153,36,1],[154,9,154,10,1],[158,9,158,10,1],[159,13,159,97,1],[161,13,161,89,1],[163,13,163,36,1],[164,9,164,10,1],[168,9,168,10,1],[169,13,169,77,1],[171,13,171,65,1],[173,13,173,89,1],[175,13,175,33,1],[176,9,176,10,1],[180,9,180,10,1],[181,13,181,80,1],[183,13,183,91,1],[185,13,185,38,1],[186,9,186,10,1],[190,9,190,10,1],[191,13,191,77,1],[193,13,193,87,1],[195,13,195,38,1],[196,9,196,10,1],[200,9,200,10,1],[201,13,201,77,1],[203,13,203,91,1],[205,13,205,45,1],[206,9,206,10,1],[210,9,210,10,1],[211,13,211,80,1],[213,13,213,87,1],[215,13,215,38,1],[216,9,216,10,1],[220,9,220,10,1],[221,13,221,77,1],[223,13,223,72,1],[225,13,225,43,1],[227,13,227,36,1],[228,9,228,10,1],[231,9,231,10,1],[232,13,233,116,1],[234,13,235,116,1],[237,13,239,15,1],[241,13,241,54,1],[242,13,242,51,1],[244,13,244,66,1],[245,13,245,71,1],[246,13,246,146,1],[247,13,247,63,1],[249,13,249,79,1],[251,13,251,59,1],[252,13,252,60,1],[253,13,253,68,1],[254,13,254,71,1],[255,13,255,90,1],[256,13,256,112,1],[258,13,258,40,1],[259,9,259,10,1],[262,9,262,10,1],[263,13,264,116,1],[265,13,266,116,1],[268,13,270,15,1],[272,13,272,54,1],[273,13,273,51,1],[275,13,275,66,1],[276,13,276,71,1],[277,13,277,146,1],[278,13,278,63,1],[280,13,280,79,1],[282,13,282,59,1],[283,13,283,60,1],[284,13,284,65,1],[285,13,285,59,1],[286,13,286,71,1],[287,13,287,90,1],[288,13,288,112,1],[290,13,290,40,1],[291,9,291,10,1],[294,9,294,10,1],[295,13,296,116,1],[297,13,298,116,1],[300,13,302,15,1],[304,13,304,54,1],[305,13,305,51,1],[307,13,307,66,1],[308,13,308,71,1],[309,13,309,146,1],[310,13,310,63,1],[312,13,312,79,1],[314,13,314,59,1],[315,13,315,60,1],[316,13,316,65,1],[317,13,317,71,1],[318,13,318,90,1],[319,13,319,112,1],[321,13,321,40,1],[322,9,322,10,1],[325,9,325,10,1],[326,13,326,62,1],[327,13,327,50,1],[329,13,329,104,1],[330,13,330,108,1],[331,13,331,110,1],[332,13,332,118,1],[334,13,334,30,1],[335,9,335,10,1]]);
+    </script>
+  </body>
+</html>

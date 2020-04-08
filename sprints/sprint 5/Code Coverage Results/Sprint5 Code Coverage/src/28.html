@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\AddEmployeeFormController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     This class acts as a controller for the AddEmployeeForm. Because of this the class contains methods related to
+    ///     handling data given by the user in its parent form.
+    /// &lt;/summary&gt;
+    public class AddEmployeeFormController
+    {
+        #region Properties
+
+        /// &lt;summary&gt;Gets or sets the capstone database handler.&lt;/summary&gt;
+        /// &lt;value&gt;The capstone database handler, used for interactions with the database.&lt;/value&gt;
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;AddEmployeeFormController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Separates the view from database logic.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        public AddEmployeeFormController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;AddEmployeeFormController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Separates the view from database logic. Constructor overload allows for mocking.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDbContextHandler&quot;&gt;The capstone database context handler.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDbContextHandler - The database handler cannot be null!&lt;/exception&gt;
+        public AddEmployeeFormController(IDbContextHandler capstoneDbContextHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDbContextHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDbContextHandler),
+                                               @&quot;The database handler cannot be null!&quot;);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;Determines whether [is valid password] [the specified password]. &lt;/para&gt;
+        ///     &lt;para&gt;Password requirements are as follows:&lt;/para&gt;
+        ///     &lt;para&gt;* Contains at least one lowercase letter.&lt;/para&gt;
+        ///     &lt;para&gt;* Contains at least one uppercase letter.&lt;/para&gt;
+        ///     &lt;para&gt;* Contains at least one symbol.&lt;/para&gt;
+        ///     &lt;para&gt;* Must be a minimum of 6 characters long.&lt;/para&gt;
+        ///     &lt;para&gt;* Cannot be longer than 16 characters.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;password&quot;&gt;The password to validate.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     &lt;c&gt;true&lt;/c&gt; if [is valid password] [the specified password]; otherwise, &lt;c&gt;false&lt;/c&gt;.
+        /// &lt;/returns&gt;
+        public bool IsValidPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                return false;
+            }
+
+            var lowerCases = 0;
+            var upperCases = 0;
+            var numbers = 0;
+            var specialChars = 0;
+
+            foreach (var currentChar in password)
+            {
+                if (char.IsNumber(currentChar))
+                {
+                    numbers++;
+                }
+
+                if (char.IsLower(currentChar))
+                {
+                    lowerCases++;
+                }
+
+                if (char.IsUpper(currentChar))
+                {
+                    upperCases++;
+                }
+
+                if (char.IsPunctuation(currentChar) | char.IsSymbol(currentChar))
+                {
+                    specialChars++;
+                }
+            }
+
+            var hasLowerCase = lowerCases &gt; 0;
+            var hasUpperCase = upperCases &gt; 0;
+            var hasNumbers = numbers &gt; 0;
+            var hasSpecialChars = specialChars &gt; 0;
+            var isMinimumLength = password.Length &gt;= 6;
+            var isNotPastMaximumLength = password.Length &lt;= 16;
+
+            var isValid = hasLowerCase &amp;&amp; hasUpperCase &amp;&amp; hasNumbers &amp;&amp; hasSpecialChars &amp;&amp; isMinimumLength &amp;&amp;
+                          isNotPastMaximumLength;
+
+            return isValid;
+        }
+
+        public void AddEmployee(string password, bool isManager, string name)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password), @&quot;The password cannot be null or empty!&quot;);
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException(nameof(name), @&quot;The name cannot be null or empty!&quot;);
+            }
+
+            var addingEmployee = new Employee {
+                password = password,
+                isManager = isManager,
+                name = name
+            };
+            this.CapstoneDatabaseHandler.AddEmployee(addingEmployee);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,60,17,64,1],[17,65,17,69,1],[29,9,29,43,1],[30,9,30,10,1],[31,13,31,75,1],[32,9,32,10,1],[42,9,42,85,1],[43,9,43,10,1],[44,13,46,89,1],[47,9,47,10,1],[67,9,67,10,1],[68,13,68,48,1],[69,13,69,14,1],[70,17,70,30,1],[73,13,73,32,1],[74,13,74,32,1],[75,13,75,29,1],[76,13,76,34,1],[78,13,78,20,1],[78,22,78,37,1],[78,38,78,40,1],[78,41,78,49,1],[79,13,79,14,1],[80,17,80,48,1],[81,17,81,18,1],[82,21,82,31,1],[83,17,83,18,1],[85,17,85,47,1],[86,17,86,18,1],[87,21,87,34,1],[88,17,88,18,1],[90,17,90,47,1],[91,17,91,18,1],[92,21,92,34,1],[93,17,93,18,1],[95,17,95,82,1],[96,17,96,18,1],[97,21,97,36,1],[98,17,98,18,1],[99,13,99,14,1],[101,13,101,47,1],[102,13,102,47,1],[103,13,103,42,1],[104,13,104,52,1],[105,13,105,56,1],[106,13,106,64,1],[108,13,109,50,1],[111,13,111,28,1],[112,9,112,10,1],[115,9,115,10,1],[116,13,116,48,1],[117,13,117,14,1],[118,17,118,109,1],[121,13,121,44,1],[122,13,122,14,1],[123,17,123,101,1],[126,13,130,15,1],[131,13,131,70,1],[132,9,132,10,1]]);
+    </script>
+  </body>
+</html>

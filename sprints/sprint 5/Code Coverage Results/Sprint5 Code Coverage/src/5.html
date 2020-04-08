@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\ManageEmployeeController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.ComponentModel;
+using System.Data.Entity;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;Handles communications between the view and the database.&lt;/para&gt;
+    ///     &lt;para&gt;Has methods for getting and removing employees.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class ManageEmployeeController
+    {
+
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        /// &lt;summary&gt;
+        ///   &lt;para&gt;
+        ///  Initializes a new instance of the &lt;see cref=&quot;ManageEmployeeController&quot;/&gt; class.
+        /// &lt;/para&gt;
+        ///   &lt;para&gt;Acts as a intermediary between the view and database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;A new instance is created.&lt;/Postcondition&gt;
+        public ManageEmployeeController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// &lt;summary&gt;
+        ///   &lt;para&gt;
+        ///  Initializes a new instance of the &lt;see cref=&quot;ManageEmployeeController&quot;/&gt; class.
+        /// &lt;/para&gt;
+        ///   &lt;para&gt;Acts as an intermediary between the view and database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDatabaseHandler&quot;&gt;The capstone database handler.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDatabaseHandler - The database handler cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt;The database handler cannot be null!&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;A new instance is created.&lt;/Postcondition&gt;
+        public ManageEmployeeController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @&quot;The database handler cannot be null!&quot;);
+        }
+
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Removes the employee from database.
+        ///     &lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to remove.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     employee - The employee to remove cannot be null!
+        ///     or
+        ///     capstoneDbContext - The database to remove the employee from cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The employee cannot be null!&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;The employee is removed from the database.&lt;/Postcondition&gt;
+        public void RemoveEmployeeFromDatabase(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), @&quot;The employee to remove cannot be null!&quot;);
+            }
+
+            this.CapstoneDatabaseHandler.RemoveEmployee(employee);
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets and returns the employees in the database.
+        ///     &lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;A binding list of employees.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None &lt;/Precondition&gt;
+        public BindingList&lt;Employee&gt; GetEmployees()
+        {
+            return this.CapstoneDatabaseHandler.GetAllEmployees();
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[16,60,16,64,1],[16,65,16,69,1],[26,9,26,42,1],[27,9,27,10,1],[28,13,28,75,1],[29,9,29,10,1],[41,9,41,83,1],[42,9,42,10,1],[43,13,45,89,1],[46,9,46,10,1],[65,9,65,10,1],[66,13,66,34,1],[67,13,67,14,1],[68,17,68,110,1],[71,13,71,67,1],[72,9,72,10,1],[82,9,82,10,1],[83,13,83,67,1],[84,9,84,10,1]]);
+    </script>
+  </body>
+</html>

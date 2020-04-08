@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\database\Capstone Database\Model\CapstoneDBModel.Context.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated from a template.
+//
+//     Manual changes to this file may cause unexpected behavior in your application.
+//     Manual changes to this file will be overwritten if the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+
+namespace Capstone_Database.Model
+{
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
+    
+    public partial class OnlineEntities : DbContext
+    {
+        public OnlineEntities()
+            : base(&quot;name=OnlineEntities&quot;)
+        {
+        }
+    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
+    
+        public virtual DbSet&lt;Employee&gt; Employees { get; set; }
+        public virtual DbSet&lt;Member&gt; Members { get; set; }
+        public virtual DbSet&lt;Product&gt; Products { get; set; }
+        public virtual DbSet&lt;Stock&gt; Stocks { get; set; }
+        public virtual DbSet&lt;Address&gt; Addresses { get; set; }
+        public virtual DbSet&lt;ItemRental&gt; ItemRentals { get; set; }
+        public virtual DbSet&lt;DetailedRentalView&gt; DetailedRentalViews { get; set; }
+        public virtual DbSet&lt;StockDetailView&gt; StockDetailViews { get; set; }
+    
+        public virtual int createMemberOrder(Nullable&lt;int&gt; selectedStockId, Nullable&lt;int&gt; selectedMemberId, Nullable&lt;int&gt; selectedAddressId)
+        {
+            var selectedStockIdParameter = selectedStockId.HasValue ?
+                new ObjectParameter(&quot;selectedStockId&quot;, selectedStockId) :
+                new ObjectParameter(&quot;selectedStockId&quot;, typeof(int));
+    
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter(&quot;selectedMemberId&quot;, selectedMemberId) :
+                new ObjectParameter(&quot;selectedMemberId&quot;, typeof(int));
+    
+            var selectedAddressIdParameter = selectedAddressId.HasValue ?
+                new ObjectParameter(&quot;selectedAddressId&quot;, selectedAddressId) :
+                new ObjectParameter(&quot;selectedAddressId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;createMemberOrder&quot;, selectedStockIdParameter, selectedMemberIdParameter, selectedAddressIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;retrieveAllProducts_Result&gt; retrieveAllProducts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;retrieveAllProducts_Result&gt;(&quot;retrieveAllProducts&quot;);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; retrieveAvailableProducts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;retrieveAvailableProducts&quot;);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; retrieveAvailableProducts(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;retrieveAvailableProducts&quot;, mergeOption);
+        }
+    
+        public virtual int retrieveProductsWaitingReturn()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;retrieveProductsWaitingReturn&quot;);
+        }
+    
+        public virtual int retrieveProductsWaitingShipment()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;retrieveProductsWaitingShipment&quot;);
+        }
+    
+        public virtual ObjectResult&lt;Nullable&lt;int&gt;&gt; retrieveRentedCount(Nullable&lt;int&gt; selectedMemberId)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter(&quot;selectedMemberId&quot;, selectedMemberId) :
+                new ObjectParameter(&quot;selectedMemberId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Nullable&lt;int&gt;&gt;(&quot;retrieveRentedCount&quot;, selectedMemberIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; searchProductsName(string nameSearch)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter(&quot;nameSearch&quot;, nameSearch) :
+                new ObjectParameter(&quot;nameSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;searchProductsName&quot;, nameSearchParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; searchProductsName(string nameSearch, MergeOption mergeOption)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter(&quot;nameSearch&quot;, nameSearch) :
+                new ObjectParameter(&quot;nameSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;searchProductsName&quot;, mergeOption, nameSearchParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; searchProductsNameType(string nameSearch, string typeSearch)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter(&quot;nameSearch&quot;, nameSearch) :
+                new ObjectParameter(&quot;nameSearch&quot;, typeof(string));
+    
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter(&quot;typeSearch&quot;, typeSearch) :
+                new ObjectParameter(&quot;typeSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;searchProductsNameType&quot;, nameSearchParameter, typeSearchParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; searchProductsNameType(string nameSearch, string typeSearch, MergeOption mergeOption)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter(&quot;nameSearch&quot;, nameSearch) :
+                new ObjectParameter(&quot;nameSearch&quot;, typeof(string));
+    
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter(&quot;typeSearch&quot;, typeSearch) :
+                new ObjectParameter(&quot;typeSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;searchProductsNameType&quot;, mergeOption, nameSearchParameter, typeSearchParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; searchProductsType(string typeSearch)
+        {
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter(&quot;typeSearch&quot;, typeSearch) :
+                new ObjectParameter(&quot;typeSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;searchProductsType&quot;, typeSearchParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; searchProductsType(string typeSearch, MergeOption mergeOption)
+        {
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter(&quot;typeSearch&quot;, typeSearch) :
+                new ObjectParameter(&quot;typeSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;searchProductsType&quot;, mergeOption, typeSearchParameter);
+        }
+    
+        public virtual int updateMemberReturn(Nullable&lt;int&gt; selectedRentalId)
+        {
+            var selectedRentalIdParameter = selectedRentalId.HasValue ?
+                new ObjectParameter(&quot;selectedRentalId&quot;, selectedRentalId) :
+                new ObjectParameter(&quot;selectedRentalId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;updateMemberReturn&quot;, selectedRentalIdParameter);
+        }
+    
+        public virtual int updateRentalShipped(Nullable&lt;int&gt; selectedRentalId)
+        {
+            var selectedRentalIdParameter = selectedRentalId.HasValue ?
+                new ObjectParameter(&quot;selectedRentalId&quot;, selectedRentalId) :
+                new ObjectParameter(&quot;selectedRentalId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;updateRentalShipped&quot;, selectedRentalIdParameter);
+        }
+    
+        public virtual int updateReturnProcessed(Nullable&lt;int&gt; selectedRentalId)
+        {
+            var selectedRentalIdParameter = selectedRentalId.HasValue ?
+                new ObjectParameter(&quot;selectedRentalId&quot;, selectedRentalId) :
+                new ObjectParameter(&quot;selectedRentalId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;updateReturnProcessed&quot;, selectedRentalIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Employee&gt; selectEmployeeByIdAndPassword(Nullable&lt;int&gt; id, string pwd)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter(&quot;id&quot;, id) :
+                new ObjectParameter(&quot;id&quot;, typeof(int));
+    
+            var pwdParameter = pwd != null ?
+                new ObjectParameter(&quot;pwd&quot;, pwd) :
+                new ObjectParameter(&quot;pwd&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Employee&gt;(&quot;selectEmployeeByIdAndPassword&quot;, idParameter, pwdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Employee&gt; selectEmployeeByIdAndPassword(Nullable&lt;int&gt; id, string pwd, MergeOption mergeOption)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter(&quot;id&quot;, id) :
+                new ObjectParameter(&quot;id&quot;, typeof(int));
+    
+            var pwdParameter = pwd != null ?
+                new ObjectParameter(&quot;pwd&quot;, pwd) :
+                new ObjectParameter(&quot;pwd&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Employee&gt;(&quot;selectEmployeeByIdAndPassword&quot;, mergeOption, idParameter, pwdParameter);
+        }
+    
+        public virtual int insertEmployee(Nullable&lt;int&gt; id, string pw, Nullable&lt;sbyte&gt; isMan, string epName)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter(&quot;id&quot;, id) :
+                new ObjectParameter(&quot;id&quot;, typeof(int));
+    
+            var pwParameter = pw != null ?
+                new ObjectParameter(&quot;pw&quot;, pw) :
+                new ObjectParameter(&quot;pw&quot;, typeof(string));
+    
+            var isManParameter = isMan.HasValue ?
+                new ObjectParameter(&quot;isMan&quot;, isMan) :
+                new ObjectParameter(&quot;isMan&quot;, typeof(sbyte));
+    
+            var epNameParameter = epName != null ?
+                new ObjectParameter(&quot;epName&quot;, epName) :
+                new ObjectParameter(&quot;epName&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;insertEmployee&quot;, idParameter, pwParameter, isManParameter, epNameParameter);
+        }
+    
+        public virtual ObjectResult&lt;Nullable&lt;int&gt;&gt; findAvailableStockOfProduct(Nullable&lt;int&gt; selectedProductId)
+        {
+            var selectedProductIdParameter = selectedProductId.HasValue ?
+                new ObjectParameter(&quot;selectedProductId&quot;, selectedProductId) :
+                new ObjectParameter(&quot;selectedProductId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Nullable&lt;int&gt;&gt;(&quot;findAvailableStockOfProduct&quot;, selectedProductIdParameter);
+        }
+    
+        public virtual int insertMember(string newUsername, string newName, string newPassword)
+        {
+            var newUsernameParameter = newUsername != null ?
+                new ObjectParameter(&quot;newUsername&quot;, newUsername) :
+                new ObjectParameter(&quot;newUsername&quot;, typeof(string));
+    
+            var newNameParameter = newName != null ?
+                new ObjectParameter(&quot;newName&quot;, newName) :
+                new ObjectParameter(&quot;newName&quot;, typeof(string));
+    
+            var newPasswordParameter = newPassword != null ?
+                new ObjectParameter(&quot;newPassword&quot;, newPassword) :
+                new ObjectParameter(&quot;newPassword&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;insertMember&quot;, newUsernameParameter, newNameParameter, newPasswordParameter);
+        }
+    
+        public virtual ObjectResult&lt;Member&gt; selectMemberByIdAndPassword(string username, string password)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter(&quot;username&quot;, username) :
+                new ObjectParameter(&quot;username&quot;, typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter(&quot;password&quot;, password) :
+                new ObjectParameter(&quot;password&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Member&gt;(&quot;selectMemberByIdAndPassword&quot;, usernameParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult&lt;Member&gt; selectMemberByIdAndPassword(string username, string password, MergeOption mergeOption)
+        {
+            var usernameParameter = username != null ?
+                new ObjectParameter(&quot;username&quot;, username) :
+                new ObjectParameter(&quot;username&quot;, typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter(&quot;password&quot;, password) :
+                new ObjectParameter(&quot;password&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Member&gt;(&quot;selectMemberByIdAndPassword&quot;, mergeOption, usernameParameter, passwordParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; retrieveAvailableProductsWithSearch(string nameSearch, string typeSearch)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter(&quot;nameSearch&quot;, nameSearch) :
+                new ObjectParameter(&quot;nameSearch&quot;, typeof(string));
+    
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter(&quot;typeSearch&quot;, typeSearch) :
+                new ObjectParameter(&quot;typeSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;retrieveAvailableProductsWithSearch&quot;, nameSearchParameter, typeSearchParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; retrieveAvailableProductsWithSearch(string nameSearch, string typeSearch, MergeOption mergeOption)
+        {
+            var nameSearchParameter = nameSearch != null ?
+                new ObjectParameter(&quot;nameSearch&quot;, nameSearch) :
+                new ObjectParameter(&quot;nameSearch&quot;, typeof(string));
+    
+            var typeSearchParameter = typeSearch != null ?
+                new ObjectParameter(&quot;typeSearch&quot;, typeSearch) :
+                new ObjectParameter(&quot;typeSearch&quot;, typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;retrieveAvailableProductsWithSearch&quot;, mergeOption, nameSearchParameter, typeSearchParameter);
+        }
+    
+        public virtual int editMember(string newUsername, string newName, string newPassword, Nullable&lt;int&gt; currentMemberId)
+        {
+            var newUsernameParameter = newUsername != null ?
+                new ObjectParameter(&quot;newUsername&quot;, newUsername) :
+                new ObjectParameter(&quot;newUsername&quot;, typeof(string));
+    
+            var newNameParameter = newName != null ?
+                new ObjectParameter(&quot;newName&quot;, newName) :
+                new ObjectParameter(&quot;newName&quot;, typeof(string));
+    
+            var newPasswordParameter = newPassword != null ?
+                new ObjectParameter(&quot;newPassword&quot;, newPassword) :
+                new ObjectParameter(&quot;newPassword&quot;, typeof(string));
+    
+            var currentMemberIdParameter = currentMemberId.HasValue ?
+                new ObjectParameter(&quot;currentMemberId&quot;, currentMemberId) :
+                new ObjectParameter(&quot;currentMemberId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;editMember&quot;, newUsernameParameter, newNameParameter, newPasswordParameter, currentMemberIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;ItemRental&gt; retrieveMembersRentals(Nullable&lt;int&gt; selectedMemberId)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter(&quot;selectedMemberId&quot;, selectedMemberId) :
+                new ObjectParameter(&quot;selectedMemberId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;ItemRental&gt;(&quot;retrieveMembersRentals&quot;, selectedMemberIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;ItemRental&gt; retrieveMembersRentals(Nullable&lt;int&gt; selectedMemberId, MergeOption mergeOption)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter(&quot;selectedMemberId&quot;, selectedMemberId) :
+                new ObjectParameter(&quot;selectedMemberId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;ItemRental&gt;(&quot;retrieveMembersRentals&quot;, mergeOption, selectedMemberIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Address&gt; retrieveMembersAddresses(Nullable&lt;int&gt; selectedMemberId)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter(&quot;selectedMemberId&quot;, selectedMemberId) :
+                new ObjectParameter(&quot;selectedMemberId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Address&gt;(&quot;retrieveMembersAddresses&quot;, selectedMemberIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Address&gt; retrieveMembersAddresses(Nullable&lt;int&gt; selectedMemberId, MergeOption mergeOption)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter(&quot;selectedMemberId&quot;, selectedMemberId) :
+                new ObjectParameter(&quot;selectedMemberId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Address&gt;(&quot;retrieveMembersAddresses&quot;, mergeOption, selectedMemberIdParameter);
+        }
+    
+        public virtual int editAddress(Nullable&lt;int&gt; currentAddressId, string newAddress1, string newAddress2, string newCity, string newState, Nullable&lt;int&gt; newZip)
+        {
+            var currentAddressIdParameter = currentAddressId.HasValue ?
+                new ObjectParameter(&quot;currentAddressId&quot;, currentAddressId) :
+                new ObjectParameter(&quot;currentAddressId&quot;, typeof(int));
+    
+            var newAddress1Parameter = newAddress1 != null ?
+                new ObjectParameter(&quot;newAddress1&quot;, newAddress1) :
+                new ObjectParameter(&quot;newAddress1&quot;, typeof(string));
+    
+            var newAddress2Parameter = newAddress2 != null ?
+                new ObjectParameter(&quot;newAddress2&quot;, newAddress2) :
+                new ObjectParameter(&quot;newAddress2&quot;, typeof(string));
+    
+            var newCityParameter = newCity != null ?
+                new ObjectParameter(&quot;newCity&quot;, newCity) :
+                new ObjectParameter(&quot;newCity&quot;, typeof(string));
+    
+            var newStateParameter = newState != null ?
+                new ObjectParameter(&quot;newState&quot;, newState) :
+                new ObjectParameter(&quot;newState&quot;, typeof(string));
+    
+            var newZipParameter = newZip.HasValue ?
+                new ObjectParameter(&quot;newZip&quot;, newZip) :
+                new ObjectParameter(&quot;newZip&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;editAddress&quot;, currentAddressIdParameter, newAddress1Parameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
+        }
+    
+        public virtual int insertAddress(string newAddress1, Nullable&lt;int&gt; newMemberId, string newAddress2, string newCity, string newState, Nullable&lt;int&gt; newZip)
+        {
+            var newAddress1Parameter = newAddress1 != null ?
+                new ObjectParameter(&quot;newAddress1&quot;, newAddress1) :
+                new ObjectParameter(&quot;newAddress1&quot;, typeof(string));
+    
+            var newMemberIdParameter = newMemberId.HasValue ?
+                new ObjectParameter(&quot;newMemberId&quot;, newMemberId) :
+                new ObjectParameter(&quot;newMemberId&quot;, typeof(int));
+    
+            var newAddress2Parameter = newAddress2 != null ?
+                new ObjectParameter(&quot;newAddress2&quot;, newAddress2) :
+                new ObjectParameter(&quot;newAddress2&quot;, typeof(string));
+    
+            var newCityParameter = newCity != null ?
+                new ObjectParameter(&quot;newCity&quot;, newCity) :
+                new ObjectParameter(&quot;newCity&quot;, typeof(string));
+    
+            var newStateParameter = newState != null ?
+                new ObjectParameter(&quot;newState&quot;, newState) :
+                new ObjectParameter(&quot;newState&quot;, typeof(string));
+    
+            var newZipParameter = newZip.HasValue ?
+                new ObjectParameter(&quot;newZip&quot;, newZip) :
+                new ObjectParameter(&quot;newZip&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;insertAddress&quot;, newAddress1Parameter, newMemberIdParameter, newAddress2Parameter, newCityParameter, newStateParameter, newZipParameter);
+        }
+    
+        public virtual int removeAddress(Nullable&lt;int&gt; currentAddressId)
+        {
+            var currentAddressIdParameter = currentAddressId.HasValue ?
+                new ObjectParameter(&quot;currentAddressId&quot;, currentAddressId) :
+                new ObjectParameter(&quot;currentAddressId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction(&quot;removeAddress&quot;, currentAddressIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; retrieveProductById(Nullable&lt;int&gt; selectedProductId)
+        {
+            var selectedProductIdParameter = selectedProductId.HasValue ?
+                new ObjectParameter(&quot;selectedProductId&quot;, selectedProductId) :
+                new ObjectParameter(&quot;selectedProductId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;retrieveProductById&quot;, selectedProductIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Product&gt; retrieveProductById(Nullable&lt;int&gt; selectedProductId, MergeOption mergeOption)
+        {
+            var selectedProductIdParameter = selectedProductId.HasValue ?
+                new ObjectParameter(&quot;selectedProductId&quot;, selectedProductId) :
+                new ObjectParameter(&quot;selectedProductId&quot;, typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Product&gt;(&quot;retrieveProductById&quot;, mergeOption, selectedProductIdParameter);
+        }
+    
+        public virtual ObjectResult&lt;Member&gt; retrieveNonlibrarians()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Member&gt;(&quot;retrieveNonlibrarians&quot;);
+        }
+    
+        public virtual ObjectResult&lt;Member&gt; retrieveNonlibrarians(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction&lt;Member&gt;(&quot;retrieveNonlibrarians&quot;, mergeOption);
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[21,15,21,42,1],[22,9,22,10,1],[23,9,23,10,1],[26,9,26,10,0],[27,13,27,57,0],[30,52,30,56,1],[30,57,30,61,1],[31,48,31,52,0],[31,53,31,57,1],[32,50,32,54,1],[32,55,32,59,1],[33,46,33,50,1],[33,51,33,55,1],[34,51,34,55,0],[34,56,34,60,1],[35,56,35,60,1],[35,61,35,65,1],[36,72,36,76,1],[36,77,36,81,1],[37,66,37,70,1],[37,71,37,75,1],[40,9,40,10,0],[41,13,43,69,0],[45,13,47,70,0],[49,13,51,71,0],[53,13,53,182,0],[54,9,54,10,0],[57,9,57,10,0],[58,13,58,131,0],[59,9,59,10,0],[62,9,62,10,0],[63,13,63,118,0],[64,9,64,10,0],[67,9,67,10,0],[68,13,68,131,0],[69,9,69,10,0],[72,9,72,10,0],[73,13,73,113,0],[74,9,74,10,0],[77,9,77,10,0],[78,13,78,115,0],[79,9,79,10,0],[82,9,82,10,0],[83,13,85,70,0],[87,13,87,145,0],[88,9,88,10,0],[91,9,91,10,0],[92,13,94,67,0],[96,13,96,132,0],[97,9,97,10,0],[100,9,100,10,0],[101,13,103,67,0],[105,13,105,145,0],[106,9,106,10,0],[109,9,109,10,0],[110,13,112,67,0],[114,13,116,67,0],[118,13,118,157,0],[119,9,119,10,0],[122,9,122,10,0],[123,13,125,67,0],[127,13,129,67,0],[131,13,131,170,0],[132,9,132,10,0],[135,9,135,10,0],[136,13,138,67,0],[140,13,140,132,0],[141,9,141,10,0],[144,9,144,10,0],[145,13,147,67,0],[149,13,149,145,0],[150,9,150,10,0],[153,9,153,10,0],[154,13,156,70,0],[158,13,158,129,0],[159,9,159,10,0],[162,9,162,10,0],[163,13,165,70,0],[167,13,167,130,0],[168,9,168,10,0],[171,9,171,10,0],[172,13,174,70,0],[176,13,176,132,0],[177,9,177,10,0],[180,9,180,10,1],[181,13,183,56,1],[185,13,187,60,1],[189,13,189,150,1],[190,9,190,10,1],[193,9,193,10,0],[194,13,196,56,0],[198,13,200,60,0],[202,13,202,163,0],[203,9,203,10,0],[206,9,206,10,1],[207,13,209,56,1],[211,13,213,59,1],[215,13,217,61,1],[219,13,221,63,1],[223,13,223,157,1],[224,9,224,10,1],[227,9,227,10,0],[228,13,230,71,0],[232,13,232,154,0],[233,9,233,10,0],[236,9,236,10,0],[237,13,239,68,0],[241,13,243,64,0],[245,13,247,68,0],[249,13,249,158,0],[250,9,250,10,0],[253,9,253,10,0],[254,13,256,65,0],[258,13,260,65,0],[262,13,262,157,0],[263,9,263,10,0],[266,9,266,10,0],[267,13,269,65,0],[271,13,273,65,0],[275,13,275,170,0],[276,9,276,10,0],[279,9,279,10,0],[280,13,282,67,0],[284,13,286,67,0],[288,13,288,170,0],[289,9,289,10,0],[292,9,292,10,0],[293,13,295,67,0],[297,13,299,67,0],[301,13,301,183,0],[302,9,302,10,0],[305,9,305,10,0],[306,13,308,68,0],[310,13,312,64,0],[314,13,316,68,0],[318,13,320,69,0],[322,13,322,182,0],[323,9,323,10,0],[326,9,326,10,0],[327,13,329,70,0],[331,13,331,145,0],[332,9,332,10,0],[335,9,335,10,0],[336,13,338,70,0],[340,13,340,158,0],[341,9,341,10,0],[344,9,344,10,0],[345,13,347,70,0],[349,13,349,144,0],[350,9,350,10,0],[353,9,353,10,0],[354,13,356,70,0],[358,13,358,157,0],[359,9,359,10,0],[362,9,362,10,0],[363,13,365,70,0],[367,13,369,68,0],[371,13,373,68,0],[375,13,377,64,0],[379,13,381,65,0],[383,13,385,60,0],[387,13,387,220,0],[388,9,388,10,0],[391,9,391,10,0],[392,13,394,68,0],[396,13,398,65,0],[400,13,402,68,0],[404,13,406,64,0],[408,13,410,65,0],[412,13,414,60,0],[416,13,416,217,0],[417,9,417,10,0],[420,9,420,10,0],[421,13,423,70,0],[425,13,425,124,0],[426,9,426,10,0],[429,9,429,10,0],[430,13,432,71,0],[434,13,434,140,0],[435,9,435,10,0],[438,9,438,10,0],[439,13,441,71,0],[443,13,443,153,0],[444,9,444,10,0],[447,9,447,10,0],[448,13,448,113,0],[449,9,449,10,0],[452,9,452,10,0],[453,13,453,126,0],[454,9,454,10,0]]);
+    </script>
+  </body>
+</html>

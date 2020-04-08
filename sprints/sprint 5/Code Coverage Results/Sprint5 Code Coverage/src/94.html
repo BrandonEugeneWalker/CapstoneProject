@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\desktop\controller\LoginControllerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using Capstone_Desktop.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.desktop.controller
+{
+    /// &lt;summary&gt;Tests the functionality of the LoginController.&lt;/summary&gt;
+    [TestClass]
+    public class LoginControllerTests
+    {
+        #region Methods
+
+        [TestMethod]
+        public void TestDefaultConstructorSunnyDay()
+        {
+            var testController = new LoginController();
+            Assert.IsNotNull(testController);
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorNull()
+        {
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; new LoginController(null));
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorSunnyDay()
+        {
+            var testController = new LoginController(new CapstoneDbContextHandler());
+            Assert.IsNotNull(testController);
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByUsernameAndPasswordNullPassword()
+        {
+            var loginController = new LoginController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                loginController.GetEmployeeByIdAndPassword(1, null));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByUsernameAndPasswordEmptyPassword()
+        {
+            var loginController = new LoginController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                loginController.GetEmployeeByIdAndPassword(1, &quot;&quot;));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByUsernameAndPasswordZeroId()
+        {
+            var loginController = new LoginController();
+
+            Assert.ThrowsException&lt;ArgumentOutOfRangeException&gt;(() =&gt;
+                loginController.GetEmployeeByIdAndPassword(0, &quot;hello&quot;));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByUsernameAndPasswordNegativeId()
+        {
+            var loginController = new LoginController();
+
+            Assert.ThrowsException&lt;ArgumentOutOfRangeException&gt;(() =&gt;
+                loginController.GetEmployeeByIdAndPassword(-1, &quot;hello&quot;));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByUsernameAndPasswordSunnyDay()
+        {
+            var contextHandlerMock = new Mock&lt;IDbContextHandler&gt;();
+            contextHandlerMock.Setup(x =&gt; x.GetEmployeeByIdAndPassword(1234, &quot;password&quot;)).Returns(new Employee());
+            var testController = new LoginController(contextHandlerMock.Object);
+            var results = testController.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is Employee);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[18,9,18,10,1],[19,13,19,56,1],[20,13,20,46,1],[21,9,21,10,1],[25,9,25,10,1],[26,13,26,65,1],[26,65,26,90,1],[26,90,26,92,1],[26,13,26,92,1],[27,9,27,10,1],[31,9,31,10,1],[32,13,32,86,1],[33,13,33,46,1],[34,9,34,10,1],[38,9,38,10,1],[39,13,39,57,1],[41,13,42,17,1],[42,17,42,68,1],[42,68,42,70,1],[41,13,42,70,1],[43,9,43,10,1],[47,9,47,10,1],[48,13,48,57,1],[50,13,51,17,1],[51,17,51,66,1],[51,66,51,68,1],[50,13,51,68,1],[52,9,52,10,1],[56,9,56,10,1],[57,13,57,57,1],[59,13,60,17,1],[60,17,60,71,1],[60,71,60,73,1],[59,13,60,73,1],[61,9,61,10,1],[65,9,65,10,1],[66,13,66,57,1],[68,13,69,17,1],[69,17,69,72,1],[69,72,69,74,1],[68,13,69,74,1],[70,9,70,10,1],[74,9,74,10,1],[75,13,75,68,1],[76,13,76,115,1],[77,13,77,81,1],[78,13,78,87,1],[79,13,79,39,1],[80,13,80,48,1],[81,9,81,10,1]]);
+    </script>
+  </body>
+</html>

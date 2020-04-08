@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse\Controllers\RentalsController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Warehouse.Controllers
+{
+    /// &lt;summary&gt;Controller for manage rental pages.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Web.Mvc.Controller&quot; /&gt;
+    public class RentalsController : Controller
+    {
+        private readonly OnlineEntities database = new OnlineEntities();
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;RentalsController&quot;/&gt; class.
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        public RentalsController()
+        {
+            database = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;RentalsController&quot;/&gt; class.
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;entity&quot;&gt;The entity.&lt;/param&gt;
+        public RentalsController(OnlineEntities entity)
+        {
+            database = entity;
+        }
+
+        /// &lt;summary&gt;  Returns manage rentals index page.
+        /// &lt;Precondition&gt;Employee != Null&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;Returns manage rentals index page with list of rentals.&lt;/returns&gt;
+        public ActionResult Index()
+        {
+            var employee = Session[&quot;Employee&quot;] as Employee;
+
+            if (employee == null) return Redirect(&quot;~/Home/Login&quot;);
+
+            return View(database.ItemRentals.Where(i =&gt; i.status.Equals(&quot;WaitingReturn&quot;) || i.status.Equals(&quot;WaitingShipment&quot;)));
+        }
+
+        /// &lt;summary&gt;Updates the status of rental item.
+        /// &lt;Precondition&gt;Employee != Null &amp;&amp; ID != Null&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The id of the rental item.&lt;/param&gt;
+        /// &lt;returns&gt;The index page refreshed if found || error page if bad id.&lt;/returns&gt;
+        public ActionResult UpdateStatus(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = Session[&quot;Employee&quot;] as Employee;
+            var rental = database.ItemRentals.Find(id);
+
+            if (rental == null || employee == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (rental.status.Equals(&quot;WaitingShipment&quot;))
+            {
+                rental.status = &quot;WaitingReturn&quot;;
+                rental.shipEmployeeId = employee.employeeId;
+                rental.shipDateTime = DateTime.Now;
+                database.SaveChanges();
+                return RedirectToAction(&quot;Index&quot;);
+            }
+
+            if (rental.status.Equals(&quot;WaitingReturn&quot;))
+            {
+                rental.status = &quot;Returned&quot;;
+                rental.returnEmployeeId = employee.employeeId;
+                rental.returnDateTime = DateTime.Now;
+                rental.returnCondition = &quot;Good&quot;;
+                var stock = database.Stocks.Find(rental.stockId);
+                stock.itemCondition = rental.returnCondition;
+                database.SaveChanges();
+                return RedirectToAction(&quot;Index&quot;);
+            }
+
+            return RedirectToAction(&quot;Index&quot;);
+        }
+
+        /// &lt;summary&gt;Releases unmanaged resources and optionally releases managed resources.&lt;/summary&gt;
+        /// &lt;param name=&quot;disposing&quot;&gt;true to release both managed and unmanaged resources; false to release only unmanaged resources.&lt;/param&gt;
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) database.Dispose();
+
+            base.Dispose(disposing);
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[14,9,14,73,1],[14,9,14,73,1],[20,9,20,35,1],[21,9,21,10,1],[22,13,22,45,1],[23,9,23,10,1],[30,9,30,56,1],[31,9,31,10,1],[32,13,32,31,1],[33,9,33,10,1],[41,9,41,10,1],[42,13,42,60,1],[44,13,44,34,1],[44,35,44,67,1],[46,13,46,130,1],[47,9,47,10,1],[56,9,56,10,1],[57,13,57,28,1],[58,13,58,14,1],[59,17,59,76,1],[62,13,62,60,1],[63,13,63,56,1],[65,13,65,52,1],[66,13,66,14,1],[67,17,67,76,1],[70,13,70,57,1],[71,13,71,14,1],[72,17,72,49,1],[73,17,73,61,1],[74,17,74,52,1],[75,17,75,40,1],[76,17,76,50,1],[79,13,79,55,1],[80,13,80,14,1],[81,17,81,44,1],[82,17,82,63,1],[83,17,83,54,1],[84,17,84,49,1],[85,17,85,66,1],[86,17,86,62,1],[87,17,87,40,1],[88,17,88,50,1],[91,13,91,46,1],[92,9,92,10,1],[97,9,97,10,1],[98,13,98,27,1],[98,28,98,47,1],[100,13,100,37,1],[101,9,101,10,1]]);
+    </script>
+  </body>
+</html>

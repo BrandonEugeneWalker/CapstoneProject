@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Model\CapstoneDbContextHandler.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity;
+using System.Linq;
+using Capstone_Database.Model;
+
+namespace Capstone_Desktop.Model
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;
+    ///         Implements the IDbContextHandler interface in order to provide a inbetween from controller classes and the
+    ///         database.
+    ///     &lt;/para&gt;
+    ///     &lt;para&gt;
+    ///         By default this class will create a new instance of the default database used with the system. There is an
+    ///         overloaded constructor that allows for a database to be passed in, making mocking database interaction more
+    ///         manageable.
+    ///     &lt;/para&gt;
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;Capstone_Desktop.Model.IDbContextHandler&quot; /&gt;
+    public class CapstoneDbContextHandler : IDbContextHandler
+    {
+        #region Data members
+
+        private const string EmployeeNullMessage = @&quot;The given employee cannot be null!&quot;;
+        private const string StockNullError = @&quot;The Stock to view the history for cannot be null!&quot;;
+        private const string RentalNullError = @&quot;The rental to edit cannot be null!&quot;;
+
+        #endregion
+
+        #region Properties
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         The database DbContext used for database operations.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Allows for getting and setting.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;The capstone database context.&lt;/value&gt;
+        public OnlineEntities CapstoneDbContext { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;CapstoneDbContextHandler&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Creates the new instance with a new database object.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;The object is created.&lt;/Postcondition&gt;
+        public CapstoneDbContextHandler()
+        {
+            this.CapstoneDbContext = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;CapstoneDbContextHandler&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Creates the new instance with the given database object. This is intended for ease of mocking.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDbContext&quot;&gt;The capstone database context.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDbContext - The given database cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;The object is created.&lt;/Postcondition&gt;
+        public CapstoneDbContextHandler(OnlineEntities capstoneDbContext)
+        {
+            this.CapstoneDbContext = capstoneDbContext ??
+                                     throw new ArgumentNullException(nameof(capstoneDbContext),
+                                         @&quot;The given database cannot be null!&quot;);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets the detailed rental history of the given employee from the database.
+        ///     &lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to get the history of.&lt;/param&gt;
+        /// &lt;returns&gt;Returns the detailed rentals that employee has worked with.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;employee - The employee cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt;The employee cannot be null!&lt;/Precondition&gt;
+        public List&lt;DetailedRentalView&gt; GetDetailedEmployeeHistory(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
+            }
+
+            this.CapstoneDbContext.DetailedRentalViews.Load();
+
+            var employeeHistoryQueryable = this.CapstoneDbContext.DetailedRentalViews.Local.ToBindingList().Where(
+                                                   rental =&gt;
+                                                       rental.shipEmployeeId.Equals(employee.employeeId) ||
+                                                       rental.returnEmployeeId.Equals(employee.employeeId))
+                                               .Distinct();
+
+            return employeeHistoryQueryable.ToList();
+        }
+
+        /// &lt;summary&gt;Gets the detailed rental history of the given stock item from the database.&lt;/summary&gt;
+        /// &lt;param name=&quot;stock&quot;&gt;The stock to get the history of.&lt;/param&gt;
+        /// &lt;returns&gt;The detailed rentals that stock item was a part of.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     stock
+        ///     - The stock item cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The stock item cannot be null!&lt;/Precondition&gt;
+        public List&lt;DetailedRentalView&gt; GetDetailedStockHistory(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), StockNullError);
+            }
+
+            this.CapstoneDbContext.DetailedRentalViews.Load();
+
+            var stockHistoryQueryable = this.CapstoneDbContext
+                                            .DetailedRentalViews.Local.ToBindingList().Where(rental =&gt;
+                                                rental.stockId.Equals(stock.stockId));
+
+            return stockHistoryQueryable.ToList();
+        }
+
+        /// &lt;summary&gt;Gets the employee by identifier and password from the database and returns it.&lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The identifier used to get the employee.&lt;/param&gt;
+        /// &lt;param name=&quot;password&quot;&gt;The password used to get the employee.&lt;/param&gt;
+        /// &lt;returns&gt;The employee found using the id and password.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentOutOfRangeException&quot;&gt;id - The id must be a positive integer.&lt;/exception&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;password - The password cannot be null or empty.&lt;/exception&gt;
+        /// &lt;Precondition&gt;The id must be a positive integer, the password cannot be null or empty!&lt;/Precondition&gt;
+        public Employee GetEmployeeByIdAndPassword(int id, string password)
+        {
+            if (id &lt;= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(id), @&quot;The id must be a positive integer.&quot;);
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password), @&quot;The password cannot be null or empty.&quot;);
+            }
+
+            this.CapstoneDbContext.Employees.Load();
+
+            try
+            {
+                return this.CapstoneDbContext.selectEmployeeByIdAndPassword(id, password).First();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// &lt;summary&gt;Gets all employees from the database and returns it as a bound list.&lt;/summary&gt;
+        /// &lt;returns&gt;A bound list containing all the employees in the database.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public BindingList&lt;Employee&gt; GetAllEmployees()
+        {
+            this.CapstoneDbContext.Employees.Load();
+            return this.CapstoneDbContext.Employees.Local.ToBindingList();
+        }
+
+        /// &lt;summary&gt;Gets all detailed stock items from the database and returns it as a bound list.&lt;/summary&gt;
+        /// &lt;returns&gt;A bound list containing all the detailed stock items in the database.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public BindingList&lt;StockDetailView&gt; GetAllDetailedStock()
+        {
+            this.CapstoneDbContext.StockDetailViews.Load();
+            return this.CapstoneDbContext.StockDetailViews.Local.ToBindingList();
+        }
+
+        /// &lt;summary&gt;Gets the detailed rentals waiting shipment from the database.&lt;/summary&gt;
+        /// &lt;returns&gt;A list containing all the detailed rentals waiting to be shipped.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public List&lt;DetailedRentalView&gt; GetDetailedRentalsWaitingShipment()
+        {
+            var rentalsWaitingShipmentQueryable = this.GetAllDetailedRentals().Where(rental =&gt;
+                rental.status.Equals(&quot;WaitingShipment&quot;));
+
+            return rentalsWaitingShipmentQueryable.ToList();
+        }
+
+        /// &lt;summary&gt;Gets the detailed rentals waiting return from the database.&lt;/summary&gt;
+        /// &lt;returns&gt;A list containing all the detailed rentals waiting to be returned.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public List&lt;DetailedRentalView&gt; GetDetailedRentalsWaitingReturn()
+        {
+            var rentalsWaitingReturnQueryable = this.GetAllDetailedRentals().Where(rental =&gt;
+                rental.status.Equals(&quot;WaitingReturn&quot;));
+
+            return rentalsWaitingReturnQueryable.ToList();
+        }
+
+        /// &lt;summary&gt;Gets all detailed rentals from the database and returns it as a bound list.&lt;/summary&gt;
+        /// &lt;returns&gt;A bound list containing all of the detailed rentals in the database.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public BindingList&lt;DetailedRentalView&gt; GetAllDetailedRentals()
+        {
+            this.CapstoneDbContext.DetailedRentalViews.Load();
+
+            return this.CapstoneDbContext.DetailedRentalViews.Local.ToBindingList();
+        }
+
+        /// &lt;summary&gt;Gets the item rental from the database by its identifier and returns it.&lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The identifier used to get the rental.&lt;/param&gt;
+        /// &lt;returns&gt;The rental if the id exists on the database. Null if not.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public ItemRental GetItemRentalById(int id)
+        {
+            this.CapstoneDbContext.ItemRentals.Load();
+
+            return this.CapstoneDbContext.ItemRentals.Find(id);
+        }
+
+        /// &lt;summary&gt;Gets the stock from the database by its identifier and returns it.&lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The identifier used to get the stock.&lt;/param&gt;
+        /// &lt;returns&gt;The stock if the id exists on the database. Null if not.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public Stock GetStockById(int id)
+        {
+            this.CapstoneDbContext.Stocks.Load();
+
+            return this.CapstoneDbContext.Stocks.Find(id);
+        }
+
+        /// &lt;summary&gt;Gets the detailed rental history of a given stock and returns it as a list.&lt;/summary&gt;
+        /// &lt;param name=&quot;stock&quot;&gt;The stock to get the history of.&lt;/param&gt;
+        /// &lt;returns&gt;A list containing all of the detailed rentals that the stock was a part of.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;stock&lt;/exception&gt;
+        /// &lt;Precondition&gt;The given stock cannot be null.&lt;/Precondition&gt;
+        public List&lt;DetailedRentalView&gt; GetStockHistoryByStock(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), StockNullError);
+            }
+
+            this.CapstoneDbContext.DetailedRentalViews.Load();
+
+            var stockHistoryQueryable = this.CapstoneDbContext
+                                            .DetailedRentalViews.Local.ToBindingList().Where(rental =&gt;
+                                                rental.stockId.Equals(stock.stockId));
+
+            return stockHistoryQueryable.ToList();
+        }
+
+        /// &lt;summary&gt;Gets all products prom the database.&lt;/summary&gt;
+        /// &lt;returns&gt;A binding list containing all of the products.&lt;/returns&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        public BindingList&lt;Product&gt; GetAllProducts()
+        {
+            this.CapstoneDbContext.Products.Load();
+            return this.CapstoneDbContext.Products.Local.ToBindingList();
+        }
+
+        /// &lt;summary&gt;  Removes the given employee from the database if it exists.&lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to remove from the database.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     employee
+        ///     - The employee cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The employee cannot be null.&lt;/Precondition&gt;
+        public void RemoveEmployee(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
+            }
+
+            this.CapstoneDbContext.Employees.Load();
+            this.CapstoneDbContext.Employees.Remove(employee);
+            this.CapstoneDbContext.SaveChanges();
+        }
+
+        /// &lt;summary&gt;Removes the given stock from the database if it exists.&lt;/summary&gt;
+        /// &lt;param name=&quot;stock&quot;&gt;The stock to remove from the database.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     stock
+        ///     - The stock cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The stock cannot be null.&lt;/Precondition&gt;
+        public void RemoveStock(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), StockNullError);
+            }
+
+            this.CapstoneDbContext.Stocks.Load();
+            this.CapstoneDbContext.Stocks.Remove(stock);
+            this.CapstoneDbContext.SaveChanges();
+        }
+
+        /// &lt;summary&gt;Adds the given stock to the database if it does not already exist.&lt;/summary&gt;
+        /// &lt;param name=&quot;stock&quot;&gt;The stock to add to the database.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     stock
+        ///     - The stock cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The employee cannot be null.&lt;/Precondition&gt;
+        public void AddStock(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), StockNullError);
+            }
+
+            this.CapstoneDbContext.Stocks.Load();
+            this.CapstoneDbContext.Stocks.Add(stock);
+            this.CapstoneDbContext.SaveChanges();
+        }
+
+        /// &lt;summary&gt;Adds the given employee to the database if it does not already exist.&lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to add to the database.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     employee
+        ///     - The employee cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The employee cannot be null.&lt;/Precondition&gt;
+        public void AddEmployee(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
+            }
+
+            var isManager = Convert.ToSByte(employee.isManager);
+            this.CapstoneDbContext.insertEmployee(null, employee.password, isManager,
+                employee.name);
+            this.CapstoneDbContext.SaveChanges();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;Updates the given rental, marking that the status of the return is WaitingReturn.&lt;/para&gt;
+        ///     &lt;para&gt;This also adds the employee making the action and the current timestamp to the object.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;detailedRentalView&quot;&gt;The detailed rental view to update.&lt;/param&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee doing the updating.&lt;/param&gt;
+        /// &lt;returns&gt;True if the value could be updated and was, false if not.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     detailedRentalView
+        ///     or
+        ///     employee
+        ///     cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The employee cannot be null, the detailed rental cannot be null!&lt;/Precondition&gt;
+        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, Employee employee)
+        {
+            if (detailedRentalView == null)
+            {
+                throw new ArgumentNullException(nameof(detailedRentalView), RentalNullError);
+            }
+
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
+            }
+
+            this.CapstoneDbContext.ItemRentals.Load();
+            var currentRental = this.GetItemRentalById(detailedRentalView.itemRentalId);
+
+            if (currentRental == null)
+            {
+                return false;
+            }
+
+            if (!currentRental.status.Equals(&quot;WaitingShipment&quot;))
+            {
+                return false;
+            }
+
+            currentRental.status = &quot;WaitingReturn&quot;;
+            currentRental.shipEmployeeId = employee.employeeId;
+            currentRental.shipDateTime = DateTime.Now;
+            this.CapstoneDbContext.SaveChanges();
+            return true;
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;Updates the given rental, marking that the status of the return is Returned.&lt;/para&gt;
+        ///     &lt;para&gt;This also adds the employee making the action and the current timestamp to the object.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;detailedRentalView&quot;&gt;The detailed rental view to update.&lt;/param&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee doing the updating.&lt;/param&gt;
+        /// &lt;returns&gt;True if the value could be updated and was, false if not.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     detailedRentalView
+        ///     or
+        ///     employee
+        ///     cannot be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt;The employee cannot be null, the detailed rental cannot be null!&lt;/Precondition&gt;
+        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, Employee employee)
+        {
+            if (detailedRentalView == null)
+            {
+                throw new ArgumentNullException(nameof(detailedRentalView), RentalNullError);
+            }
+
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
+            }
+
+            this.CapstoneDbContext.ItemRentals.Load();
+            var currentRental = this.GetItemRentalById(detailedRentalView.itemRentalId);
+
+            if (currentRental == null)
+            {
+                return false;
+            }
+
+            if (!currentRental.status.Equals(&quot;WaitingReturn&quot;))
+            {
+                return false;
+            }
+
+            currentRental.status = &quot;Returned&quot;;
+            currentRental.shipEmployeeId = employee.employeeId;
+            currentRental.shipDateTime = DateTime.Now;
+            this.CapstoneDbContext.SaveChanges();
+            return true;
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[41,51,41,55,1],[41,56,41,60,1],[55,9,55,42,1],[56,9,56,10,1],[57,13,57,59,1],[58,9,58,10,1],[70,9,70,74,1],[71,9,71,10,1],[72,13,74,81,1],[75,9,75,10,1],[91,9,91,10,1],[92,13,92,34,1],[93,13,93,14,1],[94,17,94,88,1],[97,13,97,63,1],[99,13,101,56,1],[101,56,102,107,1],[102,107,103,60,1],[99,13,103,60,1],[105,13,105,54,1],[106,9,106,10,1],[117,9,117,10,1],[118,13,118,31,1],[119,13,119,14,1],[120,17,120,80,1],[123,13,123,63,1],[125,13,127,49,1],[127,49,127,85,1],[127,85,127,87,1],[125,13,127,87,1],[129,13,129,51,1],[130,9,130,10,1],[140,9,140,10,1],[141,13,141,25,1],[142,13,142,14,1],[143,17,143,106,1],[146,13,146,48,1],[147,13,147,14,1],[148,17,148,109,1],[151,13,151,53,1],[154,13,154,14,1],[155,17,155,99,1],[157,13,157,30,1],[158,13,158,14,1],[159,17,159,29,1],[161,9,161,10,1],[167,9,167,10,1],[168,13,168,53,1],[169,13,169,75,1],[170,9,170,10,1],[176,9,176,10,1],[177,13,177,60,1],[178,13,178,82,1],[179,9,179,10,1],[185,9,185,10,1],[186,13,187,17,1],[187,17,187,56,1],[187,56,187,58,1],[186,13,187,58,1],[189,13,189,61,1],[190,9,190,10,1],[196,9,196,10,1],[197,13,198,17,1],[198,17,198,54,1],[198,54,198,56,1],[197,13,198,56,1],[200,13,200,59,1],[201,9,201,10,1],[207,9,207,10,1],[208,13,208,63,1],[210,13,210,85,1],[211,9,211,10,1],[218,9,218,10,1],[219,13,219,55,1],[221,13,221,64,1],[222,9,222,10,1],[229,9,229,10,1],[230,13,230,50,1],[232,13,232,59,1],[233,9,233,10,1],[241,9,241,10,1],[242,13,242,31,1],[243,13,243,14,1],[244,17,244,80,1],[247,13,247,63,1],[249,13,251,49,1],[251,49,251,85,1],[251,85,251,87,1],[249,13,251,87,1],[253,13,253,51,1],[254,9,254,10,1],[260,9,260,10,1],[261,13,261,52,1],[262,13,262,74,1],[263,9,263,10,1],[273,9,273,10,1],[274,13,274,34,1],[275,13,275,14,1],[276,17,276,88,1],[279,13,279,53,1],[280,13,280,63,1],[281,13,281,50,1],[282,9,282,10,1],[292,9,292,10,1],[293,13,293,31,1],[294,13,294,14,1],[295,17,295,80,1],[298,13,298,50,1],[299,13,299,57,1],[300,13,300,50,1],[301,9,301,10,1],[311,9,311,10,1],[312,13,312,31,1],[313,13,313,14,1],[314,17,314,80,1],[317,13,317,50,1],[318,13,318,54,1],[319,13,319,50,1],[320,9,320,10,1],[330,9,330,10,1],[331,13,331,34,1],[332,13,332,14,1],[333,17,333,88,1],[336,13,336,65,1],[337,13,338,32,1],[339,13,339,50,1],[340,9,340,10,1],[357,9,357,10,1],[358,13,358,44,1],[359,13,359,14,1],[360,17,360,94,1],[363,13,363,34,1],[364,13,364,14,1],[365,17,365,88,1],[368,13,368,55,1],[369,13,369,89,1],[371,13,371,39,1],[372,13,372,14,1],[373,17,373,30,1],[376,13,376,65,1],[377,13,377,14,1],[378,17,378,30,1],[381,13,381,52,1],[382,13,382,64,1],[383,13,383,55,1],[384,13,384,50,1],[385,13,385,25,1],[386,9,386,10,1],[403,9,403,10,1],[404,13,404,44,1],[405,13,405,14,1],[406,17,406,94,1],[409,13,409,34,1],[410,13,410,14,1],[411,17,411,88,1],[414,13,414,55,1],[415,13,415,89,1],[417,13,417,39,1],[418,13,418,14,1],[419,17,419,30,1],[422,13,422,63,1],[423,13,423,14,1],[424,17,424,30,1],[427,13,427,47,1],[428,13,428,64,1],[429,13,429,55,1],[430,13,430,50,1],[431,13,431,25,1],[432,9,432,10,1]]);
+    </script>
+  </body>
+</html>

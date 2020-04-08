@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\desktop\controller\ManageRentalsControllerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using Capstone_Desktop.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.desktop.controller
+{
+    /// &lt;summary&gt;Tests the functionality of the ManageRentalsController.&lt;/summary&gt;
+    [TestClass]
+    public class ManageRentalsControllerTests
+    {
+        #region Methods
+
+        [TestMethod]
+        public void TestDefaultConstructorSunnyDay()
+        {
+            var testConstructor = new ManageRentalsController();
+            Assert.IsNotNull(testConstructor);
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorNull()
+        {
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; new ManageRentalsController(null));
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorSunnyDay()
+        {
+            var testConstructor = new ManageRentalsController(new CapstoneDbContextHandler());
+            Assert.IsNotNull(testConstructor);
+        }
+
+        [TestMethod]
+        public void TestGetRentalsWaitingShipmentSunnyDay()
+        {
+            var contextMock = new Mock&lt;IDbContextHandler&gt;();
+            contextMock.Setup(x =&gt; x.GetDetailedRentalsWaitingShipment()).Returns(new List&lt;DetailedRentalView&gt;());
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.GetRentalsWaitingShipment();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List&lt;DetailedRentalView&gt;);
+        }
+
+        [TestMethod]
+        public void TestGetRentalsWaitingReturnSunnyDay()
+        {
+            var contextMock = new Mock&lt;IDbContextHandler&gt;();
+            contextMock.Setup(x =&gt; x.GetDetailedRentalsWaitingReturn()).Returns(new List&lt;DetailedRentalView&gt;());
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.GetRentalsWaitingReturn();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List&lt;DetailedRentalView&gt;);
+        }
+
+        [TestMethod]
+        public void TestGettingAllRentalsSunnyDay()
+        {
+            var contextMock = new Mock&lt;IDbContextHandler&gt;();
+            contextMock.Setup(x =&gt; x.GetAllDetailedRentals()).Returns(new BindingList&lt;DetailedRentalView&gt;());
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.GetAllRentals();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList&lt;DetailedRentalView&gt;);
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullRental()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsWaitingReturn(null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullEmployee()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(), null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnSunnyDay()
+        {
+            var employee = new Employee();
+            var detailedRental = new DetailedRentalView();
+            var contextMock = new Mock&lt;IDbContextHandler&gt;();
+            contextMock.Setup(x =&gt; x.MarkRentalAsWaitingReturn(detailedRental, employee)).Returns(true);
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.MarkRentalAsWaitingReturn(detailedRental, employee);
+            Assert.IsTrue(results);
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullRental()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsReturned(null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullEmployee()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(),
+                    null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalsAsReturnedSunnyDay()
+        {
+            var employee = new Employee();
+            var detailedRental = new DetailedRentalView();
+            var contextMock = new Mock&lt;IDbContextHandler&gt;();
+            contextMock.Setup(x =&gt; x.MarkRentalAsReturned(detailedRental, employee)).Returns(true);
+            var testController = new ManageRentalsController(contextMock.Object);
+            var results = testController.MarkRentalAsReturned(detailedRental, employee);
+            Assert.IsTrue(results);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,9,20,10,1],[21,13,21,65,1],[22,13,22,47,1],[23,9,23,10,1],[27,9,27,10,1],[28,13,28,65,1],[28,65,28,98,1],[28,98,28,100,1],[28,13,28,100,1],[29,9,29,10,1],[33,9,33,10,1],[34,13,34,95,1],[35,13,35,47,1],[36,9,36,10,1],[40,9,40,10,1],[41,13,41,61,1],[42,13,42,115,1],[43,13,43,82,1],[44,13,44,70,1],[45,13,45,39,1],[46,13,46,64,1],[47,9,47,10,1],[51,9,51,10,1],[52,13,52,61,1],[53,13,53,113,1],[54,13,54,82,1],[55,13,55,68,1],[56,13,56,39,1],[57,13,57,64,1],[58,9,58,10,1],[62,9,62,10,1],[63,13,63,61,1],[64,13,64,110,1],[65,13,65,82,1],[66,13,66,58,1],[67,13,67,39,1],[68,13,68,71,1],[69,9,69,10,1],[73,9,73,10,1],[74,13,74,73,1],[76,13,77,17,1],[77,17,77,88,1],[77,88,77,90,1],[76,13,77,90,1],[78,9,78,10,1],[82,9,82,10,1],[83,13,83,73,1],[85,13,86,17,1],[86,17,86,98,1],[86,98,86,100,1],[85,13,86,100,1],[87,9,87,10,1],[91,9,91,10,1],[92,13,92,43,1],[93,13,93,59,1],[94,13,94,61,1],[95,13,95,105,1],[96,13,96,82,1],[97,13,97,94,1],[98,13,98,36,1],[99,9,99,10,1],[103,9,103,10,1],[104,13,104,73,1],[106,13,107,17,1],[107,17,107,83,1],[107,83,107,85,1],[106,13,107,85,1],[108,9,108,10,1],[112,9,112,10,1],[113,13,113,73,1],[115,13,116,17,1],[116,17,117,26,1],[117,26,117,28,1],[115,13,117,28,1],[118,9,118,10,1],[122,9,122,10,1],[123,13,123,43,1],[124,13,124,59,1],[125,13,125,61,1],[126,13,126,100,1],[127,13,127,82,1],[128,13,128,89,1],[129,13,129,36,1],[130,9,130,10,1]]);
+    </script>
+  </body>
+</html>

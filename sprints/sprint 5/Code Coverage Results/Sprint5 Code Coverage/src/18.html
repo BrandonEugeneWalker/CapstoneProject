@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\ManageItemsController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.ComponentModel;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;Handles communication between the view and the database.&lt;/para&gt;
+    ///     &lt;para&gt;Handles operations involving a Stock object in the database.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class ManageItemsController
+    {
+        #region Properties
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the capstone database handler.
+        ///     Which acts as the intermediary between the controller and raw database.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;The capstone database handler.&lt;/value&gt;
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;ManageItemsController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Acts as an intermediary between the view and database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;A new instance is created.&lt;/Postcondition&gt;
+        public ManageItemsController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;ManageItemsController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Acts as an intermediary between the view and database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDatabaseHandler&quot;&gt;The capstone database handler.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDatabaseHandler - The database handler cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt;The database handler cannot be null!&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;A new instance is created.&lt;/Postcondition&gt;
+        public ManageItemsController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @&quot;The database handler cannot be null!&quot;);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets and returns all the Stock objects in the database.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;The database to get them from cannot be null.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;The list of stock objects in the database.&lt;/returns&gt;
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        public BindingList&lt;StockDetailView&gt; GetAllStock()
+        {
+            return this.CapstoneDatabaseHandler.GetAllDetailedStock();
+        }
+
+        /// &lt;summary&gt;
+        ///     Gets the stock by detailed stock and returns it.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;stockDetailView&quot;&gt;The stock detail view.&lt;/param&gt;
+        /// &lt;returns&gt;The stock if found, null if not.&lt;/returns&gt;
+        /// &lt;Precondition&gt; the detailed stock cannot be null!&lt;/Precondition&gt;
+        public Stock GetStockByDetailedStock(StockDetailView stockDetailView)
+        {
+            if (stockDetailView == null)
+            {
+                throw new ArgumentNullException(nameof(stockDetailView), @&quot;The detailed stock cannot be null!&quot;);
+            }
+
+            return this.CapstoneDatabaseHandler.GetStockById(stockDetailView.stockId);
+        }
+
+        /// &lt;summary&gt;Removes the stock from database.&lt;/summary&gt;
+        /// &lt;param name=&quot;stock&quot;&gt;The stock to remove.&lt;/param&gt;
+        /// &lt;exception cref=&quot;System.ArgumentNullException&quot;&gt;stock - The stock to remove cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt; The stock cannot be null! &lt;/Precondition&gt;
+        public void RemoveStockFromDatabase(Stock stock)
+        {
+            if (stock == null)
+            {
+                throw new ArgumentNullException(nameof(stock), @&quot;The stock to remove cannot be null!&quot;);
+            }
+
+            this.CapstoneDatabaseHandler.RemoveStock(stock);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[21,60,21,64,1],[21,65,21,69,1],[35,9,35,39,1],[36,9,36,10,1],[37,13,37,75,1],[38,9,38,10,1],[50,9,50,80,1],[51,9,51,10,1],[52,13,54,89,1],[55,9,55,10,1],[70,9,70,10,1],[71,13,71,71,1],[72,9,72,10,1],[81,9,81,10,1],[82,13,82,41,1],[83,13,83,14,1],[84,17,84,113,1],[87,13,87,87,1],[88,9,88,10,1],[95,9,95,10,1],[96,13,96,31,1],[97,13,97,14,1],[98,17,98,104,1],[101,13,101,61,1],[102,9,102,10,1]]);
+    </script>
+  </body>
+</html>

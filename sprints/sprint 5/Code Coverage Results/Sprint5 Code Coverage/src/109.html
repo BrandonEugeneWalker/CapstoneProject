@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse\Controllers\EmployeesController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Warehouse.Controllers
+{
+    /// &lt;summary&gt;Controller class for employee management pages.&lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Web.Mvc.Controller&quot; /&gt;
+    public class EmployeesController : Controller
+    {
+        private readonly OnlineEntities database = new OnlineEntities();
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;EmployeesController&quot; /&gt; class.
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        public EmployeesController()
+        {
+            database = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;EmployeesController&quot; /&gt; class.
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;entity&quot;&gt;The entity.&lt;/param&gt;
+        public EmployeesController(OnlineEntities entity)
+        {
+            database = entity;
+        }
+
+        /// &lt;summary&gt;  Index/Home page for employee management.
+        /// &lt;Precondition&gt;Employee != Null&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;employee management index page with list of all employees.&lt;/returns&gt;
+        public ActionResult Index()
+        {
+            var employee = Session[&quot;Employee&quot;] as Employee;
+
+            if (employee == null || (bool) !employee.isManager) return Redirect(&quot;~/Home/Login&quot;);
+
+            return View(database.Employees.ToList());
+        }
+
+
+        /// &lt;summary&gt;
+        ///     Detail view of the selected employee.
+        /// &lt;Precondition&gt;ID != Null&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The employee ID.&lt;/param&gt;
+        /// &lt;returns&gt;view of the employee details for selected ID.&lt;/returns&gt;
+        public ActionResult Details(int? id)
+        {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var employee = database.Employees.Find(id);
+            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
+        }
+
+        /// &lt;summary&gt;  Returns employee creation page view.
+        /// &lt;Precondition&gt;Employee != Null&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;The employee creation view.&lt;/returns&gt;
+        public ActionResult Create()
+        {
+            var employee = Session[&quot;Employee&quot;] as Employee;
+
+            if (employee == null || (bool) !employee.isManager) return RedirectToAction(&quot;Index&quot;);
+
+            return View();
+        }
+
+        /// &lt;summary&gt;
+        ///     Creates the specified employee.
+        ///     Used for create button on employee creation page.
+        ///     &lt;postcondition&gt;Employee is added to the database.&lt;/postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee to be created and added to database.&lt;/param&gt;
+        /// &lt;returns&gt;
+        ///     Returns to employee management index page if input valid || the same page with the employee data previously
+        ///     entered if input is invalid.
+        /// &lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = &quot;employeeId,password,isManager,name&quot;)]
+            Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                sbyte manager = 0;
+                if (employee.isManager != null &amp;&amp; (bool) employee.isManager) manager = 1;
+
+                database.insertEmployee(null, employee.password, manager, employee.name);
+                database.SaveChanges();
+                return RedirectToAction(&quot;Index&quot;);
+            }
+
+            return View(employee);
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Returns employee deletions page view.
+        ///     &lt;/para&gt;
+        ///     &lt;precondition&gt;employee id != null &amp;&amp; employee ID must exist in database.&lt;/precondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;  The employee id to delete.&lt;/param&gt;
+        /// &lt;returns&gt;Returns employee deletion page.&lt;/returns&gt;
+        public ActionResult Delete(int? id)
+        {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var employee = database.Employees.Find(id);
+            return employee == null ? (ActionResult) HttpNotFound() : View(employee);
+        }
+
+
+        /// &lt;summary&gt;  Returns delete confirmation message.
+        /// &lt;Precondition&gt;None&lt;/Precondition&gt;
+        /// &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;  the employee id to be deleted.&lt;/param&gt;
+        /// &lt;returns&gt;Employee management index page.&lt;/returns&gt;
+        [HttpPost]
+        [ActionName(&quot;Delete&quot;)]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var employee = database.Employees.Find(id);
+            database.Employees.Remove(employee);
+            database.SaveChanges();
+            return RedirectToAction(&quot;Index&quot;);
+        }
+
+        /// &lt;inheritdoc/&gt;
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) database.Dispose();
+
+            base.Dispose(disposing);
+        }
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[13,9,13,73,1],[13,9,13,73,1],[19,9,19,37,1],[20,9,20,10,1],[21,13,21,45,1],[22,9,22,10,1],[29,9,29,58,1],[30,9,30,10,1],[31,13,31,31,1],[32,9,32,10,1],[40,9,40,10,1],[41,13,41,60,1],[43,13,43,64,1],[43,65,43,97,1],[45,13,45,54,1],[46,9,46,10,1],[57,9,57,10,1],[58,13,58,28,1],[58,29,58,88,1],[60,13,60,56,1],[61,13,61,86,1],[62,9,62,10,1],[70,9,70,10,1],[71,13,71,60,1],[73,13,73,64,1],[73,65,73,98,1],[75,13,75,27,1],[76,9,76,10,1],[92,9,92,10,1],[93,13,93,36,1],[94,13,94,14,1],[95,17,95,35,1],[96,17,96,77,1],[96,78,96,90,1],[98,17,98,90,1],[99,17,99,40,1],[100,17,100,50,1],[103,13,103,35,0],[104,9,104,10,1],[115,9,115,10,1],[116,13,116,28,1],[116,29,116,88,1],[118,13,118,56,1],[119,13,119,86,1],[120,9,120,10,1],[133,9,133,10,1],[134,13,134,56,1],[135,13,135,49,1],[136,13,136,36,1],[137,13,137,46,1],[138,9,138,10,1],[142,9,142,10,1],[143,13,143,27,1],[143,28,143,47,1],[145,13,145,37,1],[146,9,146,10,1]]);
+    </script>
+  </body>
+</html>

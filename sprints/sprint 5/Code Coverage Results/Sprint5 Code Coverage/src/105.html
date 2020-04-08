@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\website\Capstone Web Members\ViewModels\MediaLibraryViewModel.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Members.ViewModels
+{
+    /// &lt;summary&gt;
+    ///     ViewModel for storing the available Products to rent and the count of active rentals a Member has via multiple
+    ///     models to display on the MediaLibrary View
+    /// &lt;/summary&gt;
+    public class MediaLibraryViewModel
+    {
+        #region Properties
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the products model.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     The products model, storing a List of Products available to rent
+        /// &lt;/value&gt;
+        public List&lt;Product&gt; ProductsModel { get; set; }
+
+        /// &lt;summary&gt;
+        ///     Gets or sets the rental count.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     The rental count, storing number of non-returned rentals a Member has.
+        /// &lt;/value&gt;
+        public int? RentalCount { get; set; }
+
+        /// &lt;summary&gt;
+        ///     Gets or sets a value indicating whether this instance is librarian.
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;
+        ///     &lt;c&gt;true&lt;/c&gt; if this instance is librarian; otherwise, &lt;c&gt;false&lt;/c&gt;.
+        /// &lt;/value&gt;
+        public bool IsLibrarian { get; set; }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,46,20,50,0],[20,51,20,55,1],[28,35,28,39,0],[28,40,28,44,1],[36,35,36,39,0],[36,40,36,44,1]]);
+    </script>
+  </body>
+</html>

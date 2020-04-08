@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\ManageItemsForm.Designer.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+namespace Capstone_Desktop.View
+{
+    partial class ManageItemsForm
+    {
+        /// &lt;summary&gt;
+        /// Required designer variable.
+        /// &lt;/summary&gt;
+        private System.ComponentModel.IContainer components = null;
+
+        /// &lt;summary&gt;
+        /// Clean up any resources being used.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing &amp;&amp; (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// &lt;summary&gt;
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// &lt;/summary&gt;
+        private void InitializeComponent()
+        {
+            this.logoutButton = new System.Windows.Forms.Button();
+            this.companyLabel = new System.Windows.Forms.Label();
+            this.manageItemsLabel = new System.Windows.Forms.Label();
+            this.addButton = new System.Windows.Forms.Button();
+            this.viewHistoryButton = new System.Windows.Forms.Button();
+            this.managerButton = new System.Windows.Forms.Button();
+            this.itemsGridView = new System.Windows.Forms.DataGridView();
+            this.manageRentalsButton = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // logoutButton
+            // 
+            this.logoutButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logoutButton.Location = new System.Drawing.Point(1105, 12);
+            this.logoutButton.Name = &quot;logoutButton&quot;;
+            this.logoutButton.Size = new System.Drawing.Size(141, 46);
+            this.logoutButton.TabIndex = 0;
+            this.logoutButton.Text = &quot;Logout&quot;;
+            this.logoutButton.UseVisualStyleBackColor = true;
+            this.logoutButton.Click += new System.EventHandler(this.LogoutButton_Click);
+            // 
+            // companyLabel
+            // 
+            this.companyLabel.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.companyLabel.Location = new System.Drawing.Point(1, 9);
+            this.companyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.companyLabel.Name = &quot;companyLabel&quot;;
+            this.companyLabel.Size = new System.Drawing.Size(1257, 85);
+            this.companyLabel.TabIndex = 1;
+            this.companyLabel.Text = &quot;West Georgia Entertainment Library&quot;;
+            this.companyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // manageItemsLabel
+            // 
+            this.manageItemsLabel.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manageItemsLabel.Location = new System.Drawing.Point(2, 76);
+            this.manageItemsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.manageItemsLabel.Name = &quot;manageItemsLabel&quot;;
+            this.manageItemsLabel.Size = new System.Drawing.Size(1256, 85);
+            this.manageItemsLabel.TabIndex = 2;
+            this.manageItemsLabel.Text = &quot;View and Manage Items&quot;;
+            this.manageItemsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // addButton
+            // 
+            this.addButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addButton.Location = new System.Drawing.Point(1105, 578);
+            this.addButton.Name = &quot;addButton&quot;;
+            this.addButton.Size = new System.Drawing.Size(141, 46);
+            this.addButton.TabIndex = 5;
+            this.addButton.Text = &quot;Add Item&quot;;
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // viewHistoryButton
+            // 
+            this.viewHistoryButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.viewHistoryButton.Location = new System.Drawing.Point(12, 578);
+            this.viewHistoryButton.Name = &quot;viewHistoryButton&quot;;
+            this.viewHistoryButton.Size = new System.Drawing.Size(141, 46);
+            this.viewHistoryButton.TabIndex = 6;
+            this.viewHistoryButton.Text = &quot;View History&quot;;
+            this.viewHistoryButton.UseVisualStyleBackColor = true;
+            this.viewHistoryButton.Click += new System.EventHandler(this.viewHistoryButton_Click);
+            // 
+            // managerButton
+            // 
+            this.managerButton.Enabled = false;
+            this.managerButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.managerButton.Location = new System.Drawing.Point(958, 64);
+            this.managerButton.Name = &quot;managerButton&quot;;
+            this.managerButton.Size = new System.Drawing.Size(141, 46);
+            this.managerButton.TabIndex = 8;
+            this.managerButton.Text = &quot;Manager Portal&quot;;
+            this.managerButton.UseVisualStyleBackColor = true;
+            this.managerButton.Click += new System.EventHandler(this.managerButton_Click);
+            // 
+            // itemsGridView
+            // 
+            this.itemsGridView.AllowUserToAddRows = false;
+            this.itemsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.itemsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.itemsGridView.Location = new System.Drawing.Point(12, 164);
+            this.itemsGridView.Name = &quot;itemsGridView&quot;;
+            this.itemsGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.itemsGridView.Size = new System.Drawing.Size(1240, 384);
+            this.itemsGridView.TabIndex = 9;
+            // 
+            // manageRentalsButton
+            // 
+            this.manageRentalsButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.manageRentalsButton.Location = new System.Drawing.Point(1105, 64);
+            this.manageRentalsButton.Name = &quot;manageRentalsButton&quot;;
+            this.manageRentalsButton.Size = new System.Drawing.Size(141, 46);
+            this.manageRentalsButton.TabIndex = 10;
+            this.manageRentalsButton.Text = &quot;Manage Rentals&quot;;
+            this.manageRentalsButton.UseVisualStyleBackColor = true;
+            this.manageRentalsButton.Click += new System.EventHandler(this.manageRentalsButton_Click);
+            // 
+            // removeButton
+            // 
+            this.removeButton.Font = new System.Drawing.Font(&quot;Microsoft Sans Serif&quot;, 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.removeButton.Location = new System.Drawing.Point(958, 578);
+            this.removeButton.Name = &quot;removeButton&quot;;
+            this.removeButton.Size = new System.Drawing.Size(141, 46);
+            this.removeButton.TabIndex = 11;
+            this.removeButton.Text = &quot;Remove Item&quot;;
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
+            // 
+            // ManageItemsForm
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.removeButton);
+            this.Controls.Add(this.manageRentalsButton);
+            this.Controls.Add(this.itemsGridView);
+            this.Controls.Add(this.managerButton);
+            this.Controls.Add(this.viewHistoryButton);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.manageItemsLabel);
+            this.Controls.Add(this.logoutButton);
+            this.Controls.Add(this.companyLabel);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1280, 720);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1280, 720);
+            this.Name = &quot;ManageItemsForm&quot;;
+            this.Text = &quot;Items&quot;;
+            this.Load += new System.EventHandler(this.ManageItemsForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.itemsGridView)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button logoutButton;
+        private System.Windows.Forms.Label companyLabel;
+        private System.Windows.Forms.Label manageItemsLabel;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button viewHistoryButton;
+        private System.Windows.Forms.Button managerButton;
+        private System.Windows.Forms.DataGridView itemsGridView;
+        private System.Windows.Forms.Button manageRentalsButton;
+        private System.Windows.Forms.Button removeButton;
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[8,9,8,68,0],[15,9,15,10,0],[16,13,16,51,0],[17,13,17,14,0],[18,17,18,38,0],[19,13,19,14,0],[20,13,20,37,0],[21,9,21,10,0],[30,9,30,10,0],[31,13,31,67,0],[32,13,32,66,0],[33,13,33,70,0],[34,13,34,64,0],[35,13,35,72,0],[36,13,36,68,0],[37,13,37,74,0],[38,13,38,74,0],[39,13,39,67,0],[40,13,40,90,0],[41,13,41,34,0],[45,13,45,173,0],[46,13,46,77,0],[47,13,47,53,0],[48,13,48,71,0],[49,13,49,44,0],[50,13,50,47,0],[51,13,51,62,0],[52,13,52,89,0],[56,13,56,170,0],[57,13,57,73,0],[58,13,58,85,0],[59,13,59,53,0],[60,13,60,72,0],[61,13,61,44,0],[62,13,62,75,0],[63,13,63,88,0],[67,13,67,177,0],[68,13,68,78,0],[69,13,69,89,0],[70,13,70,61,0],[71,13,71,76,0],[72,13,72,48,0],[73,13,73,66,0],[74,13,74,92,0],[78,13,78,170,0],[79,13,79,75,0],[80,13,80,47,0],[81,13,81,68,0],[82,13,82,41,0],[83,13,83,46,0],[84,13,84,59,0],[85,13,85,83,0],[89,13,89,178,0],[90,13,90,81,0],[91,13,91,63,0],[92,13,92,76,0],[93,13,93,49,0],[94,13,94,58,0],[95,13,95,67,0],[96,13,96,99,0],[100,13,100,48,0],[101,13,101,174,0],[102,13,102,77,0],[103,13,103,55,0],[104,13,104,72,0],[105,13,105,45,0],[106,13,106,56,0],[107,13,107,63,0],[108,13,108,91,0],[112,13,112,59,0],[113,13,113,112,0],[114,13,114,132,0],[115,13,115,77,0],[116,13,116,55,0],[117,13,117,86,0],[118,13,118,74,0],[119,13,119,45,0],[123,13,123,180,0],[124,13,124,84,0],[125,13,125,67,0],[126,13,126,78,0],[127,13,127,52,0],[128,13,128,62,0],[129,13,129,69,0],[130,13,130,103,0],[134,13,134,173,0],[135,13,135,77,0],[136,13,136,53,0],[137,13,137,71,0],[138,13,138,45,0],[139,13,139,52,0],[140,13,140,62,0],[141,13,141,89,0],[145,13,145,74,0],[146,13,146,66,0],[147,13,147,50,0],[148,13,148,57,0],[149,13,149,51,0],[150,13,150,51,0],[151,13,151,55,0],[152,13,152,47,0],[153,13,153,54,0],[154,13,154,50,0],[155,13,155,50,0],[156,13,156,38,0],[157,13,157,67,0],[158,13,158,38,0],[159,13,159,67,0],[160,13,160,43,0],[161,13,161,33,0],[162,13,162,77,0],[163,13,163,88,0],[164,13,164,38,0],[166,9,166,10,0]]);
+    </script>
+  </body>
+</html>

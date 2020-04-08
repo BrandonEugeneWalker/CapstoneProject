@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\desktop\model\CapstoneDbContextHandlerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Entity;
+using System.Linq;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Capstone_Unit_Tests.desktop.model
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;Tests the CapstoneDbContextHandler, which is an object that handles interactions with the database.&lt;/para&gt;
+    ///     &lt;para&gt;Because of this the system MUST be able to connect to the database (using the VPN if needed.)&lt;/para&gt;
+    /// &lt;/summary&gt;
+    /// &lt;Precondition&gt; It must be possible to connect to the database! &lt;/Precondition&gt;
+    [TestClass]
+    public class CapstoneDbContextHandlerTests
+    {
+        #region Methods
+
+        [TestMethod]
+        public void TestOverloadedConstructorNull()
+        {
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; new CapstoneDbContextHandler(null));
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler(new OnlineEntities());
+            Assert.IsNotNull(testHandler);
+        }
+
+        [TestMethod]
+        public void TestGetDetailedEmployeeHistoryNullEmployee()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testHandler.GetDetailedEmployeeHistory(null));
+        }
+
+        [TestMethod]
+        public void TestGetDetailedEmployeeHistoryNoHistory()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testEmployee = new Employee {
+                    employeeId = 1,
+                    password = &quot;password&quot;,
+                    isManager = false,
+                    name = &quot;TestEmployee&quot;
+                };
+
+                testHandler.CapstoneDbContext.Employees.Add(testEmployee);
+
+                var results = testHandler.GetDetailedEmployeeHistory(testEmployee);
+
+                Assert.AreEqual(results.Count, 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetDetailedEmployeeHistoryWithHistory()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                testHandler.CapstoneDbContext.Employees.Load();
+                var testEmployee = testHandler.CapstoneDbContext.Employees.Find(1234);
+
+                var results = testHandler.GetDetailedEmployeeHistory(testEmployee);
+
+                Assert.IsTrue(results.Count &gt; 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetDetailedStockHistoryNullStock()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testHandler.GetDetailedStockHistory(null));
+        }
+
+        [TestMethod]
+        public void TestGetDetailedStockHistoryNoHistory()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testStock = new Stock {
+                    stockId = -1,
+                    productId = 1,
+                    itemCondition = &quot;Good&quot;
+                };
+                testHandler.CapstoneDbContext.Stocks.Add(testStock);
+
+                var results = testHandler.GetDetailedStockHistory(testStock);
+
+                Assert.AreEqual(results.Count, 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetDetailedStockHistoryWithHistory()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                testHandler.CapstoneDbContext.Stocks.Load();
+
+                var testStock = testHandler.CapstoneDbContext.Stocks.Find(1);
+
+                var results = testHandler.GetDetailedStockHistory(testStock);
+
+                Assert.IsTrue(results.Count &gt; 0);
+                Assert.IsTrue(results is List&lt;DetailedRentalView&gt;);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordZeroId()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentOutOfRangeException&gt;(() =&gt;
+                testHandler.GetEmployeeByIdAndPassword(0, &quot;password&quot;));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordNegativeId()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentOutOfRangeException&gt;(() =&gt;
+                testHandler.GetEmployeeByIdAndPassword(-1, &quot;password&quot;));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordEmptyPassword()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                testHandler.GetEmployeeByIdAndPassword(1234, &quot;&quot;));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordNullPassword()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                testHandler.GetEmployeeByIdAndPassword(1234, null));
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetEmployeeByIdAndPassword(1234, &quot;not correct&quot;);
+            Assert.IsNull(results);
+        }
+
+        [TestMethod]
+        public void TestGetEmployeeByIdAndPasswordFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+            Assert.IsNotNull(results);
+            Assert.AreEqual(results.employeeId, 1234);
+            Assert.AreEqual(results.name, &quot;Brandon&quot;);
+        }
+
+        [TestMethod]
+        public void TestGetAllEmployeesSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllEmployees();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList&lt;Employee&gt;);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestGetAllDetailedStockSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllDetailedStock();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList&lt;StockDetailView&gt;);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestGetDetailedRentalsWaitingShipmentSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetDetailedRentalsWaitingShipment();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List&lt;DetailedRentalView&gt;);
+        }
+
+        [TestMethod]
+        public void TestGetDetailedRentalsWaitingReturnSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetDetailedRentalsWaitingReturn();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List&lt;DetailedRentalView&gt;);
+        }
+
+        [TestMethod]
+        public void TestGetAllDetailedRentalsSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllDetailedRentals();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList&lt;DetailedRentalView&gt;);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestGetItemRentalsByIdNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetItemRentalById(-1);
+            Assert.IsNull(results);
+        }
+
+        [TestMethod]
+        public void TestGetItemRentalsByIdFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetItemRentalById(1);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is ItemRental);
+            Assert.IsTrue(results.itemRentalId == 1);
+        }
+
+        [TestMethod]
+        public void TestGetStockByIdNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetStockById(-1);
+            Assert.IsNull(results);
+        }
+
+        [TestMethod]
+        public void TestGetStocksByIdFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetStockById(1);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.stockId == 1);
+            Assert.IsTrue(results is Stock);
+        }
+
+        [TestMethod]
+        public void TestGetStockHistoryByStockNullStock()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testHandler.GetStockHistoryByStock(null));
+        }
+
+        [TestMethod]
+        public void TestGetStockHistoryNoHistory()
+        {
+            var testStock = new Stock {
+                stockId = -1
+            };
+
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetStockHistoryByStock(testStock);
+
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List&lt;DetailedRentalView&gt;);
+            Assert.IsTrue(results.Count == 0);
+        }
+
+        [TestMethod]
+        public void TestGetStockHistoryWithHistory()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var testStock = testHandler.GetStockById(1);
+            var results = testHandler.GetStockHistoryByStock(testStock);
+
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is List&lt;DetailedRentalView&gt;);
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        public void TestGetAllProductsSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var results = testHandler.GetAllProducts();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList&lt;Product&gt;);
+        }
+
+        [TestMethod]
+        public void TestRemoveEmployeeNullEmployee()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testHandler.RemoveEmployee(null));
+        }
+
+        [TestMethod]
+        public void TestRemoveEmployeeSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var employeeToRemove = testHandler.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+                testHandler.RemoveEmployee(employeeToRemove);
+                var employeeRemoved = testHandler.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+
+                Assert.IsNull(employeeRemoved);
+            }
+        }
+
+        [TestMethod]
+        public void TestRemoveStockNullStock()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testHandler.RemoveStock(null));
+        }
+
+        [TestMethod]
+        public void TestRemoveStockSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var stockToRemove = testHandler.GetStockById(1);
+                testHandler.RemoveStock(stockToRemove);
+                var stockRemoved = testHandler.GetStockById(1);
+
+                Assert.IsNull(stockRemoved);
+            }
+        }
+
+        [TestMethod]
+        public void TestAddStockNull()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testHandler.AddStock(null));
+        }
+
+        [TestMethod]
+        public void TestAddStockSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                testHandler.CapstoneDbContext.Products.Load();
+                var testProduct = testHandler.CapstoneDbContext.Products.Find(1);
+                var testStock = new Stock {
+                    productId = 1,
+                    itemCondition = &quot;Good&quot;,
+                    Product = testProduct
+                };
+                testHandler.AddStock(testStock);
+                var highestId = testHandler.CapstoneDbContext.Stocks.Max(s =&gt; s.stockId);
+                var addedStock = testHandler.GetStockById(highestId);
+                Assert.IsNotNull(addedStock);
+                Assert.IsTrue(addedStock.stockId == highestId);
+                Assert.IsTrue(addedStock.itemCondition.Equals(&quot;Good&quot;));
+                Assert.IsTrue(addedStock.productId == 1);
+                Assert.IsTrue(addedStock is Stock);
+            }
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeNull()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testHandler.AddEmployee(null));
+        }
+
+        [TestMethod]
+        public void TestAddEmployeeSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testEmployee = new Employee {
+                    employeeId = -1,
+                    password = &quot;password&quot;,
+                    isManager = false,
+                    name = &quot;Test Employee&quot;
+                };
+                testHandler.AddEmployee(testEmployee);
+                testHandler.CapstoneDbContext.Employees.Load();
+                var highestId = testHandler.CapstoneDbContext.Employees.Max(e =&gt; e.employeeId);
+                var addedEmployee = testHandler.GetEmployeeByIdAndPassword(highestId, &quot;password&quot;);
+                Assert.IsNotNull(addedEmployee);
+                Assert.IsTrue(addedEmployee is Employee);
+                Assert.IsTrue(addedEmployee.employeeId == highestId);
+                Assert.IsTrue(addedEmployee.password.Equals(&quot;whJbRiU7ws9zI&quot;));
+                Assert.IsTrue(addedEmployee.isManager == false);
+                Assert.IsTrue(addedEmployee.name.Equals(&quot;Test Employee&quot;));
+            }
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullDetailedRental()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                testHandler.MarkRentalAsWaitingReturn(null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnNullEmployee()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                testHandler.MarkRentalAsWaitingReturn(new DetailedRentalView(), null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnRentalNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var testDetailedRental = new DetailedRentalView {
+                itemRentalId = -1
+            };
+            var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, new Employee());
+            Assert.IsFalse(results);
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnInvalidRentalStatus()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testItemRental = new ItemRental {
+                    itemRentalId = -1,
+                    stockId = 1,
+                    memberId = 1,
+                    addressId = 1,
+                    status = &quot;WaitingReturn&quot;,
+                    rentalDateTime = DateTime.Now,
+                    shipEmployeeId = 1234,
+                    shipDateTime = DateTime.Now
+                };
+
+                testHandler.CapstoneDbContext.ItemRentals.Add(testItemRental);
+
+                var testDetailedRental = new DetailedRentalView {
+                    itemRentalId = -1
+                };
+
+                var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating);
+                Assert.IsFalse(results);
+            }
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsWaitingReturnSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testItemRental = new ItemRental {
+                    itemRentalId = -1,
+                    stockId = 1,
+                    memberId = 1,
+                    addressId = 1,
+                    status = &quot;WaitingShipment&quot;,
+                    rentalDateTime = DateTime.Now
+                };
+
+                testHandler.CapstoneDbContext.ItemRentals.Add(testItemRental);
+
+                var testDetailedRental = new DetailedRentalView {
+                    itemRentalId = -1
+                };
+
+                var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating);
+                Assert.IsTrue(results);
+                Assert.IsTrue(testItemRental.status.Equals(&quot;WaitingReturn&quot;));
+            }
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullDetailedRental()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                testHandler.MarkRentalAsReturned(null, new Employee()));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullEmployee()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt;
+                testHandler.MarkRentalAsReturned(new DetailedRentalView(), null));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedRentalNotFound()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            var testDetailedRental = new DetailedRentalView {
+                itemRentalId = -1
+            };
+            var results = testHandler.MarkRentalAsReturned(testDetailedRental, new Employee());
+            Assert.IsFalse(results);
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedInvalidRentalStatus()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testItemRental = new ItemRental {
+                    itemRentalId = -1,
+                    stockId = 1,
+                    memberId = 1,
+                    addressId = 1,
+                    status = &quot;WaitingShipment&quot;,
+                    rentalDateTime = DateTime.Now,
+                    shipEmployeeId = 1234,
+                    shipDateTime = DateTime.Now
+                };
+
+                testHandler.CapstoneDbContext.ItemRentals.Add(testItemRental);
+
+                var testDetailedRental = new DetailedRentalView {
+                    itemRentalId = -1
+                };
+
+                var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+                var results = testHandler.MarkRentalAsReturned(testDetailedRental, employeeUpdating);
+                Assert.IsFalse(results);
+            }
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                var testItemRental = new ItemRental {
+                    itemRentalId = -1,
+                    stockId = 1,
+                    memberId = 1,
+                    addressId = 1,
+                    status = &quot;WaitingReturn&quot;,
+                    rentalDateTime = DateTime.Now
+                };
+
+                testHandler.CapstoneDbContext.ItemRentals.Add(testItemRental);
+
+                var testDetailedRental = new DetailedRentalView {
+                    itemRentalId = -1
+                };
+
+                var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, &quot;password&quot;);
+                var results = testHandler.MarkRentalAsReturned(testDetailedRental, employeeUpdating);
+                Assert.IsTrue(results);
+                Assert.IsTrue(testItemRental.status.Equals(&quot;Returned&quot;));
+            }
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[24,9,24,10,1],[25,13,25,65,1],[25,65,25,99,1],[25,99,25,101,1],[25,13,25,101,1],[26,9,26,10,1],[30,9,30,10,1],[31,13,31,82,1],[32,13,32,43,1],[33,9,33,10,1],[37,9,37,10,1],[38,13,38,62,1],[39,13,39,65,1],[39,65,39,109,1],[39,109,39,111,1],[39,13,39,111,1],[40,9,40,10,1],[44,9,44,10,1],[45,13,45,62,1],[46,20,46,95,1],[47,13,47,14,1],[48,17,53,19,1],[55,17,55,75,1],[57,17,57,84,1],[59,17,59,51,1],[60,13,60,14,1],[61,9,61,10,1],[65,9,65,10,1],[66,13,66,62,1],[67,20,67,95,1],[68,13,68,14,1],[69,17,69,64,1],[70,17,70,87,1],[72,17,72,84,1],[74,17,74,50,1],[75,13,75,14,1],[76,9,76,10,1],[80,9,80,10,1],[81,13,81,62,1],[82,13,82,65,1],[82,65,82,106,1],[82,106,82,108,1],[82,13,82,108,1],[83,9,83,10,1],[87,9,87,10,1],[88,13,88,62,1],[89,20,89,95,1],[90,13,90,14,1],[91,17,95,19,1],[96,17,96,69,1],[98,17,98,78,1],[100,17,100,51,1],[101,13,101,14,1],[102,9,102,10,1],[106,9,106,10,1],[107,13,107,62,1],[108,20,108,95,1],[109,13,109,14,1],[110,17,110,61,1],[112,17,112,78,1],[114,17,114,78,1],[116,17,116,50,1],[117,17,117,68,1],[118,13,118,14,1],[119,9,119,10,1],[123,9,123,10,1],[124,13,124,62,1],[125,13,126,17,1],[126,17,126,70,1],[126,70,126,72,1],[125,13,126,72,1],[127,9,127,10,1],[131,9,131,10,1],[132,13,132,62,1],[133,13,134,17,1],[134,17,134,71,1],[134,71,134,73,1],[133,13,134,73,1],[135,9,135,10,1],[139,9,139,10,1],[140,13,140,62,1],[141,13,142,17,1],[142,17,142,65,1],[142,65,142,67,1],[141,13,142,67,1],[143,9,143,10,1],[147,9,147,10,1],[148,13,148,62,1],[149,13,150,17,1],[150,17,150,67,1],[150,67,150,69,1],[149,13,150,69,1],[151,9,151,10,1],[155,9,155,10,1],[156,13,156,62,1],[157,13,157,87,1],[158,13,158,36,1],[159,9,159,10,1],[163,9,163,10,1],[164,13,164,62,1],[165,13,165,84,1],[166,13,166,39,1],[167,13,167,55,1],[168,13,168,54,1],[169,9,169,10,1],[173,9,173,10,1],[174,13,174,62,1],[175,13,175,57,1],[176,13,176,39,1],[177,13,177,61,1],[178,13,178,42,1],[179,9,179,10,1],[183,9,183,10,1],[184,13,184,62,1],[185,13,185,61,1],[186,13,186,39,1],[187,13,187,68,1],[188,13,188,42,1],[189,9,189,10,1],[193,9,193,10,1],[194,13,194,62,1],[195,13,195,75,1],[196,13,196,39,1],[197,13,197,64,1],[198,9,198,10,1],[202,9,202,10,1],[203,13,203,62,1],[204,13,204,73,1],[205,13,205,39,1],[206,13,206,64,1],[207,9,207,10,1],[211,9,211,10,1],[212,13,212,62,1],[213,13,213,63,1],[214,13,214,39,1],[215,13,215,71,1],[216,13,216,42,1],[217,9,217,10,1],[221,9,221,10,1],[222,13,222,62,1],[223,13,223,61,1],[224,13,224,36,1],[225,9,225,10,1],[229,9,229,10,1],[230,13,230,62,1],[231,13,231,60,1],[232,13,232,39,1],[233,13,233,50,1],[234,13,234,54,1],[235,9,235,10,1],[239,9,239,10,1],[240,13,240,62,1],[241,13,241,56,1],[242,13,242,36,1],[243,9,243,10,1],[247,9,247,10,1],[248,13,248,62,1],[249,13,249,55,1],[250,13,250,39,1],[251,13,251,49,1],[252,13,252,45,1],[253,9,253,10,1],[257,9,257,10,1],[258,13,258,62,1],[259,13,259,65,1],[259,65,259,105,1],[259,105,259,107,1],[259,13,259,107,1],[260,9,260,10,1],[264,9,264,10,1],[265,13,267,15,1],[269,13,269,62,1],[270,13,270,73,1],[272,13,272,39,1],[273,13,273,64,1],[274,13,274,47,1],[275,9,275,10,1],[279,9,279,10,1],[280,13,280,62,1],[281,13,281,57,1],[282,13,282,73,1],[284,13,284,39,1],[285,13,285,64,1],[286,13,286,42,1],[287,9,287,10,1],[291,9,291,10,1],[292,13,292,62,1],[293,13,293,56,1],[294,13,294,39,1],[295,13,295,60,1],[296,9,296,10,1],[300,9,300,10,1],[301,13,301,62,1],[302,13,302,65,1],[302,65,302,97,1],[302,97,302,99,1],[302,13,302,99,1],[303,9,303,10,1],[307,9,307,10,1],[308,13,308,62,1],[309,20,309,95,1],[310,13,310,14,1],[311,17,311,97,1],[312,17,312,62,1],[313,17,313,96,1],[315,17,315,48,1],[316,13,316,14,1],[317,9,317,10,1],[321,9,321,10,1],[322,13,322,62,1],[323,13,323,65,1],[323,65,323,94,1],[323,94,323,96,1],[323,13,323,96,1],[324,9,324,10,1],[328,9,328,10,1],[329,13,329,62,1],[330,20,330,95,1],[331,13,331,14,1],[332,17,332,65,1],[333,17,333,56,1],[334,17,334,64,1],[336,17,336,45,1],[337,13,337,14,1],[338,9,338,10,1],[342,9,342,10,1],[343,13,343,62,1],[344,13,344,65,1],[344,65,344,91,1],[344,91,344,93,1],[344,13,344,93,1],[345,9,345,10,1],[349,9,349,10,1],[350,13,350,62,1],[351,20,351,95,1],[352,13,352,14,1],[353,17,353,63,1],[354,17,354,82,1],[355,17,359,19,1],[360,17,360,49,1],[361,17,361,90,1],[362,17,362,70,1],[363,17,363,46,1],[364,17,364,64,1],[365,17,365,72,1],[366,17,366,58,1],[367,17,367,52,1],[368,13,368,14,1],[369,9,369,10,1],[373,9,373,10,1],[374,13,374,62,1],[375,13,375,65,1],[375,65,375,94,1],[375,94,375,96,1],[375,13,375,96,1],[376,9,376,10,1],[380,9,380,10,1],[381,13,381,62,1],[382,20,382,95,1],[383,13,383,14,1],[384,17,389,19,1],[390,17,390,55,1],[391,17,391,64,1],[392,17,392,96,1],[393,17,393,99,1],[394,17,394,49,1],[395,17,395,58,1],[396,17,396,70,1],[397,17,397,79,1],[398,17,398,65,1],[399,17,399,75,1],[400,13,400,14,1],[401,9,401,10,1],[405,9,405,10,1],[406,13,406,62,1],[407,13,408,17,1],[408,17,408,76,1],[408,76,408,78,1],[407,13,408,78,1],[409,9,409,10,1],[413,9,413,10,1],[414,13,414,62,1],[415,13,416,17,1],[416,17,416,86,1],[416,86,416,88,1],[415,13,416,88,1],[417,9,417,10,1],[421,9,421,10,1],[422,13,422,62,1],[423,13,425,15,1],[426,13,426,101,1],[427,13,427,37,1],[428,9,428,10,1],[432,9,432,10,1],[433,13,433,62,1],[434,20,434,95,1],[435,13,435,14,1],[436,17,445,19,1],[447,17,447,79,1],[449,17,451,19,1],[453,17,453,97,1],[454,17,454,107,1],[455,17,455,41,1],[456,13,456,14,1],[457,9,457,10,1],[461,9,461,10,1],[462,13,462,62,1],[463,20,463,95,1],[464,13,464,14,1],[465,17,472,19,1],[474,17,474,79,1],[476,17,478,19,1],[480,17,480,97,1],[481,17,481,107,1],[482,17,482,40,1],[483,17,483,78,1],[484,13,484,14,1],[485,9,485,10,1],[489,9,489,10,1],[490,13,490,62,1],[491,13,492,17,1],[492,17,492,71,1],[492,71,492,73,1],[491,13,492,73,1],[493,9,493,10,1],[497,9,497,10,1],[498,13,498,62,1],[499,13,500,17,1],[500,17,500,81,1],[500,81,500,83,1],[499,13,500,83,1],[501,9,501,10,1],[505,9,505,10,1],[506,13,506,62,1],[507,13,509,15,1],[510,13,510,96,1],[511,13,511,37,1],[512,9,512,10,1],[516,9,516,10,1],[517,13,517,62,1],[518,20,518,95,1],[519,13,519,14,1],[520,17,529,19,1],[531,17,531,79,1],[533,17,535,19,1],[537,17,537,97,1],[538,17,538,102,1],[539,17,539,41,1],[540,13,540,14,1],[541,9,541,10,1],[545,9,545,10,1],[546,13,546,62,1],[547,20,547,95,1],[548,13,548,14,1],[549,17,556,19,1],[558,17,558,79,1],[560,17,562,19,1],[564,17,564,97,1],[565,17,565,102,1],[566,17,566,40,1],[567,17,567,73,1],[568,13,568,14,1],[569,9,569,10,1]]);
+    </script>
+  </body>
+</html>

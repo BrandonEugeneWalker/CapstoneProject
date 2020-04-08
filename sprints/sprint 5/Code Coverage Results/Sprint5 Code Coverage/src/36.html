@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\website\Capstone Web Members\Controllers\AddressesController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Net;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+
+namespace Capstone_Web_Members.Controllers
+{
+    /// &lt;summary&gt;
+    ///     Controller for managing the address views and actions for adding and maintaining addresses.
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Web.Mvc.Controller&quot; /&gt;
+    public class AddressesController : Controller
+    {
+        #region Data members
+
+        /// &lt;summary&gt;
+        ///     The database context
+        /// &lt;/summary&gt;
+        private readonly OnlineEntities databaseContext;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;AddressesController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        public AddressesController()
+        {
+            this.databaseContext = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;AddressesController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;databaseContext&quot;&gt;The database context.&lt;/param&gt;
+        public AddressesController(OnlineEntities databaseContext)
+        {
+            this.databaseContext = databaseContext;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     Form for creating an address
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;productId of product ordered&lt;/param&gt;
+        /// &lt;returns&gt;The create page for Address&lt;/returns&gt;
+        public ActionResult Create(int? productId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            Session[&quot;productId&quot;] = null;
+            Session[&quot;productId&quot;] = productId;
+
+            return View();
+        }
+
+        /// &lt;summary&gt;
+        ///     Action for Creating an address from the Create View form
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;Inserts address to Addresses table&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;address&quot;&gt;The address created.&lt;/param&gt;
+        /// &lt;returns&gt;Previously called page if successful, back to create page if failed&lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = &quot;address1,address2,city,state,zip&quot;)]
+            Address address)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            if (ModelState.IsValid)
+            {
+                var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+                this.databaseContext.insertAddress(address.address1, memberId, address.address2, address.city,
+                    address.state, address.zip);
+
+                if (Session[&quot;productId&quot;] != null)
+                {
+                    var productId = int.Parse(Session[&quot;productId&quot;].ToString());
+                    return RedirectToAction(&quot;OrderProduct&quot;, &quot;Home&quot;, new {productId});
+                }
+
+                return RedirectToAction(&quot;Details&quot;, &quot;Members&quot;);
+            }
+
+            return View(address);
+        }
+
+        /// &lt;summary&gt;
+        ///     Starts the View for editing a specified address
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;addressId of Address to edit&lt;/param&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;productId of Product&lt;/param&gt;
+        /// &lt;returns&gt;The edit page&lt;/returns&gt;
+        public ActionResult Edit(int? id, int? productId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            Session[&quot;productId&quot;] = null;
+            Session[&quot;productId&quot;] = productId;
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var address = this.databaseContext.Addresses.Find(id);
+            if (address == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(address);
+        }
+
+        /// &lt;summary&gt;
+        ///     Action for Editing an address from the Edit View form
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;Updates address in Addresses table&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;address&quot;&gt;The address being edited.&lt;/param&gt;
+        /// &lt;returns&gt;Previously called page if successful, back to edit page if failed&lt;/returns&gt;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = &quot;addressId,address1,address2,city,state,zip,memberId,removed&quot;)]
+            Address address)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            if (ModelState.IsValid)
+            {
+                this.databaseContext.editAddress(address.addressId, address.address1, address.address2, address.city,
+                    address.state, address.zip);
+
+                if (Session[&quot;productId&quot;] != null)
+                {
+                    var productId = int.Parse(Session[&quot;productId&quot;].ToString());
+                    return RedirectToAction(&quot;OrderProduct&quot;, &quot;Home&quot;, new {productId});
+                }
+
+                return RedirectToAction(&quot;Details&quot;, &quot;Members&quot;);
+            }
+
+            return View(address);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.databaseContext.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
+        /// &lt;summary&gt;
+        ///     Removes a specified address and reloads the page
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;Updates status of address in Addresses table&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;addressId of Address to remove&lt;/param&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;productId of Product&lt;/param&gt;
+        /// &lt;returns&gt;Previously called page&lt;/returns&gt;
+        public ActionResult Remove(int id, int? productId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            this.databaseContext.removeAddress(id);
+
+            if (productId != null)
+            {
+                return RedirectToAction(&quot;OrderProduct&quot;, &quot;Home&quot;, new {productId});
+            }
+
+            return RedirectToAction(&quot;Details&quot;, &quot;Members&quot;);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[27,9,27,37,1],[28,9,28,10,1],[29,13,29,57,1],[30,9,30,10,1],[36,9,36,67,1],[37,9,37,10,1],[38,13,38,52,1],[39,9,39,10,1],[53,9,53,10,1],[54,13,54,52,1],[55,13,55,14,1],[56,17,56,61,1],[59,13,59,41,1],[60,13,60,46,1],[62,13,62,27,1],[63,9,63,10,1],[76,9,76,10,1],[77,13,77,52,1],[78,13,78,14,1],[79,17,79,61,1],[82,13,82,36,1],[83,13,83,14,1],[84,17,84,81,1],[85,17,86,49,1],[88,17,88,50,1],[89,17,89,18,1],[90,21,90,80,1],[91,21,91,86,1],[94,17,94,63,1],[97,13,97,34,1],[98,9,98,10,1],[109,9,109,10,1],[110,13,110,52,1],[111,13,111,14,1],[112,17,112,61,1],[115,13,115,41,1],[116,13,116,46,1],[118,13,118,28,1],[119,13,119,14,1],[120,17,120,76,1],[123,13,123,67,1],[124,13,124,33,1],[125,13,125,14,1],[126,17,126,39,1],[129,13,129,34,1],[130,9,130,10,1],[143,9,143,10,1],[144,13,144,52,1],[145,13,145,14,1],[146,17,146,61,1],[149,13,149,36,1],[150,13,150,14,1],[151,17,152,49,1],[154,17,154,50,1],[155,17,155,18,1],[156,21,156,80,1],[157,21,157,86,1],[160,17,160,63,1],[163,13,163,34,1],[164,9,164,10,1],[167,9,167,10,1],[168,13,168,27,1],[169,13,169,14,1],[170,17,170,48,1],[171,13,171,14,1],[173,13,173,37,1],[174,9,174,10,1],[185,9,185,10,1],[186,13,186,52,1],[187,13,187,14,1],[188,17,188,61,1],[191,13,191,52,1],[193,13,193,35,1],[194,13,194,14,1],[195,17,195,82,1],[198,13,198,59,1],[199,9,199,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\database\Capstone Database\Model\ItemRental.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+//------------------------------------------------------------------------------
+// &lt;auto-generated&gt;
+//     This code was generated from a template.
+//
+//     Manual changes to this file may cause unexpected behavior in your application.
+//     Manual changes to this file will be overwritten if the code is regenerated.
+// &lt;/auto-generated&gt;
+//------------------------------------------------------------------------------
+
+namespace Capstone_Database.Model
+{
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class ItemRental
+    {
+        public int itemRentalId { get; set; }
+        public int stockId { get; set; }
+        public int memberId { get; set; }
+        public int addressId { get; set; }
+        public string status { get; set; }
+        public Nullable&lt;System.DateTime&gt; rentalDateTime { get; set; }
+        public Nullable&lt;int&gt; shipEmployeeId { get; set; }
+        public Nullable&lt;System.DateTime&gt; shipDateTime { get; set; }
+        public Nullable&lt;int&gt; returnEmployeeId { get; set; }
+        public Nullable&lt;System.DateTime&gt; returnDateTime { get; set; }
+        public string returnCondition { get; set; }
+    
+        public virtual Address Address { get; set; }
+        public virtual Employee Employee { get; set; }
+        public virtual Employee Employee1 { get; set; }
+        public virtual Member Member { get; set; }
+        public virtual Stock Stock { get; set; }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,35,17,39,1],[17,40,17,44,1],[18,30,18,34,1],[18,35,18,39,1],[19,31,19,35,1],[19,36,19,40,1],[20,32,20,36,1],[20,37,20,41,1],[21,32,21,36,1],[21,37,21,41,1],[22,59,22,63,1],[22,64,22,68,1],[23,47,23,51,1],[23,52,23,56,1],[24,57,24,61,1],[24,62,24,66,1],[25,49,25,53,1],[25,54,25,58,1],[26,59,26,63,1],[26,64,26,68,1],[27,41,27,45,1],[27,46,27,50,1],[29,42,29,46,1],[29,47,29,51,0],[30,44,30,48,1],[30,49,30,53,1],[31,45,31,49,1],[31,50,31,54,1],[32,40,32,44,1],[32,45,32,49,0],[33,38,33,42,1],[33,43,33,47,0]]);
+    </script>
+  </body>
+</html>

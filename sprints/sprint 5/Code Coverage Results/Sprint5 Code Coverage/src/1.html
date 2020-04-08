@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\LoginController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;This class handles interactions between the database and the LoginForm.&lt;/para&gt;
+    ///     &lt;para&gt;Primarily handles logging into the system using information given by the user.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class LoginController
+    {
+        #region Properties
+
+        /// &lt;summary&gt;
+        ///   &lt;para&gt;
+        ///  Gets or sets the capstone database handler.
+        /// Handles interactions with the database.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;The capstone database handler.&lt;/value&gt;
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;LoginController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Handles interactions with the database, acting as an intermediary.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public LoginController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;LoginController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Handles interactions with the database handler, acting as an intermediary.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDatabaseHandler&quot;&gt;The capstone database handler.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDatabaseHandler - The database handler cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt; The database handler cannot be null! &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public LoginController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @&quot;The database handler cannot be null!&quot;);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets the employee by identifier and password.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;
+        ///         &lt;font color=&quot;#333333&quot;&gt;
+        ///             id must be a positive integer, password cannot be null or empty, database cannot be null
+        ///             or empty.
+        ///         &lt;/font&gt;
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;id&quot;&gt;The employee&#39;s id.&lt;/param&gt;
+        /// &lt;param name=&quot;password&quot;&gt;The employee&#39;s password.&lt;/param&gt;
+        /// &lt;returns&gt;Null if not found, the employee otherwise.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentOutOfRangeException&quot;&gt;id - The id must be a positive integer greater than zero.&lt;/exception&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;
+        ///     password - The password cannot be null or empty!
+        ///     or
+        ///     capstoneDbContext - The database to get the employee from must not be null!
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt; Id must be a positive integer, password cannot be null or empty. &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; Returns an employee if found, null if not. &lt;/Postcondition&gt;
+        public Employee GetEmployeeByIdAndPassword(int id, string password)
+        {
+            if (id &lt;= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(id),
+                    @&quot;The id must be a positive integer greater than zero.&quot;);
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password), @&quot;The password cannot be null or empty!&quot;);
+            }
+
+            return this.CapstoneDatabaseHandler.GetEmployeeByIdAndPassword(id, password);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[21,60,21,64,1],[21,65,21,69,1],[35,9,35,33,1],[36,9,36,10,1],[37,13,37,75,1],[38,9,38,10,1],[50,9,50,74,1],[51,9,51,10,1],[52,13,54,89,1],[55,9,55,10,1],[85,9,85,10,1],[86,13,86,25,1],[87,13,87,14,1],[88,17,89,78,1],[92,13,92,48,1],[93,13,93,14,1],[94,17,94,109,1],[97,13,97,90,1],[98,9,98,10,1]]);
+    </script>
+  </body>
+</html>

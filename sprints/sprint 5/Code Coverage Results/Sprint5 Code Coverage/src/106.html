@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\website\Capstone Web Members\Controllers\HomeController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using Capstone_Database.Model;
+using Capstone_Web_Members.Settings;
+using Capstone_Web_Members.ViewModels;
+
+namespace Capstone_Web_Members.Controllers
+{
+    /// &lt;summary&gt;
+    ///     Controller managing the main sites of the Member side of the West GA Electronic Library
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;Controller&quot; /&gt;
+    public class HomeController : Controller
+    {
+        #region Data members
+
+        /// &lt;summary&gt;
+        ///     The database context
+        /// &lt;/summary&gt;
+        public OnlineEntities DatabaseContext;
+
+        /// &lt;summary&gt;
+        ///     The available products
+        /// &lt;/summary&gt;
+        public List&lt;Product&gt; AvailableProducts;
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;HomeController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        public HomeController()
+        {
+            this.DatabaseContext = new OnlineEntities();
+        }
+
+        /// &lt;summary&gt;
+        ///     Initializes a new instance of the &lt;see cref=&quot;HomeController&quot; /&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;databaseContext&quot;&gt;The database context.&lt;/param&gt;
+        public HomeController(OnlineEntities databaseContext)
+        {
+            this.DatabaseContext = databaseContext;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     Index of the Website, required for running of Website
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null OR Session[&quot;currentLibrarianId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;The Media Library Page or Member Index&lt;/returns&gt;
+        public ActionResult Index()
+        {
+            if (Session[&quot;currentLibrarianId&quot;] != null)
+            {
+                return RedirectToAction(&quot;Index&quot;, &quot;Members&quot;);
+            }
+
+            return RedirectToAction(&quot;MediaLibrary&quot;);
+        }
+
+        /// &lt;summary&gt;
+        ///     The Media Library page, showing all items available to order with filters
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null OR Session[&quot;currentLibrarianId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;nameSearch&quot;&gt;The name search field.&lt;/param&gt;
+        /// &lt;param name=&quot;typeSearch&quot;&gt;The type search field.&lt;/param&gt;
+        /// &lt;returns&gt;The MediaLibrary page&lt;/returns&gt;
+        public ActionResult MediaLibrary(string nameSearch, string typeSearch)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null &amp;&amp; Session[&quot;currentLibrarianId&quot;] == null)
+            {
+                Session.Abandon();
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            if (nameSearch == null)
+            {
+                nameSearch = string.Empty;
+            }
+
+            if (typeSearch == null)
+            {
+                typeSearch = string.Empty;
+            }
+
+            ViewBag.NameSearch = nameSearch;
+            ViewBag.TypeSearch = typeSearch;
+            this.AvailableProducts = this.DatabaseContext.retrieveAvailableProductsWithSearch(nameSearch, typeSearch)
+                                         .ToList();
+
+            int? rentalCount = 0;
+            if (Session[&quot;currentMemberId&quot;] != null)
+            {
+                var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+                var rentedCountResult = this.DatabaseContext.retrieveRentedCount(memberId).ToList();
+                if (rentedCountResult.Count &gt; 0)
+                {
+                    rentalCount = rentedCountResult[0];
+                }
+            }
+
+            var mediaLibraryViewModel = new MediaLibraryViewModel
+                {ProductsModel = this.AvailableProducts, RentalCount = rentalCount};
+
+            if (Session[&quot;currentLibrarianId&quot;] != null)
+            {
+                mediaLibraryViewModel.IsLibrarian = true;
+            }
+
+            return View(mediaLibraryViewModel);
+        }
+
+        /// &lt;summary&gt;
+        ///     Navigates to the Order Product view to confirm order.
+        ///     Showcases the selected product and gives list of Addresses
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;productId of product ordered&lt;/param&gt;
+        /// &lt;returns&gt;The Order Product view detailing the selected product&lt;/returns&gt;
+        public ActionResult OrderProduct(int productId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                Session.Abandon();
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var product = this.DatabaseContext.Products.Find(productId);
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+            var addresses = this.DatabaseContext.retrieveMembersAddresses(memberId).ToList();
+            var orderProductViewModel = new OrderProductViewModel {ProductModel = product, AddressesModel = addresses};
+            return View(orderProductViewModel);
+        }
+
+        /// &lt;summary&gt;
+        ///     Orders the product following user confirmation, creating an ItemRental entry
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;ItemRentals table entry created&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;productId of product ordered&lt;/param&gt;
+        /// &lt;param name=&quot;addressId&quot;&gt;addressId of address selected&lt;/param&gt;
+        /// &lt;returns&gt;OrderConfirmation ActionResult&lt;/returns&gt;
+        [HttpPost]
+        public ActionResult OrderProduct(string productId, string addressId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                Session.Abandon();
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var results = this.DatabaseContext.findAvailableStockOfProduct(int.Parse(productId)).ToList();
+            var availableStockId = results[0];
+            var memberId = int.Parse(Session[&quot;currentMemberId&quot;].ToString());
+            this.DatabaseContext.createMemberOrder(availableStockId, memberId, int.Parse(addressId));
+
+            return RedirectToAction(&quot;OrderConfirmation&quot;,
+                new {productId = int.Parse(productId), addressId = int.Parse(addressId)});
+        }
+
+        /// &lt;summary&gt;
+        ///     Shows Order Confirmation information for Product just ordered
+        ///     &lt;Precondition&gt;Session[&quot;currentMemberId&quot;] != null&lt;/Precondition&gt;
+        ///     &lt;Postcondition&gt;None&lt;/Postcondition&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;productId of product ordered&lt;/param&gt;
+        /// &lt;param name=&quot;addressId&quot;&gt;addressId of address selected&lt;/param&gt;
+        /// &lt;returns&gt;Page detailing ItemRental and order info&lt;/returns&gt;
+        public ActionResult OrderConfirmation(int productId, int addressId)
+        {
+            if (Session[&quot;currentMemberId&quot;] == null)
+            {
+                Session.Abandon();
+                return RedirectToAction(&quot;Login&quot;, &quot;Members&quot;);
+            }
+
+            var product = this.DatabaseContext.Products.Find(productId);
+            var address = this.DatabaseContext.Addresses.Find(addressId);
+            var orderConfirmationViewModel = new OrderConfirmationViewModel
+                {ProductModel = product, AddressModel = address};
+
+            return View(orderConfirmationViewModel);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[35,9,35,32,1],[36,9,36,10,1],[37,13,37,57,1],[38,9,38,10,1],[44,9,44,62,1],[45,9,45,10,1],[46,13,46,52,1],[47,9,47,10,1],[60,9,60,10,1],[61,13,61,55,1],[62,13,62,14,1],[63,17,63,61,1],[66,13,66,53,1],[67,9,67,10,1],[78,9,78,10,1],[79,13,79,93,1],[80,13,80,14,1],[81,17,81,35,1],[82,17,82,61,1],[85,13,85,36,1],[86,13,86,14,1],[87,17,87,43,1],[88,13,88,14,1],[90,13,90,36,1],[91,13,91,14,1],[92,17,92,43,1],[93,13,93,14,1],[95,13,95,45,1],[96,13,96,45,1],[97,13,98,52,1],[100,13,100,34,1],[101,13,101,52,1],[102,13,102,14,1],[103,17,103,81,1],[104,17,104,101,1],[105,17,105,49,1],[106,17,106,18,1],[107,21,107,56,1],[108,17,108,18,1],[109,13,109,14,1],[111,13,112,85,1],[114,13,114,55,1],[115,13,115,14,1],[116,17,116,58,1],[117,13,117,14,1],[119,13,119,48,1],[120,9,120,10,1],[131,9,131,10,1],[132,13,132,52,1],[133,13,133,14,1],[134,17,134,35,1],[135,17,135,61,1],[138,13,138,73,1],[139,13,139,77,1],[140,13,140,94,1],[141,13,141,120,1],[142,13,142,48,1],[143,9,143,10,1],[155,9,155,10,1],[156,13,156,52,1],[157,13,157,14,1],[158,17,158,35,1],[159,17,159,61,1],[162,13,162,107,1],[163,13,163,47,1],[164,13,164,77,1],[165,13,165,102,1],[167,13,168,91,1],[169,9,169,10,1],[180,9,180,10,1],[181,13,181,52,1],[182,13,182,14,1],[183,17,183,35,1],[184,17,184,61,1],[187,13,187,73,1],[188,13,188,74,1],[189,13,190,66,1],[192,13,192,53,1],[193,9,193,10,1]]);
+    </script>
+  </body>
+</html>

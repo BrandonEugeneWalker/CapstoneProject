@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\View\ManageEmployeeForm.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Windows.Forms;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using MySql.Data.MySqlClient;
+
+namespace Capstone_Desktop.View
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;This form is used to manage employees in the database.&lt;/para&gt;
+    ///     &lt;para&gt;The ManageEmployeeForm can be opened by the LoginForm, ManageItemsForm, and the ManageRentalsForm.&lt;/para&gt;
+    ///     &lt;para&gt;The ManageEmployeeForm can open the ManageItemsForm, ManageRentalsForm and the AddEmployeeForm&lt;/para&gt;
+    ///     &lt;para&gt;The ManageEmployeeForm closes to the LoginForm.&lt;/para&gt;
+    ///     &lt;para&gt;The ManageEmployeeForm allows a user to see current employees in the database and add/remove them.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    /// &lt;seealso cref=&quot;System.Windows.Forms.Form&quot; /&gt;
+    public partial class ManageEmployeeForm : Form
+    {
+        #region Data members
+
+        private readonly BindingSource employeeListSource = new BindingSource();
+
+        private readonly ManageEmployeeController manageEmployeeController;
+
+        #endregion
+
+        #region Properties
+
+        /// &lt;summary&gt;Gets or sets the current employee.&lt;/summary&gt;
+        /// &lt;value&gt;The current employee.&lt;/value&gt;
+        public Employee CurrentEmployee { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;Initializes a new instance of the &lt;see cref=&quot;ManageEmployeeForm&quot; /&gt; class.&lt;/para&gt;
+        ///     &lt;para&gt;The ManageEmployeeForm handles user interactions relating to viewing managing employees.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;loggedInEmployee&quot;&gt;The logged in employee.&lt;/param&gt;
+        public ManageEmployeeForm(Employee loggedInEmployee)
+        {
+            this.InitializeComponent();
+            this.CurrentEmployee = loggedInEmployee;
+            this.manageEmployeeController = new ManageEmployeeController();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void RemoveButton_Click(object sender, EventArgs e)
+        {
+            var selectedEmployee = (Employee) this.employeeGridView.SelectedRows[0].DataBoundItem;
+            this.attemptToRemoveEmployee(selectedEmployee);
+            MessageBox.Show(@&quot;Successfully removed the employee.&quot;);
+        }
+
+        private void attemptToRemoveEmployee(Employee employee)
+        {
+            var confirmationForm = new RemoveConfirmationForm(employee.name);
+            var dialogResult = confirmationForm.ShowDialog();
+
+            switch (dialogResult)
+            {
+                case DialogResult.Yes:
+                    this.manageEmployeeController.RemoveEmployeeFromDatabase(employee);
+                    this.getData();
+                    break;
+                case DialogResult.Abort:
+                    MessageBox.Show(@&quot;No employee was selected.&quot;);
+                    break;
+            }
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            var addEmployeeForm = new AddEmployeeForm();
+            addEmployeeForm.ShowDialog();
+            this.getData();
+        }
+
+        private void ManageEmployeeForm_Load(object sender, EventArgs e)
+        {
+            this.employeeGridView.DataSource = this.employeeListSource;
+            this.getData();
+        }
+
+        private void getData()
+        {
+            try
+            {
+                this.employeeListSource.DataSource =
+                    this.manageEmployeeController.GetEmployees();
+
+                for (var i = 0; i &lt; this.employeeGridView.Columns.Count; i++)
+                {
+                    this.employeeGridView.Columns[i].MinimumWidth = 200;
+                }
+
+                this.refreshTable();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show(@&quot;There was a problem connecting to the database, is the VPN enabled?&quot;);
+            }
+        }
+
+        private void refreshTable()
+        {
+            this.employeeGridView.Columns[4].Visible = false;
+            this.employeeGridView.Columns[5].Visible = false;
+            this.employeeGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+        }
+
+        private void manageItemsButton_Click(object sender, EventArgs e)
+        {
+            var manageItemsForm = new ManageItemsForm(this.CurrentEmployee);
+            Hide();
+            manageItemsForm.ShowDialog();
+            Close();
+        }
+
+        private void viewHistoryButton_Click(object sender, EventArgs e)
+        {
+            Employee selectedEmployee = null;
+
+            if (this.employeeGridView.SelectedRows.Count != 0)
+            {
+                selectedEmployee = (Employee) this.employeeGridView.SelectedRows[0].DataBoundItem;
+            }
+
+            if (selectedEmployee != null)
+            {
+                var employeeHistoryForm = new EmployeeHistoryForm(selectedEmployee);
+                employeeHistoryForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(@&quot;There was no selected employee to view the history of.&quot;);
+            }
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[21,9,21,81,0],[31,43,31,47,0],[31,48,31,52,0],[42,9,42,61,0],[43,9,43,10,0],[44,13,44,40,0],[45,13,45,53,0],[46,13,46,76,0],[47,9,47,10,0],[54,9,54,10,0],[55,13,55,21,0],[56,9,56,10,0],[59,9,59,10,0],[60,13,60,99,0],[61,13,61,60,0],[62,13,62,68,0],[63,9,63,10,0],[66,9,66,10,0],[67,13,67,78,0],[68,13,68,62,0],[70,13,70,34,0],[73,21,73,88,0],[74,21,74,36,0],[75,21,75,27,0],[77,21,77,67,0],[78,21,78,27,0],[80,9,80,10,0],[83,9,83,10,0],[84,13,84,57,0],[85,13,85,42,0],[86,13,86,28,0],[87,9,87,10,0],[90,9,90,10,0],[91,13,91,72,0],[92,13,92,28,0],[93,9,93,10,0],[96,9,96,10,0],[98,13,98,14,0],[99,17,100,66,0],[102,22,102,31,0],[102,33,102,72,0],[102,74,102,77,0],[103,17,103,18,0],[104,21,104,73,0],[105,17,105,18,0],[107,17,107,37,0],[108,13,108,14,0],[109,13,109,35,0],[110,13,110,14,0],[111,17,111,105,0],[112,13,112,14,0],[113,9,113,10,0],[116,9,116,10,0],[117,13,117,62,0],[118,13,118,62,0],[119,13,119,107,0],[120,9,120,10,0],[123,9,123,10,0],[124,13,124,77,0],[125,13,125,20,0],[126,13,126,42,0],[127,13,127,21,0],[128,9,128,10,0],[131,9,131,10,0],[132,13,132,46,0],[134,13,134,63,0],[135,13,135,14,0],[136,17,136,99,0],[137,13,137,14,0],[139,13,139,42,0],[140,13,140,14,0],[141,17,141,85,0],[142,17,142,50,0],[143,13,143,14,0],[145,13,145,14,0],[146,17,146,92,0],[147,13,147,14,0],[148,9,148,10,0]]);
+    </script>
+  </body>
+</html>

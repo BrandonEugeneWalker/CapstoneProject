@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\tests\Capstone Unit Tests\desktop\controller\ManageItemsControllerTests.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.ComponentModel;
+using Capstone_Database.Model;
+using Capstone_Desktop.Controller;
+using Capstone_Desktop.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Capstone_Unit_Tests.desktop.controller
+{
+    [TestClass]
+    public class ManageItemsControllerTests
+    {
+        #region Methods
+
+        [TestMethod]
+        public void TestDefaultConstructorSunnyDay()
+        {
+            var testController = new ManageItemsController();
+            Assert.IsNotNull(testController);
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorNull()
+        {
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; new ManageItemsController(null));
+        }
+
+        [TestMethod]
+        public void TestOverloadedConstructorSunnyDay()
+        {
+            var testController = new ManageItemsController(new CapstoneDbContextHandler());
+            Assert.IsNotNull(testController);
+        }
+
+        [TestMethod]
+        public void TestGetAllStockSunnyDay()
+        {
+            var contextHandlerMock = new Mock&lt;IDbContextHandler&gt;();
+            contextHandlerMock.Setup(x =&gt; x.GetAllDetailedStock()).Returns(new BindingList&lt;StockDetailView&gt;());
+            var testController = new ManageItemsController(contextHandlerMock.Object);
+            var results = testController.GetAllStock();
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is BindingList&lt;StockDetailView&gt;);
+        }
+
+        [TestMethod]
+        public void TestGetStockByDetailedStockNull()
+        {
+            var testController = new ManageItemsController();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testController.GetStockByDetailedStock(null));
+        }
+
+        [TestMethod]
+        public void TestGetStockByDetailedStockSunnyDay()
+        {
+            var contextHandlerMock = new Mock&lt;IDbContextHandler&gt;();
+            contextHandlerMock.Setup(x =&gt; x.GetStockById(1234)).Returns(new Stock());
+            var testController = new ManageItemsController(contextHandlerMock.Object);
+            var results = testController.GetStockByDetailedStock(new StockDetailView {
+                stockId = 1234
+            });
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results is Stock);
+        }
+
+        [TestMethod]
+        public void TestRemoveStockFromDatabaseNull()
+        {
+            var testController = new ManageItemsController();
+            Assert.ThrowsException&lt;ArgumentNullException&gt;(() =&gt; testController.RemoveStockFromDatabase(null));
+        }
+
+        [TestMethod]
+        public void TestRemoveStockFromDatabaseSunnyDay()
+        {
+            var testStock = new Stock();
+            var contextHandlerMock = new Mock&lt;IDbContextHandler&gt;();
+            var testController = new ManageItemsController(contextHandlerMock.Object);
+            testController.RemoveStockFromDatabase(testStock);
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[18,9,18,10,1],[19,13,19,62,1],[20,13,20,46,1],[21,9,21,10,1],[25,9,25,10,1],[26,13,26,65,1],[26,65,26,96,1],[26,96,26,98,1],[26,13,26,98,1],[27,9,27,10,1],[31,9,31,10,1],[32,13,32,92,1],[33,13,33,46,1],[34,9,34,10,1],[38,9,38,10,1],[39,13,39,68,1],[40,13,40,112,1],[41,13,41,87,1],[42,13,42,56,1],[43,13,43,39,1],[44,13,44,68,1],[45,9,45,10,1],[49,9,49,10,1],[50,13,50,62,1],[51,13,51,65,1],[51,65,51,109,1],[51,109,51,111,1],[51,13,51,111,1],[52,9,52,10,1],[56,9,56,10,1],[57,13,57,68,1],[58,13,58,86,1],[59,13,59,87,1],[60,13,62,16,1],[63,13,63,39,1],[64,13,64,45,1],[65,9,65,10,1],[69,9,69,10,1],[70,13,70,62,1],[71,13,71,65,1],[71,65,71,109,1],[71,109,71,111,1],[71,13,71,111,1],[72,9,72,10,1],[76,9,76,10,1],[77,13,77,41,1],[78,13,78,68,1],[79,13,79,87,1],[80,13,80,63,1],[81,9,81,10,1]]);
+    </script>
+  </body>
+</html>

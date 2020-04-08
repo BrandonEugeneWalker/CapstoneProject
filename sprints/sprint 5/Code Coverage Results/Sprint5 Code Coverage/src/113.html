@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\website\Capstone Web Warehouse\Capstone Web Warehouse.Tests\Controllers\HomeControllerTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System.Web.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Capstone_Web_Warehouse.Controllers;
+using Moq;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using Capstone_Database.Model;
+using System.Linq;
+using System.Web;
+using System.Web.Routing;
+
+namespace Capstone_Web_Warehouse.Tests.Controllers
+{
+    [TestClass]
+    public class HomeControllerTest
+    {
+        [TestMethod]
+        public void Index()
+        {
+            var controller = new HomeController();
+
+            // Act
+            var result = controller.Index() as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+        [TestMethod]
+        public void LogoffTest()
+        {
+            var controller = setupControllerWithSession();
+            var log = controller.LogOff() as RedirectToRouteResult;
+            Assert.IsNotNull(log);
+        }
+
+        [TestMethod]
+        public void LoginTestError()
+        {
+            var controller = setupControllerWithSession();
+            controller.ModelState.AddModelError(&quot;&quot;, &quot;&quot;);
+            var log = controller.Login(null) as ViewResult;
+            Assert.IsNotNull(log);
+        }
+        [TestMethod]
+        public void LoginTest()
+        {
+            var controller = setupControllerWithSession();
+            var log = controller.Login(new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;P@ss12&quot;, isManager = true }) as RedirectToRouteResult;
+            Assert.IsNotNull(log);
+        }
+
+        [TestMethod]
+        public void ManageStockNullTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var stock = controller.ManageStock() as RedirectToRouteResult;
+            Assert.IsNotNull(stock);
+        }
+
+        [TestMethod]
+        public void ManageStockGoodTest()
+        {
+            var controller = setupControllerWithSession();
+            var stock = controller.ManageStock() as RedirectResult;
+            Assert.IsNotNull(stock);
+        }
+
+        [TestMethod]
+        public void ManageEmployeesNullTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var emp = controller.ManageEmployees() as RedirectToRouteResult;
+            Assert.IsNotNull(emp);
+        }
+
+        [TestMethod]
+        public void ManageEmployeesGoodTest()
+        {
+            var controller = setupControllerWithSession();
+            var emp = controller.ManageEmployees() as RedirectResult;
+            Assert.IsNotNull(emp);
+        }
+
+
+        [TestMethod]
+        public void ManageRentalNullTest()
+        {
+            var controller = setupControllerWithoutSession();
+            var rent = controller.ManageItems() as RedirectToRouteResult;
+            Assert.IsNotNull(rent);
+        }
+
+        [TestMethod]
+        public void ManageRentalGoodTest()
+        {
+            var controller = setupControllerWithSession();
+            var rent = controller.ManageItems() as RedirectResult;
+            Assert.IsNotNull(rent);
+        }
+
+        private static HomeController setupControllerWithoutSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = &quot;Bill&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = false };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+
+            var context = new Mock&lt;OnlineEntities&gt;();
+            var mock = CreateDbSetMock(employees);
+
+            context.Setup(x =&gt; x.Employees).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+
+            var eController = new HomeController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;Employee&quot;]).Returns(null);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+        private static HomeController setupControllerWithSession()
+        {
+            var emp1 = new Employee() { employeeId = 1000, name = &quot;Bob&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = true };
+            var emp2 = new Employee() { employeeId = 2000, name = &quot;Bill&quot;, password = &quot;whm3GC0X8np.c&quot;, isManager = false };
+            IList&lt;Employee&gt; employees = new List&lt;Employee&gt;()
+            {
+                emp1,
+                emp2
+            };
+            var mock = new Mock&lt;TestableObjectResult&lt;Employee&gt;&gt;();
+            var mock2 = CreateDbSetMock(employees);
+            mock.Setup(x =&gt; x.GetEnumerator()).Returns(employees.GetEnumerator());
+            var context = new Mock&lt;OnlineEntities&gt;();
+            context.Setup(x =&gt; x.selectEmployeeByIdAndPassword(1000, &quot;P@ss12&quot;)).Returns(mock.Object);
+            context.Setup(x =&gt; x.Employees).Returns(mock2.Object);
+            context.Setup(x =&gt; x.Employees.Find(1000)).Returns(emp1);
+
+            var eController = new HomeController(context.Object);
+
+            var httpContext = new Mock&lt;HttpContextBase&gt;();
+            var session = new Mock&lt;HttpSessionStateBase&gt;();
+            session.Setup(s =&gt; s[&quot;Employee&quot;]).Returns(emp1);
+            httpContext.Setup(x =&gt; x.Session).Returns(session.Object);
+            var requestContext = new RequestContext(httpContext.Object, new RouteData());
+            eController.ControllerContext = new ControllerContext(requestContext, eController);
+
+            return eController;
+        }
+
+        private static Mock&lt;DbSet&lt;T&gt;&gt; CreateDbSetMock&lt;T&gt;(IEnumerable&lt;T&gt; elements) where T : class
+        {
+            var elementsAsQueryable = elements.AsQueryable();
+            var dbSetMock = new Mock&lt;DbSet&lt;T&gt;&gt;();
+
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Provider).Returns(elementsAsQueryable.Provider);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.Expression).Returns(elementsAsQueryable.Expression);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.ElementType).Returns(elementsAsQueryable.ElementType);
+            dbSetMock.As&lt;IQueryable&lt;T&gt;&gt;().Setup(m =&gt; m.GetEnumerator()).Returns(elementsAsQueryable.GetEnumerator());
+
+            return dbSetMock;
+        }
+        /// &lt;summary&gt;
+        ///     Overriding class for testing with ObjectResults, as its constructor is protected
+        ///     Used in mocking Stored Procedure returns, setting to an object type or list of objects
+        /// &lt;/summary&gt;
+        /// &lt;typeparam name=&quot;T&quot;&gt;Mocked Object Result Type&lt;/typeparam&gt;
+        /// &lt;seealso cref=&quot;ObjectResult{T}&quot; /&gt;
+        public class TestableObjectResult&lt;T&gt; : ObjectResult&lt;T&gt;
+        {
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,9,20,10,1],[21,13,21,51,1],[24,13,24,59,1],[27,13,27,38,1],[28,9,28,10,1],[31,9,31,10,1],[32,13,32,59,1],[33,13,33,68,1],[34,13,34,35,1],[35,9,35,10,1],[39,9,39,10,1],[40,13,40,59,1],[41,13,41,57,1],[42,13,42,60,1],[43,13,43,35,1],[44,9,44,10,1],[47,9,47,10,1],[48,13,48,59,1],[49,13,49,156,1],[50,13,50,35,1],[51,9,51,10,1],[55,9,55,10,1],[56,13,56,62,1],[57,13,57,75,1],[58,13,58,37,1],[59,9,59,10,1],[63,9,63,10,1],[64,13,64,59,1],[65,13,65,68,1],[66,13,66,37,1],[67,9,67,10,1],[71,9,71,10,1],[72,13,72,62,1],[73,13,73,77,1],[74,13,74,35,1],[75,9,75,10,1],[79,9,79,10,1],[80,13,80,59,1],[81,13,81,70,1],[82,13,82,35,1],[83,9,83,10,1],[88,9,88,10,1],[89,13,89,62,1],[90,13,90,74,1],[91,13,91,36,1],[92,9,92,10,1],[96,9,96,10,1],[97,13,97,59,1],[98,13,98,67,1],[99,13,99,36,1],[100,9,100,10,1],[103,9,103,10,1],[104,13,104,121,1],[105,13,105,123,1],[106,13,110,15,1],[112,13,112,54,1],[113,13,113,51,1],[115,13,115,66,1],[116,13,116,70,1],[118,13,118,66,1],[120,13,120,59,1],[121,13,121,60,1],[122,13,122,61,1],[123,13,123,71,1],[124,13,124,90,1],[125,13,125,96,1],[127,13,127,32,1],[128,9,128,10,1],[131,9,131,10,1],[132,13,132,121,1],[133,13,133,123,1],[134,13,138,15,1],[139,13,139,67,1],[140,13,140,52,1],[141,13,141,83,1],[142,13,142,54,1],[143,13,143,102,1],[144,13,144,67,1],[145,13,145,70,1],[147,13,147,66,1],[149,13,149,59,1],[150,13,150,60,1],[151,13,151,61,1],[152,13,152,71,1],[153,13,153,90,1],[154,13,154,96,1],[156,13,156,32,1],[157,9,157,10,1],[160,9,160,10,1],[161,13,161,62,1],[162,13,162,50,1],[164,13,164,104,1],[165,13,165,108,1],[166,13,166,110,1],[167,13,167,118,1],[169,13,169,30,1],[170,9,170,10,1]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\ManageRentalsController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;This class handles interactions between the ManageRentalsForm and the Database.&lt;/para&gt;
+    ///     &lt;para&gt;Most methods require a database to be passed as well as the rental.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class ManageRentalsController
+    {
+        #region Data members
+
+        private const string RentalNullError = @&quot;The rental to edit cannot be null!&quot;;
+        private const string EmployeeNullError = @&quot;The employee to update a rental with cannot be null!&quot;;
+
+        #endregion
+
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        /// &lt;summary&gt;
+        ///   &lt;para&gt;
+        ///  Initializes a new instance of the &lt;see cref=&quot;ManageRentalsController&quot;/&gt; class.
+        /// &lt;/para&gt;
+        ///   &lt;para&gt;Acts as a intermediary between the view and database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public ManageRentalsController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// &lt;summary&gt;
+        ///   &lt;para&gt;
+        ///  Initializes a new instance of the &lt;see cref=&quot;ManageRentalsController&quot;/&gt; class.
+        /// &lt;/para&gt;
+        ///   &lt;para&gt;Acts as a intermediary between the view and database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDatabaseHandler&quot;&gt;The capstone database handler.&lt;/param&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDatabaseHandler - The database handler cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt; The database handler cannot be null! &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public ManageRentalsController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @&quot;The database handler cannot be null!&quot;);
+        }
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets the rentals waiting shipment and returns it.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;The list should be a binding list so any changes should reflect on the database.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;A list of rentals waiting shipment.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;System.ArgumentNullException&quot;&gt;capstoneDbContext&lt;/exception&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        public List&lt;DetailedRentalView&gt; GetRentalsWaitingShipment()
+        {
+            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingShipment();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets the rentals waiting return and returns it.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;List should have binding with the database, so changes will reflect in the database.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;A list of rentals waiting to be returned.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;System.ArgumentNullException&quot;&gt;capstoneDbContext&lt;/exception&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        public List&lt;DetailedRentalView&gt; GetRentalsWaitingReturn()
+        {
+            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingReturn();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets all the detailed rental information from the database and returns it as a bound list.
+        ///     &lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;The list of detailed rentals in the database.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;capstoneDbContext&lt;/exception&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        public BindingList&lt;DetailedRentalView&gt; GetAllRentals()
+        {
+            return this.CapstoneDatabaseHandler.GetAllDetailedRentals();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Marks the rental as waiting return.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Throws an exception if the database or rental is null.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;detailedRentalView&quot;&gt;The detailed rental view.&lt;/param&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee handing the action.&lt;/param&gt;
+        /// &lt;returns&gt;True if successful, false if not.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;System.ArgumentNullException&quot;&gt;
+        ///     employee
+        ///     or
+        ///     detailedRentalView
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt; detailedRentalView and employee cannot be null! &lt;/Precondition&gt;
+        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView,
+            Employee employee)
+        {
+            if (detailedRentalView == null)
+            {
+                throw new ArgumentNullException(nameof(detailedRentalView), RentalNullError);
+            }
+
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), EmployeeNullError);
+            }
+
+            return this.CapstoneDatabaseHandler.MarkRentalAsWaitingReturn(detailedRentalView, employee);
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Marks the rental as returned.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Throws an exception if either the database or rental are null.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;detailedRentalView&quot;&gt;The detailed rental view.&lt;/param&gt;
+        /// &lt;param name=&quot;employee&quot;&gt;The employee marking the rental as returned.&lt;/param&gt;
+        /// &lt;returns&gt;True if successful, false if not.&lt;/returns&gt;
+        /// &lt;exception cref=&quot;System.ArgumentNullException&quot;&gt;
+        ///     employee
+        ///     or
+        ///     detailedRentalView
+        /// &lt;/exception&gt;
+        /// &lt;Precondition&gt; detailedRentalView and employee cannot be null! &lt;/Precondition&gt;
+        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView,
+            Employee employee)
+        {
+            if (detailedRentalView == null)
+            {
+                throw new ArgumentNullException(nameof(detailedRentalView), RentalNullError);
+            }
+
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), EmployeeNullError);
+            }
+
+            return this.CapstoneDatabaseHandler.MarkRentalAsReturned(detailedRentalView, employee);
+        }
+
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[22,60,22,64,1],[22,65,22,69,1],[32,9,32,41,1],[33,9,33,10,1],[34,13,34,75,1],[35,9,35,10,1],[47,9,47,82,1],[48,9,48,10,1],[49,13,51,89,1],[52,9,52,10,1],[66,9,66,10,1],[67,13,67,85,1],[68,9,68,10,1],[80,9,80,10,1],[81,13,81,83,1],[82,9,82,10,1],[93,9,93,10,1],[94,13,94,73,1],[95,9,95,10,1],[114,9,114,10,1],[115,13,115,44,1],[116,13,116,14,1],[117,17,117,94,1],[120,13,120,34,1],[121,13,121,14,1],[122,17,122,86,1],[125,13,125,105,1],[126,9,126,10,1],[145,9,145,10,1],[146,13,146,44,1],[147,13,147,14,1],[148,17,148,94,1],[151,13,151,34,1],[152,13,152,14,1],[153,17,153,86,1],[156,13,156,100,1],[157,9,157,10,1]]);
+    </script>
+  </body>
+</html>

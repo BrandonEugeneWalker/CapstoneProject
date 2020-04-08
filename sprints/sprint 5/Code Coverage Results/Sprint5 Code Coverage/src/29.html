@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\Brandon Walker\Source\Repos\CapstoneProject\code\desktop\Capstone Desktop\Controller\AddStockFormController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.ComponentModel;
+using Capstone_Database.Model;
+using Capstone_Desktop.Model;
+
+namespace Capstone_Desktop.Controller
+{
+    /// &lt;summary&gt;
+    ///     &lt;para&gt;
+    ///         This class handles interactions between the view and the database handler involving action where we add stock
+    ///         to the database.
+    ///     &lt;/para&gt;
+    ///     &lt;para&gt;Contains a IDbContextHandler for easy mocking of database functionality and testing.&lt;/para&gt;
+    ///     &lt;para&gt;By default this class will use the default database handler unless another is provided.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    public class AddStockFormController
+    {
+        #region Properties
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Gets or sets the capstone database handler.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Handles interactions with the raw database context.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;value&gt;The capstone database handler.&lt;/value&gt;
+        public IDbContextHandler CapstoneDatabaseHandler { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;AddStockFormController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Acts as an intermediary between the view and database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public AddStockFormController()
+        {
+            this.CapstoneDatabaseHandler = new CapstoneDbContextHandler();
+        }
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Initializes a new instance of the &lt;see cref=&quot;AddStockFormController&quot; /&gt; class.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Acts as an intermediary between the view and the database handler.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;capstoneDatabaseHandler&quot;&gt;The capstone database handler.&lt;/param&gt;
+        /// &lt;exception cref=&quot;System.ArgumentNullException&quot;&gt;capstoneDatabaseHandler - The database handler cannot be null!&lt;/exception&gt;
+        /// &lt;Precondition&gt; The database handler cannot be null!  &lt;/Precondition&gt;
+        /// &lt;Postcondition&gt; A new instance is created. &lt;/Postcondition&gt;
+        public AddStockFormController(IDbContextHandler capstoneDatabaseHandler)
+        {
+            this.CapstoneDatabaseHandler = capstoneDatabaseHandler ??
+                                           throw new ArgumentNullException(nameof(capstoneDatabaseHandler),
+                                               @&quot;The database handler cannot be null!&quot;);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// &lt;summary&gt;
+        ///     &lt;para&gt;
+        ///         Adds the stock to database using the database handler.
+        ///     &lt;/para&gt;
+        ///     &lt;para&gt;Requires a valid product id and item condition, the stock id is auto generated.&lt;/para&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;productId&quot;&gt;The product identifier.&lt;/param&gt;
+        /// &lt;param name=&quot;itemCondition&quot;&gt;The item condition.&lt;/param&gt;
+        /// &lt;exception cref=&quot;System.ArgumentOutOfRangeException&quot;&gt;
+        ///     productId - The product id must be a positive integer greater than
+        ///     zero.
+        /// &lt;/exception&gt;
+        /// &lt;exception cref=&quot;System.ArgumentNullException&quot;&gt;itemCondition - The item condition cannot be null or empty!&lt;/exception&gt;
+        /// &lt;Precondition&gt; The product id must be a positive integer greater than zero, the item condition cannot be null! &lt;/Precondition&gt;
+        public void AddStockToDatabase(int productId, string itemCondition)
+        {
+            if (productId &lt;= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(productId),
+                    @&quot;The product id must be a positive integer greater than zero.&quot;);
+            }
+
+            if (string.IsNullOrEmpty(itemCondition))
+            {
+                throw new ArgumentNullException(nameof(itemCondition), @&quot;The item condition cannot be null or empty!&quot;);
+            }
+
+            var stockToAdd = new Stock {
+                productId = productId,
+                itemCondition = itemCondition
+            };
+
+            this.CapstoneDatabaseHandler.AddStock(stockToAdd);
+        }
+
+        /// &lt;summary&gt;Gets all products in the database and returns them as a list.&lt;/summary&gt;
+        /// &lt;returns&gt;A binding list of products in the database.&lt;/returns&gt;
+        /// &lt;Precondition&gt; None &lt;/Precondition&gt;
+        public BindingList&lt;Product&gt; GetAllProducts()
+        {
+            return this.CapstoneDatabaseHandler.GetAllProducts();
+        }
+
+        #endregion
+    }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[27,60,27,64,1],[27,65,27,69,1],[41,9,41,40,1],[42,9,42,10,1],[43,13,43,75,1],[44,9,44,10,1],[56,9,56,81,1],[57,9,57,10,1],[58,13,60,89,1],[61,9,61,10,1],[82,9,82,10,1],[83,13,83,32,1],[84,13,84,14,1],[85,17,86,86,1],[89,13,89,53,1],[90,13,90,14,1],[91,17,91,120,1],[94,13,97,15,1],[99,13,99,63,1],[100,9,100,10,1],[106,9,106,10,1],[107,13,107,66,1],[108,9,108,10,1]]);
+    </script>
+  </body>
+</html>
