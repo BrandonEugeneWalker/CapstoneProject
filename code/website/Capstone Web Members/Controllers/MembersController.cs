@@ -210,6 +210,17 @@ namespace Capstone_Web_Members.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        ///     Returns to page displaying Banned Login information
+        ///     <Precondition>none</Precondition>
+        ///     <Postcondition>none</Postcondition>
+        /// </summary>
+        /// <returns>Banned Login Info Page</returns>
+        public ActionResult BannedLogin()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -226,6 +237,7 @@ namespace Capstone_Web_Members.Controllers
         ///     <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="member">The member object that is logging in</param>
+        /// <param name="banned">If logging in member is banned</param>
         /// <returns>HomeController Index if true, login form if false</returns>
         [AllowAnonymous]
         public ActionResult Login(Member member)
@@ -242,6 +254,11 @@ namespace Capstone_Web_Members.Controllers
 
             if (matchingMembers.Count > 0)
             {
+                if (matchingMembers[0].isBanned.Equals(1))
+                {
+                    return RedirectToAction("BannedLogin");
+                }
+
                 var loggedInMemberId = matchingMembers[0].memberId;
                 Session["currentMemberId"] = loggedInMemberId;
                 return RedirectToAction("MediaLibrary", "Home");

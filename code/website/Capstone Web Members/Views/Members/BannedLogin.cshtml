@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "BannedLogin";
+}
+
+<h2>Your Account has been Suspended</h2>
+<hr />
+<div>
+    Due to overdue books or mistreatment of rented media, your account has been suspended.
+    Please call 770-555-5555 or visit your local West Georgia Library to appeal.
+</div>
+<hr />
+<p>
+    <input type="submit" value="Return Home" class="btn btn-default" onclick="location.href='@Url.Action("Login")'" style="color: white; background-color: cornflowerblue" />
+</p>
