@@ -223,6 +223,9 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="banMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
+        </Function>
         <Function Name="createMemberOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedStockId" Type="int" Mode="In" />
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
@@ -308,6 +311,9 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
         <Function Name="selectMemberByIdAndPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="username" Type="varchar" Mode="In" />
           <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="unBanMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
+          <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
         <Function Name="updateMemberReturn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedRentalId" Type="int" Mode="In" />
@@ -578,6 +584,12 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <EntitySet Name="DetailedRentalViews" EntityType="Model.DetailedRentalView" />
           <EntitySet Name="StockDetailViews" EntityType="Model.StockDetailView" />
           <FunctionImport Name="retrieveNonlibrarians" EntitySet="Members" ReturnType="Collection(Model.Member)" />
+          <FunctionImport Name="banMember">
+            <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="unBanMember">
+            <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -922,6 +934,8 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="retrieveNonlibrarians" FunctionName="Model.Store.retrieveNonlibrarians">
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="banMember" FunctionName="Model.Store.banMember" />
+          <FunctionImportMapping FunctionImportName="unBanMember" FunctionName="Model.Store.unBanMember" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -26,9 +26,20 @@
 </div>
 
 <p>
-    @if (!Model.LibrarianLoggedIn)
+    @if (Model.LibrarianLoggedIn)
     {
-        @Html.ActionLink("Edit Information", "Edit", new {id = Model.MemberModel.memberId})
+        if (Model.MemberModel.isBanned.Equals(1))
+        {
+            <input type="button" value="Unban Member" class="btn btn-default" style="float: right; color: white; background-color: orangered" onclick="location.href='@Url.Action("UnBanMember", new { memberId = Model.MemberModel.memberId })'"/>
+        }
+        else
+        {
+            <input type="button" value="Ban Member" class="btn btn-default" style="float: right; color: white; background-color: red" onclick="location.href='@Url.Action("BanMember", new { memberId = Model.MemberModel.memberId })'"/>
+        }
+    }
+    else
+    {
+        @Html.ActionLink("Edit Information", "Edit", new { id = Model.MemberModel.memberId })
     }
 </p>
 

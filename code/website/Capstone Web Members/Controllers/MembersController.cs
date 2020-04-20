@@ -184,6 +184,32 @@ namespace Capstone_Web_Members.Controllers
             return View(member);
         }
 
+        /// <summary>
+        ///     Bans selected member.
+        ///     <Precondition>none</Precondition>
+        ///     <Postcondition>Updates IsBanned field for member object</Postcondition>
+        /// </summary>
+        /// <param name="memberId">The memberId of member to ban.</param>
+        /// <returns>Index of Members</returns>
+        public ActionResult BanMember(int memberId)
+        {
+            this.DatabaseContext.banMember(memberId);
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        ///     UnBans selected member.
+        ///     <Precondition>none</Precondition>
+        ///     <Postcondition>Updates IsBanned field for member object</Postcondition>
+        /// </summary>
+        /// <param name="memberId">The memberId of member to unban.</param>
+        /// <returns>Index of Members</returns>
+        public ActionResult UnBanMember(int memberId)
+        {
+            this.DatabaseContext.unBanMember(memberId);
+            return RedirectToAction("Index");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

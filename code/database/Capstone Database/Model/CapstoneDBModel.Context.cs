@@ -452,5 +452,23 @@ namespace Capstone_Database.Model
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrarians", mergeOption);
         }
+    
+        public virtual int banMember(Nullable<int> selectedMemberId)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter("selectedMemberId", selectedMemberId) :
+                new ObjectParameter("selectedMemberId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("banMember", selectedMemberIdParameter);
+        }
+    
+        public virtual int unBanMember(Nullable<int> selectedMemberId)
+        {
+            var selectedMemberIdParameter = selectedMemberId.HasValue ?
+                new ObjectParameter("selectedMemberId", selectedMemberId) :
+                new ObjectParameter("selectedMemberId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("unBanMember", selectedMemberIdParameter);
+        }
     }
 }
