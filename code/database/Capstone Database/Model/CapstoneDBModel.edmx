@@ -42,6 +42,7 @@
           <Property Name="returnEmployeeId" Type="int" />
           <Property Name="returnDateTime" Type="datetime" Precision="0" />
           <Property Name="returnCondition" Type="enum" />
+          <Property Name="dueDateTime" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -223,6 +224,7 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="addDueDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="banMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
@@ -286,6 +288,9 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
           <Parameter Name="selectedMemberId" Type="int" Mode="In" />
         </Function>
         <Function Name="retrieveNonlibrarians" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="retrieveNonlibrariansBanned" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="retrieveNonlibrariansNotBanned" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
+        <Function Name="retrieveNonlibrariansOverdue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d" />
         <Function Name="retrieveProductById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="cs4982s20d">
           <Parameter Name="selectedProductId" Type="int" Mode="In" />
         </Function>
@@ -585,11 +590,15 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <EntitySet Name="StockDetailViews" EntityType="Model.StockDetailView" />
           <FunctionImport Name="retrieveNonlibrarians" EntitySet="Members" ReturnType="Collection(Model.Member)" />
           <FunctionImport Name="banMember">
-            <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="unBanMember">
-            <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="addDueDates" />
+          <FunctionImport Name="retrieveNonlibrariansBanned" EntitySet="Members" ReturnType="Collection(Model.Member)" />
+          <FunctionImport Name="retrieveNonlibrariansNotBanned" EntitySet="Members" ReturnType="Collection(Model.Member)" />
+          <FunctionImport Name="retrieveNonlibrariansOverdue" EntitySet="Members" ReturnType="Collection(Model.Member)" />
           </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -654,6 +663,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <NavigationProperty Name="Employee1" Relationship="Model.employeeId_ItemRental_Ship" FromRole="ItemRental" ToRole="Employee" />
           <NavigationProperty Name="Member" Relationship="Model.memberId_ItemRental" FromRole="ItemRental" ToRole="Member" />
           <NavigationProperty Name="Stock" Relationship="Model.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
+          <Property Name="dueDateTime" Type="DateTime" />
         </EntityType>
         <Association Name="addressId_ItemRental">
           <End Type="Model.Address" Role="Address" Multiplicity="1">
@@ -775,6 +785,9 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="retrieveNonlibrarians_Result" />
+        <ComplexType Name="retrieveNonlibrariansBanned_Result" />
+        <ComplexType Name="retrieveNonlibrariansNotBanned_Result" />
+        <ComplexType Name="retrieveNonlibrariansOverdue_Result" />
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -882,6 +895,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <EntitySetMapping Name="ItemRentals">
             <EntityTypeMapping TypeName="Model.ItemRental">
               <MappingFragment StoreEntitySet="ItemRental">
+                <ScalarProperty Name="dueDateTime" ColumnName="dueDateTime" />
                 <ScalarProperty Name="returnCondition" ColumnName="returnCondition" />
                 <ScalarProperty Name="returnDateTime" ColumnName="returnDateTime" />
                 <ScalarProperty Name="returnEmployeeId" ColumnName="returnEmployeeId" />
@@ -936,6 +950,13 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="banMember" FunctionName="Model.Store.banMember" />
           <FunctionImportMapping FunctionImportName="unBanMember" FunctionName="Model.Store.unBanMember" />
+          <FunctionImportMapping FunctionImportName="addDueDates" FunctionName="Model.Store.addDueDates" />
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansBanned" FunctionName="Model.Store.retrieveNonlibrariansBanned">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansNotBanned" FunctionName="Model.Store.retrieveNonlibrariansNotBanned">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansOverdue" FunctionName="Model.Store.retrieveNonlibrariansOverdue">
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

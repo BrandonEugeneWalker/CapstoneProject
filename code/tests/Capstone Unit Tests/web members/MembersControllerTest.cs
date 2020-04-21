@@ -32,7 +32,7 @@ namespace Capstone_Unit_Tests.web_members
         {
             var controller = setupMembersControllerWithLibrarianSession();
 
-            var result = controller.Index() as ViewResult;
+            var result = controller.Index(null) as ViewResult;
 
             Assert.IsNotNull(result);
         }
@@ -42,7 +42,7 @@ namespace Capstone_Unit_Tests.web_members
         {
             var controller = setupMembersControllerWithMemberSession();
 
-            var result = controller.Index() as RedirectToRouteResult;
+            var result = controller.Index(null) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }
@@ -52,7 +52,7 @@ namespace Capstone_Unit_Tests.web_members
         {
             var controller = setupMembersControllerWithoutSession();
 
-            var result = controller.Index() as RedirectToRouteResult;
+            var result = controller.Index(null) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Capstone_Database.Model;
@@ -50,14 +51,34 @@ namespace Capstone_Web_Members.Controllers
         ///     <Postcondition>None</Postcondition>
         /// </summary>
         /// <returns>Members Index page</returns>
-        public ActionResult Index()
+        public ActionResult Index(string statusSearch)
         {
-            if (Session["currentLibrarianId"] != null)
+            if (Session["currentLibrarianId"] == null)
             {
-                return View(this.DatabaseContext.retrieveNonlibrarians());
+                return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            if (statusSearch == null)
+            {
+                statusSearch = string.Empty;
+            }
+
+            ViewBag.statusSearch = statusSearch;
+
+            if (statusSearch == "Banned")
+            {
+                return View(this.DatabaseContext.retrieveNonlibrariansBanned());
+            }
+            if (statusSearch == "Unbanned")
+            {
+                return View(this.DatabaseContext.retrieveNonlibrariansNotBanned());
+            }
+            if (statusSearch == "Overdue")
+            {
+                return View(this.DatabaseContext.retrieveNonlibrariansOverdue());
+            }
+
+            return View(this.DatabaseContext.retrieveNonlibrarians());
         }
 
         /// <summary>

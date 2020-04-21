@@ -470,5 +470,40 @@ namespace Capstone_Database.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("unBanMember", selectedMemberIdParameter);
         }
+    
+        public virtual int addDueDates()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("addDueDates");
+        }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrariansBanned()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrariansBanned");
+        }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrariansBanned(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrariansBanned", mergeOption);
+        }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrariansNotBanned()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrariansNotBanned");
+        }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrariansNotBanned(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrariansNotBanned", mergeOption);
+        }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrariansOverdue()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrariansOverdue");
+        }
+    
+        public virtual ObjectResult<Member> retrieveNonlibrariansOverdue(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Member>("retrieveNonlibrariansOverdue", mergeOption);
+        }
     }
 }

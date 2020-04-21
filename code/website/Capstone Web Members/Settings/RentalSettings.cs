@@ -12,6 +12,11 @@
         /// </summary>
         public static int MaxCurrentRentals = 3;
 
+        /// <summary>
+        ///     The standard rental duration until media is considered Past Due
+        /// </summary>
+        public static int RentalPeriod = 14;
+
         #endregion
     }
 }

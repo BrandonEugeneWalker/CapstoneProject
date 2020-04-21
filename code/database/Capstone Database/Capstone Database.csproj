@@ -134,6 +134,15 @@
     <Compile Include="Model\retrieveMembersRentals_Result.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\retrieveNonlibrariansBanned_Result.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\retrieveNonlibrariansNotBanned_Result.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\retrieveNonlibrariansOverdue_Result.cs">
+      <DependentUpon>CapstoneDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\retrieveNonlibrarians_Result.cs">
       <DependentUpon>CapstoneDBModel.tt</DependentUpon>
     </Compile>

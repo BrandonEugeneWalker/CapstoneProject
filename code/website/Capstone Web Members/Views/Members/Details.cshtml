@@ -129,6 +129,9 @@
             <th>
                 Rented
             </th>
+            <th>
+                Due Date
+            </th>
         </tr>
         @foreach (var rental in Model.ItemRentalsModel)
         {
@@ -161,6 +164,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelRental => rental.rentalDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelRental => rental.dueDateTime)
                 </td>
             </tr>
         }
