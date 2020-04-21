@@ -38,11 +38,41 @@ namespace Capstone_Unit_Tests.web_members
         }
 
         [TestMethod]
-        public void IndexPageMemberWillRedirectToHomeIndex()
+        public void IndexPageMemberWillRedirectToHomeIndexWithNoParameter()
         {
             var controller = setupMembersControllerWithMemberSession();
 
             var result = controller.Index(null) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void IndexPageLibrarianWillGoToHomeIndexWithBannedParameter()
+        {
+            var controller = setupMembersControllerWithLibrarianSession();
+
+            var result = controller.Index("Banned") as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void IndexPageLibrarianWillGoToHomeIndexWithUnbannedParameter()
+        {
+            var controller = setupMembersControllerWithLibrarianSession();
+
+            var result = controller.Index("Unbanned") as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void IndexPageLibrarianWillGoToHomeIndexWithOverdueParameter()
+        {
+            var controller = setupMembersControllerWithLibrarianSession();
+
+            var result = controller.Index("Overdue") as ViewResult;
 
             Assert.IsNotNull(result);
         }
@@ -139,7 +169,7 @@ namespace Capstone_Unit_Tests.web_members
             Assert.IsNotNull(result);
         }
 
-        [TestMethod] 
+        [TestMethod]
         public void EditMemberPageWithValidIdIsValid()
         {
             var controller = setupMembersControllerWithMemberSession();
@@ -150,7 +180,7 @@ namespace Capstone_Unit_Tests.web_members
             Assert.IsNotNull(result.Model);
             Assert.IsInstanceOfType(result.Model, typeof(Member));
 
-            var model = (Member) result.Model;
+            var model = (Member)result.Model;
 
             Assert.AreEqual(1, model.memberId);
         }
@@ -160,7 +190,7 @@ namespace Capstone_Unit_Tests.web_members
         {
             var controller = setupMembersControllerWithMemberSession();
 
-            var result = controller.Edit((int?) null) as ViewResult;
+            var result = controller.Edit((int?)null) as ViewResult;
 
             Assert.IsNull(result);
         }
@@ -190,7 +220,7 @@ namespace Capstone_Unit_Tests.web_members
         {
             var controller = setupMembersControllerWithMemberSession();
 
-            var result = controller.Edit(new Member {memberId = 1, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0}) as RedirectToRouteResult;
+            var result = controller.Edit(new Member { memberId = 1, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0 }) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }
@@ -215,6 +245,36 @@ namespace Capstone_Unit_Tests.web_members
             var create = controller.Edit(new Member { memberId = 2, username = "", name = "", password = "", isBanned = 0, isLibrarian = 0 }) as RedirectToRouteResult;
 
             Assert.IsNotNull(create);
+        }
+
+        [TestMethod]
+        public void BanMemberRedirectsToIndex()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.BanMember(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void UnBanMemberRedirectsToIndex()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.UnBanMember(1) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void BannedLoginReturnsToView()
+        {
+            var controller = setupMembersControllerWithoutSession();
+
+            var result = controller.BannedLogin();
+
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
@@ -244,7 +304,7 @@ namespace Capstone_Unit_Tests.web_members
         {
             var controller = setupMembersControllerWithLibrarianSession();
 
-            var result = controller.Login(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1}) as RedirectToRouteResult;
+            var result = controller.Login(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1 }) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
         }
@@ -311,7 +371,7 @@ namespace Capstone_Unit_Tests.web_members
             context.Setup(x => x.Addresses).Returns(mockAddresses.Object);
             context.Setup(x => x.ItemRentals).Returns(mockRentals.Object);
 
-            context.Setup(x => x.Members.Find(1)).Returns(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1});
+            context.Setup(x => x.Members.Find(1)).Returns(new Member { memberId = 1, username = "username", password = "password", isLibrarian = 1 });
 
             var mockedProductObjectResult = new Mock<TestableObjectResult<Product>>();
             mockedProductObjectResult.Setup(x => x.GetEnumerator()).Returns(getTestProducts().GetEnumerator);
