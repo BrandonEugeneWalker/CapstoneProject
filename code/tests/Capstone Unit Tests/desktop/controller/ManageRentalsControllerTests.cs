@@ -65,7 +65,7 @@ namespace Capstone_Unit_Tests.desktop.controller
             var testController = new ManageRentalsController(contextMock.Object);
             var results = testController.GetAllRentals();
             Assert.IsNotNull(results);
-            Assert.IsTrue(results is BindingList<DetailedRentalView>);
+            Assert.IsTrue(results is List<DetailedRentalView>);
         }
 
         [TestMethod]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Capstone_Database.Model;
 using Capstone_Desktop.Model;
@@ -76,7 +77,7 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(stock), StockNullError);
             }
 
-            return this.CapstoneDatabaseHandler.GetDetailedStockHistory(stock);
+            return this.CapstoneDatabaseHandler.GetDetailedStockHistory(stock).OrderByDescending(x => x.rentalDateTime).ToList();
         }
 
         /// <summary>

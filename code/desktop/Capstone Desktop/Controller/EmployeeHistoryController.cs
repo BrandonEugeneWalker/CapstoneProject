@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Capstone_Database.Model;
 using Capstone_Desktop.Model;
@@ -70,7 +71,7 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
             }
 
-            return this.CapstoneDatabaseHandler.GetDetailedEmployeeHistory(employee);
+            return this.CapstoneDatabaseHandler.GetDetailedEmployeeHistory(employee).OrderByDescending(x => x.rentalDateTime).ToList();
         }
 
         /// <summary>

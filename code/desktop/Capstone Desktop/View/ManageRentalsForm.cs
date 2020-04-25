@@ -51,6 +51,7 @@ namespace Capstone_Desktop.View
             this.InitializeComponent();
             this.manageRentalsController = new ManageRentalsController();
             this.CurrentEmployee = loggedInEmployee;
+            this.populateComboBox();
             if (this.CurrentEmployee.isManager == true)
             {
                 this.managerButton.Enabled = true;

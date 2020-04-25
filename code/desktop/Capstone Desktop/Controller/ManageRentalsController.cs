@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Capstone_Database.Model;
 using Capstone_Desktop.Model;
 
@@ -64,7 +65,8 @@ namespace Capstone_Desktop.Controller
         /// <Precondition> None </Precondition>
         public List<DetailedRentalView> GetRentalsWaitingShipment()
         {
-            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingShipment();
+            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingShipment().OrderByDescending(x => x.rentalDateTime)
+                       .ToList();
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace Capstone_Desktop.Controller
         /// <Precondition> None </Precondition>
         public List<DetailedRentalView> GetRentalsWaitingReturn()
         {
-            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingReturn();
+            return this.CapstoneDatabaseHandler.GetDetailedRentalsWaitingReturn().OrderByDescending(x => x.rentalDateTime).ToList();
         }
 
         /// <summary>
@@ -89,9 +91,9 @@ namespace Capstone_Desktop.Controller
         /// <returns>The list of detailed rentals in the database.</returns>
         /// <exception cref="ArgumentNullException">capstoneDbContext</exception>
         /// <Precondition> None </Precondition>
-        public BindingList<DetailedRentalView> GetAllRentals()
+        public List<DetailedRentalView> GetAllRentals()
         {
-            return this.CapstoneDatabaseHandler.GetAllDetailedRentals();
+            return this.CapstoneDatabaseHandler.GetAllDetailedRentals().OrderByDescending(x => x.rentalDateTime).ToList();
         }
 
         /// <summary>
