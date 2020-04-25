@@ -320,7 +320,7 @@ namespace Capstone_Unit_Tests.desktop.model
         public void TestRemoveStockNullStock()
         {
             var testHandler = new CapstoneDbContextHandler();
-            Assert.ThrowsException<ArgumentNullException>(() => testHandler.RemoveStock(null));
+            Assert.ThrowsException<ArgumentNullException>(() => testHandler.MarkStockUnusable(null));
         }
 
         [TestMethod]
@@ -330,10 +330,11 @@ namespace Capstone_Unit_Tests.desktop.model
             using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
             {
                 var stockToRemove = testHandler.GetStockById(1);
-                testHandler.RemoveStock(stockToRemove);
+                testHandler.MarkStockUnusable(stockToRemove);
                 var stockRemoved = testHandler.GetStockById(1);
 
-                Assert.IsNull(stockRemoved);
+                Assert.IsNotNull(stockRemoved);
+                Assert.IsTrue(stockRemoved.itemCondition.Equals("Unusable"));
             }
         }
 

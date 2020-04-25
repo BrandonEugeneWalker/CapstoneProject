@@ -155,7 +155,7 @@ namespace Capstone_Desktop.View
             switch (dialogResult)
             {
                 case DialogResult.Yes:
-                    this.manageItemsController.RemoveStockFromDatabase(currentStock);
+                    this.manageItemsController.MarkStockUnusable(currentStock);
                     this.getData();
                     break;
                 case DialogResult.Abort:

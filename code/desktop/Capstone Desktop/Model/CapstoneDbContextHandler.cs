@@ -281,14 +281,15 @@ namespace Capstone_Desktop.Model
             this.CapstoneDbContext.SaveChanges();
         }
 
-        /// <summary>Removes the given stock from the database if it exists.</summary>
-        /// <param name="stock">The stock to remove from the database.</param>
+        /// <summary>Marks the given stock as unusable.</summary>
+        /// <param name="stock">The stock to mark unusable.</param>
         /// <exception cref="ArgumentNullException">
         ///     stock
         ///     - The stock cannot be null!
         /// </exception>
         /// <Precondition>The stock cannot be null.</Precondition>
-        public void RemoveStock(Stock stock)
+        /// <Postcondition>The stock is marked unusable.</Postcondition>
+        public void MarkStockUnusable(Stock stock)
         {
             if (stock == null)
             {
@@ -296,7 +297,7 @@ namespace Capstone_Desktop.Model
             }
 
             this.CapstoneDbContext.Stocks.Load();
-            this.CapstoneDbContext.Stocks.Remove(stock);
+            stock.itemCondition = "Unusable";
             this.CapstoneDbContext.SaveChanges();
         }
 

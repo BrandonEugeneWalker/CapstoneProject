@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using Capstone_Database.Model;
 using Capstone_Desktop.Controller;

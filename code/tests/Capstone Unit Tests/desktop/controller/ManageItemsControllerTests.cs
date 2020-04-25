@@ -68,7 +68,7 @@ namespace Capstone_Unit_Tests.desktop.controller
         public void TestRemoveStockFromDatabaseNull()
         {
             var testController = new ManageItemsController();
-            Assert.ThrowsException<ArgumentNullException>(() => testController.RemoveStockFromDatabase(null));
+            Assert.ThrowsException<ArgumentNullException>(() => testController.MarkStockUnusable(null));
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace Capstone_Unit_Tests.desktop.controller
             var testStock = new Stock();
             var contextHandlerMock = new Mock<IDbContextHandler>();
             var testController = new ManageItemsController(contextHandlerMock.Object);
-            testController.RemoveStockFromDatabase(testStock);
+            testController.MarkStockUnusable(testStock);
         }
 
         #endregion

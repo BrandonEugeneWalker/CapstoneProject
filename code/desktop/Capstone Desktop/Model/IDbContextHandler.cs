@@ -42,7 +42,7 @@ namespace Capstone_Desktop.Model
 
         void RemoveEmployee(Employee employee);
 
-        void RemoveStock(Stock stock);
+        void MarkStockUnusable(Stock stock);
 
         //Insertions
 
