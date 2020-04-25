@@ -391,6 +391,7 @@ namespace Capstone_Desktop.Model
         /// </summary>
         /// <param name="detailedRentalView">The detailed rental view to update.</param>
         /// <param name="employee">The employee doing the updating.</param>
+        /// <param name="itemCondition">The condition of the item being returned.</param>
         /// <returns>True if the value could be updated and was, false if not.</returns>
         /// <exception cref="ArgumentNullException">
         ///     detailedRentalView
@@ -399,7 +400,7 @@ namespace Capstone_Desktop.Model
         ///     cannot be null!
         /// </exception>
         /// <Precondition>The employee cannot be null, the detailed rental cannot be null!</Precondition>
-        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, Employee employee)
+        public bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, Employee employee, string itemCondition)
         {
             if (detailedRentalView == null)
             {
@@ -409,6 +410,11 @@ namespace Capstone_Desktop.Model
             if (employee == null)
             {
                 throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
+            }
+
+            if (string.IsNullOrEmpty(itemCondition))
+            {
+                throw new ArgumentNullException(nameof(itemCondition), @"The item condition cannot be null or empty!");
             }
 
             this.CapstoneDbContext.ItemRentals.Load();
@@ -427,6 +433,8 @@ namespace Capstone_Desktop.Model
             currentRental.status = "Returned";
             currentRental.shipEmployeeId = employee.employeeId;
             currentRental.shipDateTime = DateTime.Now;
+            currentRental.Stock.itemCondition = itemCondition;
+            currentRental.returnCondition = itemCondition;
             this.CapstoneDbContext.SaveChanges();
             return true;
         }

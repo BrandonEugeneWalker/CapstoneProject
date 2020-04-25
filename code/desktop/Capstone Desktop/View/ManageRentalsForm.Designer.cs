@@ -38,6 +38,8 @@
             this.rentedButton = new System.Windows.Forms.Button();
             this.rentalStatusComboBox = new System.Windows.Forms.ComboBox();
             this.rentalStatusLabel = new System.Windows.Forms.Label();
+            this.itemConditionComboBox = new System.Windows.Forms.ComboBox();
+            this.itemConditionLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.rentalGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -154,10 +156,31 @@
             this.rentalStatusLabel.TabIndex = 13;
             this.rentalStatusLabel.Text = "Rental Status:";
             // 
+            // itemConditionComboBox
+            // 
+            this.itemConditionComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.itemConditionComboBox.FormattingEnabled = true;
+            this.itemConditionComboBox.Location = new System.Drawing.Point(878, 564);
+            this.itemConditionComboBox.Name = "itemConditionComboBox";
+            this.itemConditionComboBox.Size = new System.Drawing.Size(179, 33);
+            this.itemConditionComboBox.TabIndex = 14;
+            // 
+            // itemConditionLabel
+            // 
+            this.itemConditionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.itemConditionLabel.Location = new System.Drawing.Point(683, 563);
+            this.itemConditionLabel.Name = "itemConditionLabel";
+            this.itemConditionLabel.Size = new System.Drawing.Size(189, 37);
+            this.itemConditionLabel.TabIndex = 15;
+            this.itemConditionLabel.Text = "Item Condition:";
+            this.itemConditionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // ManageRentalsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.itemConditionLabel);
+            this.Controls.Add(this.itemConditionComboBox);
             this.Controls.Add(this.rentalStatusLabel);
             this.Controls.Add(this.rentalStatusComboBox);
             this.Controls.Add(this.rentedButton);
@@ -192,5 +215,7 @@
         private System.Windows.Forms.Button rentedButton;
         private System.Windows.Forms.ComboBox rentalStatusComboBox;
         private System.Windows.Forms.Label rentalStatusLabel;
+        private System.Windows.Forms.ComboBox itemConditionComboBox;
+        private System.Windows.Forms.Label itemConditionLabel;
     }
 }

@@ -489,7 +489,7 @@ namespace Capstone_Unit_Tests.desktop.model
         {
             var testHandler = new CapstoneDbContextHandler();
             Assert.ThrowsException<ArgumentNullException>(() =>
-                testHandler.MarkRentalAsReturned(null, new Employee()));
+                testHandler.MarkRentalAsReturned(null, new Employee(), "Good"));
         }
 
         [TestMethod]
@@ -497,7 +497,15 @@ namespace Capstone_Unit_Tests.desktop.model
         {
             var testHandler = new CapstoneDbContextHandler();
             Assert.ThrowsException<ArgumentNullException>(() =>
-                testHandler.MarkRentalAsReturned(new DetailedRentalView(), null));
+                testHandler.MarkRentalAsReturned(new DetailedRentalView(), null, "Good"));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullCondition()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                testHandler.MarkRentalAsReturned(new DetailedRentalView(), new Employee(), null));
         }
 
         [TestMethod]
@@ -507,7 +515,7 @@ namespace Capstone_Unit_Tests.desktop.model
             var testDetailedRental = new DetailedRentalView {
                 itemRentalId = -1
             };
-            var results = testHandler.MarkRentalAsReturned(testDetailedRental, new Employee());
+            var results = testHandler.MarkRentalAsReturned(testDetailedRental, new Employee(), "Good");
             Assert.IsFalse(results);
         }
 
@@ -535,7 +543,7 @@ namespace Capstone_Unit_Tests.desktop.model
                 };
 
                 var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, "password");
-                var results = testHandler.MarkRentalAsReturned(testDetailedRental, employeeUpdating);
+                var results = testHandler.MarkRentalAsReturned(testDetailedRental, employeeUpdating, "Good");
                 Assert.IsFalse(results);
             }
         }
@@ -546,13 +554,16 @@ namespace Capstone_Unit_Tests.desktop.model
             var testHandler = new CapstoneDbContextHandler();
             using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
             {
+                Stock testStock = testHandler.GetStockById(1);
+
                 var testItemRental = new ItemRental {
                     itemRentalId = -1,
                     stockId = 1,
                     memberId = 1,
                     addressId = 1,
                     status = "WaitingReturn",
-                    rentalDateTime = DateTime.Now
+                    rentalDateTime = DateTime.Now,
+                    Stock = testStock
                 };
 
                 testHandler.CapstoneDbContext.ItemRentals.Add(testItemRental);
@@ -562,7 +573,7 @@ namespace Capstone_Unit_Tests.desktop.model
                 };
 
                 var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, "password");
-                var results = testHandler.MarkRentalAsReturned(testDetailedRental, employeeUpdating);
+                var results = testHandler.MarkRentalAsReturned(testDetailedRental, employeeUpdating, "Good");
                 Assert.IsTrue(results);
                 Assert.IsTrue(testItemRental.status.Equals("Returned"));
             }

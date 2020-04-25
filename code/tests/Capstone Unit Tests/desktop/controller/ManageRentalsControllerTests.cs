@@ -104,7 +104,7 @@ namespace Capstone_Unit_Tests.desktop.controller
             var manageRentalsController = new ManageRentalsController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsReturned(null, new Employee()));
+                manageRentalsController.MarkRentalAsReturned(null, new Employee(), "Good"));
         }
 
         [TestMethod]
@@ -114,7 +114,17 @@ namespace Capstone_Unit_Tests.desktop.controller
 
             Assert.ThrowsException<ArgumentNullException>(() =>
                 manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(),
-                    null));
+                    null, "Good"));
+        }
+
+        [TestMethod]
+        public void TestMarkRentalAsReturnedNullCondition()
+        {
+            var manageRentalsController = new ManageRentalsController();
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                manageRentalsController.MarkRentalAsReturned(new DetailedRentalView(),
+                    new Employee(), null));
         }
 
         [TestMethod]
@@ -123,9 +133,9 @@ namespace Capstone_Unit_Tests.desktop.controller
             var employee = new Employee();
             var detailedRental = new DetailedRentalView();
             var contextMock = new Mock<IDbContextHandler>();
-            contextMock.Setup(x => x.MarkRentalAsReturned(detailedRental, employee)).Returns(true);
+            contextMock.Setup(x => x.MarkRentalAsReturned(detailedRental, employee, "Good")).Returns(true);
             var testController = new ManageRentalsController(contextMock.Object);
-            var results = testController.MarkRentalAsReturned(detailedRental, employee);
+            var results = testController.MarkRentalAsReturned(detailedRental, employee, "Good");
             Assert.IsTrue(results);
         }
 

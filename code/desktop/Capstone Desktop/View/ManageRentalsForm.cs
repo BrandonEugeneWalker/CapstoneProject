@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Windows.Forms;
 using Capstone_Database.Model;
@@ -16,6 +17,13 @@ namespace Capstone_Desktop.View
     public partial class ManageRentalsForm : Form
     {
         #region Data members
+
+        private List<string> itemConditions = new List<string> {
+            "Excellent",
+            "Good",
+            "Fair",
+            "Unusable"
+        };
 
         private readonly BindingSource rentalListSource = new BindingSource();
 
@@ -52,6 +60,12 @@ namespace Capstone_Desktop.View
         #endregion
 
         #region Methods
+
+        private void populateComboBox()
+        {
+            this.itemConditionComboBox.DataSource = this.itemConditions;
+            this.itemConditionComboBox.SelectedIndex = 1;
+        }
 
         private void LogoutButton_Click(object sender, EventArgs e)
         {
@@ -156,8 +170,9 @@ namespace Capstone_Desktop.View
             foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
             {
                 var currentItem = (DetailedRentalView) currentRow.DataBoundItem;
+                string itemCondition = (string) this.itemConditionComboBox.SelectedItem;
 
-                var results = this.manageRentalsController.MarkRentalAsReturned(currentItem, this.CurrentEmployee);
+                var results = this.manageRentalsController.MarkRentalAsReturned(currentItem, this.CurrentEmployee, itemCondition);
 
                 if (!results)
                 {
