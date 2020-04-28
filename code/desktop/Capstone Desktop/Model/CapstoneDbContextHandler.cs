@@ -307,7 +307,8 @@ namespace Capstone_Desktop.Model
         ///     stock
         ///     - The stock cannot be null!
         /// </exception>
-        /// <Precondition>The employee cannot be null.</Precondition>
+        /// <Precondition>The stock cannot be null.</Precondition>
+        /// <Postcondition> The stock is added to the database. </Postcondition>
         public void AddStock(Stock stock)
         {
             if (stock == null)
@@ -327,6 +328,7 @@ namespace Capstone_Desktop.Model
         ///     - The employee cannot be null!
         /// </exception>
         /// <Precondition>The employee cannot be null.</Precondition>
+        /// <Postcondition> The employee is added. </Postcondition>
         public void AddEmployee(Employee employee)
         {
             if (employee == null)
@@ -337,6 +339,25 @@ namespace Capstone_Desktop.Model
             var isManager = Convert.ToSByte(employee.isManager);
             this.CapstoneDbContext.insertEmployee(null, employee.password, isManager,
                 employee.name);
+            this.CapstoneDbContext.SaveChanges();
+        }
+
+        /// <summary>
+        ///   <para>
+        ///  Adds the given product to the database. If the product already exists then an exception will be thrown by the database.</para>
+        /// </summary>
+        /// <param name="product">The product to add to the database.</param>
+        /// <exception cref="ArgumentNullException">product - The product to add cannot be null!</exception>
+        /// <Precondition> The product to add cannot be null!</Precondition>
+        /// <Postcondition> The product is added. </Postcondition>
+        public void AddProduct(Product product)
+        {
+            if (product == null)
+            {
+                throw new ArgumentNullException(nameof(product), @"The product to add cannot be null!");
+            }
+            this.CapstoneDbContext.Products.Load();
+            this.CapstoneDbContext.Products.Add(product);
             this.CapstoneDbContext.SaveChanges();
         }
 

@@ -50,6 +50,8 @@ namespace Capstone_Desktop.Model
 
         void AddEmployee(Employee employee);
 
+        void AddProduct(Product product);
+
         //Modifications
 
         bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, Employee employee);
