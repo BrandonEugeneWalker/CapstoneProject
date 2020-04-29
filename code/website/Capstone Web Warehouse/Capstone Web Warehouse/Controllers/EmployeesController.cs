@@ -45,7 +45,6 @@ namespace Capstone_Web_Warehouse.Controllers
             return View(database.Employees.ToList());
         }
 
-
         /// <summary>
         ///     Detail view of the selected employee.
         /// <Precondition>ID != Null</Precondition>
@@ -140,7 +139,10 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
-            if (disposing) database.Dispose();
+            if (disposing)
+            {
+                database.Dispose();
+            }
 
             base.Dispose(disposing);
         }

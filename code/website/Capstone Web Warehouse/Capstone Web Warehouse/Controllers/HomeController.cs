@@ -64,7 +64,7 @@ namespace Capstone_Web_Warehouse.Controllers
         {
             var employee = Session["Employee"] as Employee;
 
-            if (employee == null || (bool) !employee.isManager)
+            if (employee == null || (bool)!employee.isManager)
             {
                 return RedirectToAction("Login");
             }
@@ -87,6 +87,21 @@ namespace Capstone_Web_Warehouse.Controllers
             return Redirect("~/Stocks/Index");
         }
 
+        /// <summary>  Redirect to stocks index.
+        /// <Precondition>Employee != Null</Precondition>
+        /// <Postcondition>None</Postcondition>
+        /// </summary>
+        /// <returns>stocks index page.</returns>
+        public ActionResult ManageProducts()
+        {
+            var employee = Session["Employee"] as Employee;
+            if (employee == null || (bool)!employee.isManager)
+            {
+                return RedirectToAction("Login");
+            }
+
+            return Redirect("~/Products/Index");
+        }
 
         /// <summary>Logins the employee
         /// <Precondition>None</Precondition>
@@ -96,12 +111,12 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>Manage rentals page if good, same page if bad.</returns>
         public ActionResult Login(Employee model)
         {
-            if (!ModelState.IsValid) return View(model);
             var employee = data.selectEmployeeByIdAndPassword(model.employeeId, model.password).ToList();
             if (employee.Count > 0)
             {
                 var currentEmp = employee[0];
                 Session["Employee"] = currentEmp;
+                Session["Manager"] = currentEmp.isManager;
                 return RedirectToAction("ManageItems");
             }
 

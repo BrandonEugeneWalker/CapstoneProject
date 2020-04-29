@@ -88,7 +88,11 @@ namespace Capstone_Web_Warehouse.Controllers
         {
             var employee = Session["Employee"] as Employee;
 
-            if (employee == null || (bool)!employee.isManager) return Redirect("~/Home/Login");
+            if (employee == null || (bool)!employee.isManager)
+            {
+                return Redirect("~/Home/Login");
+            }
+
             ViewBag.productId = new SelectList(db.Products, "productId", "name");
             return View();
         }
@@ -117,6 +121,7 @@ namespace Capstone_Web_Warehouse.Controllers
                 db.SaveChanges();
                 //return RedirectToAction("Index");
             }
+
             return RedirectToAction("Index");
             //ViewBag.productId = new SelectList(db.Products, "productId", "name", stock.productId);
             //return View(stock);
@@ -141,6 +146,7 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(stock);
         }
 
@@ -152,12 +158,13 @@ namespace Capstone_Web_Warehouse.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Index page</returns>
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Stock stock = db.Stocks.Find(id);
-            db.Stocks.Remove(stock);
+            stock.itemCondition = "Unusable";
             db.SaveChanges();
             return RedirectToAction("Index");
         }

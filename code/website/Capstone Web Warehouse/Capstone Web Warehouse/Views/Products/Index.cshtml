@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Capstone_Database.Model.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Products Information</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Product ID
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Category
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.productId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.type)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.category)
+    </td>
+</tr>
+}
+
+</table>
