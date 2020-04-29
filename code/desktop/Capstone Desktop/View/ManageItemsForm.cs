@@ -63,7 +63,7 @@ namespace Capstone_Desktop.View
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            AddStockForm addStockForm = new AddStockForm();
+            var addStockForm = new AddStockForm();
             addStockForm.ShowDialog();
             this.getData();
         }
@@ -85,7 +85,7 @@ namespace Capstone_Desktop.View
             {
                 this.itemListSource.DataSource = this.manageItemsController.GetAllStock();
 
-                this.refreshTable();
+                //this.refreshTable();
             }
             catch (MySqlException)
             {
@@ -162,6 +162,12 @@ namespace Capstone_Desktop.View
                     MessageBox.Show(@"No stock was selected.");
                     break;
             }
+        }
+
+        private void manageProductButton_Click(object sender, EventArgs e)
+        {
+            var manageProductForm = new ManageProductForm();
+            manageProductForm.ShowDialog();
         }
 
         #endregion

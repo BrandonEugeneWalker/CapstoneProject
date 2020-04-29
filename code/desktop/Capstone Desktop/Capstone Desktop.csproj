@@ -115,6 +115,12 @@
     <Compile Include="View\AddEmployeeForm.Designer.cs">
       <DependentUpon>AddEmployeeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\AddProductForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AddProductForm.Designer.cs">
+      <DependentUpon>AddProductForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\AddStockForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +159,12 @@
     <Compile Include="View\ManageItemsForm.Designer.cs">
       <DependentUpon>ManageItemsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\ManageProductForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ManageProductForm.Designer.cs">
+      <DependentUpon>ManageProductForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\ManageRentalsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -177,6 +189,9 @@
     <EmbeddedResource Include="View\AddEmployeeForm.resx">
       <DependentUpon>AddEmployeeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\AddProductForm.resx">
+      <DependentUpon>AddProductForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\AddStockForm.resx">
       <DependentUpon>AddStockForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -194,6 +209,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\ManageItemsForm.resx">
       <DependentUpon>ManageItemsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ManageProductForm.resx">
+      <DependentUpon>ManageProductForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ManageRentalsForm.resx">
       <DependentUpon>ManageRentalsForm.cs</DependentUpon>

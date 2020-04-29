@@ -128,7 +128,7 @@
             this.manageItemsButton.Name = "manageItemsButton";
             this.manageItemsButton.Size = new System.Drawing.Size(141, 46);
             this.manageItemsButton.TabIndex = 7;
-            this.manageItemsButton.Text = "Manage Items";
+            this.manageItemsButton.Text = "Manage Stock";
             this.manageItemsButton.UseVisualStyleBackColor = true;
             this.manageItemsButton.Click += new System.EventHandler(this.manageItemsButton_Click);
             // 
