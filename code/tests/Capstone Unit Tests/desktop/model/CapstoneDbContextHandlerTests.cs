@@ -402,6 +402,39 @@ namespace Capstone_Unit_Tests.desktop.model
         }
 
         [TestMethod]
+        public void TestAddProductNull()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            Assert.ThrowsException<ArgumentNullException>(() => testHandler.AddProduct(null));
+        }
+
+        [TestMethod]
+        public void TestAddProductSunnyDay()
+        {
+            var testHandler = new CapstoneDbContextHandler();
+            using (var transaction = testHandler.CapstoneDbContext.Database.BeginTransaction())
+            {
+                Product testProduct = new Product {
+                    name = "Test Product",
+                    description = "Test Desc",
+                    type = "Book",
+                    category = "Fantasy"
+                };
+                testHandler.AddProduct(testProduct);
+                testHandler.CapstoneDbContext.Products.Load();
+                var highestId = testHandler.CapstoneDbContext.Products.Max(p => p.productId);
+                var addedProduct = testHandler.CapstoneDbContext.Products.Find(highestId);
+                Assert.IsNotNull(addedProduct);
+                Assert.IsTrue(addedProduct.name.Equals("Test Product"));
+                Assert.IsTrue(addedProduct.description.Equals("Test Desc"));
+                Assert.AreEqual(highestId, addedProduct.productId);
+                Assert.IsTrue(addedProduct.type.Equals("Book"));
+                Assert.IsTrue(addedProduct.category.Equals("Fantasy"));
+            }
+
+        }
+
+        [TestMethod]
         public void TestMarkRentalAsWaitingReturnNullDetailedRental()
         {
             var testHandler = new CapstoneDbContextHandler();
