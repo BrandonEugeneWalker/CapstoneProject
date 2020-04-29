@@ -109,6 +109,7 @@
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(185, 26);
             this.nameTextBox.TabIndex = 4;
+            this.nameTextBox.TextChanged += new System.EventHandler(this.passwordTextBox_TextChanged);
             // 
             // isManagerCheckBox
             // 

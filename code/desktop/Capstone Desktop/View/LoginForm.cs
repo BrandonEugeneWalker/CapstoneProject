@@ -94,7 +94,15 @@ namespace Capstone_Desktop
                 this.currentEmployee =
                     this.loginController.GetEmployeeByIdAndPassword(id, password);
 
-                return this.currentEmployee.isManager == true;
+                if (this.currentEmployee == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return this.currentEmployee.isManager == true;
+                }
+                
             }
             catch (Exception)
             {

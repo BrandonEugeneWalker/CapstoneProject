@@ -84,6 +84,11 @@ namespace Capstone_Desktop.View
             Close();
         }
 
+        private bool isTextBoxNotEmpty()
+        {
+            return !String.IsNullOrEmpty(this.nameTextBox.Text);
+        }
+
         private void passwordTextBox_TextChanged(object sender, EventArgs e)
         {
             var password = this.passwordTextBox.Text;
@@ -91,9 +96,16 @@ namespace Capstone_Desktop.View
 
             if (isValid)
             {
+                if (this.isTextBoxNotEmpty())
+                {
+                    this.submitButton.Enabled = true;
+                }
+                else
+                {
+                    this.submitButton.Enabled = false;
+                }
                 this.isValidLabel.Text = @"Valid";
                 this.isValidLabel.ForeColor = Color.Green;
-                this.submitButton.Enabled = true;
             }
             else
             {
@@ -101,6 +113,7 @@ namespace Capstone_Desktop.View
                 this.isValidLabel.ForeColor = Color.Red;
                 this.submitButton.Enabled = false;
             }
+
         }
 
         #endregion
