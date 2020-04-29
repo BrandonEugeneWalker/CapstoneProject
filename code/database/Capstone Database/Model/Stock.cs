@@ -24,7 +24,7 @@ namespace Capstone_Database.Model
         public int stockId { get; set; }
         public int productId { get; set; }
         [Required(ErrorMessage = "Condition is required.")]
-        [RegularExpression(@"", ErrorMessage = "Condition must be 'Excellent', 'Good', 'Fair', 'Unusable' ")]
+        [RegularExpression(@"^.*\b(Excellent|Good|Fair|Unusable)\b.*$", ErrorMessage = "Condition must be 'Excellent', 'Good', 'Fair', 'Unusable' ")]
         public string itemCondition { get; set; }
     
         public virtual Product Product { get; set; }

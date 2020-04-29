@@ -11,7 +11,8 @@ namespace Capstone_Database.Model
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class ItemRental
     {
         public int itemRentalId { get; set; }
@@ -24,9 +25,10 @@ namespace Capstone_Database.Model
         public Nullable<System.DateTime> shipDateTime { get; set; }
         public Nullable<int> returnEmployeeId { get; set; }
         public Nullable<System.DateTime> returnDateTime { get; set; }
+        [Required(ErrorMessage = "Item Condition is required.")]
+        [RegularExpression(@"^.*\b(Excellent|Good|Fair|Unusable)\b.*$", ErrorMessage = "Condition must be 'Excellent', 'Good', 'Fair', 'Unusable' ")]
         public string returnCondition { get; set; }
         public Nullable<System.DateTime> dueDateTime { get; set; }
-    
         public virtual Address Address { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual Employee Employee1 { get; set; }

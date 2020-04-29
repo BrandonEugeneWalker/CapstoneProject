@@ -69,6 +69,7 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var stock = db.Stocks.Find(id);
             if (stock == null)
             {
@@ -119,12 +120,9 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 db.Stocks.Add(stock);
                 db.SaveChanges();
-                //return RedirectToAction("Index");
             }
 
             return RedirectToAction("Index");
-            //ViewBag.productId = new SelectList(db.Products, "productId", "name", stock.productId);
-            //return View(stock);
         }
 
         // GET: Stocks/Delete/5

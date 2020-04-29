@@ -5,34 +5,78 @@
 }
 
 <h2>Rentals</h2>
-
-<table class="table">
+<form asp-action="Search">
+    <p>
+        Status: &nbsp;
+        @if (ViewBag.Filter.Equals("All"))
+        {
+            <input type="radio" name="filter" value="All" checked="checked" />
+        }
+        else
+        {
+            <input type="radio" name="filter" value="All" />
+        }
+        All
+        &nbsp;
+        @if (ViewBag.Filter.Equals("WaitingReturn"))
+        {
+            <input type="radio" name="filter" value="WaitingReturn" checked="checked" />
+        }
+        else
+        {
+            <input type="radio" name="filter" value="WaitingReturn" />
+        }
+        WaitingReturn
+        &nbsp;
+        @if (ViewBag.Filter.Equals("WaitingShipment"))
+        {
+            <input type="radio" name="filter" value="WaitingShipment" checked="checked" />
+        }
+        else
+        {
+            <input type="radio" name="filter" value="WaitingShipment" />
+        }
+        WaitingShipment
+        &nbsp;
+        @if (ViewBag.Filter.Equals("Returned"))
+        {
+            <input type="radio" name="filter" value="Returned" checked="checked" />
+        }
+        else
+        {
+            <input type="radio" name="filter" value="Returned" />
+        }
+        Returned
+        &nbsp;<input type="submit" value="Filter" class="btn btn-default" />
+    </p>
+</form>
+<table class="table" id="rentals">
     <tr>
-        <th>
+        <th onclick="sortTable(0)">
             Rental Date
         </th>
-        <th>
+        <th onclick="sortTable(1)">
             Rental ID
         </th>
-        <th>
+        <th onclick="sortTable(2)">
             Stock ID
         </th>
-        <th>
+        <th onclick="sortTable(3)">
             Product Name
         </th>
-        <th>
+        <th onclick="sortTable(4)">
             Member Name
         </th>
-        <th>
+        <th onclick="sortTable(5)">
             Shipping Address
         </th>
-        <th>
+        <th onclick="sortTable(6)">
             Rental Status
         </th>
-        <th>Update Rental Status</th>
+        <th onclick="sortTable(7)">Rental Status</th>
     </tr>
 
-    @foreach (var item in Model.OrderBy(s => s.rentalDateTime))
+    @foreach (var item in Model.OrderByDescending(s => s.rentalDateTime))
     {
         <tr>
             <td>
@@ -58,9 +102,81 @@
                 @Html.DisplayFor(modelItem => item.status)
             </td>
             <td>
-                @Html.ActionLink("Update Status", "UpdateStatus", new {id = item.itemRentalId})
+                @if (item.status == "WaitingShipment")
+                {
+                    @Html.ActionLink("Ship", "UpdateStatus", new { id = item.itemRentalId })
+                }
+                @if (item.status == "WaitingReturn")
+                {
+                    @Html.ActionLink("Return", "Return", new { id = item.itemRentalId })
+                }
+                @if (item.status == "Returned")
+                {
+                    <p>Returned</p>
+                }
             </td>
         </tr>
     }
-
 </table>
+
+<script>
+    // JavaScript program to illustrate
+    // Table sort for both columns and both directions.
+    function sortTable(n) {
+        var table;
+        table = document.getElementById("rentals");
+        var rows, i, x, y, count = 0;
+        var switching = true;
+
+        // Order is set as ascending
+        var direction = "ascending";
+
+        // Run loop until no switching is needed
+        while (switching) {
+            switching = false;
+            var rows = table.rows;
+
+            //Loop to go through all rows
+            for (i = 1; i < (rows.length - 1); i++) {
+                var Switch = false;
+
+                // Fetch 2 elements that need to be compared
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                // Check the direction of order
+                if (direction == "ascending") {
+
+                    // Check if 2 rows need to be switched
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If yes, mark Switch as needed and break loop
+                        Switch = true;
+                        break;
+                    }
+                } else if (direction == "descending") {
+
+                    // Check direction
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If yes, mark Switch as needed and break loop
+                        Switch = true;
+                        break;
+                    }
+                }
+            }
+            if (Switch) {
+                // Function to switch rows and mark switch as completed
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+
+                // Increase count for each switch
+                count++;
+            } else {
+                // Run while loop again for descending order
+                if (count == 0 && direction == "ascending") {
+                    direction = "descending";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>

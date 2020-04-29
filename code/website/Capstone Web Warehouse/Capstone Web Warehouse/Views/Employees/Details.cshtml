@@ -8,7 +8,7 @@
 
 <div>
     <h4>Employee Info</h4>
-    <hr/>
+    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.employeeId)
@@ -38,95 +38,155 @@
 </div>
 <h2>Rental History</h2>
 <div>
-    <table class="table">
+    <table class="table" id="empHist">
         <tr>
-            <th>
+            <th onclick="sortTable(0)">
                 Action
             </th>
-            <th>
+            <th onclick="sortTable(1)">
                 Product Name
             </th>
-            <th>
+            <th onclick="sortTable(2)">
                 Rental ID
             </th>
-            <th>
+            <th onclick="sortTable(3)">
                 Stock ID
             </th>
-            <th>
+            <th onclick="sortTable(4)">
                 Date
             </th>
-            <th>
+            <th onclick="sortTable(5)">
                 Condition
             </th>
-            <th>
+            <th onclick="sortTable(6)">
                 Member Name
             </th>
-            <th>
+            <th onclick="sortTable(7)">
                 Shipping Address
             </th>
         </tr>
         @foreach (var item in Model.ItemRentals.OrderByDescending(s => s.returnDateTime))
         {
-    <tr>
-
-        <td>
-            Returned
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Stock.Product.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.itemRentalId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.stockId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.returnDateTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.returnCondition)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Member.name)
-        </td>
-        <td>
-            Shipped to warehouse
-        </td>
-    </tr>
+            <tr>
+                <td>
+                    Returned
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock.Product.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemRentalId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.stockId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.returnCondition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.name)
+                </td>
+                <td>
+                    Shipped to warehouse
+                </td>
+            </tr>
         }
         @foreach (var item in Model.ItemRentals1.OrderByDescending(s => s.shipDateTime))
         {
-    <tr>
-        <td>
-            Shipped
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Stock.Product.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.itemRentalId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.stockId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.shipDateTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Stock.itemCondition)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Member.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address.address1)
-            <p>@Html.DisplayFor(modelItem => item.Address.city), @Html.DisplayFor(modelItem => item.Address.state) @Html.DisplayFor(modelItem => item.Address.zip)</p>
-        </td>
-    </tr>
+            <tr>
+                <td>
+                    Shipped
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock.Product.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemRentalId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.stockId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.shipDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock.itemCondition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address.address1)
+                    <p>@Html.DisplayFor(modelItem => item.Address.city), @Html.DisplayFor(modelItem => item.Address.state) @Html.DisplayFor(modelItem => item.Address.zip)</p>
+                </td>
+            </tr>
         }
     </table>
 </div>
+<script>
+    // JavaScript program to illustrate
+    // Table sort for both columns and both directions.
+    function sortTable(n) {
+        var table;
+        table = document.getElementById("empHist");
+        var rows, i, x, y, count = 0;
+        var switching = true;
+
+        // Order is set as ascending
+        var direction = "ascending";
+
+        // Run loop until no switching is needed
+        while (switching) {
+            switching = false;
+            var rows = table.rows;
+
+            //Loop to go through all rows
+            for (i = 1; i < (rows.length - 1); i++) {
+                var Switch = false;
+
+                // Fetch 2 elements that need to be compared
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                // Check the direction of order
+                if (direction == "ascending") {
+
+                    // Check if 2 rows need to be switched
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If yes, mark Switch as needed and break loop
+                        Switch = true;
+                        break;
+                    }
+                } else if (direction == "descending") {
+
+                    // Check direction
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If yes, mark Switch as needed and break loop
+                        Switch = true;
+                        break;
+                    }
+                }
+            }
+            if (Switch) {
+                // Function to switch rows and mark switch as completed
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+
+                // Increase count for each switch
+                count++;
+            } else {
+                // Run while loop again for descending order
+                if (count == 0 && direction == "ascending") {
+                    direction = "descending";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
 <p>
     @Html.ActionLink("Back to List", "Index")
 </p>
