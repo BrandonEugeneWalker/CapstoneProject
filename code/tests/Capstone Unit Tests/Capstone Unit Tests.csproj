@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="desktop\controller\AddEmployeeFormControllerTests.cs" />
+    <Compile Include="desktop\controller\AddProductControllerTests.cs" />
     <Compile Include="desktop\controller\AddStockFormControllerTests.cs" />
     <Compile Include="desktop\controller\EmployeeHistoryControllerTests.cs" />
     <Compile Include="desktop\controller\ItemHistoryControllerTests.cs" />

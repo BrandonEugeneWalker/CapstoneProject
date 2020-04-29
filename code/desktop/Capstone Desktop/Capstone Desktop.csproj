@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\AddEmployeeFormController.cs" />
+    <Compile Include="Controller\AddProductController.cs" />
     <Compile Include="Controller\AddStockFormController.cs" />
     <Compile Include="Controller\EmployeeHistoryController.cs" />
     <Compile Include="Controller\ItemHistoryController.cs" />

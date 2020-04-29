@@ -69,20 +69,6 @@ namespace Capstone_Desktop.Controller
             return this.CapstoneDatabaseHandler.GetAllProducts();
         }
 
-        /// <summary>Adds the given product to the database using the database handler.</summary>
-        /// <param name="product">The product to add to the database.</param>
-        /// <exception cref="ArgumentNullException">product - The product to add cannot be null!</exception>
-        /// <Precondition>The product to add cannot be null! </Precondition>
-        /// <Postcondition>The product is added.</Postcondition>
-        public void AddProduct(Product product)
-        {
-            if (product == null)
-            {
-                throw new ArgumentNullException(nameof(product), @"The product to add cannot be null!");
-            }
-
-            this.CapstoneDatabaseHandler.AddProduct(product);
-        }
 
         #endregion
     }

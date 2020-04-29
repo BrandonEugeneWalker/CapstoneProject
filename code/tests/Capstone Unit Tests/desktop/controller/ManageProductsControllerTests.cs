@@ -42,19 +42,5 @@ namespace Capstone_Unit_Tests.desktop.controller
             Assert.IsTrue(results is BindingList<Product>);
         }
 
-        [TestMethod]
-        public void TestAddProductNull()
-        {
-            var testController = new ManageProductsController();
-            Assert.ThrowsException<ArgumentNullException>(() => testController.AddProduct(null));
-        }
-
-        [TestMethod]
-        public void TestAddProductSunnyDay()
-        {
-            var capstoneHandlerMock = new Mock<IDbContextHandler>();
-            var testController = new ManageProductsController(capstoneHandlerMock.Object);
-            testController.AddProduct(new Product());
-        }
     }
 }
