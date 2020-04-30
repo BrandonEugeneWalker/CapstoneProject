@@ -17,14 +17,14 @@
                     <div class="col-md-10">
                         <b>Username</b>
                         @Html.TextBoxFor(model => model.username, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.username, "", new {@style="color:black"})
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-10">
                         <b>Password</b>
                         @Html.PasswordFor(model => model.password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.password, "", new { @style="black" })
                     </div>
                 </div>
                 if (ViewBag.Message != null)
