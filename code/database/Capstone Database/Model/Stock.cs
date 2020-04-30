@@ -11,7 +11,8 @@ namespace Capstone_Database.Model
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Stock
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,6 +23,8 @@ namespace Capstone_Database.Model
     
         public int stockId { get; set; }
         public int productId { get; set; }
+        [Required(ErrorMessage = "Condition is required.")]
+        [RegularExpression(@"^.*\b(Excellent|Good|Fair|Unusable)\b.*$", ErrorMessage = "Condition must be 'Excellent', 'Good', 'Fair', 'Unusable' ")]
         public string itemCondition { get; set; }
     
         public virtual Product Product { get; set; }
