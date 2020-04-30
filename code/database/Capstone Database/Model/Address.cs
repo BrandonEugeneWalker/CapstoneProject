@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Capstone_Database.Model
 {
     using System;
@@ -21,15 +19,12 @@ namespace Capstone_Database.Model
         {
             this.ItemRentals = new HashSet<ItemRental>();
         }
+    
         public int addressId { get; set; }
-        [Required]
         public string address1 { get; set; }
         public string address2 { get; set; }
-        [Required]
         public string city { get; set; }
-        [Required]
         public string state { get; set; }
-        [Required]
         public int zip { get; set; }
         public int memberId { get; set; }
         public Nullable<sbyte> removed { get; set; }

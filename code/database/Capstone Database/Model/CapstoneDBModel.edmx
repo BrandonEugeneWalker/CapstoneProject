@@ -41,6 +41,7 @@
           <Property Name="shipDateTime" Type="datetime" Precision="0" />
           <Property Name="returnEmployeeId" Type="int" />
           <Property Name="returnDateTime" Type="datetime" Precision="0" />
+          <Property Name="shippedCondition" Type="enum" />
           <Property Name="returnCondition" Type="enum" />
           <Property Name="dueDateTime" Type="datetime" Precision="0" />
         </EntityType>
@@ -664,6 +665,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <NavigationProperty Name="Member" Relationship="Model.memberId_ItemRental" FromRole="ItemRental" ToRole="Member" />
           <NavigationProperty Name="Stock" Relationship="Model.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
           <Property Name="dueDateTime" Type="DateTime" />
+          <Property Name="shippedCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="addressId_ItemRental">
           <End Type="Model.Address" Role="Address" Multiplicity="1">
@@ -895,6 +897,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <EntitySetMapping Name="ItemRentals">
             <EntityTypeMapping TypeName="Model.ItemRental">
               <MappingFragment StoreEntitySet="ItemRental">
+                <ScalarProperty Name="shippedCondition" ColumnName="shippedCondition" />
                 <ScalarProperty Name="dueDateTime" ColumnName="dueDateTime" />
                 <ScalarProperty Name="returnCondition" ColumnName="returnCondition" />
                 <ScalarProperty Name="returnDateTime" ColumnName="returnDateTime" />
