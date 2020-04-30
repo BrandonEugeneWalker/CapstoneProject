@@ -87,7 +87,7 @@ namespace Capstone_Desktop.View
                 this.rentalListSource.DataSource =
                     this.manageRentalsController.GetAllRentals();
 
-                this.refreshTable();
+                //this.refreshTable();
             }
             catch (MySqlException)
             {
@@ -102,7 +102,7 @@ namespace Capstone_Desktop.View
                 this.rentalListSource.DataSource =
                     this.manageRentalsController.GetRentalsWaitingShipment();
 
-                this.refreshTable();
+                //this.refreshTable();
             }
             catch (MySqlException)
             {
@@ -117,7 +117,7 @@ namespace Capstone_Desktop.View
                 this.rentalListSource.DataSource =
                     this.manageRentalsController.GetRentalsWaitingReturn();
 
-                this.refreshTable();
+                //this.refreshTable();
             }
             catch (MySqlException)
             {

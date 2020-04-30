@@ -106,7 +106,6 @@
             this.rentalGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.rentalGridView.Location = new System.Drawing.Point(12, 164);
             this.rentalGridView.Name = "rentalGridView";
-            this.rentalGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.rentalGridView.Size = new System.Drawing.Size(1240, 384);
             this.rentalGridView.TabIndex = 9;
             // 

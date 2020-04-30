@@ -49,6 +49,7 @@ namespace Capstone_Desktop.View
             if (this.CurrentEmployee.isManager == true)
             {
                 this.managerButton.Enabled = true;
+                this.manageProductButton.Enabled = true;
             }
         }
 
