@@ -29,7 +29,8 @@ namespace Capstone_Database.Model
         public string city { get; set; }
         [Required]
         public string state { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Fill in the first 5 numbers of your Zip Code")]
+        [RegularExpression(@"^[0-9]{5,5}$", ErrorMessage = "Fill in the first 5 numbers of your Zip Code")]
         public int zip { get; set; }
         public int memberId { get; set; }
         public Nullable<sbyte> removed { get; set; }
