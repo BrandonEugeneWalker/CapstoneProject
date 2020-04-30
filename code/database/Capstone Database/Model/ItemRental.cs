@@ -24,9 +24,9 @@ namespace Capstone_Database.Model
         public Nullable<System.DateTime> shipDateTime { get; set; }
         public Nullable<int> returnEmployeeId { get; set; }
         public Nullable<System.DateTime> returnDateTime { get; set; }
+        public string shippedCondition { get; set; }
         public string returnCondition { get; set; }
         public Nullable<System.DateTime> dueDateTime { get; set; }
-        public string shippedCondition { get; set; }
     
         public virtual Address Address { get; set; }
         public virtual Employee Employee { get; set; }

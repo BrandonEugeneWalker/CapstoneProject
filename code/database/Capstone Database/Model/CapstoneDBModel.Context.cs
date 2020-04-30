@@ -32,9 +32,9 @@ namespace Capstone_Database.Model
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<StockDetailView> StockDetailViews { get; set; }
         public virtual DbSet<ItemRental> ItemRentals { get; set; }
         public virtual DbSet<DetailedRentalView> DetailedRentalViews { get; set; }
-        public virtual DbSet<StockDetailView> StockDetailViews { get; set; }
     
         public virtual int createMemberOrder(Nullable<int> selectedStockId, Nullable<int> selectedMemberId, Nullable<int> selectedAddressId)
         {
@@ -322,22 +322,13 @@ namespace Capstone_Database.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("editMember", newUsernameParameter, newNameParameter, newPasswordParameter, currentMemberIdParameter);
         }
     
-        public virtual ObjectResult<ItemRental> retrieveMembersRentals(Nullable<int> selectedMemberId)
+        public virtual int retrieveMembersRentals(Nullable<int> selectedMemberId)
         {
             var selectedMemberIdParameter = selectedMemberId.HasValue ?
                 new ObjectParameter("selectedMemberId", selectedMemberId) :
                 new ObjectParameter("selectedMemberId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveMembersRentals", selectedMemberIdParameter);
-        }
-    
-        public virtual ObjectResult<ItemRental> retrieveMembersRentals(Nullable<int> selectedMemberId, MergeOption mergeOption)
-        {
-            var selectedMemberIdParameter = selectedMemberId.HasValue ?
-                new ObjectParameter("selectedMemberId", selectedMemberId) :
-                new ObjectParameter("selectedMemberId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ItemRental>("retrieveMembersRentals", mergeOption, selectedMemberIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("retrieveMembersRentals", selectedMemberIdParameter);
         }
     
         public virtual ObjectResult<Address> retrieveMembersAddresses(Nullable<int> selectedMemberId)

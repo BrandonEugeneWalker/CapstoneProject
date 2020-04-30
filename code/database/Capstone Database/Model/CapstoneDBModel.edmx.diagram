@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="29a19e8f3077494ea170465a56f60949" Name="Diagram1">
+      <Diagram DiagramId="29a19e8f3077494ea170465a56f60949" Name="Diagram1" ZoomLevel="90">
         <EntityTypeShape EntityType="Model.Employee" Width="1.5" PointX="5.875" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Member" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Product" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
@@ -12,14 +12,14 @@
         <AssociationConnector Association="Model.productId_Stock" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Model.Address" Width="1.5" PointX="8.125" PointY="8.25" />
         <AssociationConnector Association="Model.memberAddressID" />
-        <EntityTypeShape EntityType="Model.ItemRental" Width="1.5" PointX="6" PointY="3.875" />
+        <EntityTypeShape EntityType="Model.StockDetailView" Width="1.5" PointX="5.375" PointY="8.75" />
+        <EntityTypeShape EntityType="Model.ItemRental" Width="1.5" PointX="10.375" PointY="3.625" />
+        <EntityTypeShape EntityType="Model.DetailedRentalView" Width="1.5" PointX="10.375" PointY="9.75" />
         <AssociationConnector Association="Model.addressId_ItemRental" />
         <AssociationConnector Association="Model.employeeId_ItemRental_Return" />
         <AssociationConnector Association="Model.employeeId_ItemRental_Ship" />
         <AssociationConnector Association="Model.memberId_ItemRental" />
         <AssociationConnector Association="Model.stockId_ItemRental" />
-        <EntityTypeShape EntityType="Model.DetailedRentalView" Width="1.5" PointX="8.375" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.StockDetailView" Width="1.5" PointX="5.375" PointY="8.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

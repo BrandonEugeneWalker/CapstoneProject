@@ -41,8 +41,8 @@
           <Property Name="shipDateTime" Type="datetime" Precision="0" />
           <Property Name="returnEmployeeId" Type="int" />
           <Property Name="returnDateTime" Type="datetime" Precision="0" />
-          <Property Name="shippedCondition" Type="enum" />
-          <Property Name="returnCondition" Type="enum" />
+          <Property Name="shippedCondition" Type="enum" Nullable="false" />
+          <Property Name="returnCondition" Type="enum" Nullable="false" />
           <Property Name="dueDateTime" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="Member">
@@ -88,6 +88,8 @@ warning 6002: The table/view 'def.cs4982s20d.DetailedRentalView' does not have a
             <PropertyRef Name="state" />
             <PropertyRef Name="zip" />
             <PropertyRef Name="status" />
+            <PropertyRef Name="returnCondition" />
+            <PropertyRef Name="shippedCondition" />
           </Key>
           <Property Name="itemRentalId" Type="int" Nullable="false" />
           <Property Name="stockId" Type="int" Nullable="false" />
@@ -105,8 +107,8 @@ warning 6002: The table/view 'def.cs4982s20d.DetailedRentalView' does not have a
           <Property Name="shipDateTime" Type="datetime" Precision="0" />
           <Property Name="returnEmployeeId" Type="int" />
           <Property Name="returnDateTime" Type="datetime" Precision="0" />
-          <Property Name="returnCondition" Type="enum" />
-          <Property Name="shippedCondition" Type="enum" />
+          <Property Name="returnCondition" Type="enum" Nullable="false" />
+          <Property Name="shippedCondition" Type="enum" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -535,7 +537,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
             <Parameter Name="newPassword" Mode="In" Type="String" />
             <Parameter Name="currentMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="retrieveMembersRentals" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)">
+          <FunctionImport Name="retrieveMembersRentals">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="retrieveMembersAddresses" EntitySet="Addresses" ReturnType="Collection(Model.Address)">
@@ -568,7 +570,20 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <FunctionImport Name="retrieveProductById" EntitySet="Products" ReturnType="Collection(Model.Product)">
           <Parameter Name="selectedProductId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="StockDetailViews" EntityType="Model.StockDetailView" />
+          <FunctionImport Name="retrieveNonlibrarians" EntitySet="Members" ReturnType="Collection(Model.Member)" />
+          <FunctionImport Name="banMember">
+          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="unBanMember">
+          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="addDueDates" />
+          <FunctionImport Name="retrieveNonlibrariansBanned" EntitySet="Members" ReturnType="Collection(Model.Member)" />
+          <FunctionImport Name="retrieveNonlibrariansNotBanned" EntitySet="Members" ReturnType="Collection(Model.Member)" />
+          <FunctionImport Name="retrieveNonlibrariansOverdue" EntitySet="Members" ReturnType="Collection(Model.Member)" />
           <EntitySet Name="ItemRentals" EntityType="Model.ItemRental" />
+          <EntitySet Name="DetailedRentalViews" EntityType="Model.DetailedRentalView" />
           <AssociationSet Name="addressId_ItemRental" Association="Model.addressId_ItemRental">
             <End Role="Address" EntitySet="Addresses" />
             <End Role="ItemRental" EntitySet="ItemRentals" />
@@ -589,19 +604,6 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
             <End Role="Stock" EntitySet="Stocks" />
             <End Role="ItemRental" EntitySet="ItemRentals" />
           </AssociationSet>
-          <EntitySet Name="DetailedRentalViews" EntityType="Model.DetailedRentalView" />
-          <EntitySet Name="StockDetailViews" EntityType="Model.StockDetailView" />
-          <FunctionImport Name="retrieveNonlibrarians" EntitySet="Members" ReturnType="Collection(Model.Member)" />
-          <FunctionImport Name="banMember">
-          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="unBanMember">
-          <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="addDueDates" />
-          <FunctionImport Name="retrieveNonlibrariansBanned" EntitySet="Members" ReturnType="Collection(Model.Member)" />
-          <FunctionImport Name="retrieveNonlibrariansNotBanned" EntitySet="Members" ReturnType="Collection(Model.Member)" />
-          <FunctionImport Name="retrieveNonlibrariansOverdue" EntitySet="Members" ReturnType="Collection(Model.Member)" />
           </EntityContainer>
         <ComplexType Name="retrieveAllProducts_Result" />
         <ComplexType Name="retrieveAvailableProducts_Result" />
@@ -646,6 +648,28 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <ComplexType Name="retrieveProductById_Result" />
+        <EntityType Name="StockDetailView">
+          <Key>
+            <PropertyRef Name="stockId" />
+            <PropertyRef Name="productId" />
+            <PropertyRef Name="productName" />
+            <PropertyRef Name="productDescription" />
+            <PropertyRef Name="productType" />
+            <PropertyRef Name="productCategory" />
+            <PropertyRef Name="itemCondition" />
+          </Key>
+          <Property Name="stockId" Type="Int32" Nullable="false" />
+          <Property Name="productId" Type="Int32" Nullable="false" />
+          <Property Name="productName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="productDescription" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="productType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="productCategory" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="retrieveNonlibrarians_Result" />
+        <ComplexType Name="retrieveNonlibrariansBanned_Result" />
+        <ComplexType Name="retrieveNonlibrariansNotBanned_Result" />
+        <ComplexType Name="retrieveNonlibrariansOverdue_Result" />
         <EntityType Name="ItemRental">
           <Key>
             <PropertyRef Name="itemRentalId" />
@@ -660,14 +684,48 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <Property Name="shipDateTime" Type="DateTime" />
           <Property Name="returnEmployeeId" Type="Int32" />
           <Property Name="returnDateTime" Type="DateTime" />
-          <Property Name="returnCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="shippedCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="returnCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="dueDateTime" Type="DateTime" />
           <NavigationProperty Name="Address" Relationship="Model.addressId_ItemRental" FromRole="ItemRental" ToRole="Address" />
           <NavigationProperty Name="Employee" Relationship="Model.employeeId_ItemRental_Return" FromRole="ItemRental" ToRole="Employee" />
           <NavigationProperty Name="Employee1" Relationship="Model.employeeId_ItemRental_Ship" FromRole="ItemRental" ToRole="Employee" />
           <NavigationProperty Name="Member" Relationship="Model.memberId_ItemRental" FromRole="ItemRental" ToRole="Member" />
           <NavigationProperty Name="Stock" Relationship="Model.stockId_ItemRental" FromRole="ItemRental" ToRole="Stock" />
-          <Property Name="dueDateTime" Type="DateTime" />
-          <Property Name="shippedCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DetailedRentalView">
+          <Key>
+            <PropertyRef Name="itemRentalId" />
+            <PropertyRef Name="stockId" />
+            <PropertyRef Name="itemName" />
+            <PropertyRef Name="memberId" />
+            <PropertyRef Name="memberName" />
+            <PropertyRef Name="address1" />
+            <PropertyRef Name="city" />
+            <PropertyRef Name="state" />
+            <PropertyRef Name="zip" />
+            <PropertyRef Name="status" />
+            <PropertyRef Name="returnCondition" />
+            <PropertyRef Name="shippedCondition" />
+          </Key>
+          <Property Name="itemRentalId" Type="Int32" Nullable="false" />
+          <Property Name="stockId" Type="Int32" Nullable="false" />
+          <Property Name="itemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="memberId" Type="Int32" Nullable="false" />
+          <Property Name="memberName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address1" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="address2" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="zip" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="rentalDateTime" Type="DateTime" />
+          <Property Name="shipEmployeeId" Type="Int32" />
+          <Property Name="shipDateTime" Type="DateTime" />
+          <Property Name="returnEmployeeId" Type="Int32" />
+          <Property Name="returnDateTime" Type="DateTime" />
+          <Property Name="returnCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="shippedCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="addressId_ItemRental">
           <End Type="Model.Address" Role="Address" Multiplicity="1">
@@ -739,60 +797,6 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="DetailedRentalView">
-          <Key>
-            <PropertyRef Name="itemRentalId" />
-            <PropertyRef Name="stockId" />
-            <PropertyRef Name="itemName" />
-            <PropertyRef Name="memberId" />
-            <PropertyRef Name="memberName" />
-            <PropertyRef Name="address1" />
-            <PropertyRef Name="city" />
-            <PropertyRef Name="state" />
-            <PropertyRef Name="zip" />
-            <PropertyRef Name="status" />
-          </Key>
-          <Property Name="itemRentalId" Type="Int32" Nullable="false" />
-          <Property Name="stockId" Type="Int32" Nullable="false" />
-          <Property Name="itemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="memberId" Type="Int32" Nullable="false" />
-          <Property Name="memberName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="address1" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="address2" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="city" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="state" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="zip" Type="Int32" Nullable="false" />
-          <Property Name="status" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
-          <Property Name="rentalDateTime" Type="DateTime" />
-          <Property Name="shipEmployeeId" Type="Int32" />
-          <Property Name="shipDateTime" Type="DateTime" />
-          <Property Name="returnEmployeeId" Type="Int32" />
-          <Property Name="returnDateTime" Type="DateTime" />
-          <Property Name="returnCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
-          <Property Name="shippedCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="StockDetailView">
-          <Key>
-            <PropertyRef Name="stockId" />
-            <PropertyRef Name="productId" />
-            <PropertyRef Name="productName" />
-            <PropertyRef Name="productDescription" />
-            <PropertyRef Name="productType" />
-            <PropertyRef Name="productCategory" />
-            <PropertyRef Name="itemCondition" />
-          </Key>
-          <Property Name="stockId" Type="Int32" Nullable="false" />
-          <Property Name="productId" Type="Int32" Nullable="false" />
-          <Property Name="productName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="productDescription" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="productType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="productCategory" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="itemCondition" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <ComplexType Name="retrieveNonlibrarians_Result" />
-        <ComplexType Name="retrieveNonlibrariansBanned_Result" />
-        <ComplexType Name="retrieveNonlibrariansNotBanned_Result" />
-        <ComplexType Name="retrieveNonlibrariansOverdue_Result" />
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -897,12 +901,36 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="retrieveProductById" FunctionName="Model.Store.retrieveProductById">
           </FunctionImportMapping>
+          <EntitySetMapping Name="StockDetailViews">
+            <EntityTypeMapping TypeName="Model.StockDetailView">
+              <MappingFragment StoreEntitySet="StockDetailView">
+                <ScalarProperty Name="itemCondition" ColumnName="itemCondition" />
+                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
+                <ScalarProperty Name="productType" ColumnName="productType" />
+                <ScalarProperty Name="productDescription" ColumnName="productDescription" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="stockId" ColumnName="stockId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrarians" FunctionName="Model.Store.retrieveNonlibrarians">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="banMember" FunctionName="Model.Store.banMember" />
+          <FunctionImportMapping FunctionImportName="unBanMember" FunctionName="Model.Store.unBanMember" />
+          <FunctionImportMapping FunctionImportName="addDueDates" FunctionName="Model.Store.addDueDates" />
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansBanned" FunctionName="Model.Store.retrieveNonlibrariansBanned">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansNotBanned" FunctionName="Model.Store.retrieveNonlibrariansNotBanned">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansOverdue" FunctionName="Model.Store.retrieveNonlibrariansOverdue">
+          </FunctionImportMapping>
           <EntitySetMapping Name="ItemRentals">
             <EntityTypeMapping TypeName="Model.ItemRental">
               <MappingFragment StoreEntitySet="ItemRental">
-                <ScalarProperty Name="shippedCondition" ColumnName="shippedCondition" />
                 <ScalarProperty Name="dueDateTime" ColumnName="dueDateTime" />
                 <ScalarProperty Name="returnCondition" ColumnName="returnCondition" />
+                <ScalarProperty Name="shippedCondition" ColumnName="shippedCondition" />
                 <ScalarProperty Name="returnDateTime" ColumnName="returnDateTime" />
                 <ScalarProperty Name="returnEmployeeId" ColumnName="returnEmployeeId" />
                 <ScalarProperty Name="shipDateTime" ColumnName="shipDateTime" />
@@ -940,30 +968,6 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="StockDetailViews">
-            <EntityTypeMapping TypeName="Model.StockDetailView">
-              <MappingFragment StoreEntitySet="StockDetailView">
-                <ScalarProperty Name="itemCondition" ColumnName="itemCondition" />
-                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
-                <ScalarProperty Name="productType" ColumnName="productType" />
-                <ScalarProperty Name="productDescription" ColumnName="productDescription" />
-                <ScalarProperty Name="productName" ColumnName="productName" />
-                <ScalarProperty Name="productId" ColumnName="productId" />
-                <ScalarProperty Name="stockId" ColumnName="stockId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="retrieveNonlibrarians" FunctionName="Model.Store.retrieveNonlibrarians">
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="banMember" FunctionName="Model.Store.banMember" />
-          <FunctionImportMapping FunctionImportName="unBanMember" FunctionName="Model.Store.unBanMember" />
-          <FunctionImportMapping FunctionImportName="addDueDates" FunctionName="Model.Store.addDueDates" />
-          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansBanned" FunctionName="Model.Store.retrieveNonlibrariansBanned">
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansNotBanned" FunctionName="Model.Store.retrieveNonlibrariansNotBanned">
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="retrieveNonlibrariansOverdue" FunctionName="Model.Store.retrieveNonlibrariansOverdue">
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

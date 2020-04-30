@@ -408,7 +408,6 @@ namespace Capstone_Desktop.Model
             currentRental.status = "WaitingReturn";
             currentRental.shippedCondition = itemCondition;
             currentRental.Stock.itemCondition = itemCondition;
-            currentRental.returnCondition = "Unmarked";
             currentRental.shipEmployeeId = employee.employeeId;
             currentRental.shipDateTime = DateTime.Now;
             this.CapstoneDbContext.SaveChanges();
