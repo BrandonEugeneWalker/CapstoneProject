@@ -258,7 +258,6 @@ namespace Capstone_Web_Members.Controllers
         ///     <Postcondition>None</Postcondition>
         /// </summary>
         /// <param name="member">The member object that is logging in</param>
-        /// <param name="banned">If logging in member is banned</param>
         /// <returns>HomeController Index if true, login form if false</returns>
         [AllowAnonymous]
         public ActionResult Login(Member member)
@@ -285,6 +284,10 @@ namespace Capstone_Web_Members.Controllers
                 return RedirectToAction("MediaLibrary", "Home");
             }
 
+            if (member.username != null)
+            {
+                ViewBag.Message = "Incorrect Username or Password";
+            }
             return View();
         }
 
