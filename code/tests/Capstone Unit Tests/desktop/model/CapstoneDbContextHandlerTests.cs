@@ -439,7 +439,7 @@ namespace Capstone_Unit_Tests.desktop.model
         {
             var testHandler = new CapstoneDbContextHandler();
             Assert.ThrowsException<ArgumentNullException>(() =>
-                testHandler.MarkRentalAsWaitingReturn(null, new Employee()));
+                testHandler.MarkRentalAsWaitingReturn(null, new Employee(), "Good"));
         }
 
         [TestMethod]
@@ -447,7 +447,7 @@ namespace Capstone_Unit_Tests.desktop.model
         {
             var testHandler = new CapstoneDbContextHandler();
             Assert.ThrowsException<ArgumentNullException>(() =>
-                testHandler.MarkRentalAsWaitingReturn(new DetailedRentalView(), null));
+                testHandler.MarkRentalAsWaitingReturn(new DetailedRentalView(), null, "Good"));
         }
 
         [TestMethod]
@@ -457,7 +457,7 @@ namespace Capstone_Unit_Tests.desktop.model
             var testDetailedRental = new DetailedRentalView {
                 itemRentalId = -1
             };
-            var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, new Employee());
+            var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, new Employee(), "Good");
             Assert.IsFalse(results);
         }
 
@@ -485,7 +485,7 @@ namespace Capstone_Unit_Tests.desktop.model
                 };
 
                 var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, "password");
-                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating);
+                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating, "Good");
                 Assert.IsFalse(results);
             }
         }
@@ -512,9 +512,10 @@ namespace Capstone_Unit_Tests.desktop.model
                 };
 
                 var employeeUpdating = testHandler.GetEmployeeByIdAndPassword(1234, "password");
-                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating);
+                var results = testHandler.MarkRentalAsWaitingReturn(testDetailedRental, employeeUpdating, "Good");
                 Assert.IsTrue(results);
                 Assert.IsTrue(testItemRental.status.Equals("WaitingReturn"));
+                
             }
         }
 

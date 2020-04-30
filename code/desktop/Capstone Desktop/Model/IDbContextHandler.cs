@@ -54,7 +54,7 @@ namespace Capstone_Desktop.Model
 
         //Modifications
 
-        bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, Employee employee);
+        bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, Employee employee, string itemCondition);
 
         bool MarkRentalAsReturned(DetailedRentalView detailedRentalView, Employee employee, string itemCondition);
 

@@ -112,7 +112,7 @@ namespace Capstone_Desktop.Controller
         /// </exception>
         /// <Precondition> detailedRentalView and employee cannot be null! </Precondition>
         public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView,
-            Employee employee)
+            Employee employee, string itemCondition)
         {
             if (detailedRentalView == null)
             {
@@ -124,7 +124,12 @@ namespace Capstone_Desktop.Controller
                 throw new ArgumentNullException(nameof(employee), EmployeeNullError);
             }
 
-            return this.CapstoneDatabaseHandler.MarkRentalAsWaitingReturn(detailedRentalView, employee);
+            if (string.IsNullOrEmpty(itemCondition))
+            {
+                throw new ArgumentNullException(nameof(itemCondition), @"The item condition cannot be null or empty!");
+            }
+
+            return this.CapstoneDatabaseHandler.MarkRentalAsWaitingReturn(detailedRentalView, employee, itemCondition);
         }
 
         /// <summary>

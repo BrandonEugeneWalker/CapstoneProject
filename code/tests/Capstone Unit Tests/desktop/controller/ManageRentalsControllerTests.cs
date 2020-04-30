@@ -74,7 +74,7 @@ namespace Capstone_Unit_Tests.desktop.controller
             var manageRentalsController = new ManageRentalsController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsWaitingReturn(null, new Employee()));
+                manageRentalsController.MarkRentalAsWaitingReturn(null, new Employee(), "Good"));
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace Capstone_Unit_Tests.desktop.controller
             var manageRentalsController = new ManageRentalsController();
 
             Assert.ThrowsException<ArgumentNullException>(() =>
-                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(), null));
+                manageRentalsController.MarkRentalAsWaitingReturn(new DetailedRentalView(), null, "Good"));
         }
 
         [TestMethod]
@@ -92,9 +92,9 @@ namespace Capstone_Unit_Tests.desktop.controller
             var employee = new Employee();
             var detailedRental = new DetailedRentalView();
             var contextMock = new Mock<IDbContextHandler>();
-            contextMock.Setup(x => x.MarkRentalAsWaitingReturn(detailedRental, employee)).Returns(true);
+            contextMock.Setup(x => x.MarkRentalAsWaitingReturn(detailedRental, employee, "Good")).Returns(true);
             var testController = new ManageRentalsController(contextMock.Object);
-            var results = testController.MarkRentalAsWaitingReturn(detailedRental, employee);
+            var results = testController.MarkRentalAsWaitingReturn(detailedRental, employee, "Good");
             Assert.IsTrue(results);
         }
 

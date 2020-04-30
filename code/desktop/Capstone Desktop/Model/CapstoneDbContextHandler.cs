@@ -375,7 +375,7 @@ namespace Capstone_Desktop.Model
         ///     cannot be null!
         /// </exception>
         /// <Precondition>The employee cannot be null, the detailed rental cannot be null!</Precondition>
-        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, Employee employee)
+        public bool MarkRentalAsWaitingReturn(DetailedRentalView detailedRentalView, Employee employee, string itemCondition)
         {
             if (detailedRentalView == null)
             {
@@ -385,6 +385,11 @@ namespace Capstone_Desktop.Model
             if (employee == null)
             {
                 throw new ArgumentNullException(nameof(employee), EmployeeNullMessage);
+            }
+
+            if (string.IsNullOrEmpty(itemCondition))
+            {
+                throw new ArgumentNullException(nameof(itemCondition), @"The item condition cannot be null or empty!");
             }
 
             this.CapstoneDbContext.ItemRentals.Load();
@@ -401,6 +406,9 @@ namespace Capstone_Desktop.Model
             }
 
             currentRental.status = "WaitingReturn";
+            currentRental.shippedCondition = itemCondition;
+            currentRental.Stock.itemCondition = itemCondition;
+            currentRental.returnCondition = "";
             currentRental.shipEmployeeId = employee.employeeId;
             currentRental.shipDateTime = DateTime.Now;
             this.CapstoneDbContext.SaveChanges();

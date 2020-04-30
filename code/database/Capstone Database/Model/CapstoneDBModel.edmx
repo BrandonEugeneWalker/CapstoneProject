@@ -106,6 +106,7 @@ warning 6002: The table/view 'def.cs4982s20d.DetailedRentalView' does not have a
           <Property Name="returnEmployeeId" Type="int" />
           <Property Name="returnDateTime" Type="datetime" Precision="0" />
           <Property Name="returnCondition" Type="enum" />
+          <Property Name="shippedCondition" Type="enum" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -355,7 +356,8 @@ warning 6002: The table/view 'def.cs4982s20d.StockDetailView' does not have a pr
 `DetailedRentalView`.`shipDateTime`, 
 `DetailedRentalView`.`returnEmployeeId`, 
 `DetailedRentalView`.`returnDateTime`, 
-`DetailedRentalView`.`returnCondition`
+`DetailedRentalView`.`returnCondition`, 
+`DetailedRentalView`.`shippedCondition`
 FROM `DetailedRentalView` AS `DetailedRentalView`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="StockDetailView" EntityType="Self.StockDetailView" store:Type="Views" store:Schema="cs4982s20d">
@@ -767,6 +769,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <Property Name="returnEmployeeId" Type="Int32" />
           <Property Name="returnDateTime" Type="DateTime" />
           <Property Name="returnCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="shippedCondition" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="StockDetailView">
           <Key>
@@ -916,6 +919,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
           <EntitySetMapping Name="DetailedRentalViews">
             <EntityTypeMapping TypeName="Model.DetailedRentalView">
               <MappingFragment StoreEntitySet="DetailedRentalView">
+                <ScalarProperty Name="shippedCondition" ColumnName="shippedCondition" />
                 <ScalarProperty Name="returnCondition" ColumnName="returnCondition" />
                 <ScalarProperty Name="returnDateTime" ColumnName="returnDateTime" />
                 <ScalarProperty Name="returnEmployeeId" ColumnName="returnEmployeeId" />

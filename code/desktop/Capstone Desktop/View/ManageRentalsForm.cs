@@ -154,8 +154,9 @@ namespace Capstone_Desktop.View
             foreach (DataGridViewRow currentRow in this.rentalGridView.SelectedRows)
             {
                 var currentItem = (DetailedRentalView) currentRow.DataBoundItem;
+                string itemCondition = (string)this.itemConditionComboBox.SelectedItem;
 
-                var results = this.manageRentalsController.MarkRentalAsWaitingReturn(currentItem, this.CurrentEmployee);
+                var results = this.manageRentalsController.MarkRentalAsWaitingReturn(currentItem, this.CurrentEmployee, itemCondition);
 
                 if (!results)
                 {
