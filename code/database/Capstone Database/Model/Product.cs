@@ -11,8 +11,7 @@ namespace Capstone_Database.Model
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,12 +21,9 @@ namespace Capstone_Database.Model
         }
     
         public int productId { get; set; }
-        [Required(ErrorMessage = "Product name is required.")]
         public string name { get; set; }
         public string description { get; set; }
-        [Required(ErrorMessage = "Product type is required.")]
         public string type { get; set; }
-        [Required(ErrorMessage = "Product category is required.")]
         public string category { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

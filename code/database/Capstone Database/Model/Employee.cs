@@ -11,8 +11,7 @@ namespace Capstone_Database.Model
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Employee
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,15 +22,8 @@ namespace Capstone_Database.Model
         }
     
         public int employeeId { get; set; }
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [Display(Name = "Password")]
-        [DataType(DataType.Password)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$", ErrorMessage = "Password must include: 1 uppercase letter; 1 lowercase letter; 1 number; 1 special character; Length of 6.")]
         public string password { get; set; }
         public Nullable<bool> isManager { get; set; }
-        [RegularExpression("^[a-zA-Z ]*$", ErrorMessage = "Name must be letters only.")]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
-        [Required(ErrorMessage = "Name is required.")] 
         public string name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

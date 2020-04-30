@@ -11,8 +11,7 @@ namespace Capstone_Database.Model
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Address
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,14 +21,10 @@ namespace Capstone_Database.Model
         }
     
         public int addressId { get; set; }
-        [Required]
         public string address1 { get; set; }
         public string address2 { get; set; }
-        [Required]
         public string city { get; set; }
-        [Required]
         public string state { get; set; }
-        [Required]
         public int zip { get; set; }
         public int memberId { get; set; }
         public Nullable<sbyte> removed { get; set; }
