@@ -27,6 +27,10 @@
                         @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                if (ViewBag.Message != null)
+                {
+                    <b style="color: red">@ViewBag.Message</b> <br /> <br />
+                }
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Log in" class="btn btn-default" />
