@@ -537,7 +537,7 @@ FROM `StockDetailView` AS `StockDetailView`</DefiningQuery>
             <Parameter Name="newPassword" Mode="In" Type="String" />
             <Parameter Name="currentMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="retrieveMembersRentals">
+          <FunctionImport Name="retrieveMembersRentals" EntitySet="ItemRentals" ReturnType="Collection(Model.ItemRental)">
           <Parameter Name="selectedMemberId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="retrieveMembersAddresses" EntitySet="Addresses" ReturnType="Collection(Model.Address)">
