@@ -11,42 +11,53 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Employee</h4>
-        <hr/>
-        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
-        <div class="form-group">
-            @Html.LabelFor(model => model.password, new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.PasswordFor(model => model.password, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.password, "", new {@class = "text-danger"})
-            </div>
+<div class="form-horizontal">
+    <h4>Employee</h4>
+    <hr />
+    <p>
+        Password must contain:
+        <ul>
+            <li>1 Lower case and 1 Upper case</li>
+            <li>1 Number</li>
+            <li>1 Symbol</li>
+            <li>6 Characters</li>
+        </ul>
+        Employee name must be atleast 3 characters with only letters and spaces
+    </p>
+    <h5><strong>* Are Required</strong></h5>
+    @Html.ValidationSummary(true, "* Are Required", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.password, "Password*", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.PasswordFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.isManager, new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.isManager)
-                    @Html.ValidationMessageFor(model => model.isManager, "", new {@class = "text-danger"})
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.name, new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.name, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.name, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default"/>
+    <div class="form-group">
+        @Html.LabelFor(model => model.isManager, "Manager?", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.isManager)
+                @Html.ValidationMessageFor(model => model.isManager, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.name, "Employee Name*", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
 }
 
 <div>

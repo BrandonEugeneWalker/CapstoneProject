@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -63,41 +64,6 @@ namespace Capstone_Web_Warehouse.Controllers
             }
         }
 
-        /// <summary>Updates the status of rental item.
-        /// <Precondition>Employee != Null && ID != Null</Precondition>
-        /// <Postcondition>None</Postcondition>
-        /// </summary>
-        /// <param name="id">The id of the rental item.</param>
-        /// <returns>The index page refreshed if found || error page if bad id.</returns>
-        public ActionResult UpdateStatus(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var employee = Session["Employee"] as Employee;
-            var rental = database.ItemRentals.Find(id);
-
-            if (rental == null || employee == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            if (rental.status.Equals("WaitingShipment"))
-            {
-                rental.status = "WaitingReturn";
-                rental.shipEmployeeId = employee.employeeId;
-                rental.shipDateTime = DateTime.Now;
-                rental.dueDateTime = DateTime.Now.AddDays(14);
-                rental.returnCondition = rental.Stock.itemCondition;
-                database.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return RedirectToAction("Index");
-        }
-
         /// <summary>Returns return view page.
         /// <Precondition>Employee != Null && ID != Null</Precondition>
         /// <Postcondition>None</Postcondition>
@@ -133,15 +99,29 @@ namespace Capstone_Web_Warehouse.Controllers
         public ActionResult Return([Bind(Include = "itemRentalId,stockId,memberId,addressId,status,rentalDateTime,shipEmployeeId,shipDateTime,returnEmployeeId,returnDateTime,returnCondition,dueDateTime")] ItemRental rental)
         {
             var employee = Session["Employee"] as Employee;
+            var condition = Request.Form["returnCondition"].ToString();
             if (ModelState.IsValid)
             {
-                //database.Entry(rental).State = EntityState.Modified;
                 var rent = database.ItemRentals.Find(rental.itemRentalId);
+                if (rent.status.Equals("WaitingShipment"))
+                {
+                    rent.status = "WaitingReturn";
+                    rent.shipEmployeeId = employee.employeeId;
+                    rent.Stock.itemCondition = condition;
+                    rent.shipDateTime = DateTime.Now;
+                    rent.dueDateTime = DateTime.Now.AddDays(14);
+                    rent.shippedCondition = rent.Stock.itemCondition;
+                    rent.returnCondition = "Unmarked";
+                    database.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
                 rent.returnCondition = rental.returnCondition;
-                rent.Stock.itemCondition = rental.returnCondition;
+                rent.Stock.itemCondition = condition;
                 rent.returnDateTime = DateTime.Now;
                 rent.status = "Returned";
                 rent.returnEmployeeId = employee.employeeId;
+                rent.returnCondition = rent.Stock.itemCondition;
                 database.SaveChanges();
                 return RedirectToAction("Index");
             }

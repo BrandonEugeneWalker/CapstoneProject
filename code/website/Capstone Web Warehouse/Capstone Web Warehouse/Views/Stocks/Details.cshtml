@@ -83,42 +83,48 @@
             <th onclick="sortTable(8)">
                 Return Condition
             </th>
+            <th onclick="sortTable(9)">
+                Ship Condition
+            </th>
         </tr>
         @foreach (var item in Model.ItemRentals.OrderByDescending(s => s.rentalDateTime))
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.itemRentalId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.rentalDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee1.name)
-                    <br />
-                    @Html.DisplayFor(modelItem => item.Employee1.employeeId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.shipDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee.name)
-                    <br />
-                    @Html.DisplayFor(modelItem => item.Employee.employeeId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.returnDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.returnCondition)
-                </td>
-            </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.itemRentalId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Member.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rentalDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee1.name)
+            <br />
+            @Html.DisplayFor(modelItem => item.Employee1.employeeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.shipDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.name)
+            <br />
+            @Html.DisplayFor(modelItem => item.Employee.employeeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.returnDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.returnCondition)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.shippedCondition)
+        </td>
+    </tr>
         }
     </table>
 </div>

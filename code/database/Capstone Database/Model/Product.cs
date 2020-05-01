@@ -24,6 +24,7 @@ namespace Capstone_Database.Model
         public int productId { get; set; }
         [Required(ErrorMessage = "Product name is required.")]
         public string name { get; set; }
+        [Required(ErrorMessage = "Product description is required.")]
         public string description { get; set; }
         [Required(ErrorMessage = "Product type is required.")]
         public string type { get; set; }

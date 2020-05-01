@@ -11,7 +11,6 @@ namespace Capstone_Web_Warehouse.Controllers
     {
         private readonly OnlineEntities data = new OnlineEntities();
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeController"/> class.
         /// <Precondition>None</Precondition>
@@ -27,7 +26,7 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <Precondition>None</Precondition>
         /// <Postcondition>None</Postcondition>
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity"> dbcontext. </param>
         public HomeController(OnlineEntities entity)
         {
             data = entity;
@@ -111,6 +110,7 @@ namespace Capstone_Web_Warehouse.Controllers
         /// <returns>Manage rentals page if good, same page if bad.</returns>
         public ActionResult Login(Employee model)
         {
+
             var employee = data.selectEmployeeByIdAndPassword(model.employeeId, model.password).ToList();
             if (employee.Count > 0)
             {
@@ -118,6 +118,11 @@ namespace Capstone_Web_Warehouse.Controllers
                 Session["Employee"] = currentEmp;
                 Session["Manager"] = currentEmp.isManager;
                 return RedirectToAction("ManageItems");
+            }
+
+            if (model.password != null)
+            {
+                ViewBag.Message = "Incorrect ID and or Password";
             }
 
             return View(model);

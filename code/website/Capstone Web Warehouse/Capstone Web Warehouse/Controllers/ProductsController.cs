@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -67,6 +68,7 @@ namespace Capstone_Web_Warehouse.Controllers
             {
                 return Redirect("~/Home/Login");
             }
+
             return View();
         }
 
@@ -84,8 +86,14 @@ namespace Capstone_Web_Warehouse.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "productId,name,description,type,category")] Product product)
         {
+            var type = Request.Form["type"].ToString();
+            var txtInfo = new CultureInfo("en-US", false).TextInfo;
             if (ModelState.IsValid)
             {
+                var category = product.category;
+                category.ToLower();
+                product.type = type;
+                product.category = txtInfo.ToTitleCase(category);
                 db.Products.Add(product);
                 db.SaveChanges();
                 return RedirectToAction("Index");

@@ -5,31 +5,44 @@
 
 <h2>@ViewBag.Title</h2>
 <div class="row">
+    <p>
+        Password must contain:
+        <ul>
+            <li>1 Lower case and 1 Upper case</li>
+            <li>1 Number</li>
+            <li>1 Symbol</li>
+            <li>6 Characters</li>
+        </ul>
+    </p>
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("Login", "Home", new {ViewBag.ReturnUrl}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+            @using (Html.BeginForm("Login", "Home", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 <h4>Use an account to log in.</h4>
-                <hr/>
-                @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                <hr />
+                if (ViewBag.Message != null)
+                {
+                    <b style="color: red">@ViewBag.Message</b> <br /> <br />
+                }
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
                     <div class="col-md-10">
                         <b>Username</b>
-                        @Html.TextBoxFor(model => model.employeeId, new {@class = "form-control"})
-                        @Html.ValidationMessageFor(model => model.employeeId, "", new {@class = "text-danger"})
+                        @Html.TextBoxFor(model => model.employeeId,new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.employeeId, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-10">
                         <b>Password</b>
-                        @Html.PasswordFor(model => model.password, new {@class = "form-control"})
-                        @Html.ValidationMessageFor(model => model.password, "", new {@class = "text-danger"})
+                        @Html.PasswordFor(model => model.password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default"/>
+                        <input type="submit" value="Log in" class="btn btn-default" />
                     </div>
                 </div>
             }

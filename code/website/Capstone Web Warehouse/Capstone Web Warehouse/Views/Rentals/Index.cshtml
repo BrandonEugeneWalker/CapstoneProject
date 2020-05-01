@@ -104,7 +104,7 @@
             <td>
                 @if (item.status == "WaitingShipment")
                 {
-                    @Html.ActionLink("Ship", "UpdateStatus", new { id = item.itemRentalId })
+                    @Html.ActionLink("Ship", "Return", new { id = item.itemRentalId })
                 }
                 @if (item.status == "WaitingReturn")
                 {

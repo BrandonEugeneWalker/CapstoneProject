@@ -25,12 +25,8 @@ namespace Capstone_Database.Model
         public Nullable<System.DateTime> shipDateTime { get; set; }
         public Nullable<int> returnEmployeeId { get; set; }
         public Nullable<System.DateTime> returnDateTime { get; set; }
-        [Required(ErrorMessage = "Item Condition is required.")]
-        [RegularExpression(@"^.*\b(Excellent|Good|Fair|Unusable|Unmarked)\b.*$", ErrorMessage = "Condition must be 'Excellent', 'Good', 'Fair', 'Unusable', 'Unmarked' ")]
-        public string shippedCondition { get; set; }
-        [Required(ErrorMessage = "Item Condition is required.")]
-        [RegularExpression(@"^.*\b(Excellent|Good|Fair|Unusable|Unmarked)\b.*$", ErrorMessage = "Condition must be 'Excellent', 'Good', 'Fair', 'Unusable', 'Unmarked' ")]
         public string returnCondition { get; set; }
+        public string shippedCondition { get; set; }
         public Nullable<System.DateTime> dueDateTime { get; set; }
     
         public virtual Address Address { get; set; }

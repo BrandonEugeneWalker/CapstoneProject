@@ -115,14 +115,16 @@ namespace Capstone_Web_Warehouse.Controllers
             var employee = Session["Employee"] as Employee;
 
             if (employee == null || (bool)!employee.isManager) return Redirect("~/Home/Login");
-
+            var condition = Request.Form["condition"].ToString();
             if (ModelState.IsValid)
             {
+                stock.itemCondition = condition;
                 db.Stocks.Add(stock);
                 db.SaveChanges();
+                return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Index");
+            return View(stock);
         }
 
         // GET: Stocks/Delete/5
